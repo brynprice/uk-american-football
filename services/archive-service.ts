@@ -40,9 +40,13 @@ export const ArchiveService = {
         const { data, error } = await supabase.from("games").select("*, home_team:teams!home_team_id (*, team_aliases (*)), away_team:teams!away_team_id (*, team_aliases (*)), venue:venues (*), phase:phases (*, season:seasons (id, year, competition:competitions (name))), game_staff (*, person:people (*)), sources (*), notes (*)").eq("id", gameId).single();
         if (error) throw error;
         if (!data) throw new Error("Game not found");
-        const { data: participations } = await supabase.from("participations").select("*, person:people (*)").eq("phase_id", data.phase_id);
-        return { ...data, participations: participations || [] };
+
+        // Explicitly cast data to any to prevent 'never' type collapse
+        const gameData = data as any;
+        const { data: participations } = await supabase.from("participations").select("*, person:people (*)").eq("phase_id", gameData.phase_id);
+        return { ...gameData, participations: participations || [] };
     },
+
 
     async getTeamHistory(teamId: string): Promise<any> {
         const { data, error } = await supabase.from("teams").select("*, team_aliases (*), participations (*, phase:phases (*, season:seasons (*, competition:competitions (*))))").eq("id", teamId).single();
