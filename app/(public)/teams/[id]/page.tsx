@@ -2,8 +2,9 @@ import Link from 'next/link';
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 
-export default async function TeamPage({ params }: { params: { id: string } }) {
-    const team = await ArchiveService.getTeamHistory(params.id);
+export default async function TeamPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    const team = await ArchiveService.getTeamHistory(id);
 
     return (
         <ArchiveLayout>
@@ -27,7 +28,7 @@ export default async function TeamPage({ params }: { params: { id: string } }) {
                     <section>
                         <h3 className="text-xl font-black uppercase border-b-2 border-slate-900 pb-2 mb-6 font-sans">Season History</h3>
                         <div className="space-y-4">
-                            {team.participations?.sort((a, b) => b.phase.season.year - a.phase.season.year).map((p) => (
+                            {team.participations?.sort((a: any, b: any) => b.phase.season.year - a.phase.season.year).map((p: any) => (
                                 <div key={p.id} className="flex gap-4 items-start group">
                                     <div className="w-16 pt-1 text-lg font-black text-slate-400 group-hover:text-blue-600 transition-colors">
                                         {p.phase.season.year}
@@ -58,7 +59,7 @@ export default async function TeamPage({ params }: { params: { id: string } }) {
                     <section className="bg-white p-6 border border-slate-200 shadow-sm">
                         <h4 className="text-xs font-black uppercase text-slate-400 mb-4 tracking-tighter">Known Aliases</h4>
                         <div className="space-y-3">
-                            {team.team_aliases?.map((alias) => (
+                            {team.team_aliases?.map((alias: any) => (
                                 <div key={alias.id} className="text-sm border-l-2 border-slate-100 pl-3">
                                     <div className="font-bold">{alias.name}</div>
                                     <div className="text-[10px] text-slate-400 uppercase font-sans">

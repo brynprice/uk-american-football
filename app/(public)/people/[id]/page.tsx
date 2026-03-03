@@ -2,12 +2,13 @@ import Link from 'next/link';
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 
-export default async function PersonPage({ params }: { params: { id: string } }) {
-    const person = await ArchiveService.getPersonDetails(params.id);
+export default async function PersonPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    const person = await ArchiveService.getPersonDetails(id);
 
     // Combine and sort career events (participations and game overrides)
     const careerEvents = [
-        ...person.participations.map(p => ({
+        ...person.participations.map((p: any) => ({
             type: 'season',
             year: p.phase.season.year,
             competition: p.phase.season.competition.name,
@@ -16,7 +17,7 @@ export default async function PersonPage({ params }: { params: { id: string } })
             phase: p.phase.name,
             id: p.id
         })),
-        ...person.game_staff.map(s => ({
+        ...person.game_staff.map((s: any) => ({
             type: 'game',
             year: s.game.date ? new Date(s.game.date).getFullYear() : s.game.phase.season.year,
             competition: s.game.phase.season.competition.name,
@@ -42,7 +43,7 @@ export default async function PersonPage({ params }: { params: { id: string } })
                     <section>
                         <h3 className="text-xl font-black uppercase border-b-2 border-slate-900 pb-2 mb-6 font-sans">Career Timeline</h3>
                         <div className="relative border-l-2 border-slate-200 ml-3 pl-8 space-y-12">
-                            {careerEvents.map((event, idx) => (
+                            {careerEvents.map((event: any, idx) => (
                                 <div key={idx} className="relative">
                                     {/* Timeline node */}
                                     <div className="absolute -left-[41px] top-1 w-4 h-4 rounded-full bg-white border-4 border-slate-900"></div>

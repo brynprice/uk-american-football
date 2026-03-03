@@ -3,14 +3,15 @@ import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import { resolveHeadCoach } from '@/lib/utils/coach-resolver';
 
-export default async function GamePage({ params }: { params: { id: string } }) {
-    const game = await ArchiveService.getGameDetails(params.id);
+export default async function GamePage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    const game = await ArchiveService.getGameDetails(id);
 
     const homeCoach = resolveHeadCoach(
         game.id,
         game.home_team_id,
         game.phase_id,
-        game.game_staff.filter(s => s.team_id === game.home_team_id),
+        game.game_staff.filter((s: any) => s.team_id === game.home_team_id),
         game.participations
     );
 
@@ -18,7 +19,7 @@ export default async function GamePage({ params }: { params: { id: string } }) {
         game.id,
         game.away_team_id,
         game.phase_id,
-        game.game_staff.filter(s => s.team_id === game.away_team_id),
+        game.game_staff.filter((s: any) => s.team_id === game.away_team_id),
         game.participations
     );
 

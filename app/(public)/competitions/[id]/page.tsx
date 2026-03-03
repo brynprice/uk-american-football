@@ -2,8 +2,9 @@ import Link from 'next/link';
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 
-export default async function CompetitionPage({ params }: { params: { id: string } }) {
-    const competition = await ArchiveService.getCompetitionById(params.id);
+export default async function CompetitionPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    const competition = await ArchiveService.getCompetitionById(id);
 
     return (
         <ArchiveLayout>
@@ -31,7 +32,7 @@ export default async function CompetitionPage({ params }: { params: { id: string
                             </tr>
                         </thead>
                         <tbody>
-                            {competition.seasons?.sort((a, b) => b.year - a.year).map((season) => (
+                            {competition.seasons?.sort((a: any, b: any) => b.year - a.year).map((season: any) => (
                                 <tr key={season.id} className="border-b border-slate-200 hover:bg-slate-50 transition-colors">
                                     <td className="py-4 px-4 font-bold text-lg leading-none">{season.year}</td>
                                     <td className="py-4 px-4">{season.name || `${season.year} Season`}</td>

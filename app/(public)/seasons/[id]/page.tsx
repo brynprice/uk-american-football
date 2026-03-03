@@ -3,8 +3,9 @@ import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import PhaseView from '@/components/archive/PhaseView';
 
-export default async function SeasonPage({ params }: { params: { id: string } }) {
-    const season = await ArchiveService.getSeasonDetails(params.id);
+export default async function SeasonPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    const season = await ArchiveService.getSeasonDetails(id);
 
     return (
         <ArchiveLayout>
