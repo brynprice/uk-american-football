@@ -15,8 +15,8 @@ export default async function HomePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {competitions.map((comp) => (
-            <Link
-              key={comp.id}
+            <Link 
+              key={comp.id} 
               href={`/competitions/${comp.id}`}
               className="group block p-6 bg-white border border-slate-200 shadow-sm hover:border-blue-500 hover:shadow-md transition-all"
             >
@@ -32,35 +32,18 @@ export default async function HomePage() {
               <span className="text-sm font-bold text-blue-600 group-hover:underline">View Seasons &rarr;</span>
             </Link>
           ))}
-
-          {competitions.length === 0 && (
+          
+          {(!competitions || competitions.length === 0) && (
             <div className="col-span-full p-12 text-center bg-white border border-dashed border-slate-300 rounded">
-              <p className="text-slate-400 font-sans italic">No competitions found. Start by adding a competition to the archive.</p>
+              <p className="text-slate-400 font-sans italic">No competitions found in the database yet.</p>
             </div>
           )}
         </div>
       </section>
 
       <section className="bg-slate-900 text-white p-8 rounded shadow-lg">
-        <h3 className="text-xl font-bold mb-4 font-sans uppercase tracking-widest">Archive Statistics</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-          <div>
-            <div className="text-2xl font-black text-blue-400">0</div>
-            <div className="text-xs uppercase opacity-75 font-sans">Seasons</div>
-          </div>
-          <div>
-            <div className="text-2xl font-black text-blue-400">0</div>
-            <div className="text-xs uppercase opacity-75 font-sans">Games</div>
-          </div>
-          <div>
-            <div className="text-2xl font-black text-blue-400">0</div>
-            <div className="text-xs uppercase opacity-75 font-sans">Teams</div>
-          </div>
-          <div>
-            <div className="text-2xl font-black text-blue-400">0%</div>
-            <div className="text-xs uppercase opacity-75 font-sans">Completeness</div>
-          </div>
-        </div>
+        <h3 className="text-xl font-bold mb-4 font-sans uppercase tracking-widest">Archive Status</h3>
+        <p className="text-sm opacity-75 mb-6">Database connected. Waiting for historical records.</p>
       </section>
     </ArchiveLayout>
   );
