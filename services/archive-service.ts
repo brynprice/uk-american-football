@@ -9,46 +9,52 @@ export type Team = Database["public"]["Tables"]["teams"]["Row"];
 export type Person = Database["public"]["Tables"]["people"]["Row"];
 
 export const ArchiveService = {
-    async getCompetitions() {
+    async getCompetitions(): Promise<Competition[]> {
         const { data, error } = await supabase.from("competitions").select("*").order("name");
         if (error) throw error;
-        return data;
+        return data || [];
     },
 
-    async getCompetitionById(id: string) {
+    async getCompetitionById(id: string): Promise<any> {
         const { data, error } = await supabase.from("competitions").select("*, seasons (*)").eq("id", id).single();
         if (error) throw error;
+        if (!data) throw new Error("Competition not found");
         return data;
     },
 
-    async getSeasonDetails(seasonId: string) {
+    async getSeasonDetails(seasonId: string): Promise<any> {
         const { data, error } = await supabase.from("seasons").select("*, competition:competitions (*), phases (*)").eq("id", seasonId).single();
         if (error) throw error;
+        if (!data) throw new Error("Season not found");
         return data;
     },
 
-    async getPhaseData(phaseId: string) {
+    async getPhaseData(phaseId: string): Promise<any> {
         const { data, error } = await supabase.from("phases").select("*, games (*, home_team:teams!home_team_id (*), away_team:teams!away_team_id (*)), participations (*, team:teams (*))").eq("id", phaseId).single();
         if (error) throw error;
+        if (!data) throw new Error("Phase not found");
         return data;
     },
 
-    async getGameDetails(gameId: string) {
+    async getGameDetails(gameId: string): Promise<any> {
         const { data, error } = await supabase.from("games").select("*, home_team:teams!home_team_id (*, team_aliases (*)), away_team:teams!away_team_id (*, team_aliases (*)), venue:venues (*), phase:phases (*, season:seasons (id, year, competition:competitions (name))), game_staff (*, person:people (*)), sources (*), notes (*)").eq("id", gameId).single();
         if (error) throw error;
+        if (!data) throw new Error("Game not found");
         const { data: participations } = await supabase.from("participations").select("*, person:people (*)").eq("phase_id", data.phase_id);
         return { ...data, participations: participations || [] };
     },
 
-    async getTeamHistory(teamId: string) {
+    async getTeamHistory(teamId: string): Promise<any> {
         const { data, error } = await supabase.from("teams").select("*, team_aliases (*), participations (*, phase:phases (*, season:seasons (*, competition:competitions (*))))").eq("id", teamId).single();
         if (error) throw error;
+        if (!data) throw new Error("Team not found");
         return data;
     },
 
-    async getPersonDetails(personId: string) {
+    async getPersonDetails(personId: string): Promise<any> {
         const { data, error } = await supabase.from("people").select("*, game_staff (*, game:games (*, phase:phases (*, season:seasons (*, competition:competitions (*))))), participations (*, phase:phases (*, season:seasons (*, competition:competitions (*))))").eq("id", personId).single();
         if (error) throw error;
+        if (!data) throw new Error("Person not found");
         return data;
     }
 };
