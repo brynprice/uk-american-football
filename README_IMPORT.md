@@ -32,6 +32,8 @@ Ensure your spreadsheet has the following columns (in any order, but named exact
 - `home_score`: Number (or empty if unknown)
 - `venue`: Venue name (optional)
 - `notes`: Any archival notes (optional)
+- `away_coach`: Full Name of the Away Head Coach (optional)
+- `home_coach`: Full Name of the Home Head Coach (optional)
 
 Export this sheet as a **CSV** file (e.g. `my_data.csv`).
 

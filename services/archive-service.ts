@@ -37,14 +37,25 @@ export const ArchiveService = {
     },
 
     async getGameDetails(gameId: string): Promise<any> {
-        const { data, error } = await supabase.from("games").select("*, home_team:teams!home_team_id (*, team_aliases (*)), away_team:teams!away_team_id (*, team_aliases (*)), venue:venues (*), phase:phases (*, season:seasons (id, year, competition:competitions (name))), game_staff (*, person:people (*)), sources (*), notes (*)").eq("id", gameId).single();
+        const { data, error } = await supabase.from("games").select("*, home_team:teams!home_team_id (*, team_aliases (*)), away_team:teams!away_team_id (*, team_aliases (*)), venue:venues (*), phase:phases (*, season:seasons (id, year, competition:competitions (name))), game_staff (*, person:people (*))").eq("id", gameId).single();
         if (error) throw error;
         if (!data) throw new Error("Game not found");
 
-        // Explicitly cast data to any to prevent 'never' type collapse
         const gameData = data as any;
-        const { data: participations } = await supabase.from("participations").select("*, person:people (*)").eq("phase_id", gameData.phase_id);
-        return { ...gameData, participations: participations || [] };
+
+        // Fetch polymorphic relations separately to avoid PostgREST relationship errors
+        const [sources, notes, participations] = await Promise.all([
+            supabase.from("sources").select("*").eq("entity_id", gameId).eq("entity_type", "games"),
+            supabase.from("notes").select("*").eq("entity_id", gameId).eq("entity_type", "games"),
+            supabase.from("participations").select("*, person:people (*)").eq("phase_id", gameData.phase_id)
+        ]);
+
+        return {
+            ...gameData,
+            sources: sources.data || [],
+            notes: notes.data || [],
+            participations: participations.data || []
+        };
     },
 
 

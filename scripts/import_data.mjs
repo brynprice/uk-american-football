@@ -24,6 +24,7 @@ console.log("--- Env Diagnostic ---");
 console.log("SUPABASE_URL found:", !!supabaseUrl);
 console.log("ANON_KEY found:", !!supabaseAnonKey);
 console.log("SERVICE_ROLE_KEY found:", !!supabaseServiceKey);
+console.log("Detected Keys:", Object.keys(process.env).filter(k => k.includes('SUPABASE') || k.includes('KEY')));
 console.log("----------------------");
 
 if (!supabaseUrl || !supabaseKey) {
@@ -127,6 +128,68 @@ async function getOrCreateTeam(name) {
     return newData.id;
 }
 
+async function getOrCreatePerson(displayName) {
+    if (!displayName) return null;
+
+    // Naivety assumption: first word is first name, rest is last name
+    const parts = displayName.trim().split(' ');
+    const firstName = parts[0];
+    const lastName = parts.slice(1).join(' ');
+
+    const { data, error } = await supabase
+        .from('people')
+        .select('id')
+        .eq('display_name', displayName.trim())
+        .single();
+
+    if (data) return data.id;
+
+    const { data: newData, error: insertError } = await supabase
+        .from('people')
+        .insert({
+            display_name: displayName.trim(),
+            first_name: firstName || null,
+            last_name: lastName || null
+        })
+        .select('id')
+        .single();
+
+    if (insertError) throw insertError;
+    return newData.id;
+}
+
+async function ensureParticipation(phaseId, teamId, coachId = null) {
+    const { data: existing, error: findError } = await supabase
+        .from('participations')
+        .select('id')
+        .eq('phase_id', phaseId)
+        .eq('team_id', teamId)
+        .single();
+
+    // Ignore error 406 (Not Acceptable) which might happen if multiple results or 0 results
+    if (existing) {
+        // Optionally update coach if it was null before? Skip for now to let manual DB take precedence.
+        return existing.id;
+    }
+
+    const { data: newData, error: insertError } = await supabase
+        .from('participations')
+        .insert({
+            phase_id: phaseId,
+            team_id: teamId,
+            head_coach_id: coachId
+        })
+        .select('id')
+        .single();
+
+    if (insertError) {
+        // If there was a race condition or constraint violation, try to ignore
+        if (insertError.code === '23505') return null; // unique violation
+        throw insertError;
+    }
+    return newData.id;
+}
+
 // --- MAIN ---
 
 async function importData(filePath) {
@@ -150,7 +213,9 @@ async function importData(filePath) {
                 away_score,
                 home_score,
                 venue,
-                notes
+                notes,
+                away_coach,
+                home_coach
             } = record;
 
             console.log(`Processing: ${year} ${competition} - ${away_team} @ ${home_team}`);
@@ -164,8 +229,16 @@ async function importData(filePath) {
             const homeTeamId = await getOrCreateTeam(home_team);
             const awayTeamId = await getOrCreateTeam(away_team);
 
-            // 3. Create Game
-            const { error: gameError } = await supabase
+            // 3. Resolve Coaches
+            const homeCoachId = await getOrCreatePerson(home_coach);
+            const awayCoachId = await getOrCreatePerson(away_coach);
+
+            // 4. Ensure Participations (For Standings)
+            await ensureParticipation(phaseId, homeTeamId, homeCoachId);
+            await ensureParticipation(phaseId, awayTeamId, awayCoachId);
+
+            // 5. Create Game
+            const { data: gameData, error: gameError } = await supabase
                 .from('games')
                 .insert({
                     phase_id: phaseId,
@@ -176,13 +249,34 @@ async function importData(filePath) {
                     date: date || null,
                     notes: notes || null,
                     status: 'completed'
-                });
+                })
+                .select('id')
+                .single();
 
             if (gameError) {
                 // If it's a duplicate or other error, log it but continue
                 console.warn(`  [Warning] Could not insert game: ${gameError.message}`);
             } else {
                 console.log(`  [Success] Game recorded.`);
+
+                // 6. Link Coaches to Game
+                if (homeCoachId) {
+                    await supabase.from('game_staff').insert({
+                        game_id: gameData.id,
+                        team_id: homeTeamId,
+                        person_id: homeCoachId,
+                        role: 'head_coach'
+                    });
+                }
+
+                if (awayCoachId) {
+                    await supabase.from('game_staff').insert({
+                        game_id: gameData.id,
+                        team_id: awayTeamId,
+                        person_id: awayCoachId,
+                        role: 'head_coach'
+                    });
+                }
             }
 
         } catch (err) {
