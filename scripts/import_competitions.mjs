@@ -1,0 +1,79 @@
+/**
+ * UK American Football Archive - Competition Import Script
+ */
+
+import fs from 'fs';
+import { parse } from 'csv-parse/sync';
+import { createClient } from '@supabase/supabase-js';
+import dotenv from 'dotenv';
+
+// Load environment variables from .env.local
+dotenv.config({ path: '.env.local' });
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY;
+
+// Use Service Role Key if available (bypasses RLS), otherwise fallback to Anon Key
+const supabaseKey = supabaseServiceKey || supabaseAnonKey;
+
+if (!supabaseUrl || !supabaseKey) {
+    console.error("CRITICAL: Missing SUPABASE_URL or SERVICE_ROLE_KEY in .env.local");
+    process.exit(1);
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+async function importCompetitions(filePath) {
+    const input = fs.readFileSync(filePath);
+    const records = parse(input, {
+        columns: true,
+        skip_empty_lines: true,
+        bom: true
+    });
+
+    console.log(`--- Importing ${records.length} Competitions ---`);
+
+    for (const record of records) {
+        const { name, level, description } = record;
+
+        if (!name) {
+            console.warn(`[Warning] Skipping record with missing name:`, record);
+            continue;
+        }
+
+        const cleanName = name.trim();
+        const slug = slugify(cleanName);
+
+        const { data: existing } = await supabase
+            .from('competitions')
+            .select('id')
+            .eq('slug', slug)
+            .maybeSingle();
+
+        if (existing) {
+            console.log(`[Info] Updating ${cleanName}...`);
+            await supabase.from('competitions').update({
+                name: cleanName,
+                level: level || 'Senior',
+                description: description || null
+            }).eq('id', existing.id);
+        } else {
+            console.log(`[Success] Creating ${cleanName}...`);
+            await supabase.from('competitions').insert({
+                name: cleanName,
+                slug,
+                level: level || 'Senior',
+                description: description || null
+            });
+        }
+    }
+    console.log("--- Competition Import Finished ---");
+}
+
+const fileArg = process.argv[2];
+if (!fileArg) {
+    console.log("Usage: node scripts/import_competitions.mjs <path_to_csv>");
+} else {
+    importCompetitions(fileArg);
+}

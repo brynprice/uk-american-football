@@ -92,8 +92,13 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                                     )}
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <div className="flex-1 text-center pr-4">
+                                    <div className="flex-1 flex items-center justify-end gap-3 pr-4 text-right">
                                         <span className="font-black text-lg">{game.away_team?.name}</span>
+                                        {game.away_team?.logo_url && (
+                                            <div className="w-8 h-8 bg-slate-50 p-1 flex items-center justify-center shrink-0 border border-slate-100 rounded">
+                                                <img src={game.away_team.logo_url} alt="" className="max-w-full max-h-full object-contain" />
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="flex items-center gap-4 bg-slate-50 px-4 py-1 rounded border border-slate-100 font-black">
                                         <span className={game.away_score > game.home_score ? "text-blue-700" : ""}>
@@ -104,7 +109,12 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                                             {game.home_score ?? "-"}
                                         </span>
                                     </div>
-                                    <div className="flex-1 text-center pl-4">
+                                    <div className="flex-1 flex items-center justify-start gap-3 pl-4 text-left">
+                                        {game.home_team?.logo_url && (
+                                            <div className="w-8 h-8 bg-slate-50 p-1 flex items-center justify-center shrink-0 border border-slate-100 rounded">
+                                                <img src={game.home_team.logo_url} alt="" className="max-w-full max-h-full object-contain" />
+                                            </div>
+                                        )}
                                         <span className="font-black text-lg">{game.home_team?.name}</span>
                                     </div>
                                 </div>

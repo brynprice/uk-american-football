@@ -41,7 +41,12 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                     {/* Scoreboard */}
                     <div className="p-8 grid grid-cols-3 items-center">
                         {/* Away Team */}
-                        <div className="text-center">
+                        <div className="flex flex-col items-center">
+                            {game.away_team.logo_url && (
+                                <div className="w-20 h-20 bg-white p-1 border border-slate-200 shadow-sm rounded mb-4 flex items-center justify-center overflow-hidden">
+                                    <img src={game.away_team.logo_url} alt={game.away_team.name} className="max-w-full max-h-full object-contain" />
+                                </div>
+                            )}
                             <Link href={`/teams/${game.away_team_id}`} className="text-2xl font-black hover:text-blue-700">
                                 {game.away_team.name}
                             </Link>
@@ -56,7 +61,12 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                         </div>
 
                         {/* Home Team */}
-                        <div className="text-center">
+                        <div className="flex flex-col items-center">
+                            {game.home_team.logo_url && (
+                                <div className="w-20 h-20 bg-white p-1 border border-slate-200 shadow-sm rounded mb-4 flex items-center justify-center overflow-hidden">
+                                    <img src={game.home_team.logo_url} alt={game.home_team.name} className="max-w-full max-h-full object-contain" />
+                                </div>
+                            )}
                             <Link href={`/teams/${game.home_team_id}`} className="text-2xl font-black hover:text-blue-700">
                                 {game.home_team.name}
                             </Link>

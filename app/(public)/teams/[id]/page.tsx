@@ -8,17 +8,24 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
 
     return (
         <ArchiveLayout>
-            <div className="mb-12">
-                <h1 className="text-5xl font-black mb-2">{team.name}</h1>
-                <div className="flex gap-4 items-center">
-                    <span className="text-slate-500 font-sans uppercase tracking-widest text-xs">
-                        {team.location} &bull; Founded {team.founded_year || "Unknown"}
-                    </span>
-                    {team.folded_year && (
-                        <span className="bg-red-50 text-red-600 text-[10px] font-black uppercase px-2 py-0.5 rounded border border-red-100 italic">
-                            Folded {team.folded_year}
+            <div className="mb-12 flex flex-col md:flex-row gap-8 items-start md:items-center">
+                {team.logo_url && (
+                    <div className="w-32 h-32 bg-white p-2 border border-slate-200 shadow-sm rounded-lg overflow-hidden flex items-center justify-center shrink-0">
+                        <img src={team.logo_url} alt={`${team.name} Logo`} className="max-w-full max-h-full object-contain" />
+                    </div>
+                )}
+                <div>
+                    <h1 className="text-5xl font-black mb-2">{team.name}</h1>
+                    <div className="flex gap-4 items-center">
+                        <span className="text-slate-500 font-sans uppercase tracking-widest text-xs">
+                            {team.location} &bull; Founded {team.founded_year || "Unknown"}
                         </span>
-                    )}
+                        {team.folded_year && (
+                            <span className="bg-red-50 text-red-600 text-[10px] font-black uppercase px-2 py-0.5 rounded border border-red-100 italic">
+                                Folded {team.folded_year}
+                            </span>
+                        )}
+                    </div>
                 </div>
             </div>
 
@@ -60,10 +67,17 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                         <h4 className="text-xs font-black uppercase text-slate-400 mb-4 tracking-tighter">Known Aliases</h4>
                         <div className="space-y-3">
                             {team.team_aliases?.map((alias: any) => (
-                                <div key={alias.id} className="text-sm border-l-2 border-slate-100 pl-3">
-                                    <div className="font-bold">{alias.name}</div>
-                                    <div className="text-[10px] text-slate-400 uppercase font-sans">
-                                        {alias.start_year || "?"} &mdash; {alias.end_year || "Present"}
+                                <div key={alias.id} className="text-sm border-l-2 border-slate-100 pl-3 flex items-center gap-4 py-2">
+                                    {alias.logo_url && (
+                                        <div className="w-8 h-8 bg-slate-50 border border-slate-100 p-1 flex items-center justify-center shrink-0 overflow-hidden rounded shadow-sm">
+                                            <img src={alias.logo_url} alt={alias.name} className="max-w-full max-h-full object-contain" />
+                                        </div>
+                                    )}
+                                    <div className="flex-1">
+                                        <div className="font-bold">{alias.name}</div>
+                                        <div className="text-[10px] text-slate-400 uppercase font-sans">
+                                            {alias.start_year || "?"} &mdash; {alias.end_year || "Present"}
+                                        </div>
                                     </div>
                                 </div>
                             ))}

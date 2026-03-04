@@ -51,6 +51,7 @@ CREATE TABLE teams (
   founded_year INT,
   folded_year INT,
   notes TEXT,
+  logo_url TEXT,
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
@@ -61,6 +62,7 @@ CREATE TABLE team_aliases (
   name TEXT NOT NULL,
   start_year INT,
   end_year INT,
+  logo_url TEXT,
   created_at TIMESTAMPTZ DEFAULT now()
 );
 

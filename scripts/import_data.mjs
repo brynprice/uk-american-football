@@ -158,6 +158,27 @@ async function getOrCreatePerson(displayName) {
     return newData.id;
 }
 
+async function getOrCreateVenue(name) {
+    if (!name) return null;
+
+    const { data, error } = await supabase
+        .from('venues')
+        .select('id')
+        .eq('name', name.trim())
+        .maybeSingle();
+
+    if (data) return data.id;
+
+    const { data: newData, error: insertError } = await supabase
+        .from('venues')
+        .insert({ name: name.trim() })
+        .select('id')
+        .single();
+
+    if (insertError) throw insertError;
+    return newData.id;
+}
+
 async function ensureParticipation(phaseId, teamId, coachId = null) {
     const { data: existing, error: findError } = await supabase
         .from('participations')
@@ -196,7 +217,8 @@ async function importData(filePath) {
     const input = fs.readFileSync(filePath);
     const records = parse(input, {
         columns: true,
-        skip_empty_lines: true
+        skip_empty_lines: true,
+        bom: true
     });
 
     console.log(`--- Starting Import of ${records.length} records ---`);
@@ -218,6 +240,12 @@ async function importData(filePath) {
                 home_coach
             } = record;
 
+            // Validation: Skip if core identifiers are missing
+            if (!competition || !year || !home_team || !away_team) {
+                console.warn(`[Warning] Skipping malformed record (missing competition, year, or teams):`, record);
+                continue;
+            }
+
             console.log(`Processing: ${year} ${competition} - ${away_team} @ ${home_team}`);
 
             // 1. Resolve Parents
@@ -229,9 +257,10 @@ async function importData(filePath) {
             const homeTeamId = await getOrCreateTeam(home_team);
             const awayTeamId = await getOrCreateTeam(away_team);
 
-            // 3. Resolve Coaches
+            // 3. Resolve Coaches & Venues
             const homeCoachId = await getOrCreatePerson(home_coach);
             const awayCoachId = await getOrCreatePerson(away_coach);
+            const venueId = await getOrCreateVenue(venue);
 
             // 4. Ensure Participations (For Standings)
             await ensureParticipation(phaseId, homeTeamId, homeCoachId);
@@ -261,6 +290,7 @@ async function importData(filePath) {
                         home_score: home_score ? parseInt(home_score) : null,
                         away_score: away_score ? parseInt(away_score) : null,
                         date: date || null,
+                        venue_id: venueId,
                         notes: notes || null,
                         status: 'completed'
                     })
