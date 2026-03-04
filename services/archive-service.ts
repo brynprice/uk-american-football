@@ -60,5 +60,23 @@ export const ArchiveService = {
         if (error) throw error;
         if (!data) throw new Error("Person not found");
         return data;
+    },
+
+    async getTeams(): Promise<Team[]> {
+        const { data, error } = await supabase.from("teams").select("*").order("name");
+        if (error) throw error;
+        return data || [];
+    },
+
+    async getPeople(): Promise<Person[]> {
+        const { data, error } = await supabase.from("people").select("*").order("display_name");
+        if (error) throw error;
+        return data || [];
+    },
+
+    async getVenues(): Promise<any[]> {
+        const { data, error } = await supabase.from("venues").select("*").order("name");
+        if (error) throw error;
+        return data || [];
     }
 };
