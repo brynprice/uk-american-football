@@ -10,26 +10,27 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
         <ArchiveLayout>
             <div className="mb-8">
                 <Link
-                    href={`/seasons/${phase.season_id}`}
+                    href={`/seasons/${phase.season.id}`}
                     className="text-blue-600 hover:underline text-sm mb-4 inline-block"
                 >
-                    &larr; Back to {phase.name}
+                    &larr; Back to {phase.season.year} {phase.season.competition.name}
                 </Link>
                 <div className="flex flex-col gap-2">
                     <h1 className="text-4xl font-black">{phase.name}</h1>
                     <div className="text-sm text-slate-500 font-sans uppercase tracking-widest">
-                        {phase.type} &bull; {phase.games?.length || 0} Games Recorded
+                        {phase.type} &bull; {phase.games?.length || 0} Games {phase.isLeaf ? "in Phase" : "Rolled Up"}
                     </div>
                 </div>
             </div>
 
             <div className="space-y-12">
-                {/* Standings Placeholder if teams exist */}
-                {phase.participations && phase.participations.length > 0 && (
+                {/* Standings only for leaf phases */}
+                {phase.isLeaf && phase.participations && phase.participations.length > 0 && (
                     <section>
                         <h2 className="text-xl font-bold mb-4 font-sans uppercase tracking-widest border-b-2 border-slate-900 pb-1">
-                            Current Standings
+                            Phase Standings
                         </h2>
+                        {/* ... table content remains same ... */}
                         <div className="overflow-x-auto">
                             <table className="w-full text-left border-collapse font-sans text-sm">
                                 <thead>
@@ -57,10 +58,16 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                     </section>
                 )}
 
+                {!phase.isLeaf && (
+                    <div className="bg-slate-50 p-4 border-l-4 border-slate-900 text-sm italic text-slate-600 font-sans">
+                        This is a container phase. Standings are displayed at the individual group/division level. All results from child phases are aggregated below.
+                    </div>
+                )}
+
                 {/* Games Section */}
                 <section>
                     <h2 className="text-xl font-bold mb-6 font-sans uppercase tracking-widest border-b-2 border-slate-900 pb-1">
-                        Game Results
+                        {phase.isLeaf ? "Game Results" : "Combined Game Results"}
                     </h2>
                     <div className="space-y-4">
                         {phase.games?.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime()).map((game: any) => (
@@ -70,9 +77,16 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                                 className="block bg-white border border-slate-200 p-4 hover:border-blue-500 transition-all shadow-sm"
                             >
                                 <div className="flex justify-between items-center mb-2">
-                                    <span className="text-xs font-sans text-slate-500 uppercase tracking-tighter">
-                                        {game.date_display || (game.date ? new Date(game.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : "Unknown Date")}
-                                    </span>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-xs font-sans text-slate-500 uppercase tracking-tighter">
+                                            {game.date_display || (game.date ? new Date(game.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : "Unknown Date")}
+                                        </span>
+                                        {!phase.isLeaf && (
+                                            <span className="text-[10px] font-black bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded uppercase">
+                                                {game.phase?.name}
+                                            </span>
+                                        )}
+                                    </div>
                                     {game.is_playoff && (
                                         <span className="text-[10px] font-black bg-slate-900 text-white px-2 py-0.5 rounded uppercase">Postseason</span>
                                     )}

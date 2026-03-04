@@ -30,10 +30,53 @@ export const ArchiveService = {
     },
 
     async getPhaseData(phaseId: string): Promise<any> {
-        const { data, error } = await supabase.from("phases").select("*, games (*, home_team:teams!home_team_id (*), away_team:teams!away_team_id (*)), participations (*, person:people (*), team:teams (*))").eq("id", phaseId).single();
-        if (error) throw error;
-        if (!data) throw new Error("Phase not found");
-        return data;
+        // 1. Fetch the initial phase to get season_id and descriptive info
+        const { data: phaseData, error: phaseError } = await supabase.from("phases")
+            .select("*, season:seasons(id, year, competition:competitions(name))")
+            .eq("id", phaseId).single();
+        if (phaseError) throw phaseError;
+        if (!phaseData) throw new Error("Phase not found");
+        const phase = phaseData as any;
+
+        // 2. Fetch all phases for this season to build the tree
+        const { data: allPhasesData, error: allPhasesError } = await supabase.from("phases").select("*").eq("season_id", phase.season_id);
+        if (allPhasesError) throw allPhasesError;
+        const allPhases = (allPhasesData || []) as any[];
+
+        // 3. Find all descendant phase IDs
+        const getDescendants = (parentId: string): string[] => {
+            const children = allPhases.filter(p => p.parent_phase_id === parentId);
+            return [parentId, ...children.flatMap(c => getDescendants(c.id))];
+        };
+        const descendantIds = getDescendants(phaseId);
+        const isLeaf = allPhases.filter(p => p.parent_phase_id === phaseId).length === 0;
+
+        // 4. Fetch all games for these phases
+        const { data: games, error: gamesError } = await supabase
+            .from("games")
+            .select("*, home_team:teams!home_team_id (*), away_team:teams!away_team_id (*), phase:phases(name)")
+            .in("phase_id", descendantIds)
+            .order("date", { ascending: true });
+
+        if (gamesError) throw gamesError;
+
+        // 5. Fetch participations (standings) only if it's a leaf phase
+        let participations: any[] = [];
+        if (isLeaf) {
+            const { data: partData, error: partError } = await supabase
+                .from("participations")
+                .select("*, person:people (*), team:teams (*)")
+                .eq("phase_id", phaseId);
+            if (partError) throw partError;
+            participations = partData || [];
+        }
+
+        return {
+            ...phase,
+            isLeaf,
+            games: games || [],
+            participations
+        };
     },
 
     async getGameDetails(gameId: string): Promise<any> {
