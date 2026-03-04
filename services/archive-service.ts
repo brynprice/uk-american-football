@@ -30,7 +30,7 @@ export const ArchiveService = {
     },
 
     async getPhaseData(phaseId: string): Promise<any> {
-        const { data, error } = await supabase.from("phases").select("*, games (*, home_team:teams!home_team_id (*), away_team:teams!away_team_id (*)), participations (*, team:teams (*))").eq("id", phaseId).single();
+        const { data, error } = await supabase.from("phases").select("*, games (*, home_team:teams!home_team_id (*), away_team:teams!away_team_id (*)), participations (*, person:people (*), team:teams (*))").eq("id", phaseId).single();
         if (error) throw error;
         if (!data) throw new Error("Phase not found");
         return data;

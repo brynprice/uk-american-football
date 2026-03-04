@@ -237,45 +237,88 @@ async function importData(filePath) {
             await ensureParticipation(phaseId, homeTeamId, homeCoachId);
             await ensureParticipation(phaseId, awayTeamId, awayCoachId);
 
-            // 5. Create Game
-            const { data: gameData, error: gameError } = await supabase
+            // 5. Resolve or Create Game
+            let gameId;
+            const { data: existingGame } = await supabase
                 .from('games')
-                .insert({
-                    phase_id: phaseId,
-                    home_team_id: homeTeamId,
-                    away_team_id: awayTeamId,
-                    home_score: home_score ? parseInt(home_score) : null,
-                    away_score: away_score ? parseInt(away_score) : null,
-                    date: date || null,
-                    notes: notes || null,
-                    status: 'completed'
-                })
                 .select('id')
-                .single();
+                .eq('phase_id', phaseId)
+                .eq('home_team_id', homeTeamId)
+                .eq('away_team_id', awayTeamId)
+                .eq('date', date || null)
+                .maybeSingle();
 
-            if (gameError) {
-                // If it's a duplicate or other error, log it but continue
-                console.warn(`  [Warning] Could not insert game: ${gameError.message}`);
+            if (existingGame) {
+                gameId = existingGame.id;
+                console.log(`  [Info] Game already exists (ID: ${gameId}). Updating staff/participations...`);
             } else {
-                console.log(`  [Success] Game recorded.`);
+                const { data: newGame, error: gameError } = await supabase
+                    .from('games')
+                    .insert({
+                        phase_id: phaseId,
+                        home_team_id: homeTeamId,
+                        away_team_id: awayTeamId,
+                        home_score: home_score ? parseInt(home_score) : null,
+                        away_score: away_score ? parseInt(away_score) : null,
+                        date: date || null,
+                        notes: notes || null,
+                        status: 'completed'
+                    })
+                    .select('id')
+                    .single();
 
-                // 6. Link Coaches to Game
-                if (homeCoachId) {
-                    await supabase.from('game_staff').insert({
-                        game_id: gameData.id,
+                if (gameError) {
+                    console.warn(`  [Warning] Could not insert game: ${gameError.message}`);
+                    continue;
+                }
+                gameId = newGame.id;
+                console.log(`  [Success] Game recorded (ID: ${gameId}).`);
+            }
+
+            // 6. Link Coaches to Game
+            if (homeCoachId) {
+                const { data: existingStaff } = await supabase
+                    .from('game_staff')
+                    .select('id')
+                    .eq('game_id', gameId)
+                    .eq('team_id', homeTeamId)
+                    .eq('person_id', homeCoachId)
+                    .eq('role', 'head_coach')
+                    .maybeSingle();
+
+                if (!existingStaff) {
+                    const { error: staffError } = await supabase.from('game_staff').insert({
+                        game_id: gameId,
                         team_id: homeTeamId,
                         person_id: homeCoachId,
                         role: 'head_coach'
                     });
+                    if (!staffError) console.log(`  [Success] Home coach (${home_coach}) linked to game.`);
+                } else {
+                    console.log(`  [Info] Home coach (${home_coach}) already linked to game.`);
                 }
+            }
 
-                if (awayCoachId) {
-                    await supabase.from('game_staff').insert({
-                        game_id: gameData.id,
+            if (awayCoachId) {
+                const { data: existingStaff } = await supabase
+                    .from('game_staff')
+                    .select('id')
+                    .eq('game_id', gameId)
+                    .eq('team_id', awayTeamId)
+                    .eq('person_id', awayCoachId)
+                    .eq('role', 'head_coach')
+                    .maybeSingle();
+
+                if (!existingStaff) {
+                    const { error: staffError } = await supabase.from('game_staff').insert({
+                        game_id: gameId,
                         team_id: awayTeamId,
                         person_id: awayCoachId,
                         role: 'head_coach'
                     });
+                    if (!staffError) console.log(`  [Success] Away coach (${away_coach}) linked to game.`);
+                } else {
+                    console.log(`  [Info] Away coach (${away_coach}) already linked to game.`);
                 }
             }
 

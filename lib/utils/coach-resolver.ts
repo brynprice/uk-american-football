@@ -15,8 +15,8 @@ export function resolveHeadCoach(
     gameId: string,
     teamId: string,
     phaseId: string,
-    gameStaff: (GameStaff & { people: Person })[],
-    participations: (Participation & { people: Person | null })[]
+    gameStaff: (GameStaff & { person: Person })[],
+    participations: (Participation & { person: Person | null })[]
 ): Person | null {
     // 1. Check for game-level override
     const gameLevelOverride = gameStaff.find(
@@ -24,7 +24,7 @@ export function resolveHeadCoach(
     );
 
     if (gameLevelOverride) {
-        return gameLevelOverride.people;
+        return gameLevelOverride.person;
     }
 
     // 2. Fall back to phase-level default
@@ -32,5 +32,5 @@ export function resolveHeadCoach(
         (p) => p.phase_id === phaseId && p.team_id === teamId
     );
 
-    return participation?.people ?? null;
+    return participation?.person ?? null;
 }
