@@ -20,14 +20,14 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
 
                 <div className="flex gap-4 mt-4">
                     <span className={`px-3 py-1 rounded text-xs font-black uppercase shadow-sm ${season.confidence_level === 'high' ? 'bg-green-100 text-green-700' :
-                            season.confidence_level === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                                'bg-red-100 text-red-700'
+                        season.confidence_level === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                            'bg-red-100 text-red-700'
                         }`}>
                         Confidence: {season.confidence_level}
                     </span>
                     {season.start_date && (
                         <span className="text-xs font-sans text-slate-500 bg-white border border-slate-200 px-3 py-1 rounded shadow-sm">
-                            {new Date(season.start_date).toLocaleDateString()} &mdash; {season.end_date ? new Date(season.end_date).toLocaleDateString() : 'Unknown'}
+                            {new Date(season.start_date).toLocaleDateString('en-GB')} &mdash; {season.end_date ? new Date(season.end_date).toLocaleDateString('en-GB') : 'Unknown'}
                         </span>
                     )}
                 </div>

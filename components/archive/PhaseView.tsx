@@ -40,7 +40,7 @@ export default function PhaseView({ phases, parentPhaseId = null, seasonId }: Ph
                     {/* Simple placeholder for phase content (standings/games would go here) */}
                     <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                         <Link
-                            href={`/seasons/${seasonId}/phases/${phase.id}`}
+                            href={`/phases/${phase.id}`}
                             className="text-sm font-bold text-blue-600 hover:underline"
                         >
                             View Standings & Games &rarr;
