@@ -27,7 +27,7 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                     </span>
                     {season.start_date && (
                         <span className="text-xs font-sans text-slate-500 bg-white border border-slate-200 px-3 py-1 rounded shadow-sm">
-                            {new Date(season.start_date).toLocaleDateString('en-GB')} &mdash; {season.end_date ? new Date(season.end_date).toLocaleDateString('en-GB') : 'Unknown'}
+                            {new Date(season.start_date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })} &mdash; {season.end_date ? new Date(season.end_date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Unknown'}
                         </span>
                     )}
                 </div>

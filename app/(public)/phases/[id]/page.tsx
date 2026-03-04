@@ -71,7 +71,7 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                             >
                                 <div className="flex justify-between items-center mb-2">
                                     <span className="text-xs font-sans text-slate-500 uppercase tracking-tighter">
-                                        {game.date_display || (game.date ? new Date(game.date).toLocaleDateString('en-GB') : "Unknown Date")}
+                                        {game.date_display || (game.date ? new Date(game.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : "Unknown Date")}
                                     </span>
                                     {game.is_playoff && (
                                         <span className="text-[10px] font-black bg-slate-900 text-white px-2 py-0.5 rounded uppercase">Postseason</span>
