@@ -101,8 +101,24 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                         <div>
                             <h4 className="font-black uppercase text-slate-400 mb-3 text-[10px] tracking-tighter">Venue / Conditions</h4>
                             <div className="font-sans">
-                                <p className="font-bold text-slate-700">{game.venue?.name || "Venue records missing"}</p>
-                                <p className="text-slate-500">{game.venue?.city} {game.venue?.address}</p>
+                                {game.venue?.coordinates ? (
+                                    <a
+                                        href={`https://www.google.com/maps?q=${game.venue.coordinates.replace(/[()]/g, '')}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="group"
+                                    >
+                                        <p className="font-bold text-slate-700 group-hover:text-blue-700 transition-colors">
+                                            {game.venue.name} <span className="text-[10px] text-blue-500 uppercase font-sans">↗ Map</span>
+                                        </p>
+                                        <p className="text-slate-500">{game.venue.city} {game.venue.address}</p>
+                                    </a>
+                                ) : (
+                                    <>
+                                        <p className="font-bold text-slate-700">{game.venue?.name || "Venue records missing"}</p>
+                                        <p className="text-slate-500">{game.venue?.city} {game.venue?.address}</p>
+                                    </>
+                                )}
                                 {game.notes && <p className="mt-2 italic text-slate-600 border-t pt-2 border-slate-200">{game.notes}</p>}
                             </div>
                         </div>

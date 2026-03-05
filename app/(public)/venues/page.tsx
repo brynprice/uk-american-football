@@ -14,12 +14,25 @@ export default async function VenuesListPage() {
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {venues.map((venue) => (
+                    {venues.map((venue: any) => (
                         <div
                             key={venue.id}
                             className="p-6 bg-white border border-slate-200 shadow-sm"
                         >
-                            <h2 className="text-xl font-bold">{venue.name}</h2>
+                            {venue.coordinates ? (
+                                <a
+                                    href={`https://www.google.com/maps?q=${venue.coordinates.replace(/[()]/g, '')}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group block"
+                                >
+                                    <h2 className="text-xl font-bold group-hover:text-blue-700 transition-colors">
+                                        {venue.name} <span className="text-[10px] text-blue-500 uppercase font-sans">↗ Map</span>
+                                    </h2>
+                                </a>
+                            ) : (
+                                <h2 className="text-xl font-bold">{venue.name}</h2>
+                            )}
                             <div className="text-sm text-slate-500 font-sans mt-2">
                                 {venue.city || "Unknown City"}
                             </div>

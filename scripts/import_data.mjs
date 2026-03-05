@@ -46,19 +46,25 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 const slugify = (text) => text.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
 
 async function getOrCreateCompetition(name, level = 'Senior') {
-    const slug = slugify(name);
+    const cleanName = name.trim();
+    const slug = slugify(cleanName);
+
     const { data, error } = await supabase
         .from('competitions')
         .select('id')
-        .eq('slug', slug)
+        .or(`slug.eq.${slug},name.eq."${cleanName}"`)
         .maybeSingle();
 
     if (error && error.code !== 'PGRST116') console.error("Error looking up competition:", error);
-    if (data) return data.id;
+    if (data) {
+        console.log(`  [Lookup] Found existing competition "${cleanName}" (ID: ${data.id})`);
+        return data.id;
+    }
 
+    console.log(`  [Lookup] Competition "${cleanName}" not found, creating...`);
     const { data: newData, error: insertError } = await supabase
         .from('competitions')
-        .insert({ name, slug, level })
+        .insert({ name: cleanName, slug, level })
         .select('id')
         .single();
 
@@ -83,8 +89,12 @@ async function getOrCreateSeason(competitionId, year) {
         console.error("Error looking up season:", error);
     }
 
-    if (existing) return existing.id;
+    if (existing) {
+        console.log(`  [Lookup] Found existing season for year ${cleanYear} (ID: ${existing.id})`);
+        return existing.id;
+    }
 
+    console.log(`  [Lookup] Season for year ${cleanYear} not found, creating...`);
     const { data: newData, error: insertError } = await supabase
         .from('seasons')
         .insert({
