@@ -51,8 +51,9 @@ async function getOrCreateCompetition(name, level = 'Senior') {
         .from('competitions')
         .select('id')
         .eq('slug', slug)
-        .single();
+        .maybeSingle();
 
+    if (error && error.code !== 'PGRST116') console.error("Error looking up competition:", error);
     if (data) return data.id;
 
     const { data: newData, error: insertError } = await supabase
@@ -66,21 +67,30 @@ async function getOrCreateCompetition(name, level = 'Senior') {
 }
 
 async function getOrCreateSeason(competitionId, year) {
-    const { data, error } = await supabase
+    const cleanYear = parseInt(year);
+    if (isNaN(cleanYear)) {
+        throw new Error(`Invalid year provided for season creation: ${year}`);
+    }
+
+    const { data: existing, error } = await supabase
         .from('seasons')
         .select('id')
         .eq('competition_id', competitionId)
-        .eq('year', parseInt(year))
-        .single();
+        .eq('year', cleanYear)
+        .maybeSingle();
 
-    if (data) return data.id;
+    if (error && error.code !== 'PGRST116') {
+        console.error("Error looking up season:", error);
+    }
+
+    if (existing) return existing.id;
 
     const { data: newData, error: insertError } = await supabase
         .from('seasons')
         .insert({
             competition_id: competitionId,
-            year: parseInt(year),
-            name: `${year} Season`
+            year: cleanYear,
+            name: `${cleanYear} Season`
         })
         .select('id')
         .single();
@@ -95,8 +105,9 @@ async function getOrCreatePhase(seasonId, name) {
         .select('id')
         .eq('season_id', seasonId)
         .eq('name', name)
-        .single();
+        .maybeSingle();
 
+    if (error && error.code !== 'PGRST116') console.error("Error looking up phase:", error);
     if (data) return data.id;
 
     const { data: newData, error: insertError } = await supabase
@@ -113,14 +124,15 @@ async function getOrCreateTeam(name) {
     const { data, error } = await supabase
         .from('teams')
         .select('id')
-        .eq('name', name)
-        .single();
+        .eq('name', name.trim())
+        .maybeSingle();
 
+    if (error && error.code !== 'PGRST116') console.error("Error looking up team:", error);
     if (data) return data.id;
 
     const { data: newData, error: insertError } = await supabase
         .from('teams')
-        .insert({ name })
+        .insert({ name: name.trim() })
         .select('id')
         .single();
 
@@ -140,8 +152,9 @@ async function getOrCreatePerson(displayName) {
         .from('people')
         .select('id')
         .eq('display_name', displayName.trim())
-        .single();
+        .maybeSingle();
 
+    if (error && error.code !== 'PGRST116') console.error("Error looking up person:", error);
     if (data) return data.id;
 
     const { data: newData, error: insertError } = await supabase
@@ -237,7 +250,8 @@ async function importData(filePath) {
                 venue,
                 notes,
                 away_coach,
-                home_coach
+                home_coach,
+                is_double_header
             } = record;
 
             // Validation: Skip if core identifiers are missing
@@ -292,7 +306,8 @@ async function importData(filePath) {
                         date: date || null,
                         venue_id: venueId,
                         notes: notes || null,
-                        status: 'completed'
+                        status: 'completed',
+                        is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase())
                     })
                     .select('id')
                     .single();

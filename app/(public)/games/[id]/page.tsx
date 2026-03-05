@@ -38,7 +38,12 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                     {/* Game Header */}
                     <div className="bg-slate-900 text-white p-4 flex justify-between items-center font-sans tracking-widest text-xs uppercase">
                         <span>{game.date_display || (game.date ? new Date(game.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : "Unknown Date")}</span>
-                        <span className="font-black">{game.phase.name}</span>
+                        <div className="flex items-center gap-2">
+                            <span className="font-black">{game.phase.name}</span>
+                            {game.is_double_header && (
+                                <span className="bg-amber-400 text-slate-900 px-2 py-0.5 rounded text-[10px] font-black normal-case tracking-normal">Double Header</span>
+                            )}
+                        </div>
                         <span>{game.venue?.city || "Unknown Location"}</span>
                     </div>
 

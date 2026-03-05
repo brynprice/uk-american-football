@@ -1,0 +1,96 @@
+# Data Import Guide: UK American Football Archive
+
+This guide explains how to use the data import scripts to populate the database with historical teams, seasons, competitions, and game data.
+
+## Prerequisites
+
+Before running any import scripts, you must configure your environment:
+
+1. Install required dependencies:
+   ```bash
+   npm install csv-parse dotenv @supabase/supabase-js
+   ```
+
+2. Configure your `.env.local` file with your **Service Role Key** to bypass Row Level Security (RLS) during the import process:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+   ```
+   > [!WARNING]
+   > The `SUPABASE_SERVICE_ROLE_KEY` grants full database access. **Never commit it to version control.**
+
+## Available Import Scripts
+
+All data import scripts are located in the `scripts/` directory and are executed using Node.js. They process CSV (or JSON for phases) files and insert/update records in the Supabase database.
+
+### 1. Teams Import (`import_teams.mjs`)
+Imports team information.
+* **Standard File**: `data/teams.csv`
+* **Usage**: 
+  ```bash
+  node scripts/import_teams.mjs data/teams.csv
+  ```
+* **CSV Columns Required**: `name`
+* **Optional Columns**: `location`, `founded_year`, `folded_year`, `notes`, `logo_url`
+* **Behavior**: Matches teams by `name`. If found, updates the record; if not, creates a new team.
+
+### 2. Competitions Import (`import_competitions.mjs`)
+Imports league/competition data.
+* **Standard File**: `data/competitions.csv`
+* **Usage**:
+  ```bash
+  node scripts/import_competitions.mjs data/competitions.csv
+  ```
+* **CSV Columns Required**: `name`
+* **Optional Columns**: `level`, `description`
+* **Behavior**: Generates a slug from the name. Matches by `slug`. Updates existing or creates new competitions. Defaults `level` to 'Senior'.
+
+### 3. Seasons Import (`import_seasons.mjs`)
+Imports season data linked to specific competitions.
+* **Standard File**: `data/seasons.csv`
+* **Usage**:
+  ```bash
+  node scripts/import_seasons.mjs data/seasons.csv
+  ```
+* **CSV Columns Required**: `competition_name`, `year`
+* **Optional Columns**: `season_name`, `start_date`, `end_date`, `confidence_level`
+* **Behavior**: Looks up the competition by name/slug. Matches seasons by `competition_id` and `year`. Updates existing or creates new seasons.
+
+### 4. Bulk Load Phases (`bulk-load-phases.js`)
+Imports a hierarchical structure of phases (divisions, conferences, playoffs) for a specific season from a JSON file.
+* **Standard File**: `scripts/phases.json`
+* **Usage**:
+  ```bash
+  node scripts/bulk-load-phases.js scripts/phases.json --competition="<Competition Name>" --year=<YYYY> [--dry-run]
+  ```
+* **Format**: JSON array of phase objects with `name`, `type`, and optional nested `children`.
+* **Behavior**: Requires the `--competition` and `--year` arguments to properly link the phases to their respective season by looking up the `season_id` in the database. Supports a `--dry-run` flag to test the import without writing to the database. Inserts phases recursively to maintain parent-child relationships.
+
+### 5. Unified Data Import (`import_data.mjs`)
+A comprehensive script that imports game results and automatically creates missing related entities (competitions, seasons, phases, teams, coaches, venues).
+* **Standard File**: `data/games.csv`
+* **Usage**:
+  ```bash
+  node scripts/import_data.mjs data/games.csv
+  ```
+* **CSV Columns Required**: `competition`, `year`, `home_team`, `away_team`
+* **Optional Columns**: `phase`, `date` (YYYY-MM-DD), `home_score`, `away_score`, `venue`, `notes`, `home_coach`, `away_coach`, `is_double_header` (true/yes/1)
+* **Behavior**: 
+  1. Resolves or creates Competition, Season, and Phase.
+  2. Resolves or creates Home and Away Teams.
+  3. Resolves or creates Coaches and Venues.
+  4. Ensures team/coach participation records exist for the phase.
+  5. Inserts the game record (if it doesn't already exist for that date/phase/teams).
+  6. Links head coaches to the specific game in `game_staff`.
+
+## Recommended Workflow
+
+If you have isolated files for specific entities, import them in logical order from top to bottom (Parents -> Children):
+
+1. `import_competitions.mjs`
+2. `import_teams.mjs`
+3. `import_seasons.mjs`
+4. `bulk-load-phases.js` (if phase hierarchy is complex)
+5. `import_data.mjs` (for games)
+
+Alternatively, if you only have a flat spreadsheet of games, running `import_data.mjs` will do its best to automatically scaffold the required parent entities (competitions, seasons, phases, teams) on the fly.

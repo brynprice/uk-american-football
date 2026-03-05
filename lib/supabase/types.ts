@@ -207,6 +207,7 @@ export interface Database {
           venue_id: string | null
           status: string
           is_playoff: boolean
+          is_double_header: boolean
           notes: string | null
           confidence_level: string
           created_at: string
@@ -226,6 +227,7 @@ export interface Database {
           venue_id?: string | null
           status?: string
           is_playoff?: boolean
+          is_double_header?: boolean
           notes?: string | null
           confidence_level?: string
           created_at?: string
@@ -245,6 +247,7 @@ export interface Database {
           venue_id?: string | null
           status?: string
           is_playoff?: boolean
+          is_double_header?: boolean
           notes?: string | null
           confidence_level?: string
           created_at?: string

@@ -111,6 +111,7 @@ CREATE TABLE games (
   venue_id UUID REFERENCES venues(id),
   status TEXT DEFAULT 'completed', -- completed, cancelled, postponed, awarded
   is_playoff BOOLEAN DEFAULT false,
+  is_double_header BOOLEAN DEFAULT false,
   notes TEXT,
   confidence_level TEXT DEFAULT 'high',
   created_at TIMESTAMPTZ DEFAULT now(),

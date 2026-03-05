@@ -145,8 +145,8 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                             {team.team_aliases?.map((alias: any) => (
                                 <div key={alias.id} className="text-sm border-l-2 border-slate-100 pl-3 flex items-center gap-4 py-2">
                                     {alias.logo_url && (
-                                        <div className="w-8 h-8 bg-slate-50 border border-slate-100 p-1 flex items-center justify-center shrink-0 overflow-hidden rounded shadow-sm">
-                                            <img src={alias.logo_url} alt={alias.name} className="max-w-full max-h-full object-contain" />
+                                        <div className="w-8 h-8 bg-white border border-slate-200 p-1 flex items-center justify-center shrink-0 overflow-hidden rounded shadow-sm">
+                                            <img src={alias.logo_url} alt={`${alias.name} Logo`} className="max-w-full max-h-full object-contain" />
                                         </div>
                                     )}
                                     <div className="flex-1">

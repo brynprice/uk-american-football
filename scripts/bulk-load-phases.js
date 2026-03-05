@@ -7,22 +7,59 @@ async function bulkLoadPhases() {
     const args = process.argv.slice(2);
     const dryRun = args.includes('--dry-run');
     const filePath = args.find(a => a.endsWith('.json'));
-    const seasonIdArg = args.find(a => a.startsWith('--season='));
+    const competitionArg = args.find(a => a.startsWith('--competition='));
+    const yearArg = args.find(a => a.startsWith('--year='));
 
-    if (!filePath || !seasonIdArg) {
-        console.error('Usage: node bulk-load-phases.js <path-to-json> --season=<id> [--dry-run]');
+    if (!filePath || !competitionArg || !yearArg) {
+        console.error('Usage: node bulk-load-phases.js <path-to-json> --competition="<name>" --year=<YYYY> [--dry-run]');
         process.exit(1);
     }
 
-    const seasonId = seasonIdArg.split('=')[1];
+    const competitionName = competitionArg.split('=')[1];
+    const year = yearArg.split('=')[1];
     const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
-    const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    );
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY;
+    const supabaseKey = supabaseServiceKey || supabaseAnonKey;
 
-    console.log(`Starting bulk load for season ${seasonId}${dryRun ? ' (DRY RUN)' : ''}...`);
+    if (!supabaseUrl || !supabaseKey) {
+        console.error("CRITICAL: Missing SUPABASE_URL or a valid KEY in .env.local");
+        process.exit(1);
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const slugify = (text) => text.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+    const compSlug = slugify(competitionName);
+    
+    const { data: comp } = await supabase
+        .from('competitions')
+        .select('id')
+        .or(`slug.eq.${compSlug},name.eq."${competitionName.trim()}"`)
+        .maybeSingle();
+
+    if (!comp) {
+        console.error(`Error: Competition "${competitionName}" not found in database.`);
+        process.exit(1);
+    }
+
+    const { data: season } = await supabase
+        .from('seasons')
+        .select('id')
+        .eq('competition_id', comp.id)
+        .eq('year', parseInt(year))
+        .maybeSingle();
+
+    if (!season) {
+        console.error(`Error: Season for year ${year} in competition "${competitionName}" not found in database.`);
+        process.exit(1);
+    }
+
+    const seasonId = season.id;
+
+    console.log(`Starting bulk load for ${competitionName} ${year} (Season ID: ${seasonId})${dryRun ? ' (DRY RUN)' : ''}...`);
 
     async function processPhases(phases, parentId = null) {
         for (let i = 0; i < phases.length; i++) {

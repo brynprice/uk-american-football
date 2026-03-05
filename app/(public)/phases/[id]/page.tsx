@@ -60,13 +60,14 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                                                 const isHome = g.home_team_id === p.team_id;
                                                 const score = isHome ? g.home_score : g.away_score;
                                                 const oppScore = isHome ? g.away_score : g.home_score;
+                                                const multiplier = g.is_double_header ? 2 : 1;
 
                                                 if (score !== null && oppScore !== null) {
-                                                    pf += score;
-                                                    pa += oppScore;
-                                                    if (score > oppScore) wins++;
-                                                    else if (score < oppScore) losses++;
-                                                    else ties++;
+                                                    pf += score * multiplier;
+                                                    pa += oppScore * multiplier;
+                                                    if (score > oppScore) wins += multiplier;
+                                                    else if (score < oppScore) losses += multiplier;
+                                                    else ties += multiplier;
                                                 }
                                             });
 
@@ -135,6 +136,9 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                                     </div>
                                     {game.is_playoff && (
                                         <span className="text-[10px] font-black bg-slate-900 text-white px-2 py-0.5 rounded uppercase">Postseason</span>
+                                    )}
+                                    {game.is_double_header && (
+                                        <span className="text-[10px] font-black bg-amber-100 text-amber-700 px-2 py-0.5 rounded uppercase border border-amber-200">DH</span>
                                     )}
                                 </div>
                                 <div className="flex justify-between items-center">
