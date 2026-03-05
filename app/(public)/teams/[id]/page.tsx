@@ -120,7 +120,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                                                     Retired {rj.year_retired || "?"}
                                                 </div>
                                                 <div className="font-bold text-slate-800">
-                                                    In Honour of {rj.honoured_person_id ? (
+                                                    {rj.honoured_person_id ? (
                                                         <Link href={`/people/${rj.honoured_person_id}`} className="hover:text-blue-700">
                                                             {rj.person?.display_name || rj.honoured_person_name}
                                                         </Link>
