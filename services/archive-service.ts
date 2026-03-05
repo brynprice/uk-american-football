@@ -103,7 +103,17 @@ export const ArchiveService = {
 
 
     async getTeamHistory(teamId: string): Promise<any> {
-        const { data, error } = await supabase.from("teams").select("*, team_aliases (id, name, start_year, end_year, logo_url), participations (*, phase:phases (*, season:seasons (*, competition:competitions (*))))").eq("id", teamId).single();
+        const { data, error } = await supabase
+            .from("teams")
+            .select(`
+                *, 
+                team_aliases (id, name, start_year, end_year, logo_url), 
+                participations (*, phase:phases (*, season:seasons (*, competition:competitions (*)))),
+                hall_of_fame (*, person:people (*)),
+                retired_jerseys (*, person:people (*))
+            `)
+            .eq("id", teamId)
+            .single();
         if (error) throw error;
         if (!data) throw new Error("Team not found");
         return data;

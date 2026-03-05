@@ -1,0 +1,34 @@
+[
+  {
+    "name": "Division 1",
+    "type": "division",
+    "children": [
+      {
+        "name": "Northern Conference",
+        "type": "conference",
+        "children": [
+          { "name": "Northern One", "type": "group" },
+          { "name": "Northern Two", "type": "group" }
+        ]
+      },
+      {
+        "name": "Southern Conference",
+        "type": "conference",
+        "children": [
+          { "name": "Southern One", "type": "group" },
+          { "name": "Southern Two", "type": "group" }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Playoffs",
+    "type": "playoffs",
+    "children": [
+      { "name": "Wild Card", "type": "round" },
+      { "name": "Quarter Finals", "type": "round" },
+      { "name": "Semi Finals", "type": "round" },
+      { "name": "National Championship", "type": "final" }
+    ]
+  }
+]

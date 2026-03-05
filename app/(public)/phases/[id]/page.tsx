@@ -49,7 +49,7 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                                     {(() => {
                                         const standings = phase.participations.map((p: any) => {
                                             const teamGames = phase.games.filter((g: any) =>
-                                                g.status === 'completed' &&
+                                                g.status?.toLowerCase() === 'completed' &&
                                                 (g.home_team_id === p.team_id || g.away_team_id === p.team_id)
                                             );
 
