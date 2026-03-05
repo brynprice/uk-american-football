@@ -54,7 +54,12 @@ export const ArchiveService = {
         // 4. Fetch all games for these phases
         const { data: games, error: gamesError } = await supabase
             .from("games")
-            .select("*, home_team:teams!home_team_id (*), away_team:teams!away_team_id (*), phase:phases(name)")
+            .select(`
+                *, 
+                home_team:teams!home_team_id (*, team_aliases (*)), 
+                away_team:teams!away_team_id (*, team_aliases (*)), 
+                phase:phases(name)
+            `)
             .in("phase_id", descendantIds)
             .order("date", { ascending: true });
 
@@ -80,7 +85,18 @@ export const ArchiveService = {
     },
 
     async getGameDetails(gameId: string): Promise<any> {
-        const { data, error } = await supabase.from("games").select("*, home_team:teams!home_team_id (*, team_aliases (id, name, logo_url)), away_team:teams!away_team_id (*, team_aliases (id, name, logo_url)), venue:venues (*), phase:phases (*, season:seasons (id, year, competition:competitions (name))), game_staff (*, person:people (*))").eq("id", gameId).single();
+        const { data, error } = await supabase
+            .from("games")
+            .select(`
+                *, 
+                home_team:teams!home_team_id (*, team_aliases (*)), 
+                away_team:teams!away_team_id (*, team_aliases (*)), 
+                venue:venues (*), 
+                phase:phases (*, season:seasons (id, year, competition:competitions (name))), 
+                game_staff (*, person:people (*))
+            `)
+            .eq("id", gameId)
+            .single();
         if (error) throw error;
         if (!data) throw new Error("Game not found");
 

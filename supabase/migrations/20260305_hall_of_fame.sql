@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS retired_jerseys (
   team_id UUID REFERENCES teams(id) ON DELETE CASCADE,
   jersey_number TEXT NOT NULL,
   year_retired INT,
-  honoured_person_name TEXT NOT NULL,
+  honoured_person_name TEXT, -- Fallback name or for when person record doesn't exist
   honoured_person_id UUID REFERENCES people(id) ON DELETE SET NULL,
   notes TEXT,
   created_at TIMESTAMPTZ DEFAULT now()

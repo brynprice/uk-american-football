@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import { resolveHeadCoach } from '@/lib/utils/coach-resolver';
+import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
 
 export default async function GamePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -23,6 +24,9 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
         game.participations
     );
 
+    const homeIdentity = resolveTeamIdentity(game.home_team, game.date);
+    const awayIdentity = resolveTeamIdentity(game.away_team, game.date);
+
     return (
         <ArchiveLayout>
             <div className="mb-12">
@@ -42,13 +46,13 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                     <div className="p-8 grid grid-cols-3 items-center">
                         {/* Away Team */}
                         <div className="flex flex-col items-center">
-                            {game.away_team.logo_url && (
+                            {awayIdentity.logo_url && (
                                 <div className="w-20 h-20 bg-white p-1 border border-slate-200 shadow-sm rounded mb-4 flex items-center justify-center overflow-hidden">
-                                    <img src={game.away_team.logo_url} alt={game.away_team.name} className="max-w-full max-h-full object-contain" />
+                                    <img src={awayIdentity.logo_url} alt={awayIdentity.name} className="max-w-full max-h-full object-contain" />
                                 </div>
                             )}
                             <Link href={`/teams/${game.away_team_id}`} className="text-2xl font-black hover:text-blue-700">
-                                {game.away_team.name}
+                                {awayIdentity.name}
                             </Link>
                             <div className="text-xs text-slate-500 mt-2 font-sans uppercase">Visitor</div>
                         </div>
@@ -62,13 +66,13 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
 
                         {/* Home Team */}
                         <div className="flex flex-col items-center">
-                            {game.home_team.logo_url && (
+                            {homeIdentity.logo_url && (
                                 <div className="w-20 h-20 bg-white p-1 border border-slate-200 shadow-sm rounded mb-4 flex items-center justify-center overflow-hidden">
-                                    <img src={game.home_team.logo_url} alt={game.home_team.name} className="max-w-full max-h-full object-contain" />
+                                    <img src={homeIdentity.logo_url} alt={homeIdentity.name} className="max-w-full max-h-full object-contain" />
                                 </div>
                             )}
                             <Link href={`/teams/${game.home_team_id}`} className="text-2xl font-black hover:text-blue-700">
-                                {game.home_team.name}
+                                {homeIdentity.name}
                             </Link>
                             <div className="text-xs text-slate-500 mt-2 font-sans uppercase">Home</div>
                         </div>
@@ -80,11 +84,11 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                             <h4 className="font-black uppercase text-slate-400 mb-3 text-[10px] tracking-tighter">Coaching Staff</h4>
                             <div className="space-y-2 font-sans">
                                 <div className="flex justify-between border-b border-slate-200 pb-1">
-                                    <span className="text-slate-500">{game.home_team.name} HC:</span>
+                                    <span className="text-slate-500">{homeIdentity.name} HC:</span>
                                     <span className="font-bold">{homeCoach?.display_name || "Unknown"}</span>
                                 </div>
                                 <div className="flex justify-between border-b border-slate-200 pb-1">
-                                    <span className="text-slate-500">{game.away_team.name} HC:</span>
+                                    <span className="text-slate-500">{awayIdentity.name} HC:</span>
                                     <span className="font-bold">{awayCoach?.display_name || "Unknown"}</span>
                                 </div>
                             </div>

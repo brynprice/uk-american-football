@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
+import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
 
 export default async function PhasePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -79,7 +80,7 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                                             <tr key={p.id} className="border-b border-slate-100 transition-colors hover:bg-slate-50">
                                                 <td className="py-3 px-4">
                                                     <Link href={`/teams/${p.team_id}`} className="font-bold hover:text-blue-600">
-                                                        {p.team?.name}
+                                                        {resolveTeamIdentity({ ...p.team, team_aliases: p.team?.team_aliases || [] }, phase.games[0]?.date).name}
                                                     </Link>
                                                 </td>
                                                 <td className="py-3 px-2 text-center font-mono">{p.gp}</td>
@@ -138,10 +139,10 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <div className="flex-1 flex items-center justify-end gap-3 pr-4 text-right">
-                                        <span className="font-black text-lg">{game.away_team?.name}</span>
-                                        {game.away_team?.logo_url && (
+                                        <span className="font-black text-lg">{resolveTeamIdentity(game.away_team, game.date).name}</span>
+                                        {resolveTeamIdentity(game.away_team, game.date).logo_url && (
                                             <div className="w-8 h-8 bg-slate-50 p-1 flex items-center justify-center shrink-0 border border-slate-100 rounded">
-                                                <img src={game.away_team.logo_url} alt="" className="max-w-full max-h-full object-contain" />
+                                                <img src={resolveTeamIdentity(game.away_team, game.date).logo_url!} alt="" className="max-w-full max-h-full object-contain" />
                                             </div>
                                         )}
                                     </div>
@@ -155,12 +156,12 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                                         </span>
                                     </div>
                                     <div className="flex-1 flex items-center justify-start gap-3 pl-4 text-left">
-                                        {game.home_team?.logo_url && (
+                                        {resolveTeamIdentity(game.home_team, game.date).logo_url && (
                                             <div className="w-8 h-8 bg-slate-50 p-1 flex items-center justify-center shrink-0 border border-slate-100 rounded">
-                                                <img src={game.home_team.logo_url} alt="" className="max-w-full max-h-full object-contain" />
+                                                <img src={resolveTeamIdentity(game.home_team, game.date).logo_url!} alt="" className="max-w-full max-h-full object-contain" />
                                             </div>
                                         )}
-                                        <span className="font-black text-lg">{game.home_team?.name}</span>
+                                        <span className="font-black text-lg">{resolveTeamIdentity(game.home_team, game.date).name}</span>
                                     </div>
                                 </div>
                             </Link>

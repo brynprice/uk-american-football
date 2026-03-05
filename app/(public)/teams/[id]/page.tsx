@@ -104,26 +104,34 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                         <section>
                             <h3 className="text-xl font-black uppercase border-b-2 border-slate-900 pb-2 mb-6 font-sans">Retired Jerseys</h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {team.retired_jerseys.sort((a: any, b: any) => (b.year_retired || 0) - (a.year_retired || 0)).map((rj: any) => (
-                                    <div key={rj.id} className="flex gap-4 items-center bg-white p-4 border border-slate-200 shadow-sm">
-                                        <div className="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center shrink-0 border-4 border-slate-100 shadow-inner">
-                                            <span className="text-white text-2xl font-black font-mono">#{rj.jersey_number}</span>
-                                        </div>
-                                        <div className="flex-1">
-                                            <div className="text-[10px] font-black uppercase text-slate-400 font-sans tracking-widest mb-1">
-                                                Retired {rj.year_retired || "?"}
+                                {team.retired_jerseys
+                                    .sort((a: any, b: any) => {
+                                        const numA = parseInt(a.jersey_number.replace(/\D/g, '')) || 0;
+                                        const numB = parseInt(b.jersey_number.replace(/\D/g, '')) || 0;
+                                        return numA - numB;
+                                    })
+                                    .map((rj: any) => (
+                                        <div key={rj.id} className="flex gap-4 items-center bg-white p-4 border border-slate-200 shadow-sm">
+                                            <div className="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center shrink-0 border-4 border-slate-100 shadow-inner">
+                                                <span className="text-white text-2xl font-black font-mono">#{rj.jersey_number}</span>
                                             </div>
-                                            <div className="font-bold text-slate-800">
-                                                In Honour of {rj.honoured_person_id ? (
-                                                    <Link href={`/people/${rj.honoured_person_id}`} className="hover:text-blue-700">{rj.honoured_person_name}</Link>
-                                                ) : (
-                                                    rj.honoured_person_name
-                                                )}
+                                            <div className="flex-1">
+                                                <div className="text-[10px] font-black uppercase text-slate-400 font-sans tracking-widest mb-1">
+                                                    Retired {rj.year_retired || "?"}
+                                                </div>
+                                                <div className="font-bold text-slate-800">
+                                                    In Honour of {rj.honoured_person_id ? (
+                                                        <Link href={`/people/${rj.honoured_person_id}`} className="hover:text-blue-700">
+                                                            {rj.person?.display_name || rj.honoured_person_name}
+                                                        </Link>
+                                                    ) : (
+                                                        rj.honoured_person_name
+                                                    )}
+                                                </div>
+                                                {rj.notes && <p className="text-[10px] text-slate-500 italic mt-1">{rj.notes}</p>}
                                             </div>
-                                            {rj.notes && <p className="text-[10px] text-slate-500 italic mt-1">{rj.notes}</p>}
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
                             </div>
                         </section>
                     )}
