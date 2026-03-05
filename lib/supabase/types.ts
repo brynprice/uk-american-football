@@ -113,6 +113,7 @@ export interface Database {
           founded_year: number | null
           folded_year: number | null
           notes: string | null
+          logo_url: string | null
           created_at: string
         }
         Insert: {
@@ -122,6 +123,7 @@ export interface Database {
           founded_year?: number | null
           folded_year?: number | null
           notes?: string | null
+          logo_url?: string | null
           created_at?: string
         }
         Update: {
@@ -131,6 +133,36 @@ export interface Database {
           founded_year?: number | null
           folded_year?: number | null
           notes?: string | null
+          logo_url?: string | null
+          created_at?: string
+        }
+      }
+      team_aliases: {
+        Row: {
+          id: string
+          team_id: string
+          name: string
+          start_year: number | null
+          end_year: number | null
+          logo_url: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          team_id: string
+          name: string
+          start_year?: number | null
+          end_year?: number | null
+          logo_url?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          team_id?: string
+          name?: string
+          start_year?: number | null
+          end_year?: number | null
+          logo_url?: string | null
           created_at?: string
         }
       }
@@ -219,6 +251,29 @@ export interface Database {
           updated_at?: string
         }
       }
+      venues: {
+        Row: {
+          id: string
+          name: string
+          city: string | null
+          address: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          city?: string | null
+          address?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          city?: string | null
+          address?: string | null
+          created_at?: string
+        }
+      }
       game_staff: {
         Row: {
           id: string
@@ -245,6 +300,58 @@ export interface Database {
           created_at?: string
         }
       }
+      sources: {
+        Row: {
+          id: string
+          entity_type: string
+          entity_id: string
+          url: string | null
+          description: string | null
+          metadata: Json | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          entity_type: string
+          entity_id: string
+          url?: string | null
+          description?: string | null
+          metadata?: Json | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          entity_type?: string
+          entity_id?: string
+          url?: string | null
+          description?: string | null
+          metadata?: Json | null
+          created_at?: string
+        }
+      }
+      notes: {
+        Row: {
+          id: string
+          entity_type: string
+          entity_id: string
+          content: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          entity_type: string
+          entity_id: string
+          content: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          entity_type?: string
+          entity_id?: string
+          content?: string
+          created_at?: string
+        }
+      },
       participations: {
         Row: {
           id: string

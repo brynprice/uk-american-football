@@ -80,7 +80,7 @@ export const ArchiveService = {
     },
 
     async getGameDetails(gameId: string): Promise<any> {
-        const { data, error } = await supabase.from("games").select("*, home_team:teams!home_team_id (*, team_aliases (*)), away_team:teams!away_team_id (*, team_aliases (*)), venue:venues (*), phase:phases (*, season:seasons (id, year, competition:competitions (name))), game_staff (*, person:people (*))").eq("id", gameId).single();
+        const { data, error } = await supabase.from("games").select("*, home_team:teams!home_team_id (*, team_aliases (id, name, logo_url)), away_team:teams!away_team_id (*, team_aliases (id, name, logo_url)), venue:venues (*), phase:phases (*, season:seasons (id, year, competition:competitions (name))), game_staff (*, person:people (*))").eq("id", gameId).single();
         if (error) throw error;
         if (!data) throw new Error("Game not found");
 
@@ -103,7 +103,7 @@ export const ArchiveService = {
 
 
     async getTeamHistory(teamId: string): Promise<any> {
-        const { data, error } = await supabase.from("teams").select("*, team_aliases (*), participations (*, phase:phases (*, season:seasons (*, competition:competitions (*))))").eq("id", teamId).single();
+        const { data, error } = await supabase.from("teams").select("*, team_aliases (id, name, start_year, end_year, logo_url), participations (*, phase:phases (*, season:seasons (*, competition:competitions (*))))").eq("id", teamId).single();
         if (error) throw error;
         if (!data) throw new Error("Team not found");
         return data;
