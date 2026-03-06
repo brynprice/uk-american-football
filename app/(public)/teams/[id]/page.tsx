@@ -232,7 +232,8 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                             ?.filter((g: any) => g.is_title_game && g.status?.toLowerCase() === 'completed')
                             .filter((g: any) => {
                                 const isHome = g.home_team_id === id;
-                                return isHome ? g.home_score > g.away_score : g.away_score > g.home_score;
+                                // In case of a tie in a title game, both teams share the title
+                                return isHome ? g.home_score >= g.away_score : g.away_score >= g.home_score;
                             })
                             .map((g: any) => ({
                                 title: g.title_name,
