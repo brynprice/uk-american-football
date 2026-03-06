@@ -30,10 +30,11 @@ if (!supabaseUrl || !supabaseKey) {
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function importStandings(filePath) {
-    const input = fs.readFileSync(filePath);
-    const records = parse(input, {
+    const fileContent = fs.readFileSync(filePath);
+    const records = parse(fileContent, {
         columns: true,
         skip_empty_lines: true,
+        trim: true,
         bom: true
     });
 

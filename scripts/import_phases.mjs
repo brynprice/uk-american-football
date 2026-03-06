@@ -20,7 +20,8 @@ async function importPhases(filePath) {
     const records = parse(fileContent, {
         columns: true,
         skip_empty_lines: true,
-        trim: true
+        trim: true,
+        bom: true
     });
 
     const isDryRun = process.argv.includes('--dry-run');
