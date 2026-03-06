@@ -23,10 +23,17 @@ export const ArchiveService = {
     },
 
     async getSeasonDetails(seasonId: string): Promise<any> {
-        const { data, error } = await supabase.from("seasons").select("*, competition:competitions (*), phases (*)").eq("id", seasonId).single();
+        const { data: seasonData, error } = await supabase.from("seasons").select("*, competition:competitions (*), phases (*)").eq("id", seasonId).single();
         if (error) throw error;
-        if (!data) throw new Error("Season not found");
-        return data;
+        if (!seasonData) throw new Error("Season not found");
+
+        // Fetch archival notes for this season
+        const { data: notes } = await supabase.from("notes").select("*").eq("entity_id", seasonId).eq("entity_type", "seasons");
+
+        return {
+            ...(seasonData as any),
+            notes: notes || []
+        };
     },
 
     async getPhaseData(phaseId: string): Promise<any> {

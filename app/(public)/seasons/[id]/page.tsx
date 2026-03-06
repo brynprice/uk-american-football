@@ -50,10 +50,18 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                 {/* Footnotes/Sources Section */}
                 <section className="bg-slate-50 p-6 border-l-4 border-slate-300">
                     <h4 className="text-sm font-black uppercase mb-4 font-sans text-slate-500">Archival Notes</h4>
-                    <p className="text-sm text-slate-600 font-serif leading-relaxed italic">
-                        Records for the {season.year} season are compiled from various historical newspaper archives and league bulletins.
-                        Dates and venues may be subject to revision as more primary sources are recovered.
-                    </p>
+                    {season.notes && season.notes.length > 0 ? (
+                        <div className="space-y-4 text-sm text-slate-600 font-serif leading-relaxed italic">
+                            {season.notes.map((note: any) => (
+                                <p key={note.id}>{note.content}</p>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-sm text-slate-600 font-serif leading-relaxed italic">
+                            Records for the {season.year} season are compiled from various historical newspaper archives and league bulletins.
+                            Dates and venues may be subject to revision as more primary sources are recovered.
+                        </p>
+                    )}
                 </section>
             </div>
         </ArchiveLayout>
