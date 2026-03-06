@@ -105,3 +105,18 @@ If you have isolated files for specific entities, import them in logical order f
 6. `import_data.mjs` (for games)
 
 Alternatively, if you only have a flat spreadsheet of games, running `import_data.mjs` will do its best to automatically scaffold the required parent entities (competitions, seasons, phases, teams) on the fly, but it will no longer auto-enroll teams into the standings via `participations`. You must still use `import_participations.mjs` to establish team standings baselines.
+
+## 4. Awards Import (`import_awards.mjs`)
+
+This script bulk loads Hall of Fame inductions and Retired Jersey honors. 
+*   **Command**: `node scripts/import_awards.mjs ./path/to/awards.csv`
+*   **Behavior**: It looks up the team, finds or creates the honored person, and inserts either a `hall_of_fame` or `retired_jerseys` record based on the `award_type`. It skips exact duplicates.
+
+### CSV Format Requirements
+*   `award_type`: (Required) Must be exactly `hall_of_fame` or `retired_jersey`.
+*   `team`: (Required) Name of the team.
+*   `honoured_person`: (Required) Full name of the inducted/honored individual.
+*   `year`: (Required) Year of the induction or jersey retirement.
+*   `jersey_number`: (Required for `retired_jersey` only) The jersey number being retired.
+*   `seasons_with_team`: (Optional, for HOF) String describing their tenure, e.g., "1988-1995"
+*   `notes`: (Optional) Any additional context.

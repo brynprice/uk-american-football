@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
-import { resolveTeamIdentity } from '@/lib/team-helpers';
+import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
 
 export default async function ScorigamiPage({ searchParams }: { searchParams: Promise<{ scoreA?: string, scoreB?: string }> }) {
     const params = await searchParams;
