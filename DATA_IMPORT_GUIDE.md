@@ -66,22 +66,32 @@ Imports a hierarchical structure of phases (divisions, conferences, playoffs) fo
 * **Format**: JSON array of phase objects with `name`, `type`, and optional nested `children`.
 * **Behavior**: Requires the `--competition` and `--year` arguments to properly link the phases to their respective season by looking up the `season_id` in the database. Supports a `--dry-run` flag to test the import without writing to the database. Inserts phases recursively to maintain parent-child relationships.
 
-### 5. Unified Data Import (`import_data.mjs`)
-A comprehensive script that imports game results and automatically creates missing related entities (competitions, seasons, phases, teams, coaches, venues).
+### 5. Participations Import (`import_participations.mjs`)
+Imports season-level team participation and default head coach linking for a given phase in a season.
+* **Standard File**: `data/participations.csv`
+* **Usage**:
+  ```bash
+  node scripts/import_participations.mjs data/participations.csv
+  ```
+* **CSV Columns Required**: `competition_name`, `year`, `team`
+* **Optional Columns**: `phase` (defaults to "Regular Season"), `head_coach`
+* **Behavior**: **Does not abstract parent entities**. It requires that the Competition, Season, Phase, and Team all exist. If they do not exist, the record is skipped. If `head_coach` is provided but not found in the `people` table, the person record is created. Updates existing participation records or creates new ones.
+
+### 6. Unified Data Import (`import_data.mjs`)
+A comprehensive script that imports game results and automatically creates missing related entities (competitions, seasons, phases, teams, venues).
 * **Standard File**: `data/games.csv`
 * **Usage**:
   ```bash
   node scripts/import_data.mjs data/games.csv
   ```
 * **CSV Columns Required**: `competition`, `year`, `home_team`, `away_team`
-* **Optional Columns**: `phase`, `date` (YYYY-MM-DD), `home_score`, `away_score`, `venue`, `notes`, `home_coach`, `away_coach`, `is_double_header` (true/yes/1)
+* **Optional Columns**: `phase`, `date` (YYYY-MM-DD), `date_precision` (day/month/year/unknown), `date_display` (e.g. "Spring 1994"), `time` (HH:MM), `home_score`, `away_score`, `venue`, `notes`, `status` (completed/cancelled/postponed/awarded), `confidence_level` (high/medium/low), `is_playoff` (true/yes/1), `is_double_header` (true/yes/1), `home_coach`, `away_coach`
 * **Behavior**: 
   1. Resolves or creates Competition, Season, and Phase.
   2. Resolves or creates Home and Away Teams.
   3. Resolves or creates Coaches and Venues.
-  4. Ensures team/coach participation records exist for the phase.
-  5. Inserts the game record (if it doesn't already exist for that date/phase/teams).
-  6. Links head coaches to the specific game in `game_staff`.
+  4. Inserts the game record (if it doesn't already exist for that date/phase/teams).
+  5. Links head coaches to the specific game in `game_staff` **only if** a season-level participation record does not exist for that team/phase. It will never create a season-level `participations` record itself.
 
 ## Recommended Workflow
 
@@ -91,6 +101,7 @@ If you have isolated files for specific entities, import them in logical order f
 2. `import_teams.mjs`
 3. `import_seasons.mjs`
 4. `bulk-load-phases.js` (if phase hierarchy is complex)
-5. `import_data.mjs` (for games)
+5. `import_participations.mjs` (to record season-level teams & coaches)
+6. `import_data.mjs` (for games)
 
-Alternatively, if you only have a flat spreadsheet of games, running `import_data.mjs` will do its best to automatically scaffold the required parent entities (competitions, seasons, phases, teams) on the fly.
+Alternatively, if you only have a flat spreadsheet of games, running `import_data.mjs` will do its best to automatically scaffold the required parent entities (competitions, seasons, phases, teams) on the fly, but it will no longer auto-enroll teams into the standings via `participations`. You must still use `import_participations.mjs` to establish team standings baselines.

@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# UK American Football Archive
+
+A web application built to archive, catalog, and display the history of American Football in the United Kingdom. This project tracks competitions, seasons, phases, teams, venues, people, and game results across the history of the sport in the UK.
+
+## Tech Stack
+
+- **Framework**: [Next.js](https://nextjs.org/) (App Router)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Database**: [Supabase](https://supabase.com/) (PostgreSQL)
+- **Data Fetching**: Server Components and Supabase JS Client
 
 ## Getting Started
 
-First, run the development server:
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2. **Environment Variables**:
+   Create a `.env.local` file in the root directory and add your Supabase credentials:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+   ```
+   > **Note**: The `SUPABASE_SERVICE_ROLE_KEY` is required for running the data import scripts to bypass Row Level Security (RLS).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Data Schema & Migrations
 
-## Learn More
+The database schema is defined in `supabase/schema.sql`. It includes tables for:
+- `competitions`
+- `seasons`
+- `phases`
+- `teams`
+- `team_aliases`
+- `venues`
+- `people`
+- `games`
+- `game_staff`
+- `participations` (season-level team and coach enrollments)
+- `awards` (e.g., retired jerseys, hall of fame)
 
-To learn more about Next.js, take a look at the following resources:
+## Data Imports
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+We provide a suite of Node.js scripts for bulk-loading historical CSV data into the database. These are located in the `scripts/` directory.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Please refer to the **[Data Import Guide](DATA_IMPORT_GUIDE.md)** for detailed usage instructions, CSV formats, and the recommended import sequence.

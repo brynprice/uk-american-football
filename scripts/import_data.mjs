@@ -202,37 +202,40 @@ async function getOrCreateVenue(name) {
     return newData.id;
 }
 
-async function ensureParticipation(phaseId, teamId, coachId = null) {
+async function ensureTeamParticipation(phaseId, teamId) {
     const { data: existing, error: findError } = await supabase
         .from('participations')
-        .select('id')
+        .select('id, head_coach_id')
         .eq('phase_id', phaseId)
         .eq('team_id', teamId)
-        .single();
+        .maybeSingle();
 
-    // Ignore error 406 (Not Acceptable) which might happen if multiple results or 0 results
-    if (existing) {
-        // Optionally update coach if it was null before? Skip for now to let manual DB take precedence.
-        return existing.id;
-    }
+    if (existing) return existing;
 
     const { data: newData, error: insertError } = await supabase
         .from('participations')
         .insert({
             phase_id: phaseId,
-            team_id: teamId,
-            head_coach_id: coachId
+            team_id: teamId
         })
-        .select('id')
+        .select('id, head_coach_id')
         .single();
 
     if (insertError) {
-        // If there was a race condition or constraint violation, try to ignore
-        if (insertError.code === '23505') return null; // unique violation
+        if (insertError.code === '23505') {
+            const { data: retry } = await supabase
+                .from('participations')
+                .select('id, head_coach_id')
+                .eq('phase_id', phaseId)
+                .eq('team_id', teamId)
+                .maybeSingle();
+            return retry;
+        }
         throw insertError;
     }
-    return newData.id;
+    return newData;
 }
+
 
 // --- MAIN ---
 
@@ -261,7 +264,13 @@ async function importData(filePath) {
                 notes,
                 away_coach,
                 home_coach,
-                is_double_header
+                is_double_header,
+                date_precision,
+                date_display,
+                time,
+                status,
+                confidence_level,
+                is_playoff
             } = record;
 
             // Validation: Skip if core identifiers are missing
@@ -286,9 +295,10 @@ async function importData(filePath) {
             const awayCoachId = await getOrCreatePerson(away_coach);
             const venueId = await getOrCreateVenue(venue);
 
-            // 4. Ensure Participations (For Standings)
-            await ensureParticipation(phaseId, homeTeamId, homeCoachId);
-            await ensureParticipation(phaseId, awayTeamId, awayCoachId);
+            // 4. Ensure Team Participations (For Standings)
+            const homePart = await ensureTeamParticipation(phaseId, homeTeamId);
+            const awayPart = await ensureTeamParticipation(phaseId, awayTeamId);
+
 
             // 5. Resolve or Create Game
             let gameId;
@@ -314,9 +324,14 @@ async function importData(filePath) {
                         home_score: home_score ? parseInt(home_score) : null,
                         away_score: away_score ? parseInt(away_score) : null,
                         date: date || null,
+                        date_precision: date_precision || (date ? 'day' : 'unknown'),
+                        date_display: date_display || (date ? date.split('-').reverse().join('/') : null),
+                        time: time || null,
                         venue_id: venueId,
                         notes: notes || null,
-                        status: 'completed',
+                        status: status || 'completed',
+                        confidence_level: confidence_level || 'high',
+                        is_playoff: ['true', 'yes', '1'].includes((is_playoff || '').toString().toLowerCase()),
                         is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase())
                     })
                     .select('id')
@@ -330,8 +345,9 @@ async function importData(filePath) {
                 console.log(`  [Success] Game recorded (ID: ${gameId}).`);
             }
 
-            // 6. Link Coaches to Game
-            if (homeCoachId) {
+            // 6. Link Coaches to Game (Game-Level overrides)
+            // Only create an override if there isn't already a season-level head coach assigned
+            if (homeCoachId && homePart && !homePart.head_coach_id) {
                 const { data: existingStaff } = await supabase
                     .from('game_staff')
                     .select('id')
@@ -348,13 +364,13 @@ async function importData(filePath) {
                         person_id: homeCoachId,
                         role: 'head_coach'
                     });
-                    if (!staffError) console.log(`  [Success] Home coach (${home_coach}) linked to game.`);
+                    if (!staffError) console.log(`  [Success] Home coach (${home_coach}) linked as game override.`);
                 } else {
-                    console.log(`  [Info] Home coach (${home_coach}) already linked to game.`);
+                    console.log(`  [Info] Home coach (${home_coach}) already linked as game override.`);
                 }
             }
 
-            if (awayCoachId) {
+            if (awayCoachId && awayPart && !awayPart.head_coach_id) {
                 const { data: existingStaff } = await supabase
                     .from('game_staff')
                     .select('id')
@@ -371,9 +387,9 @@ async function importData(filePath) {
                         person_id: awayCoachId,
                         role: 'head_coach'
                     });
-                    if (!staffError) console.log(`  [Success] Away coach (${away_coach}) linked to game.`);
+                    if (!staffError) console.log(`  [Success] Away coach (${away_coach}) linked as game override.`);
                 } else {
-                    console.log(`  [Info] Away coach (${away_coach}) already linked to game.`);
+                    console.log(`  [Info] Away coach (${away_coach}) already linked as game override.`);
                 }
             }
 
