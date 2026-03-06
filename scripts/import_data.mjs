@@ -337,7 +337,26 @@ async function importData(filePath) {
 
             if (existingGame) {
                 gameId = existingGame.id;
-                console.log(`  [Info] Game already exists (ID: ${gameId}). Updating staff/participations...`);
+                console.log(`  [Info] Game already exists (ID: ${gameId}). Updating fields...`);
+
+                const { error: updateError } = await supabase
+                    .from('games')
+                    .update({
+                        home_score: home_score ? parseInt(home_score) : null,
+                        away_score: away_score ? parseInt(away_score) : null,
+                        date_precision: date_precision || (date ? 'day' : 'unknown'),
+                        date_display: date_display || (date ? date.split('-').reverse().join('/') : null),
+                        time: time || null,
+                        venue_id: venueId,
+                        notes: notes || null,
+                        status: status || 'completed',
+                        confidence_level: confidence_level || 'high',
+                        is_playoff: ['true', 'yes', '1'].includes((is_playoff || '').toString().toLowerCase()),
+                        is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase())
+                    })
+                    .eq('id', gameId);
+
+                if (updateError) console.warn(`  [Warning] Could not update existing game: ${updateError.message}`);
             } else {
                 const { data: newGame, error: gameError } = await supabase
                     .from('games')

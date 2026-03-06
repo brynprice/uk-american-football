@@ -90,7 +90,9 @@ A comprehensive script that imports game results and automatically creates missi
   1. Resolves or creates Competition, Season, and Phase.
   2. Resolves or creates Home and Away Teams.
   3. Resolves or creates Coaches and Venues.
-  4. Inserts the game record (if it doesn't already exist for that date/phase/teams).
+  4. **Upsert Behavior**: Matches games by `phase_id`, `home_team_id`, `away_team_id`, and `date`. 
+     - If the game **does not exist**, it inserts a new record. 
+     - If it **already exists**, it updates the existing record with the latest scores, venue, notes, status, and flags from the CSV.
   5. Links head coaches to the specific game in `game_staff` **only if** a season-level participation record does not exist for that team/phase. It will never create a season-level `participations` record itself.
 
 ## Recommended Workflow
