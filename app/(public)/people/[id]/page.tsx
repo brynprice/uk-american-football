@@ -6,27 +6,60 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
     const { id } = await params;
     const person = await ArchiveService.getPersonDetails(id);
 
+    const gamesCoached = await ArchiveService.getPersonGamesAsCoach(id);
+
     // Combine and sort career events (participations and game overrides)
-    const careerEvents = [
-        ...person.participations.map((p: any) => ({
-            type: 'season',
-            year: p.phase.season.year,
-            competition: p.phase.season.competition.name,
-            team: p.phase.season.competition.name, // Should be team name
-            role: 'Head Coach',
-            phase: p.phase.name,
-            id: p.id
-        })),
-        ...person.game_staff.map((s: any) => ({
+    const seasonEvents = person.participations.map((p: any) => ({
+        type: 'season',
+        year: p.phase.season.year,
+        competition: p.phase.season.competition.name,
+        team: p.team?.name || 'Unknown Team',
+        role: 'Head Coach',
+        phase: p.phase.name,
+        id: p.id
+    }));
+
+    // Only include game overrides if the coach is not already the season-defined coach for that team/phase
+    const gameEvents = person.game_staff
+        .filter((s: any) => !person.participations.some((p: any) => p.phase_id === s.game.phase_id && p.team_id === s.team_id))
+        .map((s: any) => ({
             type: 'game',
             year: s.game.date ? new Date(s.game.date).getFullYear() : s.game.phase.season.year,
             competition: s.game.phase.season.competition.name,
-            team: 'Team Name Placeholder', // Would ideally be fetched
+            team: 'Game Override',
             role: s.role.replace('_', ' '),
             game: s.game,
             id: s.id
-        }))
-    ].sort((a, b) => b.year - a.year);
+        }));
+
+    const careerEvents = [...seasonEvents, ...gameEvents].sort((a, b) => b.year - a.year);
+
+    // Calculate Coaching Record (Regular Season)
+    const regularSeasonGames = gamesCoached.filter(g => g.is_playoff === false);
+    let wins = 0;
+    let losses = 0;
+    let ties = 0;
+    let pointsFor = 0;
+    let pointsAgainst = 0;
+
+    regularSeasonGames.forEach(g => {
+        const multiplier = g.is_double_header ? 2 : 1;
+        const isHome = g.coach_team_id === g.home_team_id;
+        const pf = isHome ? g.home_score : g.away_score;
+        const pa = isHome ? g.away_score : g.home_score;
+
+        if (pf !== null && pa !== null) {
+            pointsFor += pf * multiplier;
+            pointsAgainst += pa * multiplier;
+
+            if (pf > pa) wins += multiplier;
+            else if (pf < pa) losses += multiplier;
+            else ties += multiplier;
+        }
+    });
+
+    const totalGames = wins + losses + ties;
+    const winPercent = totalGames > 0 ? ((wins + (ties / 2)) / totalGames * 100).toFixed(1) : "0.0";
 
     return (
         <ArchiveLayout>
@@ -61,6 +94,7 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
                                             )}
                                         </div>
                                         <h4 className="text-xl font-bold mb-1">{event.competition}</h4>
+                                        <div className="text-sm font-bold text-slate-700 mb-1">{event.team}</div>
                                         <p className="text-slate-600 font-serif">
                                             {event.type === 'season' ? `Led team in ${event.phase}` : `Staff role for specific game record`}
                                         </p>
@@ -76,6 +110,28 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
                 </div>
 
                 <div className="space-y-6">
+                    {totalGames > 0 && (
+                        <div className="bg-slate-900 text-white p-6 shadow-sm">
+                            <h4 className="text-[10px] font-black uppercase text-slate-400 mb-4 tracking-widest">Coaching Record (Regular Season)</h4>
+                            <div className="flex flex-col gap-4">
+                                <div>
+                                    <div className="text-xs text-slate-400 uppercase tracking-widest mb-1">W - L - T</div>
+                                    <div className="text-3xl font-black">{wins} - {losses} - {ties}</div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4 border-t border-slate-800 pt-4">
+                                    <div>
+                                        <div className="text-[10px] text-slate-400 uppercase tracking-widest mb-1">Win %</div>
+                                        <div className="text-xl font-bold text-slate-200">{winPercent}%</div>
+                                    </div>
+                                    <div>
+                                        <div className="text-[10px] text-slate-400 uppercase tracking-widest mb-1">PF / PA</div>
+                                        <div className="text-xl font-bold text-slate-200">{pointsFor} / {pointsAgainst}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     <div className="bg-slate-50 p-6 border-t-4 border-slate-900">
                         <h4 className="text-xs font-black uppercase text-slate-400 mb-4 tracking-tighter">Biographical Notes</h4>
                         <div className="text-sm font-serif leading-relaxed text-slate-700 italic">

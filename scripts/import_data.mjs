@@ -202,7 +202,7 @@ async function getOrCreateVenue(name) {
     return newData.id;
 }
 
-async function ensureTeamParticipation(phaseId, teamId) {
+async function ensureTeamParticipation(phaseId, teamId, coachId = null) {
     const { data: existing, error: findError } = await supabase
         .from('participations')
         .select('id, head_coach_id')
@@ -210,13 +210,20 @@ async function ensureTeamParticipation(phaseId, teamId) {
         .eq('team_id', teamId)
         .maybeSingle();
 
-    if (existing) return existing;
+    if (existing) {
+        if (!existing.head_coach_id && coachId) {
+            await supabase.from('participations').update({ head_coach_id: coachId }).eq('id', existing.id);
+            existing.head_coach_id = coachId;
+        }
+        return existing;
+    }
 
     const { data: newData, error: insertError } = await supabase
         .from('participations')
         .insert({
             phase_id: phaseId,
-            team_id: teamId
+            team_id: teamId,
+            head_coach_id: coachId
         })
         .select('id, head_coach_id')
         .single();
@@ -296,8 +303,8 @@ async function importData(filePath) {
             const venueId = await getOrCreateVenue(venue);
 
             // 4. Ensure Team Participations (For Standings)
-            const homePart = await ensureTeamParticipation(phaseId, homeTeamId);
-            const awayPart = await ensureTeamParticipation(phaseId, awayTeamId);
+            const homePart = await ensureTeamParticipation(phaseId, homeTeamId, homeCoachId);
+            const awayPart = await ensureTeamParticipation(phaseId, awayTeamId, awayCoachId);
 
 
             // 5. Resolve or Create Game
@@ -346,8 +353,8 @@ async function importData(filePath) {
             }
 
             // 6. Link Coaches to Game (Game-Level overrides)
-            // Only create an override if there isn't already a season-level head coach assigned
-            if (homeCoachId && homePart && !homePart.head_coach_id) {
+            // Only create an override if the game coach is NOT the season-level coach (which we just ensured existence of)
+            if (homeCoachId && homePart && homePart.head_coach_id !== homeCoachId) {
                 const { data: existingStaff } = await supabase
                     .from('game_staff')
                     .select('id')
@@ -370,7 +377,7 @@ async function importData(filePath) {
                 }
             }
 
-            if (awayCoachId && awayPart && !awayPart.head_coach_id) {
+            if (awayCoachId && awayPart && awayPart.head_coach_id !== awayCoachId) {
                 const { data: existingStaff } = await supabase
                     .from('game_staff')
                     .select('id')

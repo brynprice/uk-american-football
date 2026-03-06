@@ -136,10 +136,92 @@ export const ArchiveService = {
     },
 
     async getPersonDetails(personId: string): Promise<any> {
-        const { data, error } = await supabase.from("people").select("*, game_staff (*, game:games (*, phase:phases (*, season:seasons (*, competition:competitions (*))))), participations (*, phase:phases (*, season:seasons (*, competition:competitions (*)))), hall_of_fame (*, team:teams (*)), retired_jerseys (*, team:teams (*))").eq("id", personId).single();
+        const { data, error } = await supabase.from("people").select("*, game_staff (*, game:games (*, phase:phases (*, season:seasons (*, competition:competitions (*))))), participations (*, team:teams (*), phase:phases (*, season:seasons (*, competition:competitions (*)))), hall_of_fame (*, team:teams (*)), retired_jerseys (*, team:teams (*))").eq("id", personId).single();
         if (error) throw error;
         if (!data) throw new Error("Person not found");
         return data;
+    },
+
+    async getPersonGamesAsCoach(personId: string): Promise<any[]> {
+        // 1. Get all participations where they are the head coach
+        const { data: participations } = await supabase
+            .from('participations')
+            .select('team_id, phase_id')
+            .eq('head_coach_id', personId) as { data: any[] | null };
+
+        // 2. Get all game_staff overrides where they are the head coach OR someone else is
+        // We will fetch all game_staff for head coaches, then process it in memory
+        const { data: allOverrides } = await supabase
+            .from('game_staff')
+            .select('game_id, team_id, person_id')
+            .eq('role', 'head_coach') as { data: any[] | null };
+
+        const overrideMap = new Map(); // gameId_teamId -> personId
+        if (allOverrides) {
+            allOverrides.forEach(o => overrideMap.set(`${o.game_id}_${o.team_id}`, o.person_id));
+        }
+
+        // 3. Fetch all games for the phases the coach was active in, PLUS the games they were explicitly staff for
+        const phaseTeamPairs = participations?.map(p => `(phase_id.eq.${p.phase_id},and(home_team_id.eq.${p.team_id},away_team_id.eq.${p.team_id}))`) || [];
+
+        let queryRows: any[] = [];
+
+        // Due to PostgREST limitations with complex ORs, we might need to fetch games for simply the phase_ids, then filter
+        const phaseIds = participations?.map(p => p.phase_id) || [];
+
+        const { data: staffGames } = await supabase
+            .from('game_staff')
+            .select('game_id, team_id')
+            .eq('person_id', personId)
+            .eq('role', 'head_coach') as { data: any[] | null };
+
+        const explicitGameIds = staffGames?.map(s => s.game_id) || [];
+
+        // Fetch all games in those phases
+        if (phaseIds.length > 0 || explicitGameIds.length > 0) {
+            let q = supabase.from('games').select('*, phase:phases(*)');
+
+            if (phaseIds.length > 0 && explicitGameIds.length > 0) {
+                q = q.or(`phase_id.in.(${phaseIds.join(',')}),id.in.(${explicitGameIds.join(',')})`);
+            } else if (phaseIds.length > 0) {
+                q = q.in('phase_id', phaseIds);
+            } else {
+                q = q.in('id', explicitGameIds);
+            }
+
+            const { data: games } = await q as { data: any[] | null };
+            if (games) queryRows = games;
+        }
+
+        // 4. Filter games where this person was ACTUALLY the head coach
+        const actualGames = queryRows.filter(game => {
+            const isHome = participations?.some(p => p.phase_id === game.phase_id && p.team_id === game.home_team_id) || staffGames?.some(s => s.game_id === game.id && s.team_id === game.home_team_id);
+            const isAway = participations?.some(p => p.phase_id === game.phase_id && p.team_id === game.away_team_id) || staffGames?.some(s => s.game_id === game.id && s.team_id === game.away_team_id);
+
+            if (!isHome && !isAway) return false;
+
+            const teamId = isHome ? game.home_team_id : game.away_team_id;
+            const overrideId = overrideMap.get(`${game.id}_${teamId}`);
+
+            if (overrideId) {
+                // If there's an override, they only coached if the override is them
+                return overrideId === personId;
+            } else {
+                // If there's no override, they coached if they are the season default
+                return participations?.some(p => p.phase_id === game.phase_id && p.team_id === teamId);
+            }
+        });
+
+        return actualGames.map(game => {
+            const isHome = participations?.some(p => p.phase_id === game.phase_id && p.team_id === game.home_team_id) || staffGames?.some(s => s.game_id === game.id && s.team_id === game.home_team_id);
+            const teamId = isHome ? game.home_team_id : game.away_team_id;
+            const isOverride = explicitGameIds.includes(game.id) && staffGames?.some(s => s.game_id === game.id && s.team_id === teamId);
+            return {
+                ...game,
+                coach_team_id: teamId,
+                is_override: isOverride
+            };
+        });
     },
 
     async getTeams(): Promise<Team[]> {
