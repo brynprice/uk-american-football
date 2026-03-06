@@ -41,7 +41,7 @@ export default function PhaseView({ phases, parentPhaseId = null, seasonId, init
     return (
         <div className={`space-y-6 ${parentPhaseId ? 'pl-6 border-l-2 border-slate-200 mt-4' : ''}`}>
             {currentPhases.map((phase) => {
-                const isExpanded = expandedPhases[phase.id] || (parentPhaseId === null); // Top level always expanded or per state
+                const isExpanded = !!expandedPhases[phase.id];
                 const canExpand = hasChildren(phase.id);
 
                 return (
