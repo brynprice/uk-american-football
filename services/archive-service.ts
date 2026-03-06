@@ -252,5 +252,43 @@ export const ArchiveService = {
         const { data, error } = await supabase.from("venues").select("*").order("name");
         if (error) throw error;
         return data || [];
+    },
+
+    async getTeamOpponents(teamId: string): Promise<Team[]> {
+        const { data: homeGames } = await supabase.from("games").select("away_team_id").eq("home_team_id", teamId) as { data: any[] | null };
+        const { data: awayGames } = await supabase.from("games").select("home_team_id").eq("away_team_id", teamId) as { data: any[] | null };
+
+        const opponentIds = new Set([
+            ...(homeGames?.map(g => g.away_team_id) || []),
+            ...(awayGames?.map(g => g.home_team_id) || [])
+        ]);
+
+        if (opponentIds.size === 0) return [];
+
+        const { data, error } = await supabase
+            .from("teams")
+            .select("*")
+            .in("id", Array.from(opponentIds))
+            .order("name");
+
+        if (error) throw error;
+        return data || [];
+    },
+
+    async getH2HGames(team1Id: string, team2Id: string): Promise<any[]> {
+        const { data, error } = await supabase
+            .from("games")
+            .select(`
+                *,
+                home_team:teams!home_team_id (*),
+                away_team:teams!away_team_id (*),
+                phase:phases (*, season:seasons (id, year, competition:competitions (name))),
+                venue:venues (*)
+            `)
+            .or(`and(home_team_id.eq.${team1Id},away_team_id.eq.${team2Id}),and(home_team_id.eq.${team2Id},away_team_id.eq.${team1Id})`)
+            .order("date", { ascending: false });
+
+        if (error) throw error;
+        return data || [];
     }
 };
