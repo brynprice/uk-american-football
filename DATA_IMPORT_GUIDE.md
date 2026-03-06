@@ -120,3 +120,12 @@ This script bulk loads Hall of Fame inductions and Retired Jersey honors.
 *   `jersey_number`: (Required for `retired_jersey` only) The jersey number being retired.
 *   `seasons_with_team`: (Optional, for HOF) String describing their tenure, e.g., "1988-1995"
 *   `notes`: (Optional) Any additional context.
+
+## 5. Season Phase Copy Utility (`copy_season_phases.mjs`)
+
+Use this script to duplicate the phase structure (Divisions, Conferences, etc.) from one season to another. Highly useful if the league structure hasn't changed year-to-year.
+
+*   **Command**: `node scripts/copy_season_phases.mjs "<Comp Name>" <Source Year> <Target Year>`
+*   **Example**: `node scripts/copy_season_phases.mjs "BUAFL" 2024 2023`
+*   **Behavior**: It recursively recreates the phase hierarchy for the target year.
+*   **Safety**: It will skip execution if the target season already has phases (use `--force` to override).
