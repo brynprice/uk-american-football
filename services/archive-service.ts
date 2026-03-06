@@ -289,6 +289,9 @@ export const ArchiveService = {
             .order("date", { ascending: false });
 
         if (error) throw error;
-        return data || [];
+
+        // Deduplicate by ID to prevent double counting if query returns multiple rows for the same game
+        const uniqueGames = Array.from(new Map(((data as any[]) || []).map(g => [g.id, g])).values());
+        return uniqueGames;
     }
 };
