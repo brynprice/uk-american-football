@@ -105,14 +105,31 @@ async function importAwards(filePath) {
         }
 
         // 1. Find the team
+        let teamId = null;
         const { data: teamRecord } = await supabase
             .from('teams')
             .select('id')
             .eq('name', teamName)
             .maybeSingle();
 
-        if (!teamRecord) {
-            console.warn(`  [Skip] Team "${teamName}" not found in database.`);
+        if (teamRecord) {
+            teamId = teamRecord.id;
+        } else {
+            // Check aliases
+            const { data: aliasRecord } = await supabase
+                .from('team_aliases')
+                .select('team_id')
+                .eq('name', teamName)
+                .maybeSingle();
+
+            if (aliasRecord) {
+                teamId = aliasRecord.team_id;
+                console.log(`  [Info] Resolved team "${teamName}" via alias.`);
+            }
+        }
+
+        if (!teamId) {
+            console.warn(`  [Skip] Team "${teamName}" not found in database (checked primary and aliases).`);
             skipped++;
             continue;
         }
@@ -127,7 +144,7 @@ async function importAwards(filePath) {
                 const { data: existing } = await supabase
                     .from('hall_of_fame')
                     .select('id')
-                    .eq('team_id', teamRecord.id)
+                    .eq('team_id', teamId)
                     .eq('person_name', personName) // Fallback check
                     .maybeSingle();
 
@@ -138,7 +155,7 @@ async function importAwards(filePath) {
                 }
 
                 const { error: insertError } = await supabase.from('hall_of_fame').insert({
-                    team_id: teamRecord.id,
+                    team_id: teamId,
                     person_id: personId,
                     person_name: personName,
                     year_inducted: isNaN(awardYear) ? null : awardYear,
@@ -155,7 +172,7 @@ async function importAwards(filePath) {
                 const { data: existing } = await supabase
                     .from('retired_jerseys')
                     .select('id')
-                    .eq('team_id', teamRecord.id)
+                    .eq('team_id', teamId)
                     .eq('jersey_number', jersey_number.trim())
                     .maybeSingle();
 
@@ -166,7 +183,7 @@ async function importAwards(filePath) {
                 }
 
                 const { error: insertError } = await supabase.from('retired_jerseys').insert({
-                    team_id: teamRecord.id,
+                    team_id: teamId,
                     jersey_number: jersey_number.trim(),
                     year_retired: isNaN(awardYear) ? null : awardYear,
                     honoured_person_id: personId,

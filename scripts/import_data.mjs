@@ -131,18 +131,35 @@ async function getOrCreatePhase(seasonId, name) {
 }
 
 async function getOrCreateTeam(name) {
+    const cleanName = name.trim();
+
+    // 1. Check primary team name
     const { data, error } = await supabase
         .from('teams')
         .select('id')
-        .eq('name', name.trim())
+        .eq('name', cleanName)
         .maybeSingle();
 
     if (error && error.code !== 'PGRST116') console.error("Error looking up team:", error);
     if (data) return data.id;
 
+    // 2. Check team aliases
+    const { data: aliasData, error: aliasError } = await supabase
+        .from('team_aliases')
+        .select('team_id')
+        .eq('name', cleanName)
+        .maybeSingle();
+
+    if (aliasError && aliasError.code !== 'PGRST116') console.error("Error looking up team alias:", aliasError);
+    if (aliasData) {
+        console.log(`  [Info] Resolved team "${cleanName}" via alias.`);
+        return aliasData.team_id;
+    }
+
+    // 3. Create new team if neither match
     const { data: newData, error: insertError } = await supabase
         .from('teams')
-        .insert({ name: name.trim() })
+        .insert({ name: cleanName })
         .select('id')
         .single();
 

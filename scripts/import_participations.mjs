@@ -136,14 +136,30 @@ async function importParticipations(filePath) {
         }
 
         // 4. Find team
+        let teamId = null;
         const { data: teamRecord } = await supabase
             .from('teams')
             .select('id')
             .eq('name', teamName)
             .maybeSingle();
 
-        if (!teamRecord) {
-            console.warn(`  [Skip] Team "${teamName}" not found.`);
+        if (teamRecord) {
+            teamId = teamRecord.id;
+        } else {
+            // Check aliases
+            const { data: aliasRecord } = await supabase
+                .from('team_aliases')
+                .select('team_id')
+                .eq('name', teamName)
+                .maybeSingle();
+
+            if (aliasRecord) {
+                teamId = aliasRecord.team_id;
+            }
+        }
+
+        if (!teamId) {
+            console.warn(`  [Skip] Team "${teamName}" not found (checked primary and aliases).`);
             skipped++;
             continue;
         }
@@ -156,7 +172,7 @@ async function importParticipations(filePath) {
             .from('participations')
             .select('id')
             .eq('phase_id', phaseRecord.id)
-            .eq('team_id', teamRecord.id)
+            .eq('team_id', teamId)
             .maybeSingle();
 
         if (existing) {
@@ -173,7 +189,7 @@ async function importParticipations(filePath) {
                 .from('participations')
                 .insert({
                     phase_id: phaseRecord.id,
-                    team_id: teamRecord.id,
+                    team_id: teamId,
                     head_coach_id: coachId
                 });
 
