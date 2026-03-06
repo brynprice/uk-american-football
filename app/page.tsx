@@ -46,7 +46,7 @@ export default async function HomePage() {
         <p className="text-sm opacity-75 mb-6">Database connected. Waiting for historical records.</p>
 
         <div className="mt-8 pt-8 border-t border-slate-800 text-xs text-slate-400 font-sans italic leading-relaxed">
-          <p>Whilst every effort has been made to accurately record results, if you see any inconsistencies or errors, please email <a href="mailto:ukaffootballproject@gmail.com" className="text-blue-400 hover:underline">ukfootballproject@gmail.com</a></p>
+          <p>Whilst every effort has been made to accurately record results, if you see any inconsistencies or errors, please email <a href="mailto:ukaffootballproject@gmail.com" className="text-blue-400 hover:underline">ukaffootballproject@gmail.com</a></p>
         </div>
       </section>
     </ArchiveLayout>
