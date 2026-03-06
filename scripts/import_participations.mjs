@@ -35,6 +35,29 @@ if (supabaseServiceKey) {
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey);
+const isSample = process.argv.includes('--sample');
+
+async function ensureSampleNote(entityType, entityId) {
+    if (!isSample || !entityId) return;
+
+    // Check if sample note already exists for this entity
+    const { data: existing } = await supabase
+        .from('notes')
+        .select('id')
+        .eq('entity_type', entityType)
+        .eq('entity_id', entityId)
+        .eq('content', 'sample')
+        .maybeSingle();
+
+    if (!existing) {
+        await supabase.from('notes').insert({
+            entity_type: entityType,
+            entity_id: entityId,
+            content: 'sample'
+        });
+        console.log(`    [Note] Tagged ${entityType} ${entityId} as sample.`);
+    }
+}
 
 async function getOrCreatePerson(displayName) {
     if (!displayName) return null;
@@ -183,16 +206,21 @@ async function importParticipations(filePath) {
                     .update({ head_coach_id: coachId })
                     .eq('id', existing.id);
             }
+            await ensureSampleNote('participations', existing.id);
             console.log(`  [Updated] ${teamName} in ${cleanYear} ${cleanName} - ${phaseName}`);
             updated++;
         } else {
-            const { error: insertError } = await supabase
+            const { data, error: insertError } = await supabase
                 .from('participations')
                 .insert({
                     phase_id: phaseRecord.id,
                     team_id: teamId,
                     head_coach_id: coachId
-                });
+                }).select('id').single();
+
+            if (!insertError && data) {
+                await ensureSampleNote('participations', data.id);
+            }
 
             if (insertError) {
                 console.error(`  [Error] Failed to create participation: ${insertError.message}`);
@@ -208,9 +236,9 @@ async function importParticipations(filePath) {
     console.log(`  Created: ${created} | Updated: ${updated} | Skipped: ${skipped}`);
 }
 
-const fileArg = process.argv[2];
+const fileArg = process.argv.filter(arg => !arg.startsWith('--'))[2];
 if (!fileArg) {
-    console.log("Usage: node scripts/import_participations.mjs <path_to_csv>");
+    console.log("Usage: node scripts/import_participations.mjs <path_to_csv> [--sample]");
 } else {
     importParticipations(fileArg);
 }

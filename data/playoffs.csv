@@ -1,0 +1,5 @@
+﻿competition,year,phase,date,time,date_precision,date_display,away_team,home_team,away_score,home_score,status,venue,notes,away_coach,home_coach,is_double_header,is_playoff,confidence_level,is_title_game,title_name
+bcafl,1987,Playoffs,,,,,Cardiff Cobras,Stirling Clansmen,22,6,completed,,,,,,TRUE,high,,
+bcafl,1987,Playoffs,,,,,Hull Sharks,Strathclyde Hawks,22,0,completed,,,,,,TRUE,high,,
+bcafl,1987,Playoffs,,,,,Cardiff Cobras,Hull Sharks,0,0,completed,Hull,Triple Overtime. Both teams named winner. Tom Bell game MVP.,,,,TRUE,high,TRUE,College Bowl II
+bcafl,1986,Playoffs,,,,,Hull Sharks,Newcastle Scholars,23,6,completed,,,,,,TRUE,high,TRUE,College Bowl

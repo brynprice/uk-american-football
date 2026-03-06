@@ -28,6 +28,29 @@ if (!supabaseUrl || !supabaseKey) {
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey);
+const isSample = process.argv.includes('--sample');
+
+async function ensureSampleNote(entityType, entityId) {
+    if (!isSample || !entityId) return;
+
+    // Check if sample note already exists for this entity
+    const { data: existing } = await supabase
+        .from('notes')
+        .select('id')
+        .eq('entity_type', entityType)
+        .eq('entity_id', entityId)
+        .eq('content', 'sample')
+        .maybeSingle();
+
+    if (!existing) {
+        await supabase.from('notes').insert({
+            entity_type: entityType,
+            entity_id: entityId,
+            content: 'sample'
+        });
+        console.log(`    [Note] Tagged ${entityType} ${entityId} as sample.`);
+    }
+}
 
 async function importStandings(filePath) {
     const fileContent = fs.readFileSync(filePath);
@@ -150,16 +173,21 @@ async function importStandings(filePath) {
                 skipped++;
             } else {
                 console.log(`  [Updated] ${teamName} standings updated.`);
+                await ensureSampleNote('participations', existing.id);
                 updated++;
             }
         } else {
-            const { error: insertError } = await supabase
+            const { data, error: insertError } = await supabase
                 .from('participations')
                 .insert({
                     phase_id: phaseRecord.id,
                     team_id: teamId,
                     ...stats
-                });
+                }).select('id').single();
+
+            if (!insertError && data) {
+                await ensureSampleNote('participations', data.id);
+            }
 
             if (insertError) {
                 console.error(`  [Error] Failed to create participation and standings for ${teamName}: ${insertError.message}`);
@@ -175,9 +203,9 @@ async function importStandings(filePath) {
     console.log(`  Updated: ${updated} | Skipped: ${skipped}`);
 }
 
-const fileArg = process.argv[2];
+const fileArg = process.argv.filter(arg => !arg.startsWith('--'))[2];
 if (!fileArg) {
-    console.log("Usage: node scripts/import_standings.mjs <path_to_csv>");
+    console.log("Usage: node scripts/import_standings.mjs <path_to_csv> [--sample]");
 } else {
     importStandings(fileArg);
 }

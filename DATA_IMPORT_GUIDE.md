@@ -19,6 +19,12 @@ Before running any import scripts, you must configure your environment:
    > [!WARNING]
    > The `SUPABASE_SERVICE_ROLE_KEY` grants full database access. **Never commit it to version control.**
 
+## Global Flags
+
+The following flags can be used with all import scripts:
+
+- `--sample`: Any data created or updated during the import will be automatically tagged with a "sample" note in the database (`content: 'sample'`). Use this for test data or demonstration files to keep them distinct from real historical records.
+
 ## Available Import Scripts
 
 All data import scripts are located in the `scripts/` directory and are executed using Node.js. They process CSV (or JSON for phases) files and insert/update records in the Supabase database.
@@ -28,7 +34,7 @@ Imports team information.
 * **Standard File**: `data/teams.csv`
 * **Usage**: 
   ```bash
-  node scripts/import_teams.mjs data/teams.csv
+  node scripts/import_teams.mjs data/teams.csv [--sample]
   ```
 * **CSV Columns Required**: `name`
 * **Optional Columns**: `location`, `founded_year`, `folded_year`, `notes`, `logo_url`
@@ -39,7 +45,7 @@ Imports league/competition data.
 * **Standard File**: `data/competitions.csv`
 * **Usage**:
   ```bash
-  node scripts/import_competitions.mjs data/competitions.csv
+  node scripts/import_competitions.mjs data/competitions.csv [--sample]
   ```
 * **CSV Columns Required**: `name`
 * **Optional Columns**: `level`, `description`
@@ -50,7 +56,7 @@ Imports season data linked to specific competitions.
 * **Standard File**: `data/seasons.csv`
 * **Usage**:
   ```bash
-  node scripts/import_seasons.mjs data/seasons.csv
+  node scripts/import_seasons.mjs data/seasons.csv [--sample]
   ```
 * **CSV Columns Required**: `competition_name`, `year`
 * **Optional Columns**: `season_name`, `start_date`, `end_date`, `confidence_level`
@@ -61,7 +67,7 @@ Imports a hierarchical structure of phases (divisions, conferences, playoffs) fo
 * **Standard File**: `data/phases.csv`
 * **Usage**:
   ```bash
-  node scripts/import_phases.mjs data/phases.csv [--dry-run]
+  node scripts/import_phases.mjs data/phases.csv [--dry-run] [--sample]
   ```
 * **CSV Columns**: `competition_name, year, phase_name, type, parent_phase, confidence_level, ordinal`
 * **Behavior**: Requires the parent phase (if any) to be defined *above* the child phase in the same CSV file if you want them linked in a single run. Matches seasons by competition name/slug and year.
@@ -78,7 +84,7 @@ Imports season-level team participation and default head coach linking for a giv
 * **Standard File**: `data/participations.csv`
 * **Usage**:
   ```bash
-  node scripts/import_participations.mjs data/participations.csv
+  node scripts/import_participations.mjs data/participations.csv [--sample]
   ```
 * **CSV Columns Required**: `competition_name`, `year`, `team`
 * **Optional Columns**: `phase` (defaults to "Regular Season"), `head_coach`
@@ -89,7 +95,7 @@ A comprehensive script that imports game results and automatically creates missi
 * **Standard File**: `data/games.csv`
 * **Usage**:
   ```bash
-  node scripts/import_data.mjs data/games.csv
+  node scripts/import_data.mjs data/games.csv [--sample]
   ```
 * **CSV Columns Required**: `competition`, `year`, `home_team`, `away_team`
 * **Optional Columns**: `phase`, `date` (YYYY-MM-DD), `date_precision` (day/month/year/unknown), `date_display` (e.g. "Spring 1994"), `time` (HH:MM), `home_score`, `away_score`, `venue`, `notes`, `status` (completed/cancelled/postponed/awarded), `confidence_level` (high/medium/low), `is_playoff` (true/yes/1), `is_title_game` (true/yes/1), `title_name` (e.g. "National Trophy"), `is_double_header` (true/yes/1), `home_coach`, `away_coach`
@@ -106,7 +112,7 @@ A comprehensive script that imports game results and automatically creates missi
 Imports aggregate win/loss/points records for teams in a specific phase. Use this for historical seasons where individual game scores are missing.
 * **Usage**:
   ```bash
-  node scripts/import_standings.mjs data/standings.csv
+  node scripts/import_standings.mjs data/standings.csv [--sample]
   ```
 * **CSV Columns Required**: `competition_name`, `year`, `team`, `wins`, `losses`, `ties`, `points_for`, `points_against`
 * **Optional Columns**: `phase` (defaults to "Regular Season")
@@ -125,10 +131,10 @@ If you have isolated files for specific entities, import them in logical order f
 
 Alternatively, if you only have a flat spreadsheet of games, running `import_data.mjs` will do its best to automatically scaffold the required parent entities (competitions, seasons, phases, teams) on the fly, but it will no longer auto-enroll teams into the standings via `participations`. You must still use `import_participations.mjs` to establish team standings baselines.
 
-## 4. Awards Import (`import_awards.mjs`)
+### 8. Awards Import (`import_awards.mjs`)
 
 This script bulk loads Hall of Fame inductions and Retired Jersey honors. 
-*   **Command**: `node scripts/import_awards.mjs ./path/to/awards.csv`
+*   **Command**: `node scripts/import_awards.mjs ./path/to/awards.csv [--sample]`
 *   **Behavior**: It looks up the team, finds or creates the honored person, and inserts either a `hall_of_fame` or `retired_jerseys` record based on the `award_type`. It skips exact duplicates.
 
 ### CSV Format Requirements
@@ -140,7 +146,7 @@ This script bulk loads Hall of Fame inductions and Retired Jersey honors.
 *   `seasons_with_team`: (Optional, for HOF) String describing their tenure, e.g., "1988-1995"
 *   `notes`: (Optional) Any additional context.
 
-## 5. Season Phase Copy Utility (`copy_season_phases.mjs`)
+### 9. Season Phase Copy Utility (`copy_season_phases.mjs`)
 
 Use this script to duplicate the phase structure (Divisions, Conferences, etc.) from one season to another. Highly useful if the league structure hasn't changed year-to-year.
 

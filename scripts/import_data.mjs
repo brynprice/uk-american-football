@@ -40,6 +40,29 @@ if (supabaseServiceKey) {
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey);
+const isSample = process.argv.includes('--sample');
+
+async function ensureSampleNote(entityType, entityId) {
+    if (!isSample || !entityId) return;
+
+    // Check if sample note already exists for this entity
+    const { data: existing } = await supabase
+        .from('notes')
+        .select('id')
+        .eq('entity_type', entityType)
+        .eq('entity_id', entityId)
+        .eq('content', 'sample')
+        .maybeSingle();
+
+    if (!existing) {
+        await supabase.from('notes').insert({
+            entity_type: entityType,
+            entity_id: entityId,
+            content: 'sample'
+        });
+        console.log(`    [Note] Tagged ${entityType} ${entityId} as sample.`);
+    }
+}
 
 // --- UTILS ---
 
@@ -69,6 +92,7 @@ async function getOrCreateCompetition(name, level = 'Senior') {
         .single();
 
     if (insertError) throw insertError;
+    await ensureSampleNote('competitions', newData.id);
     return newData.id;
 }
 
@@ -106,6 +130,7 @@ async function getOrCreateSeason(competitionId, year) {
         .single();
 
     if (insertError) throw insertError;
+    await ensureSampleNote('seasons', newData.id);
     return newData.id;
 }
 
@@ -127,6 +152,7 @@ async function getOrCreatePhase(seasonId, name) {
         .single();
 
     if (insertError) throw insertError;
+    await ensureSampleNote('phases', newData.id);
     return newData.id;
 }
 
@@ -361,6 +387,7 @@ async function importData(filePath) {
                     })
                     .eq('id', gameId);
 
+                await ensureSampleNote('games', gameId);
                 if (updateError) console.warn(`  [Warning] Could not update existing game: ${updateError.message}`);
             } else {
                 const { data: newGame, error: gameError } = await supabase
@@ -392,6 +419,7 @@ async function importData(filePath) {
                     continue;
                 }
                 gameId = newGame.id;
+                await ensureSampleNote('games', gameId);
                 console.log(`  [Success] Game recorded (ID: ${gameId}).`);
             }
 
@@ -451,9 +479,9 @@ async function importData(filePath) {
     console.log("--- Import Finished ---");
 }
 
-const fileArg = process.argv[2];
+const fileArg = process.argv.filter(arg => !arg.startsWith('--'))[2];
 if (!fileArg) {
-    console.log("Usage: node scripts/import_data.mjs <path_to_csv>");
+    console.log("Usage: node scripts/import_data.mjs <path_to_csv> [--sample]");
 } else {
     importData(fileArg);
 }

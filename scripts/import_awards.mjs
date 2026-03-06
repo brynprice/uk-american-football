@@ -32,6 +32,29 @@ if (supabaseServiceKey) {
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey);
+const isSample = process.argv.includes('--sample');
+
+async function ensureSampleNote(entityType, entityId) {
+    if (!isSample || !entityId) return;
+
+    // Check if sample note already exists for this entity
+    const { data: existing } = await supabase
+        .from('notes')
+        .select('id')
+        .eq('entity_type', entityType)
+        .eq('entity_id', entityId)
+        .eq('content', 'sample')
+        .maybeSingle();
+
+    if (!existing) {
+        await supabase.from('notes').insert({
+            entity_type: entityType,
+            entity_id: entityId,
+            content: 'sample'
+        });
+        console.log(`    [Note] Tagged ${entityType} ${entityId} as sample.`);
+    }
+}
 
 async function getOrCreatePerson(displayName) {
     if (!displayName) return null;
@@ -155,16 +178,17 @@ async function importAwards(filePath) {
                     continue;
                 }
 
-                const { error: insertError } = await supabase.from('hall_of_fame').insert({
+                const { data: inserted, error: insertError } = await supabase.from('hall_of_fame').insert({
                     team_id: teamId,
                     person_id: personId,
                     person_name: personName,
                     year_inducted: isNaN(awardYear) ? null : awardYear,
                     seasons_with_team: seasons_with_team || null,
                     notes: notes || null
-                });
+                }).select('id').single();
 
                 if (insertError) throw insertError;
+                await ensureSampleNote('hall_of_fame', inserted.id);
                 console.log(`  [Success] Inserted HOF: ${personName} (${teamName})`);
                 created++;
             }
@@ -183,16 +207,17 @@ async function importAwards(filePath) {
                     continue;
                 }
 
-                const { error: insertError } = await supabase.from('retired_jerseys').insert({
+                const { data: inserted, error: insertError } = await supabase.from('retired_jerseys').insert({
                     team_id: teamId,
                     jersey_number: jersey_number.trim(),
                     year_retired: isNaN(awardYear) ? null : awardYear,
                     honoured_person_id: personId,
                     honoured_person_name: personName,
                     notes: notes || null
-                });
+                }).select('id').single();
 
                 if (insertError) throw insertError;
+                await ensureSampleNote('retired_jerseys', inserted.id);
                 console.log(`  [Success] Inserted Retired Jersey #${jersey_number}: ${personName} (${teamName})`);
                 created++;
             }
@@ -207,9 +232,9 @@ async function importAwards(filePath) {
     console.log(`  Created: ${created} | Skipped/Existed: ${skipped}`);
 }
 
-const fileArg = process.argv[2];
+const fileArg = process.argv.filter(arg => !arg.startsWith('--'))[2];
 if (!fileArg) {
-    console.log("Usage: node scripts/import_awards.mjs <path_to_csv>");
+    console.log("Usage: node scripts/import_awards.mjs <path_to_csv> [--sample]");
 } else {
     importAwards(fileArg);
 }

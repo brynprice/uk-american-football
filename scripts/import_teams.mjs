@@ -23,6 +23,29 @@ if (!supabaseUrl || !supabaseKey) {
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey);
+const isSample = process.argv.includes('--sample');
+
+async function ensureSampleNote(entityType, entityId) {
+    if (!isSample || !entityId) return;
+
+    // Check if sample note already exists for this entity
+    const { data: existing } = await supabase
+        .from('notes')
+        .select('id')
+        .eq('entity_type', entityType)
+        .eq('entity_id', entityId)
+        .eq('content', 'sample')
+        .maybeSingle();
+
+    if (!existing) {
+        await supabase.from('notes').insert({
+            entity_type: entityType,
+            entity_id: entityId,
+            content: 'sample'
+        });
+        console.log(`    [Note] Tagged ${entityType} ${entityId} as sample.`);
+    }
+}
 
 async function importTeams(filePath) {
     const input = fs.readFileSync(filePath);
@@ -60,24 +83,29 @@ async function importTeams(filePath) {
                 notes: notes || null,
                 logo_url: logo_url || null
             }).eq('id', existing.id);
+            await ensureSampleNote('teams', existing.id);
         } else {
             console.log(`[Success] Creating ${cleanName}...`);
-            await supabase.from('teams').insert({
+            const { data: newData, error: insertError } = await supabase.from('teams').insert({
                 name: cleanName,
                 location: location || null,
                 founded_year: founded_year ? parseInt(founded_year) : null,
                 folded_year: folded_year ? parseInt(folded_year) : null,
                 notes: notes || null,
                 logo_url: logo_url || null
-            });
+            }).select('id').single();
+
+            if (!insertError && newData) {
+                await ensureSampleNote('teams', newData.id);
+            }
         }
     }
     console.log("--- Team Import Finished ---");
 }
 
-const fileArg = process.argv[2];
+const fileArg = process.argv.filter(arg => !arg.startsWith('--'))[2];
 if (!fileArg) {
-    console.log("Usage: node scripts/import_teams.mjs <path_to_csv>");
+    console.log("Usage: node scripts/import_teams.mjs <path_to_csv> [--sample]");
 } else {
     importTeams(fileArg);
 }

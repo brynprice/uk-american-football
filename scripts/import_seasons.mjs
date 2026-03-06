@@ -24,6 +24,29 @@ if (!supabaseUrl || !supabaseKey) {
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey);
+const isSample = process.argv.includes('--sample');
+
+async function ensureSampleNote(entityType, entityId) {
+    if (!isSample || !entityId) return;
+
+    // Check if sample note already exists for this entity
+    const { data: existing } = await supabase
+        .from('notes')
+        .select('id')
+        .eq('entity_type', entityType)
+        .eq('entity_id', entityId)
+        .eq('content', 'sample')
+        .maybeSingle();
+
+    if (!existing) {
+        await supabase.from('notes').insert({
+            entity_type: entityType,
+            entity_id: entityId,
+            content: 'sample'
+        });
+        console.log(`    [Note] Tagged ${entityType} ${entityId} as sample.`);
+    }
+}
 
 async function importSeasons(filePath) {
     const input = fs.readFileSync(filePath);
@@ -79,17 +102,21 @@ async function importSeasons(filePath) {
         if (existing) {
             console.log(`[Info] Updating ${competition_name} ${cleanYear}...`);
             await supabase.from('seasons').update(seasonPayload).eq('id', existing.id);
+            await ensureSampleNote('seasons', existing.id);
         } else {
             console.log(`[Success] Creating ${competition_name} ${cleanYear}...`);
-            await supabase.from('seasons').insert(seasonPayload);
+            const { data: newData, error: insertError } = await supabase.from('seasons').insert(seasonPayload).select('id').single();
+            if (!insertError && newData) {
+                await ensureSampleNote('seasons', newData.id);
+            }
         }
     }
     console.log("--- Season Import Finished ---");
 }
 
-const fileArg = process.argv[2];
+const fileArg = process.argv.filter(arg => !arg.startsWith('--'))[2];
 if (!fileArg) {
-    console.log("Usage: node scripts/import_seasons.mjs <path_to_csv>");
+    console.log("Usage: node scripts/import_seasons.mjs <path_to_csv> [--sample]");
 } else {
     importSeasons(fileArg);
 }

@@ -14,6 +14,29 @@ if (!supabaseUrl || !supabaseKey) {
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey);
+const isSample = process.argv.includes('--sample');
+
+async function ensureSampleNote(entityType, entityId) {
+    if (!isSample || !entityId) return;
+
+    // Check if sample note already exists for this entity
+    const { data: existing } = await supabase
+        .from('notes')
+        .select('id')
+        .eq('entity_type', entityType)
+        .eq('entity_id', entityId)
+        .eq('content', 'sample')
+        .maybeSingle();
+
+    if (!existing) {
+        await supabase.from('notes').insert({
+            entity_type: entityType,
+            entity_id: entityId,
+            content: 'sample'
+        });
+        console.log(`    [Note] Tagged ${entityType} ${entityId} as sample.`);
+    }
+}
 
 async function importPhases(filePath) {
     const fileContent = fs.readFileSync(filePath, 'utf8');
@@ -131,6 +154,7 @@ async function importPhases(filePath) {
                     skipped++;
                 } else {
                     console.log(`  [Updated] ${phase_name} updated.`);
+                    await ensureSampleNote('phases', existingPhase.id);
                     phaseCache.set(`${competition_name}|${year}|${phase_name}`, existingPhase.id);
                     created++;
                 }
@@ -146,6 +170,7 @@ async function importPhases(filePath) {
                     skipped++;
                 } else {
                     console.log(`  [Created] ${phase_name} created.`);
+                    await ensureSampleNote('phases', inserted.id);
                     phaseCache.set(`${competition_name}|${year}|${phase_name}`, inserted.id);
                     created++;
                 }
@@ -157,9 +182,9 @@ async function importPhases(filePath) {
     console.log(`  Processed: ${created} | Skipped: ${skipped}`);
 }
 
-const filePath = process.argv[2];
-if (!filePath || filePath.startsWith('--')) {
-    console.error('Usage: node scripts/import_phases.mjs <path-to-csv> [--dry-run]');
+const filePath = process.argv.filter(arg => !arg.startsWith('--'))[2];
+if (!filePath) {
+    console.error('Usage: node scripts/import_phases.mjs <path-to-csv> [--dry-run] [--sample]');
     process.exit(1);
 }
 
