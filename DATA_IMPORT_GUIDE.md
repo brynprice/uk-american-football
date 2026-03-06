@@ -63,14 +63,14 @@ Imports a hierarchical structure of phases (divisions, conferences, playoffs) fo
   ```bash
   node scripts/import_phases.mjs data/phases.csv [--dry-run]
   ```
-* **CSV Columns**: `competition_name, year, phase_name, type, parent_phase, confidence_level`
+* **CSV Columns**: `competition_name, year, phase_name, type, parent_phase, confidence_level, ordinal`
 * **Behavior**: Requires the parent phase (if any) to be defined *above* the child phase in the same CSV file if you want them linked in a single run. Matches seasons by competition name/slug and year.
 * **Example CSV**:
   ```csv
-  competition_name,year,phase_name,type,parent_phase
-  BUAFL,2025,"Division 1",division,
-  BUAFL,2025,"South Eastern",conference,"Division 1"
-  BUAFL,2025,"Group A",group,"South Eastern"
+  competition_name,year,phase_name,type,parent_phase,ordinal
+  BUAFL,2025,"Division 1",division,,1
+  BUAFL,2025,"South Eastern",conference,"Division 1",1
+  BUAFL,2025,"Group A",group,"South Eastern",1
   ```
 
 ### 5. Participations Import (`import_participations.mjs`)

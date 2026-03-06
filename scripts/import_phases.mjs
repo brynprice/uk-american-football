@@ -36,7 +36,7 @@ async function importPhases(filePath) {
     const slugify = (text) => text.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
 
     for (const record of records) {
-        const { competition_name, year, phase_name, type, parent_phase, confidence_level } = record;
+        const { competition_name, year, phase_name, type, parent_phase, confidence_level, ordinal } = record;
 
         if (!competition_name || !year || !phase_name) {
             console.warn(`[Warning] Skipping record with missing required fields:`, record);
@@ -102,7 +102,8 @@ async function importPhases(filePath) {
             parent_phase_id: parentId,
             name: phase_name,
             type: type || null,
-            confidence_level: confidence_level || 'high'
+            confidence_level: confidence_level || 'high',
+            ordinal: ordinal ? parseInt(ordinal) : null
         };
 
         if (isDryRun) {
