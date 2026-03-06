@@ -103,7 +103,7 @@ export const ArchiveService = {
         const gameData = data as any;
 
         // Fetch polymorphic relations separately to avoid PostgREST relationship errors
-        const [sources, notes, participations] = await Promise.all([
+        const [sources, archivalNotes, participations] = await Promise.all([
             supabase.from("sources").select("*").eq("entity_id", gameId).eq("entity_type", "games"),
             supabase.from("notes").select("*").eq("entity_id", gameId).eq("entity_type", "games"),
             supabase.from("participations").select("*, person:people (*)").eq("phase_id", gameData.phase_id)
@@ -112,7 +112,7 @@ export const ArchiveService = {
         return {
             ...gameData,
             sources: sources.data || [],
-            notes: notes.data || [],
+            archival_notes: archivalNotes.data || [],
             participations: participations.data || []
         };
     },

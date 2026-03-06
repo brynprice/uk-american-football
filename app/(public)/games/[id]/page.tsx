@@ -38,10 +38,18 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                     {/* Game Header */}
                     <div className="bg-slate-900 text-white p-4 flex justify-between items-center font-sans tracking-widest text-xs uppercase">
                         <span>{game.date_display || (game.date ? new Date(game.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : "Unknown Date")}</span>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-3">
                             <span className="font-black">{game.phase.name}</span>
                             {game.is_double_header && (
                                 <span className="bg-amber-400 text-slate-900 px-2 py-0.5 rounded text-[10px] font-black normal-case tracking-normal">Double Header</span>
+                            )}
+                            {game.status && game.status !== 'completed' && (
+                                <span className={`px-2 py-0.5 rounded text-[10px] font-black normal-case tracking-normal ${game.status === 'cancelled' ? 'bg-red-500 text-white' :
+                                    game.status === 'postponed' ? 'bg-orange-500 text-white' :
+                                        'bg-blue-500 text-white'
+                                    }`}>
+                                    {game.status}
+                                </span>
                             )}
                         </div>
                         <span>{game.venue?.city || "Unknown Location"}</span>
@@ -99,31 +107,51 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                             </div>
                         </div>
                         <div>
-                            <h4 className="font-black uppercase text-slate-400 mb-3 text-[10px] tracking-tighter">Venue / Conditions</h4>
-                            <div className="font-sans">
-                                {game.venue?.coordinates ? (
-                                    <a
-                                        href={`https://www.google.com/maps?q=${game.venue.coordinates.replace(/[()]/g, '')}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="group"
-                                    >
-                                        <p className="font-bold text-slate-700 group-hover:text-blue-700 transition-colors">
-                                            {game.venue.name} <span className="text-[10px] text-blue-500 uppercase font-sans">↗ Map</span>
-                                        </p>
-                                        <p className="text-slate-500">{game.venue.city} {game.venue.address}</p>
-                                    </a>
-                                ) : (
-                                    <>
-                                        <p className="font-bold text-slate-700">{game.venue?.name || "Venue records missing"}</p>
-                                        <p className="text-slate-500">{game.venue?.city} {game.venue?.address}</p>
-                                    </>
-                                )}
-                                {game.notes && <p className="mt-2 italic text-slate-600 border-t pt-2 border-slate-200">{game.notes}</p>}
-                            </div>
+                            {game.venue?.coordinates ? (
+                                <a
+                                    href={`https://www.google.com/maps?q=${game.venue.coordinates.replace(/[()]/g, '')}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group"
+                                >
+                                    <p className="font-bold text-slate-700 group-hover:text-blue-700 transition-colors">
+                                        {game.venue.name} <span className="text-[10px] text-blue-500 uppercase font-sans">↗ Map</span>
+                                    </p>
+                                    <p className="text-slate-500">{game.venue.city} {game.venue.address}</p>
+                                </a>
+                            ) : (
+                                <>
+                                    <p className="font-bold text-slate-700">{game.venue?.name || "Venue records missing"}</p>
+                                    <p className="text-slate-500">{game.venue?.city} {game.venue?.address}</p>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
+
+                {/* Notes Section - more prominent */}
+                {(game.notes || (game.archival_notes && game.archival_notes.length > 0)) && (
+                    <div className="mt-6 bg-white border-2 border-slate-900 shadow-lg overflow-hidden rounded p-6 space-y-4">
+                        {game.notes && (
+                            <div>
+                                <h4 className="font-black uppercase text-slate-400 mb-2 text-[10px] tracking-tighter">Game Notes</h4>
+                                <p className="text-slate-700 font-sans text-sm italic">{game.notes}</p>
+                            </div>
+                        )}
+                        {game.archival_notes && game.archival_notes.length > 0 && (
+                            <div>
+                                <h4 className="font-black uppercase text-slate-400 mb-2 text-[10px] tracking-tighter">Archival Records</h4>
+                                <ul className="space-y-2">
+                                    {game.archival_notes.map((note: any) => (
+                                        <li key={note.id} className="text-slate-600 font-sans text-xs border-l-2 border-slate-100 pl-3">
+                                            {note.content}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
 
             {/* Sources & Accuracy */}
