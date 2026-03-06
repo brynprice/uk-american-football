@@ -47,7 +47,7 @@ export default function PhaseView({ phases, parentPhaseId = null, seasonId, init
                 return (
                     <div key={phase.id} className="relative">
                         <div
-                            className={`flex items-center gap-3 mb-3 ${canExpand ? 'cursor-pointer group' : ''}`}
+                            className={`flex items-center gap-3 mb-2 ${canExpand ? 'cursor-pointer group' : ''}`}
                             onClick={() => canExpand && togglePhase(phase.id)}
                         >
                             {canExpand && (
@@ -66,21 +66,19 @@ export default function PhaseView({ phases, parentPhaseId = null, seasonId, init
                             )}
                         </div>
 
-                        {isExpanded && (
-                            <>
-                                {/* Link to details */}
-                                <div className="mb-4">
-                                    <Link
-                                        href={`/phases/${phase.id}`}
-                                        className="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1"
-                                    >
-                                        View Details &rarr;
-                                    </Link>
-                                </div>
+                        {/* Standings Link - Always visible if the phase itself is visible */}
+                        <div className="mb-4 ml-0">
+                            <Link
+                                href={`/phases/${phase.id}`}
+                                className="text-sm font-bold text-blue-600 hover:underline inline-flex items-center gap-1"
+                            >
+                                View Standings & Games &rarr;
+                            </Link>
+                        </div>
 
-                                {/* Recursive call for children */}
-                                <PhaseView phases={phases} parentPhaseId={phase.id} seasonId={seasonId} />
-                            </>
+                        {/* Recursive call for children - only if expanded */}
+                        {isExpanded && (
+                            <PhaseView phases={phases} parentPhaseId={phase.id} seasonId={seasonId} />
                         )}
                     </div>
                 );

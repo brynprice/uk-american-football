@@ -18,17 +18,30 @@ export default async function TeamsListPage() {
                         <Link
                             key={team.id}
                             href={`/teams/${team.id}`}
-                            className="group block p-6 bg-white border border-slate-200 shadow-sm hover:border-blue-500 hover:shadow-md transition-all"
+                            className="group block p-6 bg-white border border-slate-200 shadow-sm hover:border-blue-500 hover:shadow-md transition-all flex items-start gap-5"
                         >
-                            <h2 className="text-xl font-bold group-hover:text-blue-700 transition-colors">{team.name}</h2>
-                            <div className="text-sm text-slate-500 font-sans mt-2">
-                                {team.location || "Unknown Location"}
+                            <div className="flex-shrink-0 w-16 h-16 bg-white rounded border border-slate-100 flex items-center justify-center overflow-hidden p-1">
+                                {team.logo_url ? (
+                                    <img
+                                        src={team.logo_url}
+                                        alt={`${team.name} Logo`}
+                                        className="max-w-full max-h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+                                    />
+                                ) : (
+                                    <div className="text-[10px] text-slate-300 font-black uppercase tracking-tighter">No Logo</div>
+                                )}
                             </div>
-                            {team.founded_year && (
-                                <div className="text-xs text-slate-400 font-sans mt-1">
-                                    Founded: {team.founded_year}
+                            <div className="flex-grow">
+                                <h2 className="text-xl font-bold group-hover:text-blue-700 transition-colors leading-tight">{team.name}</h2>
+                                <div className="text-sm text-slate-500 font-sans mt-2">
+                                    {team.location || "Unknown Location"}
                                 </div>
-                            )}
+                                {team.founded_year && (
+                                    <div className="text-xs text-slate-400 font-sans mt-1">
+                                        Founded: {team.founded_year}
+                                    </div>
+                                )}
+                            </div>
                         </Link>
                     ))}
 
