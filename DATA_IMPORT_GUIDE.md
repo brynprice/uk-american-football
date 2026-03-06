@@ -95,6 +95,16 @@ A comprehensive script that imports game results and automatically creates missi
      - If it **already exists**, it updates the existing record with the latest scores, venue, notes, status, and flags from the CSV.
   5. Links head coaches to the specific game in `game_staff` **only if** a season-level participation record does not exist for that team/phase. It will never create a season-level `participations` record itself.
 
+### 7. Standings Import (`import_standings.mjs`)
+Imports aggregate win/loss/points records for teams in a specific phase. Use this for historical seasons where individual game scores are missing.
+* **Usage**:
+  ```bash
+  node scripts/import_standings.mjs data/standings.csv
+  ```
+* **CSV Columns Required**: `competition_name`, `year`, `team`, `wins`, `losses`, `ties`, `points_for`, `points_against`
+* **Optional Columns**: `phase` (defaults to "Regular Season")
+* **Behavior**: Matches the team and phase in the `participations` table and updates the stats columns. Requires that the participation record already exists (run `import_participations.mjs` first).
+
 ## Recommended Workflow
 
 If you have isolated files for specific entities, import them in logical order from top to bottom (Parents -> Children):

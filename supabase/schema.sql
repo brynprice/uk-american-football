@@ -82,6 +82,11 @@ CREATE TABLE participations (
   phase_id UUID REFERENCES phases(id) ON DELETE CASCADE,
   team_id UUID REFERENCES teams(id) ON DELETE CASCADE,
   head_coach_id UUID REFERENCES people(id), -- Default coach for this phase
+  wins INT,
+  losses INT,
+  ties INT,
+  points_for INT,
+  points_against INT,
   notes TEXT,
   created_at TIMESTAMPTZ DEFAULT now()
 );

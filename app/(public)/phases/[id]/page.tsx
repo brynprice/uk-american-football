@@ -58,27 +58,38 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                                 <tbody>
                                     {(() => {
                                         const standings = phase.participations.map((p: any) => {
-                                            const teamGames = phase.games.filter((g: any) =>
-                                                g.status?.toLowerCase() === 'completed' &&
-                                                (g.home_team_id === p.team_id || g.away_team_id === p.team_id)
-                                            );
+                                            // Check for manual stats first
+                                            const hasManualStats = p.wins !== null && p.losses !== null;
 
                                             let wins = 0, losses = 0, ties = 0, pf = 0, pa = 0;
 
-                                            teamGames.forEach((g: any) => {
-                                                const isHome = g.home_team_id === p.team_id;
-                                                const score = isHome ? g.home_score : g.away_score;
-                                                const oppScore = isHome ? g.away_score : g.home_score;
-                                                const multiplier = g.is_double_header ? 2 : 1;
+                                            if (hasManualStats) {
+                                                wins = p.wins || 0;
+                                                losses = p.losses || 0;
+                                                ties = p.ties || 0;
+                                                pf = p.points_for || 0;
+                                                pa = p.points_against || 0;
+                                            } else {
+                                                const teamGames = phase.games.filter((g: any) =>
+                                                    g.status?.toLowerCase() === 'completed' &&
+                                                    (g.home_team_id === p.team_id || g.away_team_id === p.team_id)
+                                                );
 
-                                                if (score !== null && oppScore !== null) {
-                                                    pf += score * multiplier;
-                                                    pa += oppScore * multiplier;
-                                                    if (score > oppScore) wins += multiplier;
-                                                    else if (score < oppScore) losses += multiplier;
-                                                    else ties += multiplier;
-                                                }
-                                            });
+                                                teamGames.forEach((g: any) => {
+                                                    const isHome = g.home_team_id === p.team_id;
+                                                    const score = isHome ? g.home_score : g.away_score;
+                                                    const oppScore = isHome ? g.away_score : g.home_score;
+                                                    const multiplier = g.is_double_header ? 2 : 1;
+
+                                                    if (score !== null && oppScore !== null) {
+                                                        pf += score * multiplier;
+                                                        pa += oppScore * multiplier;
+                                                        if (score > oppScore) wins += multiplier;
+                                                        else if (score < oppScore) losses += multiplier;
+                                                        else ties += multiplier;
+                                                    }
+                                                });
+                                            }
 
                                             const gp = wins + losses + ties;
                                             const winPct = gp > 0 ? (wins / gp + 1 - losses / gp) / 2 : 0;
