@@ -92,7 +92,7 @@ A comprehensive script that imports game results and automatically creates missi
   node scripts/import_data.mjs data/games.csv
   ```
 * **CSV Columns Required**: `competition`, `year`, `home_team`, `away_team`
-* **Optional Columns**: `phase`, `date` (YYYY-MM-DD), `date_precision` (day/month/year/unknown), `date_display` (e.g. "Spring 1994"), `time` (HH:MM), `home_score`, `away_score`, `venue`, `notes`, `status` (completed/cancelled/postponed/awarded), `confidence_level` (high/medium/low), `is_playoff` (true/yes/1), `is_double_header` (true/yes/1), `home_coach`, `away_coach`
+* **Optional Columns**: `phase`, `date` (YYYY-MM-DD), `date_precision` (day/month/year/unknown), `date_display` (e.g. "Spring 1994"), `time` (HH:MM), `home_score`, `away_score`, `venue`, `notes`, `status` (completed/cancelled/postponed/awarded), `confidence_level` (high/medium/low), `is_playoff` (true/yes/1), `is_title_game` (true/yes/1), `title_name` (e.g. "National Trophy"), `is_double_header` (true/yes/1), `home_coach`, `away_coach`
 * **Behavior**: 
   1. Resolves or creates Competition, Season, and Phase.
   2. Resolves or creates Home and Away Teams.

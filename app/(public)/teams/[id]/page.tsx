@@ -224,8 +224,52 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                     )}
                 </div>
 
-                {/* Right Column: Metadata & Aliases */}
+                {/* Right Column: Metadata & Honours */}
                 <div className="space-y-8">
+                    {/* Honours Section */}
+                    {(() => {
+                        const wonTitles = team.games
+                            ?.filter((g: any) => g.is_title_game && g.status?.toLowerCase() === 'completed')
+                            .filter((g: any) => {
+                                const isHome = g.home_team_id === id;
+                                return isHome ? g.home_score > g.away_score : g.away_score > g.home_score;
+                            })
+                            .map((g: any) => ({
+                                title: g.title_name,
+                                year: g.phase?.season?.year,
+                                competition: g.phase?.season?.competition?.name,
+                                game_id: g.id
+                            }));
+
+                        if (!wonTitles || wonTitles.length === 0) return null;
+
+                        return (
+                            <section className="bg-gradient-to-br from-amber-50 to-white p-6 border-2 border-amber-200 shadow-md rounded-lg relative overflow-hidden">
+                                <div className="absolute top-0 right-0 p-2 opacity-10">
+                                    <span className="text-6xl text-amber-600">🏆</span>
+                                </div>
+                                <h4 className="text-xs font-black uppercase text-amber-700 mb-4 tracking-tighter flex items-center gap-2">
+                                    <span className="text-lg">🏆</span> Major Honours
+                                </h4>
+                                <div className="space-y-4">
+                                    {wonTitles.map((title: any, idx: number) => (
+                                        <div key={idx} className="flex gap-3 items-center">
+                                            <div className="w-10 h-10 bg-amber-500 text-white rounded-full flex items-center justify-center shrink-0 shadow-sm border-2 border-white">
+                                                <span className="text-xs font-black uppercase">{title.year}</span>
+                                            </div>
+                                            <div>
+                                                <div className="font-bold text-slate-900 leading-tight">{title.title}</div>
+                                                <div className="text-[10px] text-amber-700 uppercase font-black font-sans tracking-wide">
+                                                    {title.competition}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        );
+                    })()}
+
                     <H2HSelector teamId={id} opponents={opponents} />
 
                     <section className="bg-white p-6 border border-slate-200 shadow-sm">

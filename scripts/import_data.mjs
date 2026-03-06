@@ -295,7 +295,9 @@ async function importData(filePath) {
                 time,
                 status,
                 confidence_level,
-                is_playoff
+                is_playoff,
+                is_title_game,
+                title_name
             } = record;
 
             // Validation: Skip if core identifiers are missing
@@ -353,6 +355,8 @@ async function importData(filePath) {
                         status: status || 'completed',
                         confidence_level: confidence_level || 'high',
                         is_playoff: ['true', 'yes', '1'].includes((is_playoff || '').toString().toLowerCase()),
+                        is_title_game: ['true', 'yes', '1'].includes((is_title_game || '').toString().toLowerCase()),
+                        title_name: title_name || null,
                         is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase())
                     })
                     .eq('id', gameId);
@@ -376,6 +380,8 @@ async function importData(filePath) {
                         status: status || 'completed',
                         confidence_level: confidence_level || 'high',
                         is_playoff: ['true', 'yes', '1'].includes((is_playoff || '').toString().toLowerCase()),
+                        is_title_game: ['true', 'yes', '1'].includes((is_title_game || '').toString().toLowerCase()),
+                        title_name: title_name || null,
                         is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase())
                     })
                     .select('id')
