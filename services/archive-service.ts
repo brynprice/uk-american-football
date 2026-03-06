@@ -290,8 +290,19 @@ export const ArchiveService = {
 
         if (error) throw error;
 
-        // Deduplicate by ID to prevent double counting if query returns multiple rows for the same game
+        // Deduplicate and sort: Season (desc) then Date (desc)
         const uniqueGames = Array.from(new Map(((data as any[]) || []).map(g => [g.id, g])).values());
+
+        uniqueGames.sort((a, b) => {
+            const yearA = a.phase?.season?.year || 0;
+            const yearB = b.phase?.season?.year || 0;
+            if (yearA !== yearB) return yearB - yearA;
+
+            const dateA = a.date || '';
+            const dateB = b.date || '';
+            return dateB.localeCompare(dateA);
+        });
+
         return uniqueGames;
     }
 };
