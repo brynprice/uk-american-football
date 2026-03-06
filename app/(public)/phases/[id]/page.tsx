@@ -94,7 +94,9 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                                         </span>
                                     )}
                                     {game.is_playoff && !game.is_title_game && (
-                                        <span className="text-[10px] font-black bg-slate-900 text-white px-2 py-0.5 rounded uppercase">Postseason</span>
+                                        <span className="text-[10px] font-black bg-slate-900 text-white px-2 py-0.5 rounded uppercase">
+                                            {game.playoff_round || "Postseason"}
+                                        </span>
                                     )}
                                     {game.is_double_header && (
                                         <span className="text-[10px] font-black bg-amber-100 text-amber-700 px-2 py-0.5 rounded uppercase border border-amber-200">DH</span>

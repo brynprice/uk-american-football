@@ -118,6 +118,7 @@ CREATE TABLE games (
   is_playoff BOOLEAN DEFAULT false,
   is_title_game BOOLEAN DEFAULT false,
   title_name TEXT,
+  playoff_round TEXT,
   is_double_header BOOLEAN DEFAULT false,
   notes TEXT,
   confidence_level TEXT DEFAULT 'high',

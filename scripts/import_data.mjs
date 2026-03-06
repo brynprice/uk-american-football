@@ -323,7 +323,8 @@ async function importData(filePath) {
                 confidence_level,
                 is_playoff,
                 is_title_game,
-                title_name
+                title_name,
+                playoff_round
             } = record;
 
             // Validation: Skip if core identifiers are missing
@@ -383,6 +384,7 @@ async function importData(filePath) {
                         is_playoff: ['true', 'yes', '1'].includes((is_playoff || '').toString().toLowerCase()),
                         is_title_game: ['true', 'yes', '1'].includes((is_title_game || '').toString().toLowerCase()),
                         title_name: title_name || null,
+                        playoff_round: playoff_round ? playoff_round.trim() : null,
                         is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase())
                     })
                     .eq('id', gameId);
@@ -409,6 +411,7 @@ async function importData(filePath) {
                         is_playoff: ['true', 'yes', '1'].includes((is_playoff || '').toString().toLowerCase()),
                         is_title_game: ['true', 'yes', '1'].includes((is_title_game || '').toString().toLowerCase()),
                         title_name: title_name || null,
+                        playoff_round: playoff_round ? playoff_round.trim() : null,
                         is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase())
                     })
                     .select('id')
