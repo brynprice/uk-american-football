@@ -72,22 +72,24 @@ export const ArchiveService = {
 
         if (gamesError) throw gamesError;
 
-        // 5. Fetch participations (standings) only if it's a leaf phase
-        let participations: any[] = [];
-        if (isLeaf) {
-            const { data: partData, error: partError } = await supabase
-                .from("participations")
-                .select("*, person:people (*), team:teams (*)")
-                .eq("phase_id", phaseId);
-            if (partError) throw partError;
-            participations = partData || [];
-        }
+        // 5. Fetch participations (standings) for all descendant phases
+        const { data: partData, error: partError } = await supabase
+            .from("participations")
+            .select("*, person:people (*), team:teams (*), phase:phases(id, name, type)")
+            .in("phase_id", descendantIds);
+
+        if (partError) throw partError;
+        const participationsByPhase = (partData || []).reduce((acc: any, p: any) => {
+            if (!acc[p.phase_id]) acc[p.phase_id] = { id: p.phase_id, name: p.phase.name, type: p.phase.type, participations: [] };
+            acc[p.phase_id].participations.push(p);
+            return acc;
+        }, {});
 
         return {
             ...phase,
             isLeaf,
             games: games || [],
-            participations
+            childPhases: Object.values(participationsByPhase) // Phases that have participations
         };
     },
 
