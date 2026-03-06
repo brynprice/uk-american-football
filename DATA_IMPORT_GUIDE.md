@@ -56,15 +56,22 @@ Imports season data linked to specific competitions.
 * **Optional Columns**: `season_name`, `start_date`, `end_date`, `confidence_level`
 * **Behavior**: Looks up the competition by name/slug. Matches seasons by `competition_id` and `year`. Updates existing or creates new seasons.
 
-### 4. Bulk Load Phases (`bulk-load-phases.js`)
-Imports a hierarchical structure of phases (divisions, conferences, playoffs) for a specific season from a JSON file.
-* **Standard File**: `scripts/phases.json`
+### 4. Phase Import (`import_phases.mjs`)
+Imports a hierarchical structure of phases (divisions, conferences, playoffs) for a specific season from a CSV file.
+* **Standard File**: `data/phases.csv`
 * **Usage**:
   ```bash
-  node scripts/bulk-load-phases.js scripts/phases.json --competition="<Competition Name>" --year=<YYYY> [--dry-run]
+  node scripts/import_phases.mjs data/phases.csv [--dry-run]
   ```
-* **Format**: JSON array of phase objects with `name`, `type`, and optional nested `children`.
-* **Behavior**: Requires the `--competition` and `--year` arguments to properly link the phases to their respective season by looking up the `season_id` in the database. Supports a `--dry-run` flag to test the import without writing to the database. Inserts phases recursively to maintain parent-child relationships.
+* **CSV Columns**: `competition_name, year, phase_name, type, parent_phase, confidence_level`
+* **Behavior**: Requires the parent phase (if any) to be defined *above* the child phase in the same CSV file if you want them linked in a single run. Matches seasons by competition name/slug and year.
+* **Example CSV**:
+  ```csv
+  competition_name,year,phase_name,type,parent_phase
+  BUAFL,2025,"Division 1",division,
+  BUAFL,2025,"South Eastern",conference,"Division 1"
+  BUAFL,2025,"Group A",group,"South Eastern"
+  ```
 
 ### 5. Participations Import (`import_participations.mjs`)
 Imports season-level team participation and default head coach linking for a given phase in a season.
