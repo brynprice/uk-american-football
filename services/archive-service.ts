@@ -141,7 +141,24 @@ export const ArchiveService = {
             .single();
         if (error) throw error;
         if (!data) throw new Error("Team not found");
-        return data;
+
+        const { data: games, error: gamesError } = await supabase
+            .from("games")
+            .select(`
+                *,
+                phase:phases (*, season:seasons (*, competition:competitions (*))),
+                home_team:teams!home_team_id (*),
+                away_team:teams!away_team_id (*)
+            `)
+            .or(`home_team_id.eq.${teamId},away_team_id.eq.${teamId}`)
+            .order("date", { ascending: false });
+
+        if (gamesError) throw gamesError;
+
+        return {
+            ...(data as any),
+            games: games || []
+        };
     },
 
     async getPersonDetails(personId: string): Promise<any> {
