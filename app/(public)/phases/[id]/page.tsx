@@ -7,6 +7,15 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
     const { id } = await params;
     const phase = await ArchiveService.getPhaseData(id);
 
+    // Determine if this is a playoff phase
+    const isPlayoffPhase =
+        phase.type === 'playoffs' ||
+        phase.type?.toLowerCase().includes('playoff') ||
+        phase.type === 'wild_card' ||
+        phase.name.toLowerCase().includes('playoff') ||
+        phase.name.toLowerCase().includes('knockout') ||
+        (phase.games && phase.games.length > 0 && phase.games.every((g: any) => g.is_playoff));
+
     return (
         <ArchiveLayout>
             <div className="mb-8">
@@ -25,8 +34,8 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
             </div>
 
             <div className="space-y-12">
-                {/* Standings only for leaf phases */}
-                {phase.isLeaf && phase.participations && phase.participations.length > 0 && (
+                {/* Standings only for leaf phases that are NOT playoffs */}
+                {!isPlayoffPhase && phase.isLeaf && phase.participations && phase.participations.length > 0 && (
                     <section>
                         <h2 className="text-xl font-bold mb-4 font-sans uppercase tracking-widest border-b-2 border-slate-900 pb-1">
                             Phase Standings
@@ -108,6 +117,16 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                 {!phase.isLeaf && (
                     <div className="bg-slate-50 p-4 border-l-4 border-slate-900 text-sm italic text-slate-600 font-sans">
                         This is a container phase. Standings are displayed at the individual group/division level. All results from child phases are aggregated below.
+                    </div>
+                )}
+
+                {isPlayoffPhase && (
+                    <div className="bg-amber-50 p-6 border border-amber-200 text-amber-900 font-sans shadow-sm">
+                        <div className="flex items-center gap-3 mb-2">
+                            <span className="bg-amber-500 text-white text-xs font-black uppercase px-2 py-1 tracking-widest">Postseason</span>
+                            <h3 className="font-bold text-lg">Knockout Phase</h3>
+                        </div>
+                        <p className="text-sm">Regular season standings do not apply to this phase. Game results and progression are listed below.</p>
                     </div>
                 )}
 

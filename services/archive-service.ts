@@ -142,6 +142,18 @@ export const ArchiveService = {
         return data;
     },
 
+    async searchGamesByScore(scoreA: number, scoreB: number): Promise<any[]> {
+        // Query games where (home = scoreA AND away = scoreB) OR (home = scoreB AND away = scoreA)
+        const { data, error } = await supabase
+            .from('games')
+            .select('*, phase:phases(*, season:seasons(*, competition:competitions(*))), home_team:teams!home_team_id(*), away_team:teams!away_team_id(*), venue:venues(*)')
+            .or(`and(home_score.eq.${scoreA},away_score.eq.${scoreB}),and(home_score.eq.${scoreB},away_score.eq.${scoreA})`)
+            .order('date', { ascending: false });
+
+        if (error) throw error;
+        return data || [];
+    },
+
     async getPersonGamesAsCoach(personId: string): Promise<any[]> {
         // 1. Get all participations where they are the head coach
         const { data: participations } = await supabase

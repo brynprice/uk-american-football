@@ -17,6 +17,7 @@ export default function ArchiveLayout({
                         <Link href="/teams" className="hover:text-blue-700">Teams</Link>
                         <Link href="/people" className="hover:text-blue-700">People</Link>
                         <Link href="/venues" className="hover:text-blue-700">Venues</Link>
+                        <Link href="/scorigami" className="hover:text-blue-700">Scorigami</Link>
                     </nav>
                 </div>
             </header>
