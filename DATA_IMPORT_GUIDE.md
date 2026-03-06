@@ -103,7 +103,7 @@ Imports aggregate win/loss/points records for teams in a specific phase. Use thi
   ```
 * **CSV Columns Required**: `competition_name`, `year`, `team`, `wins`, `losses`, `ties`, `points_for`, `points_against`
 * **Optional Columns**: `phase` (defaults to "Regular Season")
-* **Behavior**: Matches the team and phase in the `participations` table and updates the stats columns. Requires that the participation record already exists (run `import_participations.mjs` first).
+* **Behavior**: Matches the team and phase in the `participations` table and updates the stats columns. If a participation record does not exist for the team in that phase, it will be automatically created.
 
 ## Recommended Workflow
 

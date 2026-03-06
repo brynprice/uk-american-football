@@ -122,30 +122,51 @@ async function importStandings(filePath) {
             continue;
         }
 
-        // 5. Update participation record
-        const { data: existing, error: updateError } = await supabase
+        // 5. Update or Create participation record
+        const stats = {
+            wins: wins !== undefined && wins !== "" ? parseInt(wins) : null,
+            losses: losses !== undefined && losses !== "" ? parseInt(losses) : null,
+            ties: ties !== undefined && ties !== "" ? parseInt(ties) : null,
+            points_for: points_for !== undefined && points_for !== "" ? parseInt(points_for) : null,
+            points_against: points_against !== undefined && points_against !== "" ? parseInt(points_against) : null
+        };
+
+        const { data: existing } = await supabase
             .from('participations')
-            .update({
-                wins: wins !== undefined && wins !== "" ? parseInt(wins) : null,
-                losses: losses !== undefined && losses !== "" ? parseInt(losses) : null,
-                ties: ties !== undefined && ties !== "" ? parseInt(ties) : null,
-                points_for: points_for !== undefined && points_for !== "" ? parseInt(points_for) : null,
-                points_against: points_against !== undefined && points_against !== "" ? parseInt(points_against) : null
-            })
+            .select('id')
             .eq('phase_id', phaseRecord.id)
             .eq('team_id', teamId)
-            .select('id')
             .maybeSingle();
 
-        if (updateError) {
-            console.error(`  [Error] Failed to update standings for ${teamName}: ${updateError.message}`);
-            skipped++;
-        } else if (!existing) {
-            console.warn(`  [Skip] Participation record not found for ${teamName} in ${phaseName}. Run import_participations.mjs first.`);
-            skipped++;
+        if (existing) {
+            const { error: updateError } = await supabase
+                .from('participations')
+                .update(stats)
+                .eq('id', existing.id);
+
+            if (updateError) {
+                console.error(`  [Error] Failed to update standings for ${teamName}: ${updateError.message}`);
+                skipped++;
+            } else {
+                console.log(`  [Updated] ${teamName} standings updated.`);
+                updated++;
+            }
         } else {
-            console.log(`  [Done] ${teamName} standings updated.`);
-            updated++;
+            const { error: insertError } = await supabase
+                .from('participations')
+                .insert({
+                    phase_id: phaseRecord.id,
+                    team_id: teamId,
+                    ...stats
+                });
+
+            if (insertError) {
+                console.error(`  [Error] Failed to create participation and standings for ${teamName}: ${insertError.message}`);
+                skipped++;
+            } else {
+                console.log(`  [Created] ${teamName} participation and standings created.`);
+                updated++;
+            }
         }
     }
 
