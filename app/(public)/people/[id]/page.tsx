@@ -75,11 +75,59 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
                     </section>
                 </div>
 
-                <div className="bg-slate-50 p-6 border-t-4 border-slate-900">
-                    <h4 className="text-xs font-black uppercase text-slate-400 mb-4 tracking-tighter">Biographical Notes</h4>
-                    <div className="text-sm font-serif leading-relaxed text-slate-700 italic">
-                        {person.bio || "No biographical information has been recorded for this individual yet."}
+                <div className="space-y-6">
+                    <div className="bg-slate-50 p-6 border-t-4 border-slate-900">
+                        <h4 className="text-xs font-black uppercase text-slate-400 mb-4 tracking-tighter">Biographical Notes</h4>
+                        <div className="text-sm font-serif leading-relaxed text-slate-700 italic">
+                            {person.bio || "No biographical information has been recorded for this individual yet."}
+                        </div>
                     </div>
+
+                    {(person.hall_of_fame?.length > 0 || person.retired_jerseys?.length > 0) && (
+                        <div className="bg-amber-50 p-6 border-t-4 border-amber-500 shadow-sm">
+                            <h4 className="text-xs font-black uppercase text-amber-800 mb-4 tracking-tighter flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L11 6.477V16h2a1 1 0 110 2H7a1 1 0 110-2h2V6.477L5.237 7.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 014 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.617a1 1 0 01.894-1.788l1.599.799L8 4.323V3a1 1 0 011-1zm-5.16 10.617l-1.472 4.593A1.988 1.988 0 004 17a1.988 1.988 0 001.632-.29l-1.472-4.593zM15 17a1.988 1.988 0 001.632-.29l-1.472-4.593-1.472 4.593A1.988 1.988 0 0015 17z" clipRule="evenodd" />
+                                </svg>
+                                Awards & Honours
+                            </h4>
+
+                            <div className="space-y-6">
+                                {person.hall_of_fame?.length > 0 && (
+                                    <div>
+                                        <h5 className="text-sm font-bold text-slate-800 mb-2 border-b border-amber-200 pb-1">Hall of Fame Inductions</h5>
+                                        <ul className="space-y-3 mt-3">
+                                            {person.hall_of_fame.map((hof: any) => (
+                                                <li key={hof.id} className="text-sm">
+                                                    <div className="font-bold text-amber-900">{hof.team?.name || 'Unknown Team'}</div>
+                                                    <div className="text-slate-600">
+                                                        Inducted: <span className="font-semibold">{hof.year_inducted || 'Unknown'}</span>
+                                                        {hof.seasons_with_team && <span className="ml-2 text-xs italic text-slate-500">({hof.seasons_with_team})</span>}
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+
+                                {person.retired_jerseys?.length > 0 && (
+                                    <div>
+                                        <h5 className="text-sm font-bold text-slate-800 mb-2 border-b border-amber-200 pb-1">Retired Jerseys</h5>
+                                        <ul className="space-y-3 mt-3">
+                                            {person.retired_jerseys.map((jersey: any) => (
+                                                <li key={jersey.id} className="text-sm">
+                                                    <div className="font-bold text-amber-900">{jersey.team?.name || 'Unknown Team'} <span className="inline-block ml-2 px-1.5 py-0.5 bg-slate-800 text-white rounded text-xs shadow-sm border border-slate-700">#{jersey.jersey_number}</span></div>
+                                                    <div className="text-slate-600">
+                                                        Retired: <span className="font-semibold">{jersey.year_retired || 'Unknown'}</span>
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </ArchiveLayout>

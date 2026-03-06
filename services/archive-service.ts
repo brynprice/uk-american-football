@@ -136,7 +136,7 @@ export const ArchiveService = {
     },
 
     async getPersonDetails(personId: string): Promise<any> {
-        const { data, error } = await supabase.from("people").select("*, game_staff (*, game:games (*, phase:phases (*, season:seasons (*, competition:competitions (*))))), participations (*, phase:phases (*, season:seasons (*, competition:competitions (*))))").eq("id", personId).single();
+        const { data, error } = await supabase.from("people").select("*, game_staff (*, game:games (*, phase:phases (*, season:seasons (*, competition:competitions (*))))), participations (*, phase:phases (*, season:seasons (*, competition:competitions (*)))), hall_of_fame (*, team:teams (*)), retired_jerseys (*, team:teams (*))").eq("id", personId).single();
         if (error) throw error;
         if (!data) throw new Error("Person not found");
         return data;
