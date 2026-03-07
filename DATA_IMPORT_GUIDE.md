@@ -159,3 +159,28 @@ Use this script to duplicate the phase structure (Divisions, Conferences, etc.) 
 *   **Example**: `node scripts/copy_season_phases.mjs "BUAFL" 2024 2023`
 *   **Behavior**: It recursively recreates the phase hierarchy for the target year.
 *   **Safety**: It will skip execution if the target season already has phases (use `--force` to override).
+
+## Data Utilities
+
+### 10. Data Completeness Score (`calculate_completeness.mjs`)
+
+The Archive features a dynamic Data Completeness Score (0-100%) for each season to indicate the depth and quality of the historical records available.
+
+*   **Command**: `node scripts/calculate_completeness.mjs [season_id]`
+*   **Behavior**: If run without arguments, it recalculates the score for *all* seasons in the database. If a specific UUID is provided, it only calculates for that season.
+
+#### How the Score is Calculated
+The 100-point score is weighted across four categories:
+1.  **Structure (20 pts):**
+    *   *Phases (10 pts):* Are there defined phases/divisions for the season?
+    *   *Participations (10 pts):* Are teams actually enrolled in those phases?
+2.  **Game Presence (30 pts):**
+    *   *Has Games (30 pts):* Are there individual game logs recorded?
+    *   *Standings Only (15 pts):* If there are no games, but we have final manual standings imported, the season gets partial credit here.
+3.  **Game Quality (30 pts):** (Proportional based on the % of games with this data)
+    *   *Scores (15 pts):* Do the games have both home and away scores?
+    *   *Dates (10 pts):* Do the games have exact calendar dates (not just the year)?
+    *   *Venues (5 pts):* Are venues logged for the games?
+4.  **Context & Personnel (20 pts):**
+    *   *Coaches (15 pts):* Percentage of participating teams that have a head coach assigned.
+    *   *Title Game (5 pts):* Is there at least one game marked as a `title_game` for the season?
