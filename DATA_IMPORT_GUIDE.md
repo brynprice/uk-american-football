@@ -59,7 +59,7 @@ Imports season data linked to specific competitions.
   node scripts/import_seasons.mjs data/seasons.csv [--sample]
   ```
 * **CSV Columns Required**: `competition_name`, `year`
-* **Optional Columns**: `season_name`, `start_date`, `end_date`, `confidence_level`
+* **Optional Columns**: `season_name`, `start_date`, `end_date`, `confidence_level`, `expected_participants` (used for completeness scoring calculation)
 * **Behavior**: Looks up the competition by name/slug. Matches seasons by `competition_id` and `year`. Updates existing or creates new seasons.
 
 ### 4. Phase Import (`import_phases.mjs`)

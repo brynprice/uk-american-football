@@ -60,7 +60,7 @@ async function importSeasons(filePath) {
     console.log(`--- Importing ${records.length} Seasons ---`);
 
     for (const record of records) {
-        const { competition_name, year, season_name, start_date, end_date, confidence_level } = record;
+        const { competition_name, year, season_name, start_date, end_date, confidence_level, expected_participants } = record;
 
         if (!competition_name || !year) {
             console.warn(`[Warning] Skipping record with missing competition or year:`, record);
@@ -96,7 +96,8 @@ async function importSeasons(filePath) {
             name: season_name || `${cleanYear} Season`,
             start_date: start_date || null,
             end_date: end_date || null,
-            confidence_level: confidence_level || 'high'
+            confidence_level: confidence_level || 'high',
+            expected_participants: expected_participants ? parseInt(expected_participants) : null
         };
 
         if (existing) {

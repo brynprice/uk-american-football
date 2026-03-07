@@ -7,6 +7,13 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
     const { id } = await params;
     const season = await ArchiveService.getSeasonDetails(id);
 
+    const renderMissingDetail = (text: string) => (
+        <div className="flex items-center gap-2 text-red-600 text-xs mb-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+            {text}
+        </div>
+    );
+
     return (
         <ArchiveLayout>
             <div className="mb-8">
@@ -66,9 +73,25 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                                 ))}
                             </div>
                         ) : (
-                            <p className="text-sm text-slate-600 font-serif leading-relaxed italic">
-                                Records for the {season.year} season are compiled from various historical newspaper archives and league bulletins.
-                            </p>
+                            <>
+                                <p className="text-sm text-slate-600 font-serif leading-relaxed italic">
+                                    Records for the {season.year} season are compiled from various historical newspaper archives and league bulletins.
+                                </p>
+                                {season.completeness_details && (
+                                    <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded">
+                                        <h5 className="text-sm font-bold text-red-800 mb-2">Completeness Details:</h5>
+                                        {season.completeness_details?.games_missing_scores > 0 && renderMissingDetail(
+                                            `Missing scores for ${season.completeness_details.games_missing_scores} games`
+                                        )}
+                                        {season.completeness_details?.games_missing_dates > 0 && renderMissingDetail(
+                                            `Missing dates for ${season.completeness_details.games_missing_dates} games`
+                                        )}
+                                        {season.completeness_details?.missing_expected_ratio && season.completeness_details.missing_expected_ratio.split('/')[0] !== season.completeness_details.missing_expected_ratio.split('/')[1] && renderMissingDetail(
+                                            `Missing ${parseInt(season.completeness_details.missing_expected_ratio.split('/')[1]) - parseInt(season.completeness_details.missing_expected_ratio.split('/')[0])} expected teams (${season.completeness_details.missing_expected_ratio})`
+                                        )}
+                                    </div>
+                                )}
+                            </>
                         )}
                     </section>
                 </div>

@@ -20,7 +20,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
  * - Game Quality (30): Scores (15), Dates (10), Venues (5)
  * - Context (20): Coaches (15), Title Game (5)
  */
-async function calculateForSeason(seasonId, seasonName) {
+async function calculateForSeason(seasonId, seasonName, expectedParticipants = null) {
     let score = 0;
     const details = {
         missing_phases: true,
@@ -52,11 +52,19 @@ async function calculateForSeason(seasonId, seasonName) {
         .in('phase_id', phaseIds);
 
     if (participations && participations.length > 0) {
-        score += 10;
+        const totalParts = participations.length;
+
+        if (expectedParticipants && expectedParticipants > 0) {
+            const ratio = Math.min(totalParts / expectedParticipants, 1.0);
+            score += Math.round(ratio * 10);
+            details.missing_expected_ratio = `${totalParts}/${expectedParticipants}`;
+        } else {
+            score += 10;
+        }
+
         details.missing_participations = false;
 
         // Context: Coaches
-        const totalParts = participations.length;
         const partsWithCoach = participations.filter(p => !!p.head_coach_id).length;
         details.participations_missing_coach = totalParts - partsWithCoach;
 
@@ -117,7 +125,7 @@ async function calculateForSeason(seasonId, seasonName) {
 async function run(targetSeasonId = null) {
     console.log("--- Calculating Season Completeness Scores ---");
 
-    let query = supabase.from('seasons').select('id, year, name');
+    let query = supabase.from('seasons').select('id, year, name, expected_participants');
     if (targetSeasonId) {
         query = query.eq('id', targetSeasonId);
     }
@@ -133,7 +141,7 @@ async function run(targetSeasonId = null) {
     let updated = 0;
     for (const s of seasons) {
         const title = s.name || `${s.year} Season`;
-        const { score, details } = await calculateForSeason(s.id, title);
+        const { score, details } = await calculateForSeason(s.id, title, s.expected_participants);
 
         const { error: updateError } = await supabase
             .from('seasons')

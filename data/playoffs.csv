@@ -1,12 +1,42 @@
-﻿competition,year,phase,date,time,date_precision,date_display,away_team,home_team,away_score,home_score,status,venue,notes,away_coach,home_coach,is_double_header,is_playoff,playoff_round,confidence_level,is_title_game,title_name
+﻿competition,year,phase,date,time,date_precision,date_display,away_team,home_team,away_score,home_score,status,venue,notes,away_coach,home_coach,is_double_header,is_playoff,playoff_round,confidence_level,final_type,title_name
 bcafl,1987,Playoffs,,,,unknown,Cardiff Cobras,Stirling Clansmen,22,6,completed,,,,,,TRUE,Semi-Final,high,,
 bcafl,1987,Playoffs,,,,unknown,Hull Sharks,Strathclyde Hawks,22,0,completed,,,,,,TRUE,Semi-Final,high,,
-bcafl,1987,Playoffs,1988-03-13,,,unknown,Cardiff Cobras,Hull Sharks,0,0,completed,Allam Sports Pitches,Triple Overtime. Both teams named winner. Tom Bell game MVP.,,,,TRUE,Final,high,TRUE,College Bowl II
-bcafl,1986,Playoffs,1987-03-15,,,day,Hull Sharks,Newcastle Scholars,23,6,completed,Teeside Playing Fields,,,,,TRUE,Final,high,TRUE,College Bowl
+bcafl,1987,Playoffs,1988-03-13,,,day,Cardiff Cobras,Hull Sharks,0,0,completed,Allam Sport Centre,Triple Overtime. Both teams named winner. Tom Bell game MVP.,,,,TRUE,Final,high,title,College Bowl II
+bcafl,1986,Playoffs,1987-03-15,,,day,Hull Sharks,Newcastle Scholars,23,6,completed,Teeside Playing Fields,,,,,TRUE,Final,high,title,College Bowl
 bcafl,1988,Playoffs,,,,unknown,Teesside Demons,Hull Sharks,0,34,completed,,,,,,TRUE,1st Round,high,,
 bcafl,1988,Playoffs,,,,unknown,Loughborough Aces,Hull Sharks,7,21,completed,,,,,,TRUE,Semi-Final,high,,
 bcafl,1988,Playoffs,,,,unknown,Strathclyde Hawks,Cardiff Cobras,3,13,completed,,,,,,TRUE,Semi-Final,high,,
-bcafl,1988,Playoffs,,,,unknown,Hull Sharks,Cardiff Cobras,7,6,completed,Saffron Lane Stadium,Matt Loader game MVP.,,,,TRUE,Final,high,TRUE,College Bowl III
+bcafl,1988,Playoffs,,,,unknown,Hull Sharks,Cardiff Cobras,7,6,completed,Saffron Lane Stadium,Matt Loader game MVP.,,,,TRUE,Final,high,title,College Bowl III
 bcafl,1989,Playoffs,,,,unknown,Strathclyde Hawks,Birmingham Lions,0,34,completed,,,,,,TRUE,Semi-Final,high,,
 bcafl,1989,Playoffs,,,,unknown,Warwick Wolves,Teesside Demons,14,16,completed,,,,,,TRUE,Semi-Final,high,,
-bcafl,1989,Playoffs,,,,unknown,Teesside Demons,Birmingham Lions,21,20,completed,Saffron Lane Stadium,,,,,TRUE,Final,high,TRUE,College Bowl IV
+bcafl,1989,Playoffs,,,,unknown,Teesside Demons,Birmingham Lions,21,20,completed,Saffron Lane Stadium,,,,,TRUE,Final,high,title,College Bowl IV
+bcafl,1990,Playoffs,1991-03-17,,,day,Teesside Demons,UEA Pirates,19,0,completed,Saffron Lane Stadium,,,,,TRUE,Final,high,title,College Bowl V
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
