@@ -1,32 +1,32 @@
 ﻿competition,year,phase,date,time,date_precision,date_display,away_team,home_team,away_score,home_score,status,venue,notes,away_coach,home_coach,is_double_header,is_playoff,playoff_round,confidence_level,final_type,title_name
-bcafl,1987,Playoffs,,,,unknown,Cardiff Cobras,Stirling Clansmen,22,6,completed,,,,,,TRUE,Semi-Final,high,,
-bcafl,1987,Playoffs,,,,unknown,Hull Sharks,Strathclyde Hawks,22,0,completed,,,,,,TRUE,Semi-Final,high,,
-bcafl,1987,Playoffs,1988-03-13,,,day,Cardiff Cobras,Hull Sharks,0,0,completed,Allam Sport Centre,Triple Overtime. Both teams named winner. Tom Bell game MVP.,,,,TRUE,Final,high,title,College Bowl II
-bcafl,1986,Playoffs,1987-03-15,,,day,Hull Sharks,Newcastle Scholars,23,6,completed,Teeside Playing Fields,,,,,TRUE,Final,high,title,College Bowl
-bcafl,1988,Playoffs,,,,unknown,Teesside Demons,Hull Sharks,0,34,completed,,,,,,TRUE,1st Round,high,,
-bcafl,1988,Playoffs,,,,unknown,Loughborough Aces,Hull Sharks,7,21,completed,,,,,,TRUE,Semi-Final,high,,
-bcafl,1988,Playoffs,,,,unknown,Strathclyde Hawks,Cardiff Cobras,3,13,completed,,,,,,TRUE,Semi-Final,high,,
-bcafl,1988,Playoffs,,,,unknown,Hull Sharks,Cardiff Cobras,7,6,completed,Saffron Lane Stadium,Matt Loader game MVP.,,,,TRUE,Final,high,title,College Bowl III
-bcafl,1989,Playoffs,,,,unknown,Strathclyde Hawks,Birmingham Lions,0,34,completed,,,,,,TRUE,Semi-Final,high,,
-bcafl,1989,Playoffs,,,,unknown,Warwick Wolves,Teesside Demons,14,16,completed,,,,,,TRUE,Semi-Final,high,,
-bcafl,1989,Playoffs,,,,unknown,Teesside Demons,Birmingham Lions,21,20,completed,Saffron Lane Stadium,,,,,TRUE,Final,high,title,College Bowl IV
-bcafl,1990,Playoffs,1991-03-17,,,day,Teesside Demons,UEA Pirates,19,0,completed,Saffron Lane Stadium,,,,,TRUE,Final,high,title,College Bowl V
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
+bcafl,1987,Playoffs,,,unknown,,Cardiff Cobras,Stirling Clansmen,22,6,completed,,,,,,TRUE,Semi-Final,high,,
+bcafl,1987,Playoffs,,,unknown,,Hull Sharks,Strathclyde Hawks,22,0,completed,,,,,,TRUE,Semi-Final,high,,
+bcafl,1987,Playoffs,1988-03-13,,day,,Cardiff Cobras,Hull Sharks,0,0,completed,Allam Sport Centre,Triple Overtime. Both teams named winner. Tom Bell game MVP.,,,,TRUE,Final,high,title,College Bowl II
+bcafl,1986,Playoffs,1987-03-15,,day,,Hull Sharks,Newcastle Scholars,23,6,completed,Teeside Playing Fields,,,,,TRUE,Final,high,title,College Bowl
+bcafl,1988,Playoffs,,,unknown,,Teesside Demons,Hull Sharks,0,34,completed,,,,,,TRUE,1st Round,high,,
+bcafl,1988,Playoffs,,,unknown,,Loughborough Aces,Hull Sharks,7,21,completed,,,,,,TRUE,Semi-Final,high,,
+bcafl,1988,Playoffs,,,unknown,,Strathclyde Hawks,Cardiff Cobras,3,13,completed,,,,,,TRUE,Semi-Final,high,,
+bcafl,1988,Playoffs,,,unknown,,Hull Sharks,Cardiff Cobras,7,6,completed,Saffron Lane Stadium,Matt Loader game MVP.,,,,TRUE,Final,high,title,College Bowl III
+bcafl,1989,Playoffs,,,unknown,,Strathclyde Hawks,Birmingham Lions,0,34,completed,,,,,,TRUE,Semi-Final,high,,
+bcafl,1989,Playoffs,,,unknown,,Warwick Wolves,Teesside Demons,14,16,completed,,,,,,TRUE,Semi-Final,high,,
+bcafl,1989,Playoffs,,,unknown,,Teesside Demons,Birmingham Lions,21,20,completed,Saffron Lane Stadium,,,,,TRUE,Final,high,title,College Bowl IV
+bcafl,1990,Playoffs,1991-03-17,,day,,Teesside Demons,UEA Pirates,19,0,completed,Saffron Lane Stadium,,,,,TRUE,Final,high,title,College Bowl V
+bcafl,1991,Playoffs,1992-03-08,,day,,Southampton Stags,Glasgow Tigers,53,0,completed,Saffron Lane Stadium,,,,,TRUE,Final,high,title,College Bowl VI
+bcafl,1992,Playoffs,1993-03-21,,day,,Southampton Stags,Leeds Celtics,19,0,completed,Saffron Lane Stadium,,,,,TRUE,Final,high,title,College Bowl VII
+bcafl,1993,Playoffs,1994-03-13,,day,,Glasgow Tigers,Leicester Lemmings,26,0,completed,Saffron Lane Stadium,,,,,TRUE,Final,high,title,College Bowl VIII
+bcafl,1994,Playoffs,1995-03-12,,day,,Loughborough Aces,Cambridge Pythons,23,20,completed,Saffron Lane Stadium,,,,,TRUE,Final,high,title,College Bowl IX
+bcafl,1995,Playoffs,1996-03-17,,day,,Leeds Celtics,Cardiff Cobras,14,8,completed,Saffron Lane Stadium,,,,,TRUE,Final,high,title,College Bowl X
+bcafl,1996,Playoffs,,,month,March 1997,Loughborough Aces,Tarannau Aberystwyth,28,19,completed,Saffron Lane Stadium,,,,,TRUE,Final,high,title,College Bowl XI
+bcafl,1997,Playoffs,1998-03-15,,day,,Hertfordshire Hurricanes,Leeds Celtics,16,7,completed,Saffron Lane Stadium,,,,,TRUE,Final,high,title,College Bowl XII
+bcafl,1998,Playoffs,1999-03-21,,day,,Hertfordshire Hurricanes,Loughborough Aces,7,3,completed,Saffron Lane Stadium,,,,,TRUE,Final,high,title,College Bowl XIII
+bcafl,1999,Playoffs,2000-03-26,,day,,Hertfordshire Hurricanes,Leicester Lemmings,20,6,completed,Saffron Lane Stadium,,,,,TRUE,Final,high,title,College Bowl XIV
+bcafl,2000,Playoffs,2001-03-25,,day,,Oxford Cavaliers,Loughborough Aces,26,23,completed,Saffron Lane Stadium,,,,,TRUE,Final,high,title,College Bowl XV
+bcafl,2001,Playoffs,2002-03-17,,day,,Loughborough Aces,Oxford Cavaliers,39,23,completed,Saffron Lane Stadium,,,,,TRUE,Final,high,title,College Bowl XVI
+bcafl,2002,Playoffs,2003-03-30,,day,,Stirling Clansmen,Hertfordshire Hurricanes,22,17,completed,Crown Flatt Stadium,,,,,TRUE,Final,high,title,College Bowl XVII
+bcafl,2003,Playoffs,2004-03-21,,day,,Hertfordshire Hurricanes,Staffordshire Stallions,27,6,completed,Crown Flatt Stadium,,,,,TRUE,Final,high,title,College Bowl XVIII
+bcafl,2004,Playoffs,2005-03-20,,day,,Birmingham Lions,Glasgow Tigers,34,7,completed,Butts Park Arena,,,,,TRUE,Final,high,title,College Bowl XIX
+bcafl,2005,Playoffs,2006-03-26,,day,,Southampton Stags,Teesside Cougars,79,8,completed,Butts Park Arena,,,,,TRUE,Final,high,title,College Bowl XX
+bcafl,2006,Playoffs,2007-03-25,,day,,UWE Bullets,Loughborough Aces,31,14,completed,Butts Park Arena,,,,,TRUE,Final,high,title,College Bowl XXI
 ,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,

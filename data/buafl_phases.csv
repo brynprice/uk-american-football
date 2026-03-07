@@ -28,3 +28,33 @@ buafl,2025,Playoffs,Playoffs,Division 2 South,high,0
 buafl,2025,Division 2 South Western,Division,Division 2 South,high,1
 buafl,2025,Division 2 Southern,Division,Division 2 South,high,2
 buafl,2025,Division 2 South Eastern,Division,Division 2 South,high,3
+,,,,,,
+buafl,2024,Premiership,Tier,,high,0
+buafl,2024,Premier (National),Conference,Premiership,high,0
+buafl,2024,Playoffs,Playoffs,Premier (National),high,0
+buafl,2024,Premier (National),Division,Premier (National),high,1
+buafl,2024,Premier North/South,Conference,Premiership,high,1
+buafl,2024,Playoffs,Playoffs,Premier North/South,high,0
+buafl,2024,Premiership North,Division,Premier North/South,high,1
+buafl,2024,Premiership South,Division,Premier North/South,high,2
+buafl,2024,Division 1,Tier,,high,1
+buafl,2024,Playoffs,Playoffs,Division 1,high,0
+buafl,2024,Division 1 North,Conference,Division 1,high,1
+buafl,2024,Division 1 Scottish,Division,Division 1 North,high,0
+buafl,2024,Division 1 Northern,Division,Division 1 North,high,1
+buafl,2024,Division 1 Mid & Yorks,Division,Division 1 North,high,2
+buafl,2024,Division 1 South,Conference,Division 1,high,2
+buafl,2024,Division 1 South Western,Division,Division 1 South,high,0
+buafl,2024,Division 1 Southern,Division,Division 1 South,high,1
+buafl,2024,Division 1 South Eastern,Division,Division 1 South,high,2
+buafl,2024,Division 2,Tier,,high,2
+buafl,2024,Division 2 North,Conference,Division 2,high,0
+buafl,2024,Playoffs,Playoffs,Division 2 North,high,0
+buafl,2024,Division 2 North Western,Division,Division 2 North,high,1
+buafl,2024,Division 2 North Eastern,Division,Division 2 North,high,2
+buafl,2024,Division 2 Midlands,Division,Division 2 North,high,3
+buafl,2024,Division 2 South,Conference,Division 2,high,1
+buafl,2024,Playoffs,Playoffs,Division 2 South,high,0
+buafl,2024,Division 2 South Western,Division,Division 2 South,high,1
+buafl,2024,Division 2 Southern,Division,Division 2 South,high,2
+buafl,2024,Division 2 South Eastern,Division,Division 2 South,high,3

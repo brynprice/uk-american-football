@@ -48,16 +48,17 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
     // Get participations for these phases
     const { data: participations } = await supabase
         .from('participations')
-        .select('id, head_coach_id, wins')
+        .select('id, head_coach_id, wins, team_id')
         .in('phase_id', phaseIds);
 
     if (participations && participations.length > 0) {
         const totalParts = participations.length;
+        const uniqueTeamsCount = new Set(participations.map(p => p.team_id)).size;
 
         if (expectedParticipants && expectedParticipants > 0) {
-            const ratio = Math.min(totalParts / expectedParticipants, 1.0);
+            const ratio = Math.min(uniqueTeamsCount / expectedParticipants, 1.0);
             score += Math.round(ratio * 10);
-            details.missing_expected_ratio = `${totalParts}/${expectedParticipants}`;
+            details.missing_expected_ratio = `${uniqueTeamsCount}/${expectedParticipants}`;
         } else {
             score += 10;
         }
