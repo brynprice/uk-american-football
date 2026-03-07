@@ -134,20 +134,54 @@ async function getOrCreateSeason(competitionId, year) {
     return newData.id;
 }
 
-async function getOrCreatePhase(seasonId, name) {
-    const { data, error } = await supabase
+async function getOrCreatePhase(seasonId, name, parentPhaseName = null) {
+    const { data: phases, error } = await supabase
         .from('phases')
-        .select('id')
+        .select('id, parent_phase_id')
         .eq('season_id', seasonId)
-        .eq('name', name)
-        .maybeSingle();
+        .eq('name', name);
 
-    if (error && error.code !== 'PGRST116') console.error("Error looking up phase:", error);
-    if (data) return data.id;
+    if (error) console.error("Error looking up phase:", error);
+
+    if (phases && phases.length === 1) {
+        return phases[0].id;
+    }
+
+    let parentId = null;
+    if (parentPhaseName) {
+        const { data: parentData } = await supabase
+            .from('phases')
+            .select('id')
+            .eq('season_id', seasonId)
+            .eq('name', parentPhaseName.trim())
+            .maybeSingle();
+
+        if (parentData) {
+            parentId = parentData.id;
+        } else {
+            console.warn(`  [Warning] Parent phase "${parentPhaseName}" not found; proceeding without it.`);
+        }
+    }
+
+    if (phases && phases.length > 1) {
+        if (!parentPhaseName) {
+            throw new Error(`Ambiguous phase "${name}". Multiple found, no 'parent_phase' provided.`);
+        }
+        if (!parentId) {
+            throw new Error(`Ambiguous phase "${name}". 'parent_phase' "${parentPhaseName}" not found.`);
+        }
+
+        const matched = phases.filter(p => p.parent_phase_id === parentId);
+        if (matched.length === 1) {
+            return matched[0].id;
+        } else {
+            throw new Error(`Ambiguous phase "${name}". Found ${matched.length} even with 'parent_phase'.`);
+        }
+    }
 
     const { data: newData, error: insertError } = await supabase
         .from('phases')
-        .insert({ season_id: seasonId, name, type: 'division' })
+        .insert({ season_id: seasonId, parent_phase_id: parentId, name, type: 'division' })
         .select('id')
         .single();
 
@@ -324,7 +358,8 @@ async function importData(filePath) {
                 is_playoff,
                 is_title_game,
                 title_name,
-                playoff_round
+                playoff_round,
+                parent_phase
             } = record;
 
             // Validation: Skip if core identifiers are missing
@@ -338,7 +373,7 @@ async function importData(filePath) {
             // 1. Resolve Parents
             const competitionId = await getOrCreateCompetition(competition);
             const seasonId = await getOrCreateSeason(competitionId, year);
-            const phaseId = await getOrCreatePhase(seasonId, phase || 'Regular Season');
+            const phaseId = await getOrCreatePhase(seasonId, phase || 'Regular Season', parent_phase);
 
             // 2. Resolve Teams
             const homeTeamId = await getOrCreateTeam(home_team);

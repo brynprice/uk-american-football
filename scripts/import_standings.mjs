@@ -66,7 +66,7 @@ async function importStandings(filePath) {
     let updated = 0, skipped = 0;
 
     for (const record of records) {
-        const { competition_name, year, phase, team, wins, losses, ties, points_for, points_against } = record;
+        const { competition_name, year, phase, parent_phase, team, wins, losses, ties, points_for, points_against } = record;
 
         if (!competition_name || !year || !team) {
             console.warn(`[Warning] Skipping record with missing competition, year, or team:`, record);
@@ -108,17 +108,48 @@ async function importStandings(filePath) {
         }
 
         // 3. Find phase
-        const { data: phaseRecord } = await supabase
+        const { data: phaseRecords } = await supabase
             .from('phases')
-            .select('id')
+            .select('id, parent_phase_id')
             .eq('season_id', season.id)
-            .eq('name', phaseName)
-            .maybeSingle();
+            .eq('name', phaseName);
 
-        if (!phaseRecord) {
+        if (!phaseRecords || phaseRecords.length === 0) {
             console.warn(`  [Skip] Phase "${phaseName}" not found in ${cleanYear} ${cleanName}.`);
             skipped++;
             continue;
+        }
+
+        let finalPhaseId = phaseRecords[0].id;
+
+        if (phaseRecords.length > 1) {
+            if (!parent_phase) {
+                console.warn(`  [Skip] Ambiguous phase "${phaseName}". Multiple found, but no 'parent_phase' provided in CSV to disambiguate.`);
+                skipped++;
+                continue;
+            }
+
+            const { data: parentRecord } = await supabase
+                .from('phases')
+                .select('id')
+                .eq('season_id', season.id)
+                .eq('name', parent_phase.trim())
+                .maybeSingle();
+
+            if (!parentRecord) {
+                console.warn(`  [Skip] Ambiguous phase "${phaseName}". 'parent_phase' "${parent_phase}" not found in DB.`);
+                skipped++;
+                continue;
+            }
+
+            const matchedPhases = phaseRecords.filter(p => p.parent_phase_id === parentRecord.id);
+            if (matchedPhases.length === 1) {
+                finalPhaseId = matchedPhases[0].id;
+            } else {
+                console.warn(`  [Skip] Ambiguous phase "${phaseName}". Even with parent "${parent_phase}", found ${matchedPhases.length} matches.`);
+                skipped++;
+                continue;
+            }
         }
 
         // 4. Find team
@@ -158,7 +189,7 @@ async function importStandings(filePath) {
         const { data: existing } = await supabase
             .from('participations')
             .select('id')
-            .eq('phase_id', phaseRecord.id)
+            .eq('phase_id', finalPhaseId)
             .eq('team_id', teamId)
             .maybeSingle();
 
@@ -180,7 +211,7 @@ async function importStandings(filePath) {
             const { data, error: insertError } = await supabase
                 .from('participations')
                 .insert({
-                    phase_id: phaseRecord.id,
+                    phase_id: finalPhaseId,
                     team_id: teamId,
                     ...stats
                 }).select('id').single();
