@@ -73,25 +73,55 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                                 ))}
                             </div>
                         ) : (
-                            <>
-                                <p className="text-sm text-slate-600 font-serif leading-relaxed italic">
-                                    Records for the {season.year} season are compiled from various historical newspaper archives and league bulletins.
-                                </p>
-                                {season.completeness_details && (
-                                    <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded">
-                                        <h5 className="text-sm font-bold text-red-800 mb-2">Completeness Details:</h5>
-                                        {season.completeness_details?.games_missing_scores > 0 && renderMissingDetail(
-                                            `Missing scores for ${season.completeness_details.games_missing_scores} games`
-                                        )}
-                                        {season.completeness_details?.games_missing_dates > 0 && renderMissingDetail(
-                                            `Missing dates for ${season.completeness_details.games_missing_dates} games`
-                                        )}
-                                        {season.completeness_details?.missing_expected_ratio && season.completeness_details.missing_expected_ratio.split('/')[0] !== season.completeness_details.missing_expected_ratio.split('/')[1] && renderMissingDetail(
-                                            `Missing ${parseInt(season.completeness_details.missing_expected_ratio.split('/')[1]) - parseInt(season.completeness_details.missing_expected_ratio.split('/')[0])} expected teams (${season.completeness_details.missing_expected_ratio})`
-                                        )}
-                                    </div>
+                            <p className="text-sm text-slate-600 font-serif leading-relaxed italic">
+                                Records for the {season.year} season are compiled from various historical newspaper archives and league bulletins.
+                            </p>
+                        )}
+
+                        {season.completeness_details && (
+                            <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded">
+                                <h5 className="text-sm font-bold text-red-800 mb-2">Completeness Details:</h5>
+                                {season.completeness_details?.missing_phases && renderMissingDetail(
+                                    `Missing divisions or phases`
                                 )}
-                            </>
+                                {season.completeness_details?.missing_participations && renderMissingDetail(
+                                    `Missing enrolled teams`
+                                )}
+                                {season.completeness_details?.missing_games && renderMissingDetail(
+                                    `Missing game logs or final standings`
+                                )}
+                                {season.completeness_details?.games_missing_scores > 0 && renderMissingDetail(
+                                    `Missing scores for ${season.completeness_details.games_missing_scores} games`
+                                )}
+                                {season.completeness_details?.games_missing_dates > 0 && renderMissingDetail(
+                                    `Missing exact dates for ${season.completeness_details.games_missing_dates} games`
+                                )}
+                                {season.completeness_details?.games_missing_venues > 0 && renderMissingDetail(
+                                    `Missing venues for ${season.completeness_details.games_missing_venues} games`
+                                )}
+                                {season.completeness_details?.participations_missing_coach > 0 && renderMissingDetail(
+                                    `Missing head coach for ${season.completeness_details.participations_missing_coach} teams`
+                                )}
+                                {season.completeness_details?.missing_title_game && renderMissingDetail(
+                                    `Missing championship title game`
+                                )}
+                                {season.completeness_details?.missing_expected_ratio && season.completeness_details.missing_expected_ratio.split('/')[0] !== season.completeness_details.missing_expected_ratio.split('/')[1] && renderMissingDetail(
+                                    `Missing ${parseInt(season.completeness_details.missing_expected_ratio.split('/')[1]) - parseInt(season.completeness_details.missing_expected_ratio.split('/')[0])} expected teams (${season.completeness_details.missing_expected_ratio} enrolled)`
+                                )}
+
+                                {Object.keys(season.completeness_details).length > 0 &&
+                                    !season.completeness_details.missing_phases &&
+                                    !season.completeness_details.missing_participations &&
+                                    !season.completeness_details.missing_games &&
+                                    !(season.completeness_details.games_missing_scores > 0) &&
+                                    !(season.completeness_details.games_missing_dates > 0) &&
+                                    !(season.completeness_details.games_missing_venues > 0) &&
+                                    !(season.completeness_details.participations_missing_coach > 0) &&
+                                    !season.completeness_details.missing_title_game &&
+                                    !(season.completeness_details.missing_expected_ratio && season.completeness_details.missing_expected_ratio.split('/')[0] !== season.completeness_details.missing_expected_ratio.split('/')[1]) && (
+                                        <div className="text-sm text-green-700 font-medium">All standard data points appear complete!</div>
+                                    )}
+                            </div>
                         )}
                     </section>
                 </div>
