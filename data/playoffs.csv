@@ -1,9 +1,12 @@
-﻿competition,year,phase,date,time,date_precision,date_display,away_team,home_team,away_score,home_score,status,venue,notes,away_coach,home_coach,is_double_header,is_playoff,confidence_level,is_title_game,title_name
-bcafl,1987,Playoffs,,,,unknown,Cardiff Cobras,Stirling Clansmen,22,6,completed,,,,,,TRUE,high,,
-bcafl,1987,Playoffs,,,,unknown,Hull Sharks,Strathclyde Hawks,22,0,completed,,,,,,TRUE,high,,
-bcafl,1987,Playoffs,,,,unknown,Cardiff Cobras,Hull Sharks,0,0,completed,Hull,Triple Overtime. Both teams named winner. Tom Bell game MVP.,,,,TRUE,high,TRUE,College Bowl II
-bcafl,1986,Playoffs,,,,unknown,Hull Sharks,Newcastle Scholars,23,6,completed,,,,,,TRUE,high,TRUE,College Bowl
-bcafl,1988,Playoffs,,,,unknown,Teesside Demons,Hull Sharks,0,34,completed,,,,,,TRUE,high,,
-bcafl,1988,Playoffs,,,,unknown,Loughborough Aces,Hull Sharks,7,21,completed,,,,,,TRUE,high,,
-bcafl,1988,Playoffs,,,,unknown,Strathclyde Hawks,Cardiff Cobras,3,13,completed,,,,,,TRUE,high,,
-bcafl,1988,Playoffs,,,,unknown,Hull Sharks,Cardiff Cobras,7,6,completed,Saffron Lane Stadium,Matt Loader game MVP.,,,,TRUE,high,TRUE,College Bowl III
+﻿competition,year,phase,date,time,date_precision,date_display,away_team,home_team,away_score,home_score,status,venue,notes,away_coach,home_coach,is_double_header,is_playoff,playoff_round,confidence_level,is_title_game,title_name
+bcafl,1987,Playoffs,,,,unknown,Cardiff Cobras,Stirling Clansmen,22,6,completed,,,,,,TRUE,Semi-Final,high,,
+bcafl,1987,Playoffs,,,,unknown,Hull Sharks,Strathclyde Hawks,22,0,completed,,,,,,TRUE,Semi-Final,high,,
+bcafl,1987,Playoffs,1988-03-13,,,unknown,Cardiff Cobras,Hull Sharks,0,0,completed,Allam Sports Pitches,Triple Overtime. Both teams named winner. Tom Bell game MVP.,,,,TRUE,Final,high,TRUE,College Bowl II
+bcafl,1986,Playoffs,1987-03-15,,,day,Hull Sharks,Newcastle Scholars,23,6,completed,Teeside Playing Fields,,,,,TRUE,Final,high,TRUE,College Bowl
+bcafl,1988,Playoffs,,,,unknown,Teesside Demons,Hull Sharks,0,34,completed,,,,,,TRUE,1st Round,high,,
+bcafl,1988,Playoffs,,,,unknown,Loughborough Aces,Hull Sharks,7,21,completed,,,,,,TRUE,Semi-Final,high,,
+bcafl,1988,Playoffs,,,,unknown,Strathclyde Hawks,Cardiff Cobras,3,13,completed,,,,,,TRUE,Semi-Final,high,,
+bcafl,1988,Playoffs,,,,unknown,Hull Sharks,Cardiff Cobras,7,6,completed,Saffron Lane Stadium,Matt Loader game MVP.,,,,TRUE,Final,high,TRUE,College Bowl III
+bcafl,1989,Playoffs,,,,unknown,Strathclyde Hawks,Birmingham Lions,0,34,completed,,,,,,TRUE,Semi-Final,high,,
+bcafl,1989,Playoffs,,,,unknown,Warwick Wolves,Teesside Demons,14,16,completed,,,,,,TRUE,Semi-Final,high,,
+bcafl,1989,Playoffs,,,,unknown,Teesside Demons,Birmingham Lions,21,20,completed,Saffron Lane Stadium,,,,,TRUE,Final,high,TRUE,College Bowl IV

@@ -27,6 +27,7 @@ export default async function CompetitionPage({ params }: { params: Promise<{ id
                             <tr className="border-b-2 border-slate-900">
                                 <th className="py-3 px-4 font-black uppercase">Year</th>
                                 <th className="py-3 px-4 font-black uppercase">Season Name</th>
+                                <th className="py-3 px-4 font-black uppercase">Data Quality</th>
                                 <th className="py-3 px-4 font-black uppercase">Confidence</th>
                                 <th className="py-3 px-4 font-black uppercase text-right">Actions</th>
                             </tr>
@@ -37,9 +38,21 @@ export default async function CompetitionPage({ params }: { params: Promise<{ id
                                     <td className="py-4 px-4 font-bold text-lg leading-none">{season.year}</td>
                                     <td className="py-4 px-4">{season.name || `${season.year} Season`}</td>
                                     <td className="py-4 px-4">
+                                        {season.completeness_score !== null && season.completeness_score !== undefined ? (
+                                            <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase ${season.completeness_score >= 90 ? 'bg-green-100 text-green-700' :
+                                                    season.completeness_score >= 50 ? 'bg-yellow-100 text-yellow-700' :
+                                                        'bg-red-100 text-red-700'
+                                                }`}>
+                                                {season.completeness_score}% Score
+                                            </span>
+                                        ) : (
+                                            <span className="text-xs text-slate-400 italic">Unrated</span>
+                                        )}
+                                    </td>
+                                    <td className="py-4 px-4">
                                         <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase ${season.confidence_level === 'high' ? 'bg-green-100 text-green-700' :
-                                                season.confidence_level === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                                                    'bg-red-100 text-red-700'
+                                            season.confidence_level === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                                                'bg-red-100 text-red-700'
                                             }`}>
                                             {season.confidence_level}
                                         </span>

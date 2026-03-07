@@ -26,6 +26,8 @@ CREATE TABLE seasons (
   start_date DATE,
   end_date DATE,
   confidence_level TEXT DEFAULT 'high', -- high, medium, low
+  completeness_score INT,
+  completeness_details JSONB,
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now(),
   UNIQUE(competition_id, year)

@@ -25,6 +25,14 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                         }`}>
                         Confidence: {season.confidence_level}
                     </span>
+                    {season.completeness_score !== null && season.completeness_score !== undefined && (
+                        <span className={`px-3 py-1 rounded text-xs font-black uppercase shadow-sm border ${season.completeness_score >= 90 ? 'bg-teal-50 text-teal-700 border-teal-200' :
+                            season.completeness_score >= 50 ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                                'bg-rose-50 text-rose-700 border-rose-200'
+                            }`}>
+                            Data Quality: {season.completeness_score}%
+                        </span>
+                    )}
                     {season.start_date && (
                         <span className="text-xs font-sans text-slate-500 bg-white border border-slate-200 px-3 py-1 rounded shadow-sm">
                             {new Date(season.start_date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })} &mdash; {season.end_date ? new Date(season.end_date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Unknown'}
@@ -48,21 +56,22 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                 </section>
 
                 {/* Footnotes/Sources Section */}
-                <section className="bg-slate-50 p-6 border-l-4 border-slate-300">
-                    <h4 className="text-sm font-black uppercase mb-4 font-sans text-slate-500">Archival Notes</h4>
-                    {season.notes && season.notes.length > 0 ? (
-                        <div className="space-y-4 text-sm text-slate-600 font-serif leading-relaxed italic">
-                            {season.notes.map((note: any) => (
-                                <p key={note.id}>{note.content}</p>
-                            ))}
-                        </div>
-                    ) : (
-                        <p className="text-sm text-slate-600 font-serif leading-relaxed italic">
-                            Records for the {season.year} season are compiled from various historical newspaper archives and league bulletins.
-                            Dates and venues may be subject to revision as more primary sources are recovered.
-                        </p>
-                    )}
-                </section>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <section className="bg-slate-50 p-6 border-l-4 border-slate-300">
+                        <h4 className="text-sm font-black uppercase mb-4 font-sans text-slate-500">Archival Notes</h4>
+                        {season.notes && season.notes.length > 0 ? (
+                            <div className="space-y-4 text-sm text-slate-600 font-serif leading-relaxed italic">
+                                {season.notes.map((note: any) => (
+                                    <p key={note.id}>{note.content}</p>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-sm text-slate-600 font-serif leading-relaxed italic">
+                                Records for the {season.year} season are compiled from various historical newspaper archives and league bulletins.
+                            </p>
+                        )}
+                    </section>
+                </div>
             </div>
         </ArchiveLayout>
     );

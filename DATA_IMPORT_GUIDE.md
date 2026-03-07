@@ -137,6 +137,11 @@ This script bulk loads Hall of Fame inductions and Retired Jersey honors.
 *   **Command**: `node scripts/import_awards.mjs ./path/to/awards.csv [--sample]`
 *   **Behavior**: It looks up the team, finds or creates the honored person, and inserts either a `hall_of_fame` or `retired_jerseys` record based on the `award_type`. It skips exact duplicates.
 
+* **Usage**:
+  ```bash
+  node scripts/import_awards.mjs data/awards.csv
+  ```
+
 ### CSV Format Requirements
 *   `award_type`: (Required) Must be exactly `hall_of_fame` or `retired_jersey`.
 *   `team`: (Required) Name of the team.
