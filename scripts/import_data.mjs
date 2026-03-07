@@ -357,6 +357,7 @@ async function importData(filePath) {
                 confidence_level,
                 is_playoff,
                 is_title_game,
+                final_type,
                 title_name,
                 playoff_round,
                 parent_phase
@@ -417,7 +418,7 @@ async function importData(filePath) {
                         status: status || 'completed',
                         confidence_level: confidence_level || 'high',
                         is_playoff: ['true', 'yes', '1'].includes((is_playoff || '').toString().toLowerCase()),
-                        is_title_game: ['true', 'yes', '1'].includes((is_title_game || '').toString().toLowerCase()),
+                        final_type: final_type ? final_type.toLowerCase().trim() : (['true', 'yes', '1'].includes((is_title_game || '').toString().toLowerCase()) ? 'title' : null),
                         title_name: title_name || null,
                         playoff_round: playoff_round ? playoff_round.trim() : null,
                         is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase())
@@ -444,7 +445,7 @@ async function importData(filePath) {
                         status: status || 'completed',
                         confidence_level: confidence_level || 'high',
                         is_playoff: ['true', 'yes', '1'].includes((is_playoff || '').toString().toLowerCase()),
-                        is_title_game: ['true', 'yes', '1'].includes((is_title_game || '').toString().toLowerCase()),
+                        final_type: final_type ? final_type.toLowerCase().trim() : (['true', 'yes', '1'].includes((is_title_game || '').toString().toLowerCase()) ? 'title' : null),
                         title_name: title_name || null,
                         playoff_round: playoff_round ? playoff_round.trim() : null,
                         is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase())

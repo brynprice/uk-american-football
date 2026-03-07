@@ -17,5 +17,15 @@ bcafl,1989,Northern Conference,Conference,BCAFL 1989 Season,medium,2
 bcafl,1989,Scottish Conference,Conference,BCAFL 1989 Season,medium,1
 bcafl,1989,Southern Conference,Conference,BCAFL 1989 Season,medium,3
 bcafl,1989,Playoffs,Playoffs,BCAFL 1989 Season,medium,0
-bcafl,1989,Eastern Division,Division,BCAFL 1989 Season,medium,1
-bcafl,1989,Western Division,Division,BCAFL 1989 Season,medium,0
+bcafl,1989,Eastern Division,Division,Southern Conference,medium,1
+bcafl,1989,Western Division,Division,Southern Conference,medium,0
+bcafl,2005,Northern Conference,Conference,,medium,0
+bcafl,2005,Southern Conference,Conference,,medium,1
+bcafl,2005,Scottish Division,Division,Northern Conference,medium,0
+bcafl,2005,Eastern Division,Division,Northern Conference,medium,1
+bcafl,2005,Western Division,Division,Northern Conference,medium,2
+bcafl,2005,Central Division,Division,Northern Conference,medium,3
+bcafl,2005,Central Division,Division,Southern Conference,medium,0
+bcafl,2005,Eastern Division,Division,Southern Conference,medium,1
+bcafl,2005,Western Division,Division,Southern Conference,medium,2
+bcafl,2005,Southern Division,Division,Southern Conference,medium,3

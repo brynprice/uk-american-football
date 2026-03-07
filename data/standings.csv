@@ -1,51 +1,69 @@
-﻿competition_name,phase,year,team,wins,losses,ties,points_for,points_against
-bcafl,1985 Regular Season,1985,Hull Sharks,5,0,0,,
-bcafl,1985 Regular Season,1985,Teesside Demons,3,2,0,,
-bcafl,1985 Regular Season,1985,Newcastle Scholars,1,2,0,,
-bcafl,1985 Regular Season,1985,Manchester MPs,0,5,0,,
-bcafl,Northern Conference,1986,Hull Sharks,6,0,0,138,21
-bcafl,Northern Conference,1986,Teesside Demons,4,2,0,25,34
-bcafl,Northern Conference,1986,Leicester Lemmings,1,5,0,33,63
-bcafl,Northern Conference,1986,Manchester MPs,1,5,0,19,97
-bcafl,Scottish Conference,1986,Newcastle Scholars,4,1,1,4,1
-bcafl,Scottish Conference,1986,Stirling Clansmen,4,2,0,27,23
-bcafl,Scottish Conference,1986,Strathclyde Hawks,3,2,1,24,25
-bcafl,Scottish Conference,1986,Glasgow Tigers,0,6,0,0,6
-bcafl,Northern Conference,1987,Hull Sharks,6,0,0,123,12
-bcafl,Northern Conference,1987,Manchester MPs,2,2,2,2,42
-bcafl,Northern Conference,1987,Teesside Demons,0,4,2,18,129
-bcafl,Northern Conference,1987,Newcastle Scholars,2,4,0,50,10
-bcafl,Scottish Conference,1987,Stirling Clansmen,5,1,0,150,76
-bcafl,Scottish Conference,1987,Strathclyde Hawks,4,2,0,129,84
-bcafl,Scottish Conference,1987,Glasgow Tigers,0,6,0,18,137
-bcafl,Southern Conference,1987,Cardiff Cobras,5,0,1,109,13
-bcafl,Southern Conference,1987,Leicester Lemmings,4,2,0,63,57
-bcafl,Southern Conference,1987,UEA Pirates,2,3,1,2,64
-bcafl,Southern Conference,1987,Reading Knights,0,6,0,0,40
-bcafl,Northern Conference,1988,Newcastle Scholars,2,2,0,8,50
-bcafl,Northern Conference,1988,Teesside Demons,2,2,0,62,54
-bcafl,Northern Conference,1988,Hull Sharks,2,2,0,48,14
-bcafl,Scottish Conference,1988,Strathclyde Hawks,6,0,0,97,25
-bcafl,Scottish Conference,1988,Stirling Clansmen,2,4,0,108,58
-bcafl,Scottish Conference,1988,Glasgow Tigers,1,5,0,12,134
-bcafl,Southern Conference,1988,Loughborough Aces,8,0,0,127,20
-bcafl,Southern Conference,1988,Cardiff Cobras,6,2,0,100,51
-bcafl,Southern Conference,1988,Leicester Lemmings,3,5,0,23,66
-bcafl,Southern Conference,1988,UEA Pirates,3,5,0,3,80
-bcafl,Southern Conference,1988,Reading Knights,0,8,0,0,36
-bcafl,Northern Conference,1989,Teesside Demons,4,0,2,137,40
-bcafl,Northern Conference,1989,Hull Sharks,4,0,2,88,50
-bcafl,Northern Conference,1989,Sheffield Pirates,2,4,0,14,103
-bcafl,Northern Conference,1989,Newcastle Scholars,0,6,0,14,60
-bcafl,Scottish Conference,1989,Strathclyde Hawks,6,0,0,118,28
-bcafl,Scottish Conference,1989,Stirling Clansmen,4,2,0,111,27
-bcafl,Scottish Conference,1989,Glasgow Tigers,1,4,1,34,60
-bcafl,Southern Conference,1989,Paisley Panthers,0,5,1,0,148
-bcafl,Eastern Division,1989,Warwick Wolves,7,0,1,154,32
-bcafl,Eastern Division,1989,UEA Pirates,4,4,0,79,62
-bcafl,Eastern Division,1989,Leicester Lemmings,3,4,1,89,105
-bcafl,Eastern Division,1989,Loughborough Aces,3,5,0,54,101
-bcafl,Western Division,1989,Birmingham Lions,6,1,1,193,20
-bcafl,Western Division,1989,Cardiff Cobras,5,3,0,86,60
-bcafl,Western Division,1989,Southampton Stags,1,6,1,12,233
-bcafl,Western Division,1989,Reading Knights,1,7,0,20,74
+﻿competition_name,parent_phase,phase,year,team,wins,losses,ties,points_for,points_against
+bcafl,,BCAFL 1985 Season,1985,Hull Sharks,5,0,0,,
+bcafl,,BCAFL 1985 Season,1985,Teesside Demons,3,2,0,,
+bcafl,,BCAFL 1985 Season,1985,Newcastle Scholars,1,2,0,,
+bcafl,,BCAFL 1985 Season,1985,Manchester MPs,0,5,0,,
+bcafl,,Northern Conference,1986,Hull Sharks,6,0,0,138,21
+bcafl,,Northern Conference,1986,Teesside Demons,4,2,0,25,34
+bcafl,,Northern Conference,1986,Leicester Lemmings,1,5,0,33,63
+bcafl,,Northern Conference,1986,Manchester MPs,1,5,0,19,97
+bcafl,,Scottish Conference,1986,Newcastle Scholars,4,1,1,4,1
+bcafl,,Scottish Conference,1986,Stirling Clansmen,4,2,0,27,23
+bcafl,,Scottish Conference,1986,Strathclyde Hawks,3,2,1,24,25
+bcafl,,Scottish Conference,1986,Glasgow Tigers,0,6,0,0,6
+bcafl,,Northern Conference,1987,Hull Sharks,6,0,0,123,12
+bcafl,,Northern Conference,1987,Manchester MPs,2,2,2,2,42
+bcafl,,Northern Conference,1987,Teesside Demons,0,4,2,18,129
+bcafl,,Northern Conference,1987,Newcastle Scholars,2,4,0,50,10
+bcafl,,Scottish Conference,1987,Stirling Clansmen,5,1,0,150,76
+bcafl,,Scottish Conference,1987,Strathclyde Hawks,4,2,0,129,84
+bcafl,,Scottish Conference,1987,Glasgow Tigers,0,6,0,18,137
+bcafl,,Southern Conference,1987,Cardiff Cobras,5,0,1,109,13
+bcafl,,Southern Conference,1987,Leicester Lemmings,4,2,0,63,57
+bcafl,,Southern Conference,1987,UEA Pirates,2,3,1,2,64
+bcafl,,Southern Conference,1987,Reading Knights,0,6,0,0,40
+bcafl,,Northern Conference,1988,Newcastle Scholars,2,2,0,8,50
+bcafl,,Northern Conference,1988,Teesside Demons,2,2,0,62,54
+bcafl,,Northern Conference,1988,Hull Sharks,2,2,0,48,14
+bcafl,,Scottish Conference,1988,Strathclyde Hawks,6,0,0,97,25
+bcafl,,Scottish Conference,1988,Stirling Clansmen,2,4,0,108,58
+bcafl,,Scottish Conference,1988,Glasgow Tigers,1,5,0,12,134
+bcafl,,Southern Conference,1988,Loughborough Aces,8,0,0,127,20
+bcafl,,Southern Conference,1988,Cardiff Cobras,6,2,0,100,51
+bcafl,,Southern Conference,1988,Leicester Lemmings,3,5,0,23,66
+bcafl,,Southern Conference,1988,UEA Pirates,3,5,0,3,80
+bcafl,,Southern Conference,1988,Reading Knights,0,8,0,0,36
+bcafl,,Northern Conference,1989,Teesside Demons,4,0,2,137,40
+bcafl,,Northern Conference,1989,Hull Sharks,4,0,2,88,50
+bcafl,,Northern Conference,1989,Sheffield Pirates,2,4,0,14,103
+bcafl,,Northern Conference,1989,Newcastle Scholars,0,6,0,14,60
+bcafl,,Scottish Conference,1989,Strathclyde Hawks,6,0,0,118,28
+bcafl,,Scottish Conference,1989,Stirling Clansmen,4,2,0,111,27
+bcafl,,Scottish Conference,1989,Glasgow Tigers,1,4,1,34,60
+bcafl,,Southern Conference,1989,Paisley Panthers,0,5,1,0,148
+bcafl,,Eastern Division,1989,Warwick Wolves,7,0,1,154,32
+bcafl,,Eastern Division,1989,UEA Pirates,4,4,0,79,62
+bcafl,,Eastern Division,1989,Leicester Lemmings,3,4,1,89,105
+bcafl,,Eastern Division,1989,Loughborough Aces,3,5,0,54,101
+bcafl,,Western Division,1989,Birmingham Lions,6,1,1,193,20
+bcafl,,Western Division,1989,Cardiff Cobras,5,3,0,86,60
+bcafl,,Western Division,1989,Southampton Stags,1,6,1,12,233
+bcafl,,Western Division,1989,Reading Knights,1,7,0,20,74
+bcafl,,Scottish Division,2005,Glasgow Tigers,7,1,0,225,81
+bcafl,,Scottish Division,2005,Stirling Clansmen,4,3,1,92,52
+bcafl,,Scottish Division,2005,Edinburgh Timberwolves,4,4,0,94,75
+bcafl,,Scottish Division,2005,Caledonian Roughriders,2,6,0,88,139
+bcafl,,Scottish Division,2005,Paisley Pyros,1,7,0,88,300
+bcafl,Northern Conference,Eastern Division,2005,Teesside Cougars,7,1,0,238,92
+bcafl,Northern Conference,Eastern Division,2005,Leeds Celtics,5,3,0,132,88
+bcafl,Northern Conference,Eastern Division,2005,Newcastle Raiders,4,3,1,103,74
+bcafl,Northern Conference,Eastern Division,2005,Sunderland Kings,2,5,1,80,157
+bcafl,Northern Conference,Eastern Division,2005,Hull Sharks,1,6,1,41,148
+bcafl,Northern Conference,Western Division,2005,Staffordshire Stallions,5,2,1,231,181
+bcafl,Northern Conference,Western Division,2005,Sheffield Sabres,5,3,0,222,98
+bcafl,Northern Conference,Western Division,2005,Lancaster Bombers,4,4,0,112,174
+bcafl,Northern Conference,Western Division,2005,Sheffield Hallam Warriors,1,7,0,55,184
+bcafl,Northern Conference,Central Division,2005,Loughborough Aces,8,0,0,195,35
+bcafl,Northern Conference,Central Division,2005,Nottingham Outlaws,4,4,0,110,114
+bcafl,Northern Conference,Central Division,2005,Derby Braves,4,4,0,159,114
+bcafl,Northern Conference,Central Division,2005,Leicester Lightning,0,8,0,12,253

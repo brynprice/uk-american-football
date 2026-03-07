@@ -229,7 +229,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                     {/* Honours Section */}
                     {(() => {
                         const wonTitles = team.games
-                            ?.filter((g: any) => g.is_title_game && g.status?.toLowerCase() === 'completed')
+                            ?.filter((g: any) => (g.final_type === 'title' || g.final_type === 'bowl') && g.status?.toLowerCase() === 'completed')
                             .filter((g: any) => {
                                 const isHome = g.home_team_id === id;
                                 // In case of a tie in a title game, both teams share the title
@@ -239,6 +239,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                                 title: g.title_name,
                                 year: g.phase?.season?.year,
                                 competition: g.phase?.season?.competition?.name,
+                                final_type: g.final_type,
                                 game_id: g.id
                             }));
 
@@ -255,7 +256,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                                 <div className="space-y-4">
                                     {wonTitles.map((title: any, idx: number) => (
                                         <div key={idx} className="flex gap-3 items-center">
-                                            <div className="w-10 h-10 bg-amber-500 text-white rounded-full flex items-center justify-center shrink-0 shadow-sm border-2 border-white">
+                                            <div className={`w-10 h-10 ${title.final_type === 'bowl' ? 'bg-blue-500' : 'bg-amber-500'} text-white rounded-full flex items-center justify-center shrink-0 shadow-sm border-2 border-white`}>
                                                 <span className="text-xs font-black uppercase">{title.year}</span>
                                             </div>
                                             <div>

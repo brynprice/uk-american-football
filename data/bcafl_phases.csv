@@ -1,0 +1,28 @@
+﻿competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal
+bcafl,1985,BCAFL 1985 Season,Division,,low,0
+bcafl,1986,Northern Conference,Conference,,medium,1
+bcafl,1986,Scottish Conference,Conference,,medium,0
+bcafl,1987,Northern Conference,Conference,,medium,2
+bcafl,1987,Scottish Conference,Conference,,medium,1
+bcafl,1987,Southern Conference,Conference,,medium,3
+bcafl,1987,Playoffs,Playoffs,,medium,0
+bcafl,1988,Northern Conference,Conference,,medium,2
+bcafl,1988,Scottish Conference,Conference,,medium,1
+bcafl,1988,Southern Conference,Conference,,medium,3
+bcafl,1988,Playoffs,Playoffs,,medium,0
+bcafl,1989,Northern Conference,Conference,,medium,2
+bcafl,1989,Scottish Conference,Conference,,medium,1
+bcafl,1989,Southern Conference,Conference,,medium,3
+bcafl,1989,Playoffs,Playoffs,,medium,0
+bcafl,1989,Eastern Division,Division,Southern Conference,medium,1
+bcafl,1989,Western Division,Division,Southern Conference,medium,0
+bcafl,2005,Northern Conference,Conference,,medium,0
+bcafl,2005,Southern Conference,Conference,,medium,1
+bcafl,2005,Scottish Division,Division,Northern Conference,medium,0
+bcafl,2005,Eastern Division,Division,Northern Conference,medium,1
+bcafl,2005,Western Division,Division,Northern Conference,medium,2
+bcafl,2005,Central Division,Division,Northern Conference,medium,3
+bcafl,2005,Central Division,Division,Southern Conference,medium,0
+bcafl,2005,Eastern Division,Division,Southern Conference,medium,1
+bcafl,2005,Western Division,Division,Southern Conference,medium,2
+bcafl,2005,Southern Division,Division,Southern Conference,medium,3

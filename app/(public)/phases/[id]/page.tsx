@@ -88,12 +88,17 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                                             </span>
                                         )}
                                     </div>
-                                    {game.is_title_game && game.title_name && (
+                                    {game.final_type === 'title' && game.title_name && (
                                         <span className="text-[10px] font-black bg-amber-500 text-white px-2 py-0.5 rounded uppercase shadow-sm">
                                             🏆 {game.title_name}
                                         </span>
                                     )}
-                                    {game.is_playoff && !game.is_title_game && (
+                                    {game.final_type === 'bowl' && game.title_name && (
+                                        <span className="text-[10px] font-black bg-blue-500 text-white px-2 py-0.5 rounded uppercase shadow-sm">
+                                            🏈 {game.title_name}
+                                        </span>
+                                    )}
+                                    {game.is_playoff && !game.final_type && (
                                         <span className="text-[10px] font-black bg-slate-900 text-white px-2 py-0.5 rounded uppercase">
                                             {game.playoff_round || "Postseason"}
                                         </span>

@@ -67,7 +67,7 @@ async function calculateForSeason(seasonId, seasonName) {
     // 2. Games Presence & Quality
     const { data: games } = await supabase
         .from('games')
-        .select('id, home_score, away_score, date, date_precision, venue_id, is_title_game')
+        .select('id, home_score, away_score, date, date_precision, venue_id, final_type')
         .in('phase_id', phaseIds);
 
     if (games && games.length > 0) {
@@ -90,7 +90,7 @@ async function calculateForSeason(seasonId, seasonName) {
             if (g.venue_id) venueCount++;
             else details.games_missing_venues++;
 
-            if (g.is_title_game) hasTitle = true;
+            if (g.final_type === 'title') hasTitle = true;
         });
 
         const scorePercent = scoreCount / totalGames;
