@@ -136,12 +136,19 @@ async function importPhases(filePath) {
             created++;
         } else {
             // Check if exists
-            const { data: existingPhase } = await supabase
+            let query = supabase
                 .from('phases')
                 .select('id')
                 .eq('season_id', season.id)
-                .eq('name', phase_name)
-                .maybeSingle();
+                .eq('name', phase_name);
+
+            if (parentId) {
+                query = query.eq('parent_phase_id', parentId);
+            } else {
+                query = query.is('parent_phase_id', null);
+            }
+
+            const { data: existingPhase } = await query.maybeSingle();
 
             if (existingPhase) {
                 const { error } = await supabase
@@ -155,7 +162,7 @@ async function importPhases(filePath) {
                 } else {
                     console.log(`  [Updated] ${phase_name} updated.`);
                     await ensureSampleNote('phases', existingPhase.id);
-                    phaseCache.set(`${competition_name}|${year}|${phase_name}`, existingPhase.id);
+                    phaseCache.set(`${competition_name}|${year}|${phase_name}|${parentId || 'root'}`, existingPhase.id);
                     created++;
                 }
             } else {
@@ -171,7 +178,7 @@ async function importPhases(filePath) {
                 } else {
                     console.log(`  [Created] ${phase_name} created.`);
                     await ensureSampleNote('phases', inserted.id);
-                    phaseCache.set(`${competition_name}|${year}|${phase_name}`, inserted.id);
+                    phaseCache.set(`${competition_name}|${year}|${phase_name}|${parentId || 'root'}`, inserted.id);
                     created++;
                 }
             }
