@@ -115,7 +115,7 @@ Imports aggregate win/loss/points records for teams in a specific phase. Use thi
   node scripts/import_standings.mjs data/standings.csv [--sample]
   ```
 * **CSV Columns Required**: `competition_name`, `year`, `team`, `wins`, `losses`, `ties`, `points_for`, `points_against`
-* **Optional Columns**: `phase` (defaults to "Regular Season")
+* **Optional Columns**: `phase` (defaults to "Regular Season"), `parent_phase` (used to disambiguate identical phase names)
 * **Behavior**: Matches the team and phase in the `participations` table and updates the stats columns. If a participation record does not exist for the team in that phase, it will be automatically created.
 
 ## Recommended Workflow
