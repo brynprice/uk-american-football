@@ -59,6 +59,28 @@ export async function submitGameAction(payload: {
             return data.id;
         };
 
+        const ensureParticipation = async (phaseId: string, teamId: string, coachId: string | null) => {
+            const { data: existing } = await supabase
+                .from("participations")
+                .select("id, head_coach_id")
+                .eq("phase_id", phaseId)
+                .eq("team_id", teamId)
+                .maybeSingle();
+
+            if (existing) {
+                if (!existing.head_coach_id && coachId) {
+                    await supabase.from("participations").update({ head_coach_id: coachId }).eq("id", existing.id);
+                }
+                return;
+            }
+
+            await supabase.from("participations").insert({
+                phase_id: phaseId,
+                team_id: teamId,
+                head_coach_id: coachId
+            });
+        };
+
         const [homeTeamId, awayTeamId, venueId] = await Promise.all([
             findOrCreateTeam(payload.homeTeam),
             findOrCreateTeam(payload.awayTeam),
@@ -86,8 +108,9 @@ export async function submitGameAction(payload: {
         if (gameError) throw gameError;
 
         const staffPromises = [];
+        let homeCoachId: string | null = null;
         if (payload.homeCoach.trim()) {
-            const homeCoachId = await findOrCreatePerson(payload.homeCoach);
+            homeCoachId = await findOrCreatePerson(payload.homeCoach);
             if (homeCoachId) {
                 staffPromises.push(supabase.from("game_staff").insert({
                     game_id: newGame.id,
@@ -97,8 +120,10 @@ export async function submitGameAction(payload: {
                 }));
             }
         }
+
+        let awayCoachId: string | null = null;
         if (payload.awayCoach.trim()) {
-            const awayCoachId = await findOrCreatePerson(payload.awayCoach);
+            awayCoachId = await findOrCreatePerson(payload.awayCoach);
             if (awayCoachId) {
                 staffPromises.push(supabase.from("game_staff").insert({
                     game_id: newGame.id,
@@ -111,6 +136,10 @@ export async function submitGameAction(payload: {
         if (staffPromises.length > 0) {
             await Promise.all(staffPromises);
         }
+
+        // Ensure both teams are recorded as participating in this phase
+        await ensureParticipation(payload.selectedPhase, homeTeamId, homeCoachId);
+        await ensureParticipation(payload.selectedPhase, awayTeamId, awayCoachId);
 
         if (payload.notes.trim()) {
             await supabase.from("notes").insert({
