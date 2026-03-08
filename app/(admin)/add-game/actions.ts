@@ -20,45 +20,45 @@ export async function submitGameAction(payload: {
     isDoubleHeader: boolean;
     notes: string;
 }) {
-    // Determine the environment variables. Use process.env on the server.
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY;
-
-    if (!supabaseUrl || !supabaseKey) {
-        throw new Error("Missing Supabase Service Role configuration on the server.");
-    }
-
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
-    const findOrCreateTeam = async (name: string): Promise<string> => {
-        if (!name.trim()) return "";
-        const { data: exists } = await supabase.from("teams").select("id").ilike("name", name).maybeSingle();
-        if (exists) return exists.id;
-
-        throw new Error(`Team "${name}" does not exist. Please create teams via the bulk importer first.`);
-    };
-
-    const findOrCreateVenue = async (name: string): Promise<string | null> => {
-        if (!name.trim()) return null;
-        const { data: exists } = await supabase.from("venues").select("id").ilike("name", name).maybeSingle();
-        if (exists) return exists.id;
-
-        const { data, error } = await supabase.from("venues").insert({ name: name.trim() }).select().single();
-        if (error) throw error;
-        return data.id;
-    };
-
-    const findOrCreatePerson = async (name: string): Promise<string | null> => {
-        if (!name.trim()) return null;
-        const { data: exists } = await supabase.from("people").select("id").ilike("display_name", name).maybeSingle();
-        if (exists) return exists.id;
-
-        const { data, error } = await supabase.from("people").insert({ display_name: name.trim() }).select().single();
-        if (error) throw error;
-        return data.id;
-    };
-
     try {
+        // Determine the environment variables. Use process.env on the server.
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY;
+
+        if (!supabaseUrl || !supabaseKey) {
+            throw new Error("Missing Supabase Service Role configuration on the server.");
+        }
+
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        const findOrCreateTeam = async (name: string): Promise<string> => {
+            if (!name.trim()) return "";
+            const { data: exists } = await supabase.from("teams").select("id").ilike("name", name).maybeSingle();
+            if (exists) return exists.id;
+
+            throw new Error(`Team "${name}" does not exist. Please create teams via the bulk importer first.`);
+        };
+
+        const findOrCreateVenue = async (name: string): Promise<string | null> => {
+            if (!name.trim()) return null;
+            const { data: exists } = await supabase.from("venues").select("id").ilike("name", name).maybeSingle();
+            if (exists) return exists.id;
+
+            const { data, error } = await supabase.from("venues").insert({ name: name.trim() }).select().single();
+            if (error) throw error;
+            return data.id;
+        };
+
+        const findOrCreatePerson = async (name: string): Promise<string | null> => {
+            if (!name.trim()) return null;
+            const { data: exists } = await supabase.from("people").select("id").ilike("display_name", name).maybeSingle();
+            if (exists) return exists.id;
+
+            const { data, error } = await supabase.from("people").insert({ display_name: name.trim() }).select().single();
+            if (error) throw error;
+            return data.id;
+        };
+
         const [homeTeamId, awayTeamId, venueId] = await Promise.all([
             findOrCreateTeam(payload.homeTeam),
             findOrCreateTeam(payload.awayTeam),

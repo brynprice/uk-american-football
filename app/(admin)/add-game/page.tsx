@@ -89,7 +89,7 @@ export default function AddGamePage() {
         const fetchPhases = async () => {
             const { data } = await supabase
                 .from("phases")
-                .select("id, name, type")
+                .select("id, name, type, parent:parent_id(name)")
                 .eq("season_id", selectedSeason)
                 .order("name");
             if (data) setPhases(data);
@@ -213,7 +213,7 @@ export default function AddGamePage() {
                                 required
                                 value={selectedSeason}
                                 onChange={(e) => setSelectedSeason(e.target.value)}
-                                className="w-full border border-slate-300 rounded p-2 text-sm"
+                                className="w-full border border-slate-300 rounded p-2 text-sm text-black"
                             >
                                 <option value="">Select Season</option>
                                 {seasons.map(s => (
@@ -228,11 +228,13 @@ export default function AddGamePage() {
                                 value={selectedPhase}
                                 onChange={(e) => setSelectedPhase(e.target.value)}
                                 disabled={!selectedSeason}
-                                className="w-full border border-slate-300 rounded p-2 text-sm disabled:bg-slate-100"
+                                className="w-full border border-slate-300 rounded p-2 text-sm disabled:bg-slate-100 text-black"
                             >
                                 <option value="">Select Phase</option>
                                 {phases.map(p => (
-                                    <option key={p.id} value={p.id}>{p.name} ({p.type})</option>
+                                    <option key={p.id} value={p.id}>
+                                        {p.parent ? `${p.parent.name} - ` : ''}{p.name} ({p.type})
+                                    </option>
                                 ))}
                             </select>
                         </div>
@@ -243,7 +245,7 @@ export default function AddGamePage() {
                                 type="date"
                                 value={date}
                                 onChange={(e) => setDate(e.target.value)}
-                                className="w-full border border-slate-300 rounded p-2 text-sm"
+                                className="w-full border border-slate-300 rounded p-2 text-sm text-black"
                             />
                         </div>
                         <div>
@@ -251,7 +253,7 @@ export default function AddGamePage() {
                             <select
                                 value={status}
                                 onChange={(e) => setStatus(e.target.value)}
-                                className="w-full border border-slate-300 rounded p-2 text-sm"
+                                className="w-full border border-slate-300 rounded p-2 text-sm text-black"
                             >
                                 <option value="completed">Completed</option>
                                 <option value="awarded">Awarded</option>
@@ -279,7 +281,7 @@ export default function AddGamePage() {
                                     value={homeTeam}
                                     onChange={(e) => setHomeTeam(e.target.value)}
                                     placeholder="Search teams..."
-                                    className="w-full border border-slate-300 rounded p-2 text-sm font-bold"
+                                    className="w-full border border-slate-300 rounded p-2 text-sm font-bold text-black"
                                 />
                             </div>
                             <div>
@@ -288,7 +290,7 @@ export default function AddGamePage() {
                                     type="number"
                                     value={homeScore}
                                     onChange={(e) => setHomeScore(e.target.value)}
-                                    className="w-full border border-slate-300 rounded p-2 text-2xl font-black text-center"
+                                    className="w-full border border-slate-300 rounded p-2 text-2xl font-black text-center text-black"
                                 />
                             </div>
                             <div>
@@ -299,7 +301,7 @@ export default function AddGamePage() {
                                     value={homeCoach}
                                     onChange={(e) => setHomeCoach(e.target.value)}
                                     placeholder="Auto-creates if new"
-                                    className="w-full border border-slate-300 rounded p-2 text-sm"
+                                    className="w-full border border-slate-300 rounded p-2 text-sm text-black"
                                 />
                             </div>
                         </div>
@@ -317,7 +319,7 @@ export default function AddGamePage() {
                                     value={awayTeam}
                                     onChange={(e) => setAwayTeam(e.target.value)}
                                     placeholder="Search teams..."
-                                    className="w-full border border-slate-300 rounded p-2 text-sm font-bold"
+                                    className="w-full border border-slate-300 rounded p-2 text-sm font-bold text-black"
                                 />
                             </div>
                             <div>
@@ -326,7 +328,7 @@ export default function AddGamePage() {
                                     type="number"
                                     value={awayScore}
                                     onChange={(e) => setAwayScore(e.target.value)}
-                                    className="w-full border border-slate-300 rounded p-2 text-2xl font-black text-center bg-white"
+                                    className="w-full border border-slate-300 rounded p-2 text-2xl font-black text-center bg-white text-black"
                                 />
                             </div>
                             <div>
@@ -337,7 +339,7 @@ export default function AddGamePage() {
                                     value={awayCoach}
                                     onChange={(e) => setAwayCoach(e.target.value)}
                                     placeholder="Auto-creates if new"
-                                    className="w-full border border-slate-300 rounded p-2 text-sm"
+                                    className="w-full border border-slate-300 rounded p-2 text-sm text-black"
                                 />
                             </div>
                         </div>
@@ -357,7 +359,7 @@ export default function AddGamePage() {
                                     value={venue}
                                     onChange={(e) => setVenue(e.target.value)}
                                     placeholder="Auto-creates if new"
-                                    className="w-full border border-slate-300 rounded p-2 text-sm"
+                                    className="w-full border border-slate-300 rounded p-2 text-sm text-black"
                                 />
                             </div>
 
@@ -380,7 +382,7 @@ export default function AddGamePage() {
                                         type="text"
                                         value={playoffRound}
                                         onChange={(e) => setPlayoffRound(e.target.value)}
-                                        className="w-full border border-slate-300 rounded p-2 text-sm"
+                                        className="w-full border border-slate-300 rounded p-2 text-sm text-black"
                                     />
                                 </div>
                             )}
@@ -392,7 +394,7 @@ export default function AddGamePage() {
                                 <select
                                     value={finalType}
                                     onChange={(e) => setFinalType(e.target.value)}
-                                    className="w-full border border-slate-300 rounded p-2 text-sm"
+                                    className="w-full border border-slate-300 rounded p-2 text-sm text-black"
                                 >
                                     <option value="none">Regular / Standard Game</option>
                                     <option value="title">Title Game 🏆</option>
@@ -407,7 +409,7 @@ export default function AddGamePage() {
                                         type="text"
                                         value={titleName}
                                         onChange={(e) => setTitleName(e.target.value)}
-                                        className="w-full border border-slate-300 rounded p-2 text-sm"
+                                        className="w-full border border-slate-300 rounded p-2 text-sm text-black"
                                     />
                                 </div>
                             )}
@@ -429,7 +431,7 @@ export default function AddGamePage() {
                                 value={notes}
                                 onChange={(e) => setNotes(e.target.value)}
                                 rows={2}
-                                className="w-full border border-slate-300 rounded p-2 text-sm font-serif"
+                                className="w-full border border-slate-300 rounded p-2 text-sm font-serif text-black"
                                 placeholder="Any historical context or notes about this specific game..."
                             />
                         </div>
