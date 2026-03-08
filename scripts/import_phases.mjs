@@ -115,7 +115,9 @@ async function importPhases(filePath) {
                     parentId = existingParents[0].id;
                     phaseCache.set(cacheKey, parentId);
                 } else {
-                    console.warn(`  [Warning] Parent phase "${parent_phase}" not found for "${phase_name}". Creating as top-level.`);
+                    console.warn(`  [Skip] Parent phase "${parent_phase}" not found for "${phase_name}". Skipping phase creation.`);
+                    skipped++;
+                    continue;
                 }
             }
         }
