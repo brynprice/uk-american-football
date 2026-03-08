@@ -103,15 +103,16 @@ async function importPhases(filePath) {
                 parentId = phaseCache.get(cacheKey);
             } else {
                 // Try looking up in DB if not in current run cache
-                const { data: existingParent } = await supabase
+                const { data: existingParents } = await supabase
                     .from('phases')
                     .select('id')
                     .eq('season_id', season.id)
                     .eq('name', parent_phase)
-                    .maybeSingle();
+                    .order('created_at', { ascending: true })
+                    .limit(1);
 
-                if (existingParent) {
-                    parentId = existingParent.id;
+                if (existingParents && existingParents.length > 0) {
+                    parentId = existingParents[0].id;
                     phaseCache.set(cacheKey, parentId);
                 } else {
                     console.warn(`  [Warning] Parent phase "${parent_phase}" not found for "${phase_name}". Creating as top-level.`);
@@ -148,9 +149,10 @@ async function importPhases(filePath) {
                 query = query.is('parent_phase_id', null);
             }
 
-            const { data: existingPhase } = await query.maybeSingle();
+            const { data: existingPhases } = await query.order('created_at', { ascending: true }).limit(1);
 
-            if (existingPhase) {
+            if (existingPhases && existingPhases.length > 0) {
+                const existingPhase = existingPhases[0];
                 const { error } = await supabase
                     .from('phases')
                     .update(phaseData)
