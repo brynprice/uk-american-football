@@ -89,7 +89,7 @@ export default function AddGamePage() {
         const fetchPhases = async () => {
             const { data } = await supabase
                 .from("phases")
-                .select("id, name, type, parent:parent_id(name)")
+                .select("id, name, type, parent:parent_phase_id(name)")
                 .eq("season_id", selectedSeason)
                 .order("name");
             if (data) setPhases(data);
