@@ -162,7 +162,14 @@ Use this script to duplicate the phase structure (Divisions, Conferences, etc.) 
 
 ## Data Utilities
 
-### 10. Data Completeness Score (`calculate_completeness.mjs`)
+### 10. Data Export (`export_data.mjs`)
+
+Extracts historical game data from the database into a CSV file. The generated CSV exactly matches the structure and headers expected by the `import_data.mjs` script, making it perfect for backing up data or migrating environments.
+
+*   **Command**: `node scripts/export_data.mjs [outputFile.csv]`
+*   **Behavior**: It connects to Supabase, pulls down all games, matches them with their underlying competition, season, phase, teams, venues, and coaches (resolving both game-level overrides and season level fallbacks), and formats them safely into a CSV string. If no output file is provided, it returns a file named `exported_games.csv` in the current directory.
+
+### 11. Data Completeness Score (`calculate_completeness.mjs`)
 
 The Archive features a dynamic Data Completeness Score (0-100%) for each season to indicate the depth and quality of the historical records available.
 
