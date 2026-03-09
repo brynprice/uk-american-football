@@ -16,7 +16,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
 
         // 1. Initialize stats from participations (Regular Season only)
         team.participations?.forEach((p: any) => {
-            const isPlayoff = p.phase.type === 'playoffs' || p.phase.name.toLowerCase().includes('playoff');
+            const isPlayoff = p.phase?.type?.toLowerCase() === 'playoffs' || p.phase?.name?.toLowerCase().includes('playoff');
             if (isPlayoff) return;
 
             statsByPhase.set(p.phase_id, {
@@ -73,7 +73,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
 
         // 1. Initialize stats from participations (Playoffs only)
         team.participations?.forEach((p: any) => {
-            const isPlayoff = p.phase.type === 'playoffs' || p.phase.name.toLowerCase().includes('playoff');
+            const isPlayoff = p.phase?.type?.toLowerCase() === 'playoffs' || p.phase?.name?.toLowerCase().includes('playoff');
             if (!isPlayoff) return;
 
             statsByPhase.set(p.phase_id, {
@@ -213,7 +213,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                         <h3 className="text-xl font-black uppercase border-b-2 border-slate-900 pb-2 mb-6 font-sans">Season History</h3>
                         <div className="space-y-4">
                             {team.participations?.sort((a: any, b: any) => b.phase.season.year - a.phase.season.year).map((p: any) => {
-                                const isPlayoff = p.phase.type === 'playoffs' || p.phase.name.toLowerCase().includes('playoff');
+                                const isPlayoff = p.phase?.type?.toLowerCase() === 'playoffs' || p.phase.name.toLowerCase().includes('playoff');
 
                                 return (
                                     <div key={p.id} className="flex gap-4 items-start group">
@@ -221,8 +221,8 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                                             {p.phase.season.year}
                                         </div>
                                         <div className={`flex-1 p-4 border shadow-sm border-l-4 transition-all ${isPlayoff
-                                                ? 'bg-indigo-50 border-indigo-200 border-l-indigo-600 hover:border-l-indigo-800'
-                                                : 'bg-white border-slate-200 border-l-slate-800 hover:border-l-blue-600'
+                                            ? 'bg-indigo-50 border-indigo-200 border-l-indigo-600 hover:border-l-indigo-800'
+                                            : 'bg-white border-slate-200 border-l-slate-800 hover:border-l-blue-600'
                                             }`}>
                                             <div className="flex justify-between items-center">
                                                 <Link href={`/seasons/${p.phase.season.id}`} className={`font-bold hover:underline ${isPlayoff ? 'text-indigo-900' : 'text-slate-800 hover:text-blue-700'}`}>
