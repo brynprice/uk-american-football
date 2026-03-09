@@ -68,8 +68,68 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
         }), { wins: 0, losses: 0, ties: 0, pf: 0, pa: 0, gp: 0 });
     };
 
+    const calculatePlayoffStats = () => {
+        const statsByPhase = new Map();
+
+        // 1. Initialize stats from participations (Playoffs only)
+        team.participations?.forEach((p: any) => {
+            const isPlayoff = p.phase.type === 'playoffs' || p.phase.name.toLowerCase().includes('playoff');
+            if (!isPlayoff) return;
+
+            statsByPhase.set(p.phase_id, {
+                wins: p.wins || 0,
+                losses: p.losses || 0,
+                ties: p.ties || 0,
+                pf: p.points_for || 0,
+                pa: p.points_against || 0,
+                hasManual: p.wins !== null && p.losses !== null
+            });
+        });
+
+        // 2. Aggregate from games for phases that DON'T have manual stats
+        team.games?.forEach((g: any) => {
+            const isPlayoff = g.is_playoff || g.phase?.type === 'playoffs' || g.phase?.name.toLowerCase().includes('playoff');
+            if (!isPlayoff) return;
+            if (g.status?.toLowerCase() !== 'completed' && g.status?.toLowerCase() !== 'awarded') return;
+
+            const current = statsByPhase.get(g.phase_id);
+            if (current?.hasManual) return; // Prioritize manual stats
+
+            const isHome = g.home_team_id === id;
+            const teamScore = isHome ? g.home_score : g.away_score;
+            const oppScore = isHome ? g.away_score : g.home_score;
+            const multiplier = g.is_double_header ? 2 : 1;
+
+            if (teamScore === null || oppScore === null) return;
+
+            const phaseStats = current || { wins: 0, losses: 0, ties: 0, pf: 0, pa: 0 };
+
+            phaseStats.pf += (teamScore * multiplier);
+            phaseStats.pa += (oppScore * multiplier);
+
+            if (teamScore > oppScore) phaseStats.wins += multiplier;
+            else if (teamScore < oppScore) phaseStats.losses += multiplier;
+            else phaseStats.ties += multiplier;
+
+            statsByPhase.set(g.phase_id, phaseStats);
+        });
+
+        // 3. Sum everything
+        return Array.from(statsByPhase.values()).reduce((acc, curr) => ({
+            wins: acc.wins + curr.wins,
+            losses: acc.losses + curr.losses,
+            ties: acc.ties + curr.ties,
+            pf: acc.pf + curr.pf,
+            pa: acc.pa + curr.pa,
+            gp: acc.gp + (curr.wins + curr.losses + curr.ties)
+        }), { wins: 0, losses: 0, ties: 0, pf: 0, pa: 0, gp: 0 });
+    };
+
     const stats = calculateRegularSeasonStats();
     const winPct = stats.gp > 0 ? (stats.wins / stats.gp + (1 - stats.losses / stats.gp)) / 2 : 0;
+
+    const playoffStats = calculatePlayoffStats();
+    const playoffWinPct = playoffStats.gp > 0 ? (playoffStats.wins / playoffStats.gp + (1 - playoffStats.losses / playoffStats.gp)) / 2 : 0;
 
     return (
         <ArchiveLayout>
@@ -116,6 +176,31 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                                     <span className="text-xl font-black tabular-nums text-red-400">{stats.pa}</span>
                                 </div>
                             </div>
+
+                            {/* Playoff Stats Banner */}
+                            {playoffStats.gp > 0 && (
+                                <div className="bg-indigo-900 text-white px-4 py-2 rounded-sm shadow-lg flex items-center gap-6">
+                                    <div className="flex flex-col">
+                                        <span className="text-[10px] uppercase font-black text-indigo-300 tracking-tighter">Playoffs</span>
+                                        <span className="text-xl font-black tabular-nums">{playoffStats.wins}-{playoffStats.losses}{playoffStats.ties > 0 ? `-${playoffStats.ties}` : ''}</span>
+                                    </div>
+                                    <div className="w-px h-8 bg-indigo-700" />
+                                    <div className="flex flex-col">
+                                        <span className="text-[10px] uppercase font-black text-indigo-300 tracking-tighter">Win %</span>
+                                        <span className="text-xl font-black tabular-nums text-indigo-200">
+                                            {playoffWinPct.toFixed(3).replace(/^0/, '')}
+                                        </span>
+                                    </div>
+                                    <div className="hidden sm:flex flex-col">
+                                        <span className="text-[10px] uppercase font-black text-indigo-300 tracking-tighter">Points For</span>
+                                        <span className="text-xl font-black tabular-nums">{playoffStats.pf}</span>
+                                    </div>
+                                    <div className="hidden sm:flex flex-col">
+                                        <span className="text-[10px] uppercase font-black text-indigo-300 tracking-tighter">Points Against</span>
+                                        <span className="text-xl font-black tabular-nums text-red-300">{playoffStats.pa}</span>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -127,24 +212,31 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                     <section>
                         <h3 className="text-xl font-black uppercase border-b-2 border-slate-900 pb-2 mb-6 font-sans">Season History</h3>
                         <div className="space-y-4">
-                            {team.participations?.sort((a: any, b: any) => b.phase.season.year - a.phase.season.year).map((p: any) => (
-                                <div key={p.id} className="flex gap-4 items-start group">
-                                    <div className="w-16 pt-1 text-lg font-black text-slate-400 group-hover:text-blue-600 transition-colors">
-                                        {p.phase.season.year}
-                                    </div>
-                                    <div className="flex-1 bg-white p-4 border border-slate-200 shadow-sm border-l-4 border-l-slate-800 hover:border-l-blue-600 transition-all">
-                                        <div className="flex justify-between items-center">
-                                            <Link href={`/seasons/${p.phase.season.id}`} className="font-bold text-slate-800 hover:text-blue-700">
-                                                {p.phase.season.competition.name}
-                                            </Link>
-                                            <span className="text-[10px] uppercase font-black text-slate-400 font-sans">
-                                                {p.phase.name}
-                                            </span>
+                            {team.participations?.sort((a: any, b: any) => b.phase.season.year - a.phase.season.year).map((p: any) => {
+                                const isPlayoff = p.phase.type === 'playoffs' || p.phase.name.toLowerCase().includes('playoff');
+
+                                return (
+                                    <div key={p.id} className="flex gap-4 items-start group">
+                                        <div className={`w-16 pt-1 text-lg font-black transition-colors ${isPlayoff ? 'text-indigo-400 group-hover:text-indigo-600' : 'text-slate-400 group-hover:text-blue-600'}`}>
+                                            {p.phase.season.year}
                                         </div>
-                                        {p.notes && <p className="text-xs text-slate-500 mt-2 italic font-serif">{p.notes}</p>}
+                                        <div className={`flex-1 p-4 border shadow-sm border-l-4 transition-all ${isPlayoff
+                                                ? 'bg-indigo-50 border-indigo-200 border-l-indigo-600 hover:border-l-indigo-800'
+                                                : 'bg-white border-slate-200 border-l-slate-800 hover:border-l-blue-600'
+                                            }`}>
+                                            <div className="flex justify-between items-center">
+                                                <Link href={`/seasons/${p.phase.season.id}`} className={`font-bold hover:underline ${isPlayoff ? 'text-indigo-900' : 'text-slate-800 hover:text-blue-700'}`}>
+                                                    {p.phase.season.competition.name}
+                                                </Link>
+                                                <span className={`text-[10px] uppercase font-black font-sans ${isPlayoff ? 'text-indigo-500' : 'text-slate-400'}`}>
+                                                    {p.phase.name}
+                                                </span>
+                                            </div>
+                                            {p.notes && <p className="text-xs text-slate-500 mt-2 italic font-serif">{p.notes}</p>}
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
 
                             {(!team.participations || team.participations.length === 0) && (
                                 <p className="text-slate-400 italic font-sans py-4">No seasonal records found for this team.</p>
