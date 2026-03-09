@@ -169,7 +169,17 @@ Extracts historical game data from the database into a CSV file. The generated C
 *   **Command**: `node scripts/export_data.mjs [outputFile.csv]`
 *   **Behavior**: It connects to Supabase, pulls down all games, matches them with their underlying competition, season, phase, teams, venues, and coaches (resolving both game-level overrides and season level fallbacks), and formats them safely into a CSV string. If no output file is provided, it returns a file named `exported_games.csv` in the current directory.
 
-### 11. Data Completeness Score (`calculate_completeness.mjs`)
+### 11. Custom Format Transformers (`transform_bucs.mjs`)
+
+Often, historical data comes in unstructured formats (e.g., single-column Excel dumps from BUCS Play). Rather than creating a complex "universal importer", the recommended approach is to build throw-away scripts that parse the specific messy format and output a clean CSV that matches the 24 standard columns required by `import_data.mjs`.
+
+*   **Example Script**: `node scripts/transform_bucs.mjs data/bucs_data.xlsx [outputFile.csv]`
+*   **Behavior**:
+    1. Reads an unstructured Excel file containing repeating chunks of unstructured game data.
+    2. Identifies blocks corresponding to games (parsing phases, teams, scores, dates, venues, etc.).
+    3. Outputs a perfectly formatted standard CSV ready to be ingested by `import_data.mjs`.
+
+### 12. Data Completeness Score (`calculate_completeness.mjs`)
 
 The Archive features a dynamic Data Completeness Score (0-100%) for each season to indicate the depth and quality of the historical records available.
 
