@@ -7,6 +7,28 @@
 
 import fs from 'fs';
 import xlsx from 'xlsx';
+import path from 'path';
+
+// Load optional mapping dictionaries
+let teamMappings = {};
+let phaseMappings = {};
+
+try {
+    const teamMapPath = path.resolve('data/mappings/bucs_teams.json');
+    if (fs.existsSync(teamMapPath)) {
+        teamMappings = JSON.parse(fs.readFileSync(teamMapPath, 'utf8'));
+        console.log(`Loaded ${Object.keys(teamMappings).length} team mappings.`);
+    }
+
+    const phaseMapPath = path.resolve('data/mappings/bucs_phases.json');
+    if (fs.existsSync(phaseMapPath)) {
+        phaseMappings = JSON.parse(fs.readFileSync(phaseMapPath, 'utf8'));
+        console.log(`Loaded ${Object.keys(phaseMappings).length} phase mappings.`);
+    }
+} catch (e) {
+    console.warn("Could not load mapping files, proceeding without them.");
+}
+
 
 // Utility to write CSV string safely
 function toCSV(data, headers) {
@@ -49,10 +71,24 @@ function excelFractionToTime(fraction) {
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
 }
 
-// Clean Team Names specifically for BUCS data
+// Clean Team Names specifically for BUCS data, applying mapping if it exists
 function cleanTeamName(name) {
     if (!name) return "";
-    return name.replace(/\s+Open\s+\d+$/, '').trim();
+    let clean = name.replace(/\s+Open\s+\d+$/, '').trim();
+    if (teamMappings[clean]) {
+        return teamMappings[clean];
+    }
+    return clean;
+}
+
+// Clean phase names, applying mapping if it exists
+function cleanPhaseName(name) {
+    if (!name) return "";
+    let clean = name.trim();
+    if (phaseMappings[clean]) {
+        return phaseMappings[clean];
+    }
+    return clean;
 }
 
 async function transformBucsData(inputPath, outputPath) {
@@ -126,18 +162,36 @@ async function transformBucsData(inputPath, outputPath) {
         let awayScore = null;
         let status = 'completed';
 
-        if (typeof scoreStr === 'string' && scoreStr.includes(' - ')) {
-            const parts = scoreStr.split(' - ');
+        // Excel sometimes auto-formats \"22-6\" into a Date object or serial number
+        // e.g. Excel serial number for a date, or a string like \"22/06/2021\" or \"06-22-2021\"
+        // We must detect these and convert them back to scores
+        let parsedScoreStr = scoreStr;
+        if (typeof scoreStr === 'number' && scoreStr > 20000) {
+            // It's likely an excel serial date that was supposed to be a score.
+            // i.e Excel evaluated '22-6' as June 22 in the current year.
+            const dateObj = new Date((scoreStr - 25569) * 86400 * 1000);
+            const maybeDay = dateObj.getDate();
+            const maybeMonth = dateObj.getMonth() + 1;
+            // Best guess: It was \"Day-Month\" or \"Month-Day\"
+            parsedScoreStr = `${maybeDay} - ${maybeMonth}`;
+        } else if (typeof scoreStr === 'string' && scoreStr.match(/^\d{1,2}\/\d{1,2}\/\d{2,4}$/)) {
+            // String date like "22/06/2025"
+            const dateParts = scoreStr.split('/');
+            parsedScoreStr = `${parseInt(dateParts[0], 10)} - ${parseInt(dateParts[1], 10)}`;
+        }
+
+        if (typeof parsedScoreStr === 'string' && parsedScoreStr.includes(' - ')) {
+            const parts = parsedScoreStr.split(' - ');
             if (parts.length === 2 && !isNaN(parseInt(parts[0])) && !isNaN(parseInt(parts[1]))) {
                 // Format is Home - Away
                 homeScore = parseInt(parts[0]);
                 awayScore = parseInt(parts[1]);
             } else {
                 status = 'scheduled'; // Not played yet or Walkover
-                if (scoreStr.includes('A - W')) { status = 'awarded'; awayScore = 1; homeScore = 0; } // Away win walkover
-                if (scoreStr.includes('H - W')) { status = 'awarded'; homeScore = 1; awayScore = 0; } // Home win walkover
+                if (parsedScoreStr.includes('A - W')) { status = 'awarded'; awayScore = 1; homeScore = 0; } // Away win walkover
+                if (parsedScoreStr.includes('H - W')) { status = 'awarded'; homeScore = 1; awayScore = 0; } // Home win walkover
             }
-        } else if (typeof scoreStr === 'string' && (scoreStr.includes('v') || scoreStr.includes('TBC'))) {
+        } else if (typeof parsedScoreStr === 'string' && (parsedScoreStr.includes('v') || parsedScoreStr.includes('TBC'))) {
             status = 'scheduled';
         }
 
@@ -153,24 +207,22 @@ async function transformBucsData(inputPath, outputPath) {
 
         let startIndex = timeFraction ? 3 : 2;
         if (startIndex < awayInfoBlock.length) {
-            venue = String(awayInfoBlock[startIndex]).split(' Provider:')[0];
-            for (let j = startIndex + 1; j < awayInfoBlock.length; j++) {
-                notes.push(String(awayInfoBlock[j]));
-            }
+            let fullVenue = String(awayInfoBlock[startIndex]).split(' Provider:')[0];
+            venue = fullVenue.split(',')[0].trim();
         }
 
 
         games.push({
-            competition: "BUCS",
+            competition: "BUAFL",
             year: "2021", // Inferring from 'Provider: Rugby Union 21-22' in notes
-            phase: phase,
+            phase: cleanPhaseName(phase),
             date: date || "",
             away_team: cleanTeamName(rawAwayTeam),
             home_team: cleanTeamName(rawHomeTeam),
             away_score: awayScore !== null ? awayScore : "",
             home_score: homeScore !== null ? homeScore : "",
             venue: venue || "",
-            notes: notes.join(' | '),
+            notes: "",
             away_coach: "",
             home_coach: "",
             is_double_header: "false",
