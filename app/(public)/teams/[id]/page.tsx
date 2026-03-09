@@ -33,7 +33,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
         team.games?.forEach((g: any) => {
             const isPlayoff = g.is_playoff || g.phase?.type === 'playoffs' || g.phase?.name.toLowerCase().includes('playoff');
             if (isPlayoff) return;
-            if (g.status?.toLowerCase() !== 'completed') return;
+            if (g.status?.toLowerCase() !== 'completed' && g.status?.toLowerCase() !== 'awarded') return;
 
             const current = statsByPhase.get(g.phase_id);
             if (current?.hasManual) return; // Prioritize manual stats

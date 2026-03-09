@@ -24,7 +24,7 @@ export default function StandingsTable({ participations, games, phaseName }: Sta
             pa = p.points_against || 0;
         } else {
             const teamGames = games.filter((g: any) =>
-                g.status?.toLowerCase() === 'completed' &&
+                (g.status?.toLowerCase() === 'completed' || g.status?.toLowerCase() === 'awarded') &&
                 (g.home_team_id === p.team_id || g.away_team_id === p.team_id)
             );
 
