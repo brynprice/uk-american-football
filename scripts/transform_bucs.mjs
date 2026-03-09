@@ -214,16 +214,41 @@ async function transformBucsData(inputPath, outputPath) {
         }
 
         // Parse Info Block [AwayTeam, Date, Time, Venue Lines...]
-        const dateSerial = awayInfoBlock.length > 1 ? awayInfoBlock[1] : null;
-        const timeFraction = (awayInfoBlock.length > 2 && typeof awayInfoBlock[2] === 'number' && awayInfoBlock[2] < 1) ? awayInfoBlock[2] : null;
+        let dateVal = awayInfoBlock.length > 1 ? awayInfoBlock[1] : null;
+        let timeVal = awayInfoBlock.length > 2 ? awayInfoBlock[2] : null;
 
-        const date = typeof dateSerial === 'number' ? excelDateToISODate(dateSerial) : null;
-        const time = timeFraction ? excelFractionToTime(timeFraction) : null;
+        let date = null;
+        let time = null;
+
+        if (typeof dateVal === 'number') {
+            date = excelDateToISODate(dateVal);
+        } else if (typeof dateVal === 'string') {
+            const dateStr = dateVal.trim();
+            const parts = dateStr.includes('/') ? dateStr.split('/') : dateStr.split('-');
+            if (parts.length === 3 && parts[2].length === 4) {
+                // assume DD/MM/YYYY or DD-MM-YYYY
+                date = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+            } else if (parts.length === 3 && parts[0].length === 4) {
+                // already YYYY-MM-DD
+                date = `${parts[0]}-${parts[1].padStart(2, '0')}-${parts[2].padStart(2, '0')}`;
+            } else {
+                date = dateStr;
+            }
+        }
+
+        let isTimeVal = false;
+        if (typeof timeVal === 'number' && timeVal < 1) {
+            time = excelFractionToTime(timeVal);
+            isTimeVal = true;
+        } else if (typeof timeVal === 'string' && timeVal.includes(':')) {
+            time = timeVal.trim();
+            isTimeVal = true;
+        }
 
         let venue = null;
         let notes = [];
 
-        let startIndex = timeFraction ? 3 : 2;
+        let startIndex = isTimeVal ? 3 : 2;
         if (startIndex < awayInfoBlock.length) {
             let fullVenue = String(awayInfoBlock[startIndex]).split(' Provider:')[0];
             venue = fullVenue.split(',')[0].trim();
