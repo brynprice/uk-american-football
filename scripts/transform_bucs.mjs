@@ -164,7 +164,7 @@ async function transformBucsData(inputPath, outputPath) {
         // If it doesn't match the expected signature, advance by 1 and try again
         if (
             homeBlock.length !== 2 ||
-            scoreBlock.length !== 1 ||
+            (scoreBlock.length !== 1 && scoreBlock.length !== 2) ||
             awayInfoBlock.length < 1
         ) {
             i++;
@@ -173,7 +173,7 @@ async function transformBucsData(inputPath, outputPath) {
 
         const phase = homeBlock[0];
         const rawHomeTeam = homeBlock[1];
-        const scoreStr = scoreBlock[0];
+        const scoreStr = scoreBlock.join(' ');
         const rawAwayTeam = awayInfoBlock[0];
 
         let homeScore = null;
@@ -211,6 +211,16 @@ async function transformBucsData(inputPath, outputPath) {
             }
         } else if (typeof parsedScoreStr === 'string' && (parsedScoreStr.includes('v') || parsedScoreStr.includes('TBC'))) {
             status = 'scheduled';
+        } else if (typeof parsedScoreStr === 'string' && parsedScoreStr.toLowerCase().includes('walkover')) {
+            status = 'awarded';
+            // Determine who got the walkover from context if possible, or leave scores empty if unknown
+            if (parsedScoreStr.includes('Home Walkover') || parsedScoreStr.includes('H - W')) {
+                homeScore = 1; awayScore = 0;
+            } else if (parsedScoreStr.includes('Away Walkover') || parsedScoreStr.includes('A - W')) {
+                homeScore = 0; awayScore = 1;
+            }
+            // If it just says "- Involuntary Walkover", we might not know who forfeited from this column alone, 
+            // so we set status to 'awarded' but leave scores blank for manual verification.
         }
 
         // Parse Info Block [AwayTeam, Date, Time, Venue Lines...]
