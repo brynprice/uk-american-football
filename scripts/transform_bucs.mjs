@@ -9,9 +9,6 @@ import fs from 'fs';
 import xlsx from 'xlsx';
 import path from 'path';
 
-const teamMapPath = path.resolve('data/mappings/bucs_teams.json');
-const phaseMapPath = path.resolve('data/mappings/bucs_phases.json');
-
 // Load optional mapping dictionaries
 let teamMappings = {};
 let phaseMappings = {};
@@ -19,17 +16,19 @@ const unmappedTeams = new Set();
 const unmappedPhases = new Set();
 
 try {
+    const teamMapPath = path.resolve('data/mappings/bucs_teams.json');
     if (fs.existsSync(teamMapPath)) {
         teamMappings = JSON.parse(fs.readFileSync(teamMapPath, 'utf8'));
         console.log(`Loaded ${Object.keys(teamMappings).length} team mappings.`);
     }
 
+    const phaseMapPath = path.resolve('data/mappings/bucs_phases.json');
     if (fs.existsSync(phaseMapPath)) {
         phaseMappings = JSON.parse(fs.readFileSync(phaseMapPath, 'utf8'));
         console.log(`Loaded ${Object.keys(phaseMappings).length} phase mappings.`);
     }
 } catch (e) {
-    console.warn("Could not load mapping files, proceeding without them.");
+    console.warn("Could not load mapping files, proceeding without them. Error: " + e.message);
 }
 
 
@@ -276,6 +275,8 @@ async function transformBucsData(inputPath, outputPath) {
     console.log(`--- Saved transformed data to ${outputPath} ---`);
 
     // Write back mappings including the newly discovered empty ones
+    const teamMapPath = path.resolve('data/mappings/bucs_teams.json');
+    const phaseMapPath = path.resolve('data/mappings/bucs_phases.json');
     fs.writeFileSync(teamMapPath, JSON.stringify(teamMappings, null, 2), 'utf8');
     fs.writeFileSync(phaseMapPath, JSON.stringify(phaseMappings, null, 2), 'utf8');
 
