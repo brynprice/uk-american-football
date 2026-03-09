@@ -9,18 +9,21 @@ import fs from 'fs';
 import xlsx from 'xlsx';
 import path from 'path';
 
+const teamMapPath = path.resolve('data/mappings/bucs_teams.json');
+const phaseMapPath = path.resolve('data/mappings/bucs_phases.json');
+
 // Load optional mapping dictionaries
 let teamMappings = {};
 let phaseMappings = {};
+const unmappedTeams = new Set();
+const unmappedPhases = new Set();
 
 try {
-    const teamMapPath = path.resolve('data/mappings/bucs_teams.json');
     if (fs.existsSync(teamMapPath)) {
         teamMappings = JSON.parse(fs.readFileSync(teamMapPath, 'utf8'));
         console.log(`Loaded ${Object.keys(teamMappings).length} team mappings.`);
     }
 
-    const phaseMapPath = path.resolve('data/mappings/bucs_phases.json');
     if (fs.existsSync(phaseMapPath)) {
         phaseMappings = JSON.parse(fs.readFileSync(phaseMapPath, 'utf8'));
         console.log(`Loaded ${Object.keys(phaseMappings).length} phase mappings.`);
@@ -75,9 +78,16 @@ function excelFractionToTime(fraction) {
 function cleanTeamName(name) {
     if (!name) return "";
     let clean = name.replace(/\s+Open\s+\d+$/, '').trim();
-    if (teamMappings[clean]) {
-        return teamMappings[clean];
+    if (teamMappings.hasOwnProperty(clean)) {
+        if (teamMappings[clean]) return teamMappings[clean];
+    } else {
+        teamMappings[clean] = "";
     }
+
+    if (!teamMappings[clean]) {
+        unmappedTeams.add(clean);
+    }
+
     return clean;
 }
 
@@ -85,9 +95,16 @@ function cleanTeamName(name) {
 function cleanPhaseName(name) {
     if (!name) return "";
     let clean = name.trim();
-    if (phaseMappings[clean]) {
-        return phaseMappings[clean];
+    if (phaseMappings.hasOwnProperty(clean)) {
+        if (phaseMappings[clean]) return phaseMappings[clean];
+    } else {
+        phaseMappings[clean] = "";
     }
+
+    if (!phaseMappings[clean]) {
+        unmappedPhases.add(clean);
+    }
+
     return clean;
 }
 
@@ -257,6 +274,19 @@ async function transformBucsData(inputPath, outputPath) {
     const csvString = toCSV(games, headers);
     fs.writeFileSync(outputPath, csvString, 'utf8');
     console.log(`--- Saved transformed data to ${outputPath} ---`);
+
+    // Write back mappings including the newly discovered empty ones
+    fs.writeFileSync(teamMapPath, JSON.stringify(teamMappings, null, 2), 'utf8');
+    fs.writeFileSync(phaseMapPath, JSON.stringify(phaseMappings, null, 2), 'utf8');
+
+    if (unmappedTeams.size > 0) {
+        console.warn(`\\n[!] Warning: ${unmappedTeams.size} teams are missing mappings in bucs_teams.json:`);
+        unmappedTeams.forEach(t => console.warn(`  - ${t}`));
+    }
+    if (unmappedPhases.size > 0) {
+        console.warn(`\\n[!] Warning: ${unmappedPhases.size} phases are missing mappings in bucs_phases.json:`);
+        unmappedPhases.forEach(p => console.warn(`  - ${p}`));
+    }
 }
 
 const inputPath = process.argv[2] || 'data/bucs_data.xlsx';
