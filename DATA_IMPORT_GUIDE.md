@@ -173,13 +173,15 @@ Extracts historical game data from the database into a CSV file. The generated C
 
 Often, historical data comes in unstructured formats (e.g., single-column Excel dumps from BUCS Play). Rather than creating a complex "universal importer", the recommended approach is to build throw-away scripts that parse the specific messy format and output a clean CSV that matches the 24 standard columns required by `import_data.mjs`.
 
-*   **Example Script**: `node scripts/transform_bucs.mjs data/bucs_data.xlsx [outputFile.csv]`
+*   **Example Script**: `node scripts/transform_bucs.mjs data/bucs_data.xlsx [outputFile.csv] [yearOverride]`
 *   **Behavior**:
     1. Reads an unstructured Excel file containing repeating chunks of unstructured game data.
     2. Identifies blocks corresponding to games (parsing phases, teams, scores, dates, venues, etc.).
-    3. Truncates venues to the first comma and explicitly tags the competition as "BUAFL".
-    4. Automatically maps team and phase names using `data/mappings/bucs_teams.json` and `bucs_phases.json`. If a team or phase is missing from the JSON, it will add it to the file with an empty string (`""`) value and log a warning so you can easily fill it in.
-    5. Outputs a perfectly formatted standard CSV ready to be ingested by `import_data.mjs`.
+    3. Handles date and time parsing even if columns are formatted as "Text" in Excel.
+    4. Automatically maps team and phase names using `data/mappings/bucs_teams.json` and `bucs_phases.json`.
+    5. **Season Year**: Automatically determines the season year from the game dates (e.g., handles Jan-Aug drift). You can manually override this by providing a third argument (e.g., `2025`).
+    6. **Walkovers**: Automatically detects walkover games, assigns "awarded" status, and logs a summary of these games to the terminal for manual review.
+    7. Outputs a perfectly formatted standard CSV ready to be ingested by `import_data.mjs`.
 
 ### 12. Data Completeness Score (`calculate_completeness.mjs`)
 

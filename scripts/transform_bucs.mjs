@@ -109,8 +109,9 @@ function cleanPhaseName(name) {
     return clean;
 }
 
-async function transformBucsData(inputPath, outputPath) {
+async function transformBucsData(inputPath, outputPath, overriddenYear = null) {
     console.log(`--- Starting Transformation for ${inputPath} ---`);
+    if (overriddenYear) console.log(`Manually setting season year to: ${overriddenYear}`);
     const walkovers = [];
 
     // 1. Read Excel file
@@ -275,9 +276,23 @@ async function transformBucsData(inputPath, outputPath) {
         }
 
 
+        // Determine Year
+        let gameYear = overriddenYear;
+        if (!gameYear && date) {
+            // For BUAFL, we typically use the season start year.
+            // If the date is Jan-Aug, it's likely the "second half" of the previous year's season.
+            // If it's Sep-Dec, it's the start year.
+            const d = new Date(date);
+            const y = d.getFullYear();
+            const m = d.getMonth() + 1;
+            gameYear = (m < 9) ? String(y - 1) : String(y);
+        } else if (!gameYear) {
+            gameYear = "2025"; // Fallback to current season if date missing and no override
+        }
+
         games.push({
             competition: "BUAFL",
-            year: "2021", // Inferring from 'Provider: Rugby Union 21-22' in notes
+            year: gameYear,
             phase: cleanPhaseName(phase),
             date: date || "",
             away_team: cleanTeamName(rawAwayTeam),
@@ -344,7 +359,8 @@ async function transformBucsData(inputPath, outputPath) {
 
 const inputPath = process.argv[2] || 'data/bucs_data.xlsx';
 const outputPath = process.argv[3] || 'data/transformed_bucs_games.csv';
+const overriddenYear = process.argv[4] || null;
 
-transformBucsData(inputPath, outputPath).catch(err => {
+transformBucsData(inputPath, outputPath, overriddenYear).catch(err => {
     console.error("Fatal Error:", err);
 });
