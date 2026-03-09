@@ -28,7 +28,9 @@ try {
         console.log(`Loaded ${Object.keys(phaseMappings).length} phase mappings.`);
     }
 } catch (e) {
-    console.warn("Could not load mapping files, proceeding without them. Error: " + e.message);
+    console.error(`\\n[FATAL ERROR] Could not parse mapping JSON files:\\n${e.message}`);
+    console.error("Please fix any syntax errors in bucs_teams.json or bucs_phases.json before running this script.\\n");
+    process.exit(1);
 }
 
 
