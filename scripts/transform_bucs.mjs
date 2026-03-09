@@ -111,6 +111,7 @@ function cleanPhaseName(name) {
 
 async function transformBucsData(inputPath, outputPath) {
     console.log(`--- Starting Transformation for ${inputPath} ---`);
+    const walkovers = [];
 
     // 1. Read Excel file
     const workbook = xlsx.readFile(inputPath);
@@ -198,29 +199,38 @@ async function transformBucsData(inputPath, outputPath) {
             parsedScoreStr = `${parseInt(dateParts[0], 10)} - ${parseInt(dateParts[1], 10)}`;
         }
 
-        if (typeof parsedScoreStr === 'string' && parsedScoreStr.includes(' - ')) {
+        // Status Logic
+        const lowerScore = parsedScoreStr.toLowerCase();
+        if (lowerScore.includes('walkover') || lowerScore.includes('forfeit') || lowerScore.includes('awarded')) {
+            status = 'awarded';
+            if (lowerScore.includes('home walkover') || lowerScore.includes('h - w') || lowerScore.includes('home win') || lowerScore.includes('hw')) {
+                homeScore = 1; awayScore = 0;
+                walkovers.push(`${cleanTeamName(rawHomeTeam)} vs ${cleanTeamName(rawAwayTeam)} (Home Walkover)`);
+            } else if (lowerScore.includes('away walkover') || lowerScore.includes('a - w') || lowerScore.includes('away win') || lowerScore.includes('aw')) {
+                homeScore = 0; awayScore = 1;
+                walkovers.push(`${cleanTeamName(rawHomeTeam)} vs ${cleanTeamName(rawAwayTeam)} (Away Walkover)`);
+            } else {
+                walkovers.push(`${cleanTeamName(rawHomeTeam)} vs ${cleanTeamName(rawAwayTeam)} (Unknown Forfeit)`);
+            }
+        } else if (parsedScoreStr.includes(' - ')) {
             const parts = parsedScoreStr.split(' - ');
             if (parts.length === 2 && !isNaN(parseInt(parts[0])) && !isNaN(parseInt(parts[1]))) {
-                // Format is Home - Away
                 homeScore = parseInt(parts[0]);
                 awayScore = parseInt(parts[1]);
+                status = 'completed';
             } else {
-                status = 'scheduled'; // Not played yet or Walkover
-                if (parsedScoreStr.includes('A - W')) { status = 'awarded'; awayScore = 1; homeScore = 0; } // Away win walkover
-                if (parsedScoreStr.includes('H - W')) { status = 'awarded'; homeScore = 1; awayScore = 0; } // Home win walkover
+                status = 'scheduled';
+                // Double check for A-W or H-W inside the " - " block
+                if (parsedScoreStr.includes('A - W')) {
+                    status = 'awarded'; awayScore = 1; homeScore = 0;
+                    walkovers.push(`${cleanTeamName(rawHomeTeam)} vs ${cleanTeamName(rawAwayTeam)} (Away Walkover)`);
+                } else if (parsedScoreStr.includes('H - W')) {
+                    status = 'awarded'; homeScore = 1; awayScore = 0;
+                    walkovers.push(`${cleanTeamName(rawHomeTeam)} vs ${cleanTeamName(rawAwayTeam)} (Home Walkover)`);
+                }
             }
-        } else if (typeof parsedScoreStr === 'string' && (parsedScoreStr.includes('v') || parsedScoreStr.includes('TBC'))) {
+        } else if (lowerScore.includes('v') || lowerScore.includes('tbc') || parsedScoreStr.trim() === '-') {
             status = 'scheduled';
-        } else if (typeof parsedScoreStr === 'string' && parsedScoreStr.toLowerCase().includes('walkover')) {
-            status = 'awarded';
-            // Determine who got the walkover from context if possible, or leave scores empty if unknown
-            if (parsedScoreStr.includes('Home Walkover') || parsedScoreStr.includes('H - W')) {
-                homeScore = 1; awayScore = 0;
-            } else if (parsedScoreStr.includes('Away Walkover') || parsedScoreStr.includes('A - W')) {
-                homeScore = 0; awayScore = 1;
-            }
-            // If it just says "- Involuntary Walkover", we might not know who forfeited from this column alone, 
-            // so we set status to 'awarded' but leave scores blank for manual verification.
         }
 
         // Parse Info Block [AwayTeam, Date, Time, Venue Lines...]
@@ -324,6 +334,11 @@ async function transformBucsData(inputPath, outputPath) {
     if (unmappedPhases.size > 0) {
         console.warn(`\\n[!] Warning: ${unmappedPhases.size} phases are missing mappings in bucs_phases.json:`);
         unmappedPhases.forEach(p => console.warn(`  - ${p}`));
+    }
+
+    if (walkovers.length > 0) {
+        console.log(`\\n[ℹ] Info: Found ${walkovers.length} walkover games that may require manual review:`);
+        walkovers.forEach(w => console.log(`  - ${w}`));
     }
 }
 
