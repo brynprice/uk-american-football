@@ -75,21 +75,23 @@ export const ArchiveService = {
         // 5. Fetch participations (standings) for all descendant phases
         const { data: partData, error: partError } = await supabase
             .from("participations")
-            .select("*, person:people (*), team:teams (*), phase:phases(id, name, type)")
+            .select("*, person:people (*), team:teams (*), phase:phases(id, name, type, ordinal)")
             .in("phase_id", descendantIds);
 
         if (partError) throw partError;
         const participationsByPhase = (partData || []).reduce((acc: any, p: any) => {
-            if (!acc[p.phase_id]) acc[p.phase_id] = { id: p.phase_id, name: p.phase.name, type: p.phase.type, participations: [] };
+            if (!acc[p.phase_id]) acc[p.phase_id] = { id: p.phase_id, name: p.phase.name, type: p.phase.type, ordinal: p.phase.ordinal, participations: [] };
             acc[p.phase_id].participations.push(p);
             return acc;
         }, {});
+
+        const childPhases = Object.values(participationsByPhase).sort((a: any, b: any) => (a.ordinal || 0) - (b.ordinal || 0));
 
         return {
             ...phase,
             isLeaf,
             games: games || [],
-            childPhases: Object.values(participationsByPhase) // Phases that have participations
+            childPhases
         };
     },
 
