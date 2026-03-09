@@ -77,7 +77,7 @@ function excelFractionToTime(fraction) {
 // Clean Team Names specifically for BUCS data, applying mapping if it exists
 function cleanTeamName(name) {
     if (!name) return "";
-    let clean = name.replace(/\s+Open\s+\d+$/, '').trim();
+    let clean = name.trim();
     if (teamMappings.hasOwnProperty(clean)) {
         if (teamMappings[clean]) return teamMappings[clean];
     } else {
