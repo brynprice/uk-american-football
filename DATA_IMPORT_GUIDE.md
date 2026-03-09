@@ -177,7 +177,9 @@ Often, historical data comes in unstructured formats (e.g., single-column Excel 
 *   **Behavior**:
     1. Reads an unstructured Excel file containing repeating chunks of unstructured game data.
     2. Identifies blocks corresponding to games (parsing phases, teams, scores, dates, venues, etc.).
-    3. Outputs a perfectly formatted standard CSV ready to be ingested by `import_data.mjs`.
+    3. Truncates venues to the first comma and explicitly tags the competition as "BUAFL".
+    4. Automatically maps team and phase names using `data/mappings/bucs_teams.json` and `bucs_phases.json`. If a team or phase is missing from the JSON, it will add it to the file with an empty string (`""`) value and log a warning so you can easily fill it in.
+    5. Outputs a perfectly formatted standard CSV ready to be ingested by `import_data.mjs`.
 
 ### 12. Data Completeness Score (`calculate_completeness.mjs`)
 
