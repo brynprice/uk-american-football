@@ -4,18 +4,14 @@ import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
 import StandingsTable from '@/components/archive/StandingsTable';
 
+import { isPlayoffPhase } from '@/lib/utils/phase-utils';
+
 export default async function PhasePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const phase = await ArchiveService.getPhaseData(id);
 
     // Determine if this is a playoff phase
-    const isPlayoffPhase =
-        phase.type === 'playoffs' ||
-        phase.type?.toLowerCase().includes('playoff') ||
-        phase.type === 'wild_card' ||
-        phase.name.toLowerCase().includes('playoff') ||
-        phase.name.toLowerCase().includes('knockout') ||
-        (phase.games && phase.games.length > 0 && phase.games.every((g: any) => g.is_playoff));
+    const isPlayoff = isPlayoffPhase(phase);
 
     return (
         <ArchiveLayout>
@@ -36,16 +32,18 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
 
             <div className="space-y-12">
                 {/* Render standings tables for each child phase (or just this one if leaf) */}
-                {!isPlayoffPhase && phase.childPhases && phase.childPhases.length > 0 && (
+                {!isPlayoff && phase.childPhases && phase.childPhases.length > 0 && (
                     <div className="space-y-8">
-                        {phase.childPhases.map((cp: any) => (
-                            <StandingsTable
-                                key={cp.id}
-                                participations={cp.participations}
-                                games={phase.games}
-                                phaseName={phase.isLeaf ? "" : cp.name}
-                            />
-                        ))}
+                        {phase.childPhases
+                            .filter((cp: any) => !isPlayoffPhase(cp))
+                            .map((cp: any) => (
+                                <StandingsTable
+                                    key={cp.id}
+                                    participations={cp.participations}
+                                    games={phase.games}
+                                    phaseName={phase.isLeaf ? "" : cp.name}
+                                />
+                            ))}
                     </div>
                 )}
 
@@ -55,7 +53,7 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                     </div>
                 )}
 
-                {isPlayoffPhase && (
+                {isPlayoff && (
                     <div className="bg-amber-50 p-6 border border-amber-200 text-amber-900 font-sans shadow-sm">
                         <div className="flex items-center gap-3 mb-2">
                             <span className="bg-amber-500 text-white text-xs font-black uppercase px-2 py-1 tracking-widest">Postseason</span>

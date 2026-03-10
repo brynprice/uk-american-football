@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { isPlayoffPhase } from '@/lib/utils/phase-utils';
 
 interface Phase {
     id: string;
@@ -69,12 +70,7 @@ export default function PhaseView({ phases, parentPhaseId = null, seasonId, init
                         {/* Standings Link - Always visible if the phase itself is visible */}
                         <div className="mb-4 ml-0">
                             {(() => {
-                                const isPlayoff =
-                                    phase.type === 'playoffs' ||
-                                    phase.type?.toLowerCase().includes('playoff') ||
-                                    phase.type === 'wild_card' ||
-                                    phase.name.toLowerCase().includes('playoff') ||
-                                    phase.name.toLowerCase().includes('knockout');
+                                const isPlayoff = isPlayoffPhase(phase);
 
                                 return (
                                     <Link
