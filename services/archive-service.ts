@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase/client";
 import { Database } from "@/lib/supabase/types";
+import { isPlayoffPhase } from "@/lib/utils/phase-utils";
 
 export type Competition = Database["public"]["Tables"]["competitions"]["Row"];
 export type Season = Database["public"]["Tables"]["seasons"]["Row"];
@@ -58,7 +59,16 @@ export const ArchiveService = {
         const descendantIds = getDescendants(phaseId);
         const isLeaf = allPhases.filter(p => p.parent_phase_id === phaseId).length === 0;
 
-        // 4. Fetch all games for these phases
+        // 4. Decide which phases to pull games from.
+        // If the root is NOT a playoff, exclude games from any descendant that IS a playoff.
+        const isRootSelectionPlayoff = isPlayoffPhase(phase);
+        const filteredGameDescendantIds = descendantIds.filter(id => {
+            if (isRootSelectionPlayoff) return true; // Keep all if we are looking at a playoff root
+            const p = allPhases.find(phase => phase.id === id);
+            return p ? !isPlayoffPhase(p) : true;
+        });
+
+        // 5. Fetch all games for these phases
         const { data: games, error: gamesError } = await supabase
             .from("games")
             .select(`
@@ -67,7 +77,7 @@ export const ArchiveService = {
                 away_team:teams!away_team_id (*, team_aliases (*)), 
                 phase:phases(name)
             `)
-            .in("phase_id", descendantIds)
+            .in("phase_id", filteredGameDescendantIds)
             .order("date", { ascending: false });
 
         if (gamesError) throw gamesError;
