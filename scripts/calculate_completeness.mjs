@@ -141,7 +141,7 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
 export async function run(targetSeasonId = null) {
     console.log("--- Calculating Season Completeness Scores ---");
 
-    let query = supabase.from('seasons').select('id, year, name, expected_participants');
+    let query = supabase.from('seasons').select('id, year, name, expected_participants, completeness_details');
     if (targetSeasonId) {
         query = query.eq('id', targetSeasonId);
     }
@@ -156,14 +156,20 @@ export async function run(targetSeasonId = null) {
 
     let updated = 0;
     for (const s of seasons) {
-        // Skip cancelled seasons
-        if (s.completeness_details?.status === 'cancelled') {
-            console.log(`[Skip] ${s.year} Season is marked as cancelled.`);
-            continue;
-        }
-
         const title = s.name || `${s.year} Season`;
-        const { score, details } = await calculateForSeason(s.id, title, s.expected_participants);
+        let score = 0;
+        let details = {};
+
+        // If cancelled, it's 100% accurate representations of a null season
+        if (s.completeness_details?.status === 'cancelled') {
+            console.log(`[Cancelled] ${s.year} Season - setting score to 100.`);
+            score = 100;
+            details = s.completeness_details;
+        } else {
+            const result = await calculateForSeason(s.id, title, s.expected_participants);
+            score = result.score;
+            details = result.details;
+        }
 
         const { error: updateError } = await supabase
             .from('seasons')
