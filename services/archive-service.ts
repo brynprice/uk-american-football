@@ -68,7 +68,7 @@ export const ArchiveService = {
                 phase:phases(name)
             `)
             .in("phase_id", descendantIds)
-            .order("date", { ascending: true });
+            .order("date", { ascending: false });
 
         if (gamesError) throw gamesError;
 
