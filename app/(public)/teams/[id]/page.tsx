@@ -217,20 +217,20 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
 
                                 return (
                                     <div key={p.id} className="flex gap-4 items-start group">
-                                        <div className={`w-16 pt-1 text-lg font-black transition-colors ${isPlayoff ? 'text-indigo-400 group-hover:text-indigo-600' : 'text-slate-400 group-hover:text-blue-600'}`}>
-                                            {p.phase.season.year}
+                                        <div className={`w-28 pt-1 text-sm font-black transition-colors ${isPlayoff ? 'text-indigo-400 group-hover:text-indigo-600' : 'text-slate-400 group-hover:text-blue-600'}`}>
+                                            {p.phase.season.name || p.phase.season.year}
                                         </div>
                                         <div className={`flex-1 p-4 border shadow-sm border-l-4 transition-all ${isPlayoff
                                             ? 'bg-indigo-50 border-indigo-200 border-l-indigo-600 hover:border-l-indigo-800'
                                             : 'bg-white border-slate-200 border-l-slate-800 hover:border-l-blue-600'
                                             }`}>
-                                            <div className="flex justify-between items-center">
+                                            <div className="flex flex-col">
                                                 <Link href={`/seasons/${p.phase.season.id}`} className={`font-bold hover:underline ${isPlayoff ? 'text-indigo-900' : 'text-slate-800 hover:text-blue-700'}`}>
                                                     {p.phase.season.competition.name}
                                                 </Link>
-                                                <span className={`text-[10px] uppercase font-black font-sans ${isPlayoff ? 'text-indigo-500' : 'text-slate-400'}`}>
+                                                <Link href={`/phases/${p.phase.id}`} className={`text-[10px] uppercase font-black font-sans hover:underline mt-0.5 w-fit ${isPlayoff ? 'text-indigo-500 hover:text-indigo-700' : 'text-slate-500 hover:text-slate-700'}`}>
                                                     {p.phase.name}
-                                                </span>
+                                                </Link>
                                             </div>
                                             {p.notes && <p className="text-xs text-slate-500 mt-2 italic font-serif">{p.notes}</p>}
                                         </div>
