@@ -12,6 +12,7 @@ import fs from 'fs';
 import { parse } from 'csv-parse/sync';
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
+import { run as calculateCompleteness } from './calculate_completeness.mjs';
 
 dotenv.config({ path: '.env.local' });
 
@@ -232,6 +233,7 @@ async function importStandings(filePath) {
 
     console.log(`\n--- Standing Import Finished ---`);
     console.log(`  Updated: ${updated} | Skipped: ${skipped}`);
+    await calculateCompleteness();
 }
 
 const fileArg = process.argv.filter(arg => !arg.startsWith('--'))[2];

@@ -123,7 +123,7 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
     return { score, details };
 }
 
-async function run(targetSeasonId = null) {
+export async function run(targetSeasonId = null) {
     console.log("--- Calculating Season Completeness Scores ---");
 
     let query = supabase.from('seasons').select('id, year, name, expected_participants');
@@ -134,7 +134,7 @@ async function run(targetSeasonId = null) {
     const { data: seasons, error } = await query;
     if (error) {
         console.error("Error fetching seasons:", error);
-        process.exit(1);
+        return;
     }
 
     console.log(`Found ${seasons.length} seasons to process.`);
@@ -163,5 +163,8 @@ async function run(targetSeasonId = null) {
     console.log(`\nFinished updating ${updated} seasons.`);
 }
 
-const arg = process.argv[2];
-run(arg);
+// Only run if executed directly
+if (process.argv[1] && (process.argv[1].endsWith('calculate_completeness.mjs') || process.argv[1].endsWith('calculate_completeness'))) {
+    const arg = process.argv[2];
+    run(arg);
+}

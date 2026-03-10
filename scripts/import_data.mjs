@@ -9,6 +9,7 @@ import fs from 'fs';
 import { parse } from 'csv-parse/sync';
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
+import { run as calculateCompleteness } from './calculate_completeness.mjs';
 
 // Load environment variables from .env.local
 dotenv.config({ path: '.env.local' });
@@ -516,6 +517,7 @@ async function importData(filePath) {
     }
 
     console.log("--- Import Finished ---");
+    await calculateCompleteness();
 }
 
 const fileArg = process.argv.filter(arg => !arg.startsWith('--'))[2];
