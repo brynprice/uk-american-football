@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
 
 interface H2HStatsProps {
     team1: any;
@@ -89,7 +90,7 @@ export default function H2HStats({ team1, team2, games }: H2HStatsProps) {
                                             {game.phase.season.year} {game.phase.season.competition.name} &bull; {game.phase.name}
                                         </div>
                                         <div className="text-xs font-bold">
-                                            {game.home_team.name} {game.home_score} &ndash; {game.away_score} {game.away_team.name}
+                                            {resolveTeamIdentity(game.home_team, game.date).name} {game.home_score} &ndash; {game.away_score} {resolveTeamIdentity(game.away_team, game.date).name}
                                         </div>
                                     </div>
                                 </div>
