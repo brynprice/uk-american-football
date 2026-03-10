@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import Link from "next/link";
-import { updateWalkoverScore, deleteGame } from "./actions";
+import { updateWalkoverScore, deleteGame, updateGameNotes } from "./actions";
 import ArchiveLayout from "@/components/archive/ArchiveLayout";
 
 export const dynamic = "force-dynamic";
@@ -16,6 +16,7 @@ export default async function WalkoverManagerPage() {
         .select(`
             id,
             date,
+            notes,
             home_team:teams!home_team_id(name),
             away_team:teams!away_team_id(name),
             phase:phases(name, season:seasons(year, competition:competitions(name)))
@@ -65,18 +66,38 @@ export default async function WalkoverManagerPage() {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
-                                <form action={updateWalkoverScore.bind(null, game.id, 1, 0)}>
-                                    <button className="w-full bg-slate-900 text-white py-3 font-black uppercase hover:bg-blue-700 transition-colors">
+                            <form className="space-y-4">
+                                <div>
+                                    <label className="block text-xs font-black uppercase text-slate-500 mb-1">Internal Notes</label>
+                                    <textarea
+                                        name="notes"
+                                        defaultValue={game.notes || ""}
+                                        placeholder="Reason for walkover, historical context, sources..."
+                                        rows={2}
+                                        className="w-full border-2 border-slate-200 p-3 text-sm font-sans focus:border-slate-900 outline-none transition-colors"
+                                    />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <button
+                                        formAction={updateWalkoverScore.bind(null, game.id, 1, 0)}
+                                        className="w-full bg-slate-900 text-white py-3 font-black uppercase hover:bg-blue-700 transition-colors"
+                                    >
                                         Award Home Win (1-0)
                                     </button>
-                                </form>
-                                <form action={updateWalkoverScore.bind(null, game.id, 0, 1)}>
-                                    <button className="w-full bg-slate-900 text-white py-3 font-black uppercase hover:bg-blue-700 transition-colors">
+                                    <button
+                                        formAction={updateWalkoverScore.bind(null, game.id, 0, 1)}
+                                        className="w-full bg-slate-900 text-white py-3 font-black uppercase hover:bg-blue-700 transition-colors"
+                                    >
                                         Award Away Win (0-1)
                                     </button>
-                                </form>
-                            </div>
+                                </div>
+                                <button
+                                    formAction={updateGameNotes.bind(null, game.id)}
+                                    className="w-full border-2 border-slate-900 py-3 font-black uppercase hover:bg-slate-100 transition-colors"
+                                >
+                                    Save Notes Only
+                                </button>
+                            </form>
                         </div>
                     ))
                 ) : (

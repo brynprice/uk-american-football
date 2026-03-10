@@ -58,13 +58,17 @@ async function importTeams(filePath) {
 
     console.log(`--- Importing ${records.length} Teams ---`);
 
+    let count = 0;
     for (const record of records) {
+        count++;
         const { name, location, founded_year, folded_year, notes, logo_url } = record;
 
         if (!name) {
             console.warn(`[Warning] Skipping record with missing name:`, record);
             continue;
         }
+
+        console.log(`Team ${count} out of ${records.length} imported`);
 
         const cleanName = name.trim();
 

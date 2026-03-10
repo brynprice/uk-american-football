@@ -66,7 +66,9 @@ async function importStandings(filePath) {
 
     let updated = 0, skipped = 0;
 
+    let count = 0;
     for (const record of records) {
+        count++;
         const { competition_name, year, phase, parent_phase, team, wins, losses, ties, points_for, points_against } = record;
 
         if (!competition_name || !year || !team) {
@@ -74,6 +76,8 @@ async function importStandings(filePath) {
             skipped++;
             continue;
         }
+
+        console.log(`Standing ${count} out of ${records.length} imported`);
 
         const cleanName = competition_name.trim();
         const cleanYear = parseInt(year);

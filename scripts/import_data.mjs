@@ -335,7 +335,9 @@ async function importData(filePath) {
 
     console.log(`--- Starting Import of ${records.length} records ---`);
 
+    let count = 0;
     for (const record of records) {
+        count++;
         try {
             const {
                 competition,
@@ -370,6 +372,7 @@ async function importData(filePath) {
                 continue;
             }
 
+            console.log(`Game ${count} out of ${records.length} imported`);
             console.log(`Processing: ${year} ${competition} - ${away_team} @ ${home_team}`);
 
             // 1. Resolve Parents

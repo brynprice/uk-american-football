@@ -103,7 +103,9 @@ async function importParticipations(filePath) {
 
     let created = 0, updated = 0, skipped = 0;
 
+    let count = 0;
     for (const record of records) {
+        count++;
         const { competition_name, year, phase, team, head_coach } = record;
 
         if (!competition_name || !year || !team) {
@@ -111,6 +113,8 @@ async function importParticipations(filePath) {
             skipped++;
             continue;
         }
+
+        console.log(`Participation ${count} out of ${records.length} imported`);
 
         const cleanName = competition_name.trim();
         const cleanYear = parseInt(year);

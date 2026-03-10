@@ -6,20 +6,23 @@ import { revalidatePath } from "next/cache";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY!;
 
-export async function updateWalkoverScore(gameId: string, homeScore: number, awayScore: number) {
+export async function updateWalkoverScore(gameId: string, homeScore: number, awayScore: number, formData: FormData) {
     const supabase = createClient(supabaseUrl, supabaseKey);
+    const notes = formData.get("notes")?.toString();
 
-    const { error } = await supabase
+    // 1. Update the game score and notes
+    const { error: gameError } = await supabase
         .from("games")
         .update({
             home_score: homeScore,
             away_score: awayScore,
-            status: "awarded"
+            status: "awarded",
+            notes: notes?.trim() || null
         })
         .eq("id", gameId);
 
-    if (error) {
-        console.error("Error updating walkover score:", error);
+    if (gameError) {
+        console.error("Error updating walkover score:", gameError);
         return;
     }
 
@@ -43,6 +46,25 @@ export async function deleteGame(gameId: string) {
 
     if (error) {
         console.error("Error deleting game:", error);
+        return;
+    }
+
+    revalidatePath("/admin/walkovers");
+}
+
+export async function updateGameNotes(gameId: string, formData: FormData) {
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    const notes = formData.get("notes")?.toString();
+
+    const { error } = await supabase
+        .from("games")
+        .update({
+            notes: notes?.trim() || null
+        })
+        .eq("id", gameId);
+
+    if (error) {
+        console.error("Error updating game notes:", error);
         return;
     }
 
