@@ -71,7 +71,7 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                         {phase.isLeaf ? "Game Results" : "Combined Game Results"}
                     </h2>
                     <div className="space-y-4">
-                        {phase.games?.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime()).map((game: any) => (
+                        {phase.games?.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((game: any) => (
                             <Link
                                 key={game.id}
                                 href={`/games/${game.id}`}
