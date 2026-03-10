@@ -20,7 +20,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
  * - Game Quality (30): Scores (15), Dates (10), Venues (5)
  * - Context (20): Coaches (15), Title Game (5)
  */
-async function calculateForSeason(seasonId, seasonName, expectedParticipants = null) {
+async function calculateForSeason(seasonId, seasonName, expectedParticipants = null, isInterrupted = false) {
     let score = 0;
     const details = {
         missing_phases: true,
@@ -121,9 +121,12 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
         score += Math.round(datePercent * 10);
         score += Math.round(venuePercent * 5);
 
-        if (hasTitle) {
+        if (hasTitle || isInterrupted) {
             score += 5;
             details.missing_title_game = false;
+            if (isInterrupted && !hasTitle) {
+                details.interrupted_waive = true;
+            }
         }
 
         // Apply Penalty
@@ -166,9 +169,14 @@ export async function run(targetSeasonId = null) {
             score = 100;
             details = s.completeness_details;
         } else {
-            const result = await calculateForSeason(s.id, title, s.expected_participants);
+            const isInterrupted = s.completeness_details?.status === 'interrupted';
+            const result = await calculateForSeason(s.id, title, s.expected_participants, isInterrupted);
             score = result.score;
             details = result.details;
+
+            if (isInterrupted) {
+                details.status = 'interrupted';
+            }
         }
 
         const { error: updateError } = await supabase

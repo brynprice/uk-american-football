@@ -62,6 +62,18 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                     </div>
                 )}
 
+                {season.completeness_details?.status === 'interrupted' && (
+                    <div className="bg-amber-900 border-4 border-amber-950 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex items-center gap-6">
+                        <div className="bg-white text-amber-900 rounded-full w-12 h-12 flex items-center justify-center text-3xl font-black shrink-0">!</div>
+                        <div>
+                            <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter mb-1">Season Interrupted</h2>
+                            <p className="text-amber-100 font-sans leading-relaxed">
+                                This season was interrupted due to the COVID-19 pandemic. Regular season play was completed, but the postseason was suspended and no champion was crowned.
+                            </p>
+                        </div>
+                    </div>
+                )}
+
                 <section>
                     <div className="flex justify-between items-end mb-6 border-b-2 border-slate-900 pb-2">
                         <h3 className="text-xl font-black uppercase tracking-widest font-sans">League Structure</h3>
