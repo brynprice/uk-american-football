@@ -68,12 +68,23 @@ export default function PhaseView({ phases, parentPhaseId = null, seasonId, init
 
                         {/* Standings Link - Always visible if the phase itself is visible */}
                         <div className="mb-4 ml-0">
-                            <Link
-                                href={`/phases/${phase.id}`}
-                                className="text-sm font-bold text-blue-600 hover:underline inline-flex items-center gap-1"
-                            >
-                                View Standings & Games &rarr;
-                            </Link>
+                            {(() => {
+                                const isPlayoff =
+                                    phase.type === 'playoffs' ||
+                                    phase.type?.toLowerCase().includes('playoff') ||
+                                    phase.type === 'wild_card' ||
+                                    phase.name.toLowerCase().includes('playoff') ||
+                                    phase.name.toLowerCase().includes('knockout');
+
+                                return (
+                                    <Link
+                                        href={`/phases/${phase.id}`}
+                                        className="text-sm font-bold text-blue-600 hover:underline inline-flex items-center gap-1"
+                                    >
+                                        {isPlayoff ? "View Games" : "View Standings & Games"} &rarr;
+                                    </Link>
+                                );
+                            })()}
                         </div>
 
                         {/* Recursive call for children - only if expanded */}
