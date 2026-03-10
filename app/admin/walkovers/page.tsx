@@ -21,8 +21,8 @@ export default async function WalkoverManagerPage() {
             phase:phases(name, season:seasons(year, competition:competitions(name)))
         `)
         .eq("status", "awarded")
-        .eq("home_score", 0)
-        .eq("away_score", 0)
+        .is("home_score", null)
+        .is("away_score", null)
         .order("date", { ascending: false });
 
     if (error) {
