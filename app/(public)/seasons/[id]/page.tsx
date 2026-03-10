@@ -49,6 +49,19 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
             </div>
 
             <div className="space-y-12">
+                {season.completeness_details?.status === 'cancelled' && (
+                    <div className="bg-rose-900 border-4 border-rose-950 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex items-center gap-6">
+                        <div className="bg-white text-rose-900 rounded-full w-12 h-12 flex items-center justify-center text-3xl font-black shrink-0">!</div>
+                        <div>
+                            <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter mb-1">Season Cancelled</h2>
+                            <p className="text-rose-100 font-sans leading-relaxed">
+                                This season was officially cancelled by the league. No competitive fixtures were played.
+                                Common reasons include global events, reorganization, or lack of participants.
+                            </p>
+                        </div>
+                    </div>
+                )}
+
                 <section>
                     <div className="flex justify-between items-end mb-6 border-b-2 border-slate-900 pb-2">
                         <h3 className="text-xl font-black uppercase tracking-widest font-sans">League Structure</h3>
@@ -57,7 +70,7 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
 
                     {season.phases.length === 0 && (
                         <div className="p-8 text-center bg-white border border-dashed border-slate-300 rounded text-slate-400 font-sans">
-                            No divisions or phases recorded for this season.
+                            {season.completeness_details?.status === 'cancelled' ? 'No competitive divisions were formed.' : 'No divisions or phases recorded for this season.'}
                         </div>
                     )}
                 </section>
@@ -78,39 +91,39 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                             </p>
                         )}
 
-                        {season.completeness_details && (
+                        {season.completeness_details && season.completeness_details.status !== 'cancelled' && (
                             <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded">
                                 <h5 className="text-sm font-bold text-red-800 mb-2">Completeness Details:</h5>
                                 {season.completeness_details?.missing_phases && renderMissingDetail(
                                     `Missing divisions or phases`
-                                )}
+                                ) || null}
                                 {season.completeness_details?.missing_participations && renderMissingDetail(
                                     `Missing enrolled teams`
-                                )}
+                                ) || null}
                                 {season.completeness_details?.missing_games && renderMissingDetail(
                                     `Missing game logs or final standings`
-                                )}
+                                ) || null}
                                 {season.completeness_details?.games_missing_scores > 0 && renderMissingDetail(
                                     `Missing scores for ${season.completeness_details.games_missing_scores} games`
-                                )}
+                                ) || null}
                                 {season.completeness_details?.games_missing_dates > 0 && renderMissingDetail(
                                     `Missing exact dates for ${season.completeness_details.games_missing_dates} games`
-                                )}
+                                ) || null}
                                 {season.completeness_details?.games_missing_venues > 0 && renderMissingDetail(
                                     `Missing venues for ${season.completeness_details.games_missing_venues} games`
-                                )}
+                                ) || null}
                                 {season.completeness_details?.participations_missing_coach > 0 && renderMissingDetail(
                                     `Missing head coach for ${season.completeness_details.participations_missing_coach} teams`
-                                )}
+                                ) || null}
                                 {season.completeness_details?.missing_title_game && renderMissingDetail(
                                     `Missing championship title game`
-                                )}
+                                ) || null}
                                 {season.completeness_details?.missing_expected_ratio && season.completeness_details.missing_expected_ratio.split('/')[0] !== season.completeness_details.missing_expected_ratio.split('/')[1] && renderMissingDetail(
                                     `Missing ${parseInt(season.completeness_details.missing_expected_ratio.split('/')[1]) - parseInt(season.completeness_details.missing_expected_ratio.split('/')[0])} expected teams (${season.completeness_details.missing_expected_ratio} enrolled)`
-                                )}
+                                ) || null}
                                 {season.completeness_details?.unresolved_walkover_count > 0 && renderMissingDetail(
                                     `${season.completeness_details.unresolved_walkover_count} unresolved walkovers (-${Math.min(season.completeness_details.unresolved_walkover_count * 5, 20)} pts)`
-                                )}
+                                ) || null}
 
                                 {Object.keys(season.completeness_details).length > 0 &&
                                     !season.completeness_details.missing_phases &&

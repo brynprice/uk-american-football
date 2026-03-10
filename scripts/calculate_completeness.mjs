@@ -156,6 +156,12 @@ export async function run(targetSeasonId = null) {
 
     let updated = 0;
     for (const s of seasons) {
+        // Skip cancelled seasons
+        if (s.completeness_details?.status === 'cancelled') {
+            console.log(`[Skip] ${s.year} Season is marked as cancelled.`);
+            continue;
+        }
+
         const title = s.name || `${s.year} Season`;
         const { score, details } = await calculateForSeason(s.id, title, s.expected_participants);
 
