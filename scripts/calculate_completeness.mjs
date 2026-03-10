@@ -30,7 +30,8 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
         games_missing_dates: 0,
         games_missing_venues: 0,
         participations_missing_coach: 0,
-        missing_title_game: true
+        missing_title_game: true,
+        unresolved_walkover_count: 0
     };
 
     // 1. Structure (Phases & Participations)
@@ -76,7 +77,7 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
     // 2. Games Presence & Quality
     const { data: games } = await supabase
         .from('games')
-        .select('id, home_score, away_score, date, date_precision, venue_id, final_type')
+        .select('id, home_score, away_score, date, date_precision, venue_id, final_type, status')
         .in('phase_id', phaseIds);
 
     if (games && games.length > 0) {
@@ -100,6 +101,16 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
             else details.games_missing_venues++;
 
             if (g.final_type === 'title') hasTitle = true;
+
+            // Penalty Detection: Unresolved Walkovers
+            const isUnresolvedWalkover =
+                g.status === 'awarded' &&
+                (g.home_score === 0 || g.home_score === null) &&
+                (g.away_score === 0 || g.away_score === null);
+
+            if (isUnresolvedWalkover) {
+                details.unresolved_walkover_count++;
+            }
         });
 
         const scorePercent = scoreCount / totalGames;
@@ -114,6 +125,10 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
             score += 5;
             details.missing_title_game = false;
         }
+
+        // Apply Penalty
+        const penalty = Math.min(details.unresolved_walkover_count * 5, 20);
+        score = Math.max(0, score - penalty);
 
     } else if (participations && participations.some(p => p.wins !== null)) {
         // No individual games, but we have aggregated standings

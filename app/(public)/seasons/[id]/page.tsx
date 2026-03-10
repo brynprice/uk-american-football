@@ -108,6 +108,9 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                                 {season.completeness_details?.missing_expected_ratio && season.completeness_details.missing_expected_ratio.split('/')[0] !== season.completeness_details.missing_expected_ratio.split('/')[1] && renderMissingDetail(
                                     `Missing ${parseInt(season.completeness_details.missing_expected_ratio.split('/')[1]) - parseInt(season.completeness_details.missing_expected_ratio.split('/')[0])} expected teams (${season.completeness_details.missing_expected_ratio} enrolled)`
                                 )}
+                                {season.completeness_details?.unresolved_walkover_count > 0 && renderMissingDetail(
+                                    `${season.completeness_details.unresolved_walkover_count} unresolved walkovers (-${Math.min(season.completeness_details.unresolved_walkover_count * 5, 20)} pts)`
+                                )}
 
                                 {Object.keys(season.completeness_details).length > 0 &&
                                     !season.completeness_details.missing_phases &&
@@ -118,6 +121,7 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                                     !(season.completeness_details.games_missing_venues > 0) &&
                                     !(season.completeness_details.participations_missing_coach > 0) &&
                                     !season.completeness_details.missing_title_game &&
+                                    !(season.completeness_details.unresolved_walkover_count > 0) &&
                                     !(season.completeness_details.missing_expected_ratio && season.completeness_details.missing_expected_ratio.split('/')[0] !== season.completeness_details.missing_expected_ratio.split('/')[1]) && (
                                         <div className="text-sm text-green-700 font-medium">All standard data points appear complete!</div>
                                     )}
