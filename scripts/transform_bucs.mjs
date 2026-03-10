@@ -8,12 +8,46 @@
 import fs from 'fs';
 import xlsx from 'xlsx';
 import path from 'path';
+import { createClient } from '@supabase/supabase-js';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: '.env.local' });
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+    console.error("[FATAL ERROR] Missing Supabase environment variables in .env.local.");
+    process.exit(1);
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Load existing data from DB for validation
+let existingTeams = new Set();
+let existingPhases = new Map(); // year -> Set of phase names
+
+async function loadExistingData() {
+    const { data: teams } = await supabase.from('teams').select('name');
+    if (teams) teams.forEach(t => existingTeams.add(t.name.toLowerCase()));
+
+    const { data: phases } = await supabase.from('phases').select('name, season:seasons(year)');
+    if (phases) {
+        phases.forEach(p => {
+            const year = String(p.season?.year);
+            if (!existingPhases.has(year)) existingPhases.set(year, new Set());
+            existingPhases.get(year).add(p.name.toLowerCase());
+        });
+    }
+}
 
 // Load optional mapping dictionaries
 let teamMappings = {};
 let phaseMappings = {};
 const unmappedTeams = new Set();
 const unmappedPhases = new Set();
+const missingTeamsInDb = new Set();
+const missingPhasesInDb = new Set(); // Stores "Phase (Year)" strings
 
 try {
     const teamMapPath = path.resolve('data/mappings/bucs_teams.json');
@@ -91,7 +125,6 @@ function cleanTeamName(name) {
 
     return clean;
 }
-
 // Clean phase names, applying mapping if it exists
 function cleanPhaseName(name) {
     if (!name) return "";
@@ -113,6 +146,9 @@ async function transformBucsData(inputPath, outputPath, overriddenYear = null) {
     console.log(`--- Starting Transformation for ${inputPath} ---`);
     if (overriddenYear) console.log(`Manually setting season year to: ${overriddenYear}`);
     const walkovers = [];
+
+    // 0. Load existing teams/phases from DB
+    await loadExistingData();
 
     // 1. Read Excel file
     const workbook = xlsx.readFile(inputPath);
@@ -173,7 +209,7 @@ async function transformBucsData(inputPath, outputPath, overriddenYear = null) {
             continue;
         }
 
-        const phase = homeBlock[0];
+        const rawPhase = homeBlock[0];
         const rawHomeTeam = homeBlock[1];
         const scoreStr = scoreBlock.join(' ');
         const rawAwayTeam = awayInfoBlock[0];
@@ -182,8 +218,8 @@ async function transformBucsData(inputPath, outputPath, overriddenYear = null) {
         let awayScore = null;
         let status = 'completed';
 
-        // Excel sometimes auto-formats \"22-6\" into a Date object or serial number
-        // e.g. Excel serial number for a date, or a string like \"22/06/2021\" or \"06-22-2021\"
+        // Excel sometimes auto-formats "22-6" into a Date object or serial number
+        // e.g. Excel serial number for a date, or a string like "22/06/2021" or "06-22-2021"
         // We must detect these and convert them back to scores
         let parsedScoreStr = scoreStr;
         if (typeof scoreStr === 'number' && scoreStr > 20000) {
@@ -192,7 +228,7 @@ async function transformBucsData(inputPath, outputPath, overriddenYear = null) {
             const dateObj = new Date((scoreStr - 25569) * 86400 * 1000);
             const maybeDay = dateObj.getDate();
             const maybeMonth = dateObj.getMonth() + 1;
-            // Best guess: It was \"Day-Month\" or \"Month-Day\"
+            // Best guess: It was "Day-Month" or "Month-Day"
             parsedScoreStr = `${maybeDay} - ${maybeMonth}`;
         } else if (typeof scoreStr === 'string' && scoreStr.match(/^\d{1,2}\/\d{1,2}\/\d{2,4}$/)) {
             // String date like "22/06/2025"
@@ -200,18 +236,22 @@ async function transformBucsData(inputPath, outputPath, overriddenYear = null) {
             parsedScoreStr = `${parseInt(dateParts[0], 10)} - ${parseInt(dateParts[1], 10)}`;
         }
 
+        const mappedPhase = cleanPhaseName(rawPhase);
+        const mappedHome = cleanTeamName(rawHomeTeam);
+        const mappedAway = cleanTeamName(rawAwayTeam);
+
         // Status Logic
         const lowerScore = parsedScoreStr.toLowerCase();
         if (lowerScore.includes('walkover') || lowerScore.includes('forfeit') || lowerScore.includes('awarded')) {
             status = 'awarded';
             if (lowerScore.includes('home walkover') || lowerScore.includes('h - w') || lowerScore.includes('home win') || lowerScore.includes('hw')) {
                 homeScore = 1; awayScore = 0;
-                walkovers.push(`${cleanTeamName(rawHomeTeam)} vs ${cleanTeamName(rawAwayTeam)} (Home Walkover)`);
+                walkovers.push(`${mappedHome} vs ${mappedAway} (Home Walkover)`);
             } else if (lowerScore.includes('away walkover') || lowerScore.includes('a - w') || lowerScore.includes('away win') || lowerScore.includes('aw')) {
                 homeScore = 0; awayScore = 1;
-                walkovers.push(`${cleanTeamName(rawHomeTeam)} vs ${cleanTeamName(rawAwayTeam)} (Away Walkover)`);
+                walkovers.push(`${mappedHome} vs ${mappedAway} (Away Walkover)`);
             } else {
-                walkovers.push(`${cleanTeamName(rawHomeTeam)} vs ${cleanTeamName(rawAwayTeam)} (Unknown Forfeit)`);
+                walkovers.push(`${mappedHome} vs ${mappedAway} (Unknown Forfeit)`);
             }
         } else if (parsedScoreStr.includes(' - ')) {
             const parts = parsedScoreStr.split(' - ');
@@ -224,10 +264,10 @@ async function transformBucsData(inputPath, outputPath, overriddenYear = null) {
                 // Double check for A-W or H-W inside the " - " block
                 if (parsedScoreStr.includes('A - W')) {
                     status = 'awarded'; awayScore = 1; homeScore = 0;
-                    walkovers.push(`${cleanTeamName(rawHomeTeam)} vs ${cleanTeamName(rawAwayTeam)} (Away Walkover)`);
+                    walkovers.push(`${mappedHome} vs ${mappedAway} (Away Walkover)`);
                 } else if (parsedScoreStr.includes('H - W')) {
                     status = 'awarded'; homeScore = 1; awayScore = 0;
-                    walkovers.push(`${cleanTeamName(rawHomeTeam)} vs ${cleanTeamName(rawAwayTeam)} (Home Walkover)`);
+                    walkovers.push(`${mappedHome} vs ${mappedAway} (Home Walkover)`);
                 }
             }
         } else if (lowerScore.includes('v') || lowerScore.includes('tbc') || parsedScoreStr.trim() === '-') {
@@ -267,8 +307,6 @@ async function transformBucsData(inputPath, outputPath, overriddenYear = null) {
         }
 
         let venue = null;
-        let notes = [];
-
         let startIndex = isTimeVal ? 3 : 2;
         if (startIndex < awayInfoBlock.length) {
             let fullVenue = String(awayInfoBlock[startIndex]).split(' Provider:')[0];
@@ -290,13 +328,23 @@ async function transformBucsData(inputPath, outputPath, overriddenYear = null) {
             gameYear = "2025"; // Fallback to current season if date missing and no override
         }
 
+        // DB VALIDATION
+        if (mappedHome && !existingTeams.has(mappedHome.toLowerCase())) missingTeamsInDb.add(mappedHome);
+        if (mappedAway && !existingTeams.has(mappedAway.toLowerCase())) missingTeamsInDb.add(mappedAway);
+        if (mappedPhase) {
+            const yearPhases = existingPhases.get(gameYear);
+            if (!yearPhases || !yearPhases.has(mappedPhase.toLowerCase())) {
+                missingPhasesInDb.add(`${mappedPhase} (${gameYear})`);
+            }
+        }
+
         games.push({
             competition: "BUAFL",
             year: gameYear,
-            phase: cleanPhaseName(phase),
+            phase: mappedPhase,
             date: date || "",
-            away_team: cleanTeamName(rawAwayTeam),
-            home_team: cleanTeamName(rawHomeTeam),
+            away_team: mappedAway,
+            home_team: mappedHome,
             away_score: awayScore !== null ? awayScore : "",
             home_score: homeScore !== null ? homeScore : "",
             venue: venue || "",
@@ -309,8 +357,8 @@ async function transformBucsData(inputPath, outputPath, overriddenYear = null) {
             time: time || "",
             status: status,
             confidence_level: "high",
-            is_playoff: phase.toLowerCase().includes('championship') ? "true" : "false",
-            is_title_game: phase.toLowerCase().includes('final') ? "true" : "false",
+            is_playoff: mappedPhase.toLowerCase().includes('championship') ? "true" : "false",
+            is_title_game: mappedPhase.toLowerCase().includes('final') ? "true" : "false",
             final_type: "",
             title_name: "",
             playoff_round: "",
@@ -343,16 +391,25 @@ async function transformBucsData(inputPath, outputPath, overriddenYear = null) {
     fs.writeFileSync(phaseMapPath, JSON.stringify(phaseMappings, null, 2), 'utf8');
 
     if (unmappedTeams.size > 0) {
-        console.warn(`\\n[!] Warning: ${unmappedTeams.size} teams are missing mappings in bucs_teams.json:`);
+        console.warn(`\n[!] Warning: ${unmappedTeams.size} teams are missing mappings in bucs_teams.json:`);
         unmappedTeams.forEach(t => console.warn(`  - ${t}`));
     }
     if (unmappedPhases.size > 0) {
-        console.warn(`\\n[!] Warning: ${unmappedPhases.size} phases are missing mappings in bucs_phases.json:`);
+        console.warn(`\n[!] Warning: ${unmappedPhases.size} phases are missing mappings in bucs_phases.json:`);
         unmappedPhases.forEach(p => console.warn(`  - ${p}`));
     }
 
+    if (missingTeamsInDb.size > 0) {
+        console.warn(`\n[!] Warning: ${missingTeamsInDb.size} teams exist in mapping but NOT in database:`);
+        missingTeamsInDb.forEach(t => console.warn(`  - ${t}`));
+    }
+    if (missingPhasesInDb.size > 0) {
+        console.warn(`\n[!] Warning: ${missingPhasesInDb.size} phases exist in mapping but NOT in database:`);
+        missingPhasesInDb.forEach(p => console.warn(`  - ${p}`));
+    }
+
     if (walkovers.length > 0) {
-        console.log(`\\n[ℹ] Info: Found ${walkovers.length} walkover games that may require manual review:`);
+        console.log(`\n[ℹ] Info: Found ${walkovers.length} walkover games that may require manual review:`);
         walkovers.forEach(w => console.log(`  - ${w}`));
     }
 }
