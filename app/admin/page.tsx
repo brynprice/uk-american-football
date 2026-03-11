@@ -30,6 +30,13 @@ export default function AdminDashboard() {
                         Easily set head coaches for teams by season or individual games.
                     </p>
                 </Link>
+
+                <Link href="/admin/predictions" className="group bg-slate-900 text-white p-8 shadow-[8px_8px_0px_0px_rgba(59,130,246,1)] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[12px_12px_0px_0px_rgba(59,130,246,1)] transition-all">
+                    <h2 className="text-2xl font-black mb-4 uppercase tracking-tight group-hover:text-blue-400 text-blue-500">Score Predictor &rarr;</h2>
+                    <p className="text-slate-400 font-sans leading-relaxed">
+                        Predict future game results based on historical H2H data and common opponent analysis.
+                    </p>
+                </Link>
             </div>
         </ArchiveLayout>
     );
