@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import H2HSelector from '@/components/archive/H2HSelector';
+export const revalidate = 0;
 
 export default async function TeamPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;

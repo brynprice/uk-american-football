@@ -419,7 +419,7 @@ async function importData(filePath) {
                         time: time || null,
                         venue_id: venueId,
                         notes: notes || null,
-                        status: status || 'completed',
+                        status: status || existingGame.status || 'completed',
                         confidence_level: confidence_level || 'high',
                         is_playoff: ['true', 'yes', '1'].includes((is_playoff || '').toString().toLowerCase()),
                         final_type: final_type ? final_type.toLowerCase().trim() : (['true', 'yes', '1'].includes((is_title_game || '').toString().toLowerCase()) ? 'title' : null),

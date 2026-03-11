@@ -6,6 +6,8 @@ import StandingsTable from '@/components/archive/StandingsTable';
 
 import { isPlayoffPhase } from '@/lib/utils/phase-utils';
 
+export const revalidate = 0;
+
 export default async function PhasePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const phase = await ArchiveService.getPhaseData(id);

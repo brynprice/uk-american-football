@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
+export const revalidate = 0;
 
 export default async function HomePage() {
   const competitions = await ArchiveService.getCompetitions();

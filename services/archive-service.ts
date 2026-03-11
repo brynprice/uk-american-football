@@ -78,6 +78,7 @@ export const ArchiveService = {
                 phase:phases(name)
             `)
             .in("phase_id", filteredGameDescendantIds)
+            .neq("status", "anomaly")
             .order("date", { ascending: false });
 
         if (gamesError) throw gamesError;
@@ -163,6 +164,7 @@ export const ArchiveService = {
                 away_team:teams!away_team_id (*, team_aliases (*))
             `)
             .or(`home_team_id.eq.${teamId},away_team_id.eq.${teamId}`)
+            .neq("status", "anomaly")
             .order("date", { ascending: false });
 
         if (gamesError) throw gamesError;
@@ -186,6 +188,7 @@ export const ArchiveService = {
             .from('games')
             .select('*, phase:phases(*, season:seasons(*, competition:competitions(*))), home_team:teams!home_team_id(*, team_aliases(*)), away_team:teams!away_team_id(*, team_aliases(*)), venue:venues(*)')
             .or(`and(home_score.eq.${scoreA},away_score.eq.${scoreB}),and(home_score.eq.${scoreB},away_score.eq.${scoreA})`)
+            .neq("status", "anomaly")
             .order('date', { ascending: false });
 
         if (error) throw error;
@@ -324,6 +327,7 @@ export const ArchiveService = {
                 venue:venues (*)
             `)
             .or(`and(home_team_id.eq.${team1Id},away_team_id.eq.${team2Id}),and(home_team_id.eq.${team2Id},away_team_id.eq.${team1Id})`)
+            .neq("status", "anomaly")
             .order("date", { ascending: false });
 
         if (error) throw error;
