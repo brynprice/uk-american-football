@@ -320,41 +320,57 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                 <div className="space-y-8">
                     {/* Honours Section */}
                     {(() => {
-                        const wonTitles = team.games
-                            ?.filter((g: any) => (g.final_type === 'title' || g.final_type === 'bowl') && g.status?.toLowerCase() === 'completed')
+                        const finalGames = team.games?.filter((g: any) =>
+                            (g.final_type === 'title' || g.final_type === 'bowl') && g.status?.toLowerCase() === 'completed'
+                        ) || [];
+
+                        const wonTitles = finalGames
                             .filter((g: any) => {
                                 const isHome = g.home_team_id === id;
-                                // In case of a tie in a title game, both teams share the title
                                 return isHome ? g.home_score >= g.away_score : g.away_score >= g.home_score;
                             })
-                            .map((g: any) => ({
-                                title: g.title_name,
-                                year: g.phase?.season?.year,
-                                competition: g.phase?.season?.competition?.name,
-                                final_type: g.final_type,
-                                game_id: g.id
-                            }));
+                            .map((g: any) => ({ ...g, type: 'winner' }));
 
-                        if (!wonTitles || wonTitles.length === 0) return null;
+                        const runnerUpFinishes = finalGames
+                            .filter((g: any) => {
+                                const isHome = g.home_team_id === id;
+                                return isHome ? g.home_score < g.away_score : g.away_score < g.home_score;
+                            })
+                            .map((g: any) => ({ ...g, type: 'runner-up' }));
+
+                        if (wonTitles.length === 0 && runnerUpFinishes.length === 0) return null;
 
                         return (
-                            <section className="bg-gradient-to-br from-amber-50 to-white p-6 border-2 border-amber-200 shadow-md rounded-lg relative overflow-hidden">
-                                <div className="absolute top-0 right-0 p-2 opacity-10">
-                                    <span className="text-6xl text-amber-600">🏆</span>
-                                </div>
-                                <h4 className="text-xs font-black uppercase text-amber-700 mb-4 tracking-tighter flex items-center gap-2">
-                                    <span className="text-lg">🏆</span> Major Honours
+                            <section className="bg-white p-6 border-2 border-slate-100 shadow-md rounded-lg relative overflow-hidden">
+                                <h4 className="text-xs font-black uppercase text-slate-400 mb-6 tracking-tighter flex items-center gap-2">
+                                    🏆 Major Honours
                                 </h4>
-                                <div className="space-y-4">
+                                <div className="space-y-6">
+                                    {/* Winners */}
                                     {wonTitles.map((title: any, idx: number) => (
-                                        <div key={idx} className="flex gap-3 items-center">
-                                            <div className={`w-10 h-10 ${title.final_type === 'bowl' ? 'bg-blue-500' : 'bg-amber-500'} text-white rounded-full flex items-center justify-center shrink-0 shadow-sm border-2 border-white`}>
-                                                <span className="text-xs font-black uppercase">{title.year}</span>
+                                        <div key={`win-${idx}`} className="flex gap-3 items-center">
+                                            <div className={`w-10 h-10 ${title.final_type === 'bowl' ? 'bg-blue-600' : 'bg-amber-500'} text-white rounded-full flex items-center justify-center shrink-0 shadow-sm border-2 border-white ring-1 ring-amber-200`}>
+                                                <span className="text-[10px] font-black uppercase">{title.phase?.season?.year}</span>
                                             </div>
                                             <div>
-                                                <div className="font-bold text-slate-900 leading-tight">{title.title}</div>
+                                                <div className="font-bold text-slate-900 leading-tight">{title.title_name}</div>
                                                 <div className="text-[10px] text-amber-700 uppercase font-black font-sans tracking-wide">
-                                                    {title.competition}
+                                                    Champion &bull; {title.phase?.season?.competition?.name}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+
+                                    {/* Runner Ups */}
+                                    {runnerUpFinishes.map((title: any, idx: number) => (
+                                        <div key={`ru-${idx}`} className="flex gap-3 items-center opacity-85">
+                                            <div className="w-10 h-10 bg-slate-300 text-slate-700 rounded-full flex items-center justify-center shrink-0 shadow-sm border-2 border-white ring-1 ring-slate-200">
+                                                <span className="text-[10px] font-black uppercase">{title.phase?.season?.year}</span>
+                                            </div>
+                                            <div>
+                                                <div className="font-bold text-slate-600 leading-tight">{title.title_name}</div>
+                                                <div className="text-[10px] text-slate-400 uppercase font-black font-sans tracking-wide">
+                                                    Runner Up &bull; {title.phase?.season?.competition?.name}
                                                 </div>
                                             </div>
                                         </div>

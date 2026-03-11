@@ -127,7 +127,33 @@ async function transformData(inputPath, outputPath, overriddenYear = "2018") {
     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
     const rawRows = xlsx.utils.sheet_to_json(worksheet, { header: 1 });
 
+    // 1. PRE-SCAN: Identify Primary Divisions for each team
+    const teamGameCounts = {}; // team -> competition -> count
+    console.log(`  [Integrity] Pre-scanning ${rawRows.length - 1} rows for primary divisions...`);
+
+    for (let i = 1; i < rawRows.length; i++) {
+        const row = rawRows[i];
+        if (!row || row.length < 10) continue;
+        const comp = (row[3] || "").toString().trim();
+        const home = (row[6] || "").toString().trim();
+        const away = (row[9] || "").toString().trim();
+        if (!comp || (!home && !away)) continue;
+
+        [home, away].forEach(t => {
+            if (!t) return;
+            if (!teamGameCounts[t]) teamGameCounts[t] = {};
+            teamGameCounts[t][comp] = (teamGameCounts[t][comp] || 0) + 1;
+        });
+    }
+
+    const teamPrimary = {};
+    for (const team in teamGameCounts) {
+        const sorted = Object.entries(teamGameCounts[team]).sort((a, b) => b[1] - a[1]);
+        teamPrimary[team] = sorted[0][0];
+    }
+
     const games = [];
+    const anomalies = [];
     const walkovers = [];
 
     // Skip header row
@@ -148,18 +174,29 @@ async function transformData(inputPath, outputPath, overriddenYear = "2018") {
         const mappedHome = cleanTeamName(rawHome);
         const mappedAway = cleanTeamName(rawAway);
 
+        const isPlayoff = mappedPhase.toLowerCase().includes('championship') ||
+            mappedPhase.toLowerCase().includes('playoff') ||
+            mappedPhase.toLowerCase().includes('cup') ||
+            mappedPhase.toLowerCase().includes('trophy');
+
         let date = excelDateToISODate(dateVal);
         const originalDateStr = date;
 
-        // Smart Date Correction: if not a Sunday, try flipping month/day
+        // Smart Date Correction
         if (date) {
             const d = new Date(date);
             const day = d.getUTCDate();
-            const month = d.getUTCMonth(); // 0-indexed
+            const month = d.getUTCMonth();
             const year = d.getUTCFullYear();
 
-            const seasonStart = new Date(Date.UTC(2018, 10, 2)); // Nov 2 2018
-            const seasonEnd = new Date(Date.UTC(2019, 2, 31));   // Mar 31 2019
+            // Default regular season window
+            let seasonStart = new Date(Date.UTC(2018, 10, 2)); // Nov 2 2018
+            let seasonEnd = new Date(Date.UTC(2019, 2, 31));   // Mar 31 2019
+
+            // narrowed Playoff window: Feb 14 - Mar 31
+            if (isPlayoff) {
+                seasonStart = new Date(Date.UTC(2019, 1, 14));
+            }
 
             const getScore = (dateObj) => {
                 let s = 0;
@@ -174,7 +211,6 @@ async function transformData(inputPath, outputPath, overriddenYear = "2018") {
             const originalScore = getScore(d);
 
             if (day <= 12) {
-                // Try flip: month becomes day (m+1), day becomes month (d-1)
                 let targetYear = year;
                 if (month >= 8 && day <= 4) targetYear = year + 1;
                 else if (month <= 3 && day >= 9) targetYear = year - 1;
@@ -184,7 +220,7 @@ async function transformData(inputPath, outputPath, overriddenYear = "2018") {
 
                 if (flippedScore > originalScore) {
                     date = flipped.toISOString().split('T')[0];
-                    console.log(`  [Date Correction] Flipped "${originalDateStr}" (Score ${originalScore}) -> "${date}" (Score ${flippedScore})`);
+                    console.log(`  [Date Correction] Flipped "${originalDateStr}" (Score ${originalScore}) -> "${date}" (Score ${flippedScore}) [Playoff=${isPlayoff}]`);
                 }
             }
         }
@@ -196,7 +232,6 @@ async function transformData(inputPath, outputPath, overriddenYear = "2018") {
 
         if (noScoreType === 'Walkover') {
             status = 'awarded';
-            // We need to figure out who won. Usually Row 10 (Winner) tells us.
             const winner = row[10];
             if (winner === rawHome) {
                 homeScore = 1; awayScore = 0;
@@ -216,7 +251,7 @@ async function transformData(inputPath, outputPath, overriddenYear = "2018") {
             }
         }
 
-        games.push({
+        const game = {
             competition: "BUAFL",
             year: overriddenYear,
             phase: mappedPhase,
@@ -235,13 +270,25 @@ async function transformData(inputPath, outputPath, overriddenYear = "2018") {
             time: time || "",
             status: status,
             confidence_level: "high",
-            is_playoff: mappedPhase.toLowerCase().includes('championship') || mappedPhase.toLowerCase().includes('playoff') ? "true" : "false",
+            is_playoff: isPlayoff ? "true" : "false",
             is_title_game: mappedPhase.toLowerCase().includes('final') ? "true" : "false",
             final_type: "",
             title_name: "",
             playoff_round: "",
             parent_phase: ""
-        });
+        };
+
+        // INTEGRITY CHECK: Is this an anomaly?
+        // If it's a playoff/cup game, we don't strictly enforce primary division
+        // But for regular league games, we do.
+        const isAnomaly = !isPlayoff && (teamPrimary[rawHome] !== rawPhase || teamPrimary[rawAway] !== rawPhase);
+
+        if (isAnomaly) {
+            game.notes = `[Anomaly] HomePrimary=${teamPrimary[rawHome]}, AwayPrimary=${teamPrimary[rawAway]}`;
+            anomalies.push(game);
+        } else {
+            games.push(game);
+        }
     }
 
     const headers = [
@@ -253,7 +300,14 @@ async function transformData(inputPath, outputPath, overriddenYear = "2018") {
     ];
 
     fs.writeFileSync(outputPath, toCSV(games, headers), 'utf8');
-    console.log(`Successfully parsed ${games.length} games. Saved to ${outputPath}`);
+
+    if (anomalies.length > 0) {
+        const anomalyPath = outputPath.replace('.csv', '_anomalies.csv');
+        fs.writeFileSync(anomalyPath, toCSV(anomalies, headers), 'utf8');
+        console.log(`  [Integrity] Quarantined ${anomalies.length} anomalous games to ${anomalyPath}`);
+    }
+
+    console.log(`Successfully parsed ${games.length} clean games. Saved to ${outputPath}`);
 
     // Update mappings
     fs.writeFileSync('data/mappings/bucs_teams.json', JSON.stringify(teamMappings, null, 2), 'utf8');

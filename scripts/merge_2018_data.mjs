@@ -44,6 +44,23 @@ const newLookup = new Map(); // pairing -> [games]
     newLookup.get(key).push(g);
 });
 
+// Load Phase Mappings
+let phaseMappings = {};
+try {
+    const phaseMapPath = path.resolve('data/mappings/bucs_phases.json');
+    if (fs.existsSync(phaseMapPath)) {
+        phaseMappings = JSON.parse(fs.readFileSync(phaseMapPath, 'utf8'));
+    }
+} catch (e) {
+    console.warn(`Could not load phase mappings: ${e.message}`);
+}
+
+function getMappedPhase(rawPhase) {
+    if (!rawPhase) return "";
+    const clean = rawPhase.trim();
+    return phaseMappings[clean] || clean;
+}
+
 const mergedGames = [...newReg, ...newPlayoffs];
 let backfilledCount = 0;
 
@@ -62,11 +79,15 @@ oldData.forEach(oldGame => {
 
     if (!isDuplicate) {
         // This is a missing game! Backfill it.
-        // We'll trust the Old CSV data but ensure it matches the new header format.
+        // Apply phase mapping to ensure consistency with the new data
+        const originalPhase = oldGame.phase;
+        const mappedPhase = getMappedPhase(originalPhase);
+
         mergedGames.push({
             ...oldGame,
+            phase: mappedPhase,
             confidence_level: 'medium', // Mark backfilled data as lower confidence
-            notes: (oldGame.notes || "") + " [Backfilled from legacy BUCS CSV]"
+            notes: (oldGame.notes || "") + ` [Backfilled from legacy BUCS CSV; original phase: ${originalPhase}]`
         });
         backfilledCount++;
     }
