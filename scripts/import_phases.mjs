@@ -138,23 +138,28 @@ async function importPhases(filePath) {
             phaseCache.set(`${competition_name}|${year}|${phase_name}`, `dry-run-${phase_name}`);
             created++;
         } else {
-            // Check if exists
-            let query = supabase
+            // Check if exists - first check by name & season regardless of parent
+            const { data: phasesByName } = await supabase
                 .from('phases')
-                .select('id')
+                .select('id, parent_phase_id')
                 .eq('season_id', season.id)
                 .eq('name', phase_name);
 
-            if (parentId) {
-                query = query.eq('parent_phase_id', parentId);
-            } else {
-                query = query.is('parent_phase_id', null);
+            let existingPhase = null;
+            if (phasesByName && phasesByName.length > 0) {
+                // If there's an exact match with the current parentId, use it
+                existingPhase = phasesByName.find(p => p.parent_phase_id === parentId);
+
+                // If no exact match but there's an orphan (null parent), "adopt" it
+                if (!existingPhase) {
+                    existingPhase = phasesByName.find(p => p.parent_phase_id === null);
+                    if (existingPhase && parentId) {
+                        console.log(`  [Adopted] Found orphan "${phase_name}", adopting into parent "${parent_phase}".`);
+                    }
+                }
             }
 
-            const { data: existingPhases } = await query.order('created_at', { ascending: true }).limit(1);
-
-            if (existingPhases && existingPhases.length > 0) {
-                const existingPhase = existingPhases[0];
+            if (existingPhase) {
                 const { error } = await supabase
                     .from('phases')
                     .update(phaseData)
@@ -166,7 +171,7 @@ async function importPhases(filePath) {
                 } else {
                     console.log(`  [Updated] ${phase_name} updated.`);
                     await ensureSampleNote('phases', existingPhase.id);
-                    phaseCache.set(`${competition_name}|${year}|${phase_name}|${parentId || 'root'}`, existingPhase.id);
+                    phaseCache.set(`${competition_name}|${year}|${phase_name}`, existingPhase.id);
                     created++;
                 }
             } else {
@@ -182,7 +187,7 @@ async function importPhases(filePath) {
                 } else {
                     console.log(`  [Created] ${phase_name} created.`);
                     await ensureSampleNote('phases', inserted.id);
-                    phaseCache.set(`${competition_name}|${year}|${phase_name}|${parentId || 'root'}`, inserted.id);
+                    phaseCache.set(`${competition_name}|${year}|${phase_name}`, inserted.id);
                     created++;
                 }
             }

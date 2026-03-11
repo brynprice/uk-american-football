@@ -149,6 +149,45 @@ async function transformData(inputPath, outputPath, overriddenYear = "2018") {
         const mappedAway = cleanTeamName(rawAway);
 
         let date = excelDateToISODate(dateVal);
+        const originalDateStr = date;
+
+        // Smart Date Correction: if not a Sunday, try flipping month/day
+        if (date) {
+            const d = new Date(date);
+            const day = d.getUTCDate();
+            const month = d.getUTCMonth(); // 0-indexed
+            const year = d.getUTCFullYear();
+
+            const seasonStart = new Date(Date.UTC(2018, 10, 2)); // Nov 2 2018
+            const seasonEnd = new Date(Date.UTC(2019, 2, 31));   // Mar 31 2019
+
+            const getScore = (dateObj) => {
+                let s = 0;
+                if (dateObj >= seasonStart && dateObj <= seasonEnd) s += 100;
+                const dw = dateObj.getUTCDay();
+                if (dw === 0) s += 3; // Sunday
+                if (dw === 6) s += 2; // Saturday
+                if (dw === 3) s += 1; // Wednesday
+                return s;
+            };
+
+            const originalScore = getScore(d);
+
+            if (day <= 12) {
+                // Try flip: month becomes day (m+1), day becomes month (d-1)
+                let targetYear = year;
+                if (month >= 8 && day <= 4) targetYear = year + 1;
+                else if (month <= 3 && day >= 9) targetYear = year - 1;
+
+                const flipped = new Date(Date.UTC(targetYear, day - 1, month + 1));
+                const flippedScore = getScore(flipped);
+
+                if (flippedScore > originalScore) {
+                    date = flipped.toISOString().split('T')[0];
+                    console.log(`  [Date Correction] Flipped "${originalDateStr}" (Score ${originalScore}) -> "${date}" (Score ${flippedScore})`);
+                }
+            }
+        }
         let time = typeof timeVal === 'number' ? excelFractionToTime(timeVal) : null;
 
         let homeScore = scoreHome;

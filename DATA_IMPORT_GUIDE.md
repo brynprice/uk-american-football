@@ -69,15 +69,15 @@ Imports a hierarchical structure of phases (divisions, conferences, playoffs) fo
   ```bash
   node scripts/import_phases.mjs data/phases.csv [--dry-run] [--sample]
   ```
-* **CSV Columns**: `competition_name, year, phase_name, type, parent_phase, confidence_level, ordinal`
-* **Behavior**: Requires the parent phase (if any) to be defined *above* the child phase in the same CSV file if you want them linked in a single run. Matches seasons by competition name/slug and year.
 * **Example CSV**:
   ```csv
-  competition_name,year,phase_name,type,parent_phase,ordinal
+  Competition,Year,Phase,Type,Parent Phase,Ordinal
   BUAFL,2025,"Division 1",division,,1
   BUAFL,2025,"South Eastern",conference,"Division 1",1
   BUAFL,2025,"Group A",group,"South Eastern",1
   ```
+
+*   **Orphan Adoption**: If a phase already exists in the database as an "orphan" (no parent), but the CSV provides a `parent_phase`, the script will automatically "adopt" that phase into the hierarchy instead of creating a duplicate.
 
 ### 5. Participations Import (`import_participations.mjs`)
 Imports season-level team participation and default head coach linking for a given phase in a season.
@@ -169,25 +169,24 @@ Extracts historical game data from the database into a CSV file. The generated C
 *   **Command**: `node scripts/export_data.mjs [outputFile.csv]`
 *   **Behavior**: It connects to Supabase, pulls down all games, matches them with their underlying competition, season, phase, teams, venues, and coaches (resolving both game-level overrides and season level fallbacks), and formats them safely into a CSV string. If no output file is provided, it returns a file named `exported_games.csv` in the current directory.
 
-### 11. Custom Format Transformers (`transform_bucs.mjs`)
+### 11. Custom Format Transformers
 
-Often, historical data comes in unstructured formats (e.g., single-column Excel dumps from BUCS Play). Rather than creating a complex "universal importer", the recommended approach is to build throw-away scripts that parse the specific messy format and output a clean CSV that matches the 24 standard columns required by `import_data.mjs`.
+Often, historical data comes in unstructured formats (e.g., single-column Excel dumps from BUCS Play). Rather than creating a complex "universal importer", the recommended approach is to build scripts that parse the specific format and output a clean CSV that matches the standard headers required by `import_data.mjs`.
 
-*   **Example Script**: `node scripts/transform_bucs.mjs data/bucs_data.xlsx [outputFile.csv] [yearOverride]`
-*   **Behavior**:
-    1. Reads an unstructured Excel file containing repeating chunks of unstructured game data.
-    2. Identifies blocks corresponding to games (parsing phases, teams, scores, dates, venues, etc.).
-    3. Handles date and time parsing even if columns are formatted as "Text" in Excel.
-    4. Automatically maps team and phase names using `data/mappings/bucs_teams.json` and `bucs_phases.json`.
-    5. **Season Year**: Automatically determines the season year from the game dates (e.g., handles Jan-Aug drift). You can manually override this by providing a third argument (e.g., `2025`).
-    6. **Walkovers**: Automatically detects walkover games, assigns "awarded" status, and logs a summary of these games to the terminal for manual review.
-    7. Outputs a perfectly formatted standard CSV ready to be ingested by `import_data.mjs`.
+#### BUCS Chunk Transformer (`transform_bucs.mjs`)
+Used for modern Playwaze/BUCS Play data (2019-present) where data is formatted in repeating single-column blocks.
+*   **Command**: `node scripts/transform_bucs.mjs <input.xlsx> <output.csv> [year]`
+*   **Behavior**: Identifies game blocks, handles Jan-Aug season drift, and auto-suggests team/phase mappings.
+
+#### BUCS Tabular Transformer (`transform_bucs_2018.mjs`)
+Used for the 2018/19 BUCS season data which used a standard tabular Excel format with headers.
+*   **Command**: `node scripts/transform_bucs_2018.mjs <input.xlsx> <output.csv>`
+*   **Behavior**: Parses the tabular format, converts Excel serial dates/times, and applies the same mapping logic as the chunk transformer.
 
 ### 12. Data Completeness Score (`calculate_completeness.mjs`)
 
 The Archive features a dynamic Data Completeness Score (0-100%) for each season to indicate the depth and quality of the historical records available.
 
-*   **Command**: `node scripts/calculate_completeness.mjs [season_id]`
 *   **Behavior**: If run without arguments, it recalculates the score for *all* seasons in the database. If a specific UUID is provided, it only calculates for that season.
 
 #### How the Score is Calculated

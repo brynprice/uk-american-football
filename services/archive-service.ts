@@ -33,7 +33,7 @@ export const ArchiveService = {
 
         return {
             ...(seasonData as any),
-            notes: notes || []
+            archival_notes: notes || []
         };
     },
 

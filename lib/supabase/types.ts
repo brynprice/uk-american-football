@@ -47,6 +47,7 @@ export interface Database {
           start_date: string | null
           end_date: string | null
           confidence_level: string
+          notes: string | null
           created_at: string
           updated_at: string
         }
@@ -58,6 +59,7 @@ export interface Database {
           start_date?: string | null
           end_date?: string | null
           confidence_level?: string
+          notes?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -69,6 +71,7 @@ export interface Database {
           start_date?: string | null
           end_date?: string | null
           confidence_level?: string
+          notes?: string | null
           created_at?: string
           updated_at?: string
         }

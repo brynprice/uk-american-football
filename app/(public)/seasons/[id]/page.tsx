@@ -91,9 +91,13 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <section className="bg-slate-50 p-6 border-l-4 border-slate-300">
                         <h4 className="text-sm font-black uppercase mb-4 font-sans text-slate-500">Archival Notes</h4>
-                        {season.notes && season.notes.length > 0 ? (
+                        {season.notes ? (
+                            <div className="text-sm text-slate-600 font-serif leading-relaxed italic">
+                                <p>{season.notes}</p>
+                            </div>
+                        ) : season.archival_notes && season.archival_notes.length > 0 ? (
                             <div className="space-y-4 text-sm text-slate-600 font-serif leading-relaxed italic">
-                                {season.notes.map((note: any) => (
+                                {season.archival_notes.map((note: any) => (
                                     <p key={note.id}>{note.content}</p>
                                 ))}
                             </div>
