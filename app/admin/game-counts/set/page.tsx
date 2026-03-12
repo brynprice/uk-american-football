@@ -67,7 +67,8 @@ export default function SetGameCountsPage() {
             .from('phases')
             .select('id, name, type, max_games_per_team, games_validated, parent_phase_id')
             .eq('season_id', seasonId)
-            .order('ordinal', { ascending: true });
+            .order('ordinal', { ascending: true })
+            .order('name', { ascending: true });
 
         if (data) {
             setPhases(data as PhaseRow[]);
@@ -105,13 +106,15 @@ export default function SetGameCountsPage() {
         setSaving(true);
         const ids = regularLeafs.map(p => p.id);
 
-        const { error } = await supabase
-            .from('phases')
-            .update({ max_games_per_team: val })
-            .in('id', ids);
+        const res = await fetch('/api/admin/phases/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phaseIds: ids, max_games_per_team: val }),
+        });
+        const result = await res.json();
 
-        if (error) {
-            setMessage(`Error: ${error.message}`);
+        if (!res.ok) {
+            setMessage(`Error: ${result.error}`);
         } else {
             setMessage(`Set max_games_per_team = ${val} for ${ids.length} regular season phases.`);
             const newVals = { ...editValues };
@@ -127,13 +130,15 @@ export default function SetGameCountsPage() {
         const numVal = val ? parseInt(val) : null;
 
         setSaving(true);
-        const { error } = await supabase
-            .from('phases')
-            .update({ max_games_per_team: numVal })
-            .eq('id', phaseId);
+        const res = await fetch('/api/admin/phases/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phaseId, max_games_per_team: numVal }),
+        });
+        const result = await res.json();
 
-        if (error) {
-            setMessage(`Error updating phase: ${error.message}`);
+        if (!res.ok) {
+            setMessage(`Error updating phase: ${result.error}`);
         } else {
             setMessage(`Updated successfully.`);
             loadPhases(selectedSeason);

@@ -119,13 +119,15 @@ export default function GameCountsPage() {
 
     async function handleValidate(phaseId: string) {
         setValidating(phaseId);
-        const { error } = await supabase
-            .from('phases')
-            .update({ games_validated: true })
-            .eq('id', phaseId);
+        const res = await fetch('/api/admin/phases/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phaseId, games_validated: true }),
+        });
+        const result = await res.json();
 
-        if (error) {
-            alert('Error validating phase: ' + error.message);
+        if (!res.ok) {
+            alert('Error validating phase: ' + result.error);
         } else {
             setFlaggedPhases(prev => prev.filter(p => p.id !== phaseId));
         }
@@ -134,13 +136,15 @@ export default function GameCountsPage() {
 
     async function handleUnvalidate(phaseId: string) {
         setValidating(phaseId);
-        const { error } = await supabase
-            .from('phases')
-            .update({ games_validated: false })
-            .eq('id', phaseId);
+        const res = await fetch('/api/admin/phases/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phaseId, games_validated: false }),
+        });
+        const result = await res.json();
 
-        if (error) {
-            alert('Error un-validating phase: ' + error.message);
+        if (!res.ok) {
+            alert('Error un-validating phase: ' + result.error);
         } else {
             loadFlaggedPhases();
         }
