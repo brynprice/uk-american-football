@@ -38,6 +38,13 @@ export default function AdminDashboard() {
                     </p>
                 </Link>
 
+                <Link href="/admin/game-counts" className="group bg-white border-2 border-slate-900 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all">
+                    <h2 className="text-2xl font-black mb-4 uppercase tracking-tight group-hover:text-blue-700">Game Count Validator &rarr;</h2>
+                    <p className="text-slate-600 font-sans leading-relaxed">
+                        Review phases where teams have played more or fewer games than expected.
+                    </p>
+                </Link>
+
                 <Link href="/admin/predictions" className="group bg-slate-900 text-white p-8 shadow-[8px_8px_0px_0px_rgba(59,130,246,1)] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[12px_12px_0px_0px_rgba(59,130,246,1)] transition-all">
                     <h2 className="text-2xl font-black mb-4 uppercase tracking-tight group-hover:text-blue-400 text-blue-500">Score Predictor &rarr;</h2>
                     <p className="text-slate-400 font-sans leading-relaxed">

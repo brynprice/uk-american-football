@@ -85,6 +85,8 @@ export interface Database {
           type: string | null
           ordinal: number
           confidence_level: string
+          max_games_per_team: number | null
+          games_validated: boolean
           created_at: string
         }
         Insert: {
@@ -95,6 +97,8 @@ export interface Database {
           type?: string | null
           ordinal?: number
           confidence_level?: string
+          max_games_per_team?: number | null
+          games_validated?: boolean
           created_at?: string
         }
         Update: {
@@ -105,6 +109,8 @@ export interface Database {
           type?: string | null
           ordinal?: number
           confidence_level?: string
+          max_games_per_team?: number | null
+          games_validated?: boolean
           created_at?: string
         }
       }

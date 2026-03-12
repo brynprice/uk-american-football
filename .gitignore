@@ -39,3 +39,20 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# temporary/analysis scripts
+scripts/analyze_*.mjs
+scripts/check_*.mjs
+scripts/compare_*.mjs
+scripts/debug_*.mjs
+scripts/deep_*.mjs
+scripts/find_*.mjs
+scripts/inspect_*.mjs
+scripts/migrate_*.mjs
+scripts/resolve_*.mjs
+scripts/search_*.mjs
+scripts/temp_*.mjs
+scripts/dump_*.mjs
+
+# excel lock files
+data/~$*.xlsx
