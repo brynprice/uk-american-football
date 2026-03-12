@@ -1,140 +1,224 @@
-﻿competition,year,phase,date,time,date_precision,date_display,away_team,home_team,away_score,home_score,status,venue,notes,away_coach,home_coach,is_double_header,is_playoff,confidence_level
-buafl,2018,Premiership South,2018-12-02,,day,,Portsmouth Destroyers,Swansea Titans,0,10,completed,,,,,,,high
-buafl,2018,1A North,2018-12-02,,day,,Glasgow Tigers,Hull Sharks,0,21,completed,,,,,,,high
-buafl,2018,1A Yorks/Lancs,2018-12-02,,day,,LJMU Fury,Sheffield Hallam Warriors,10,36,completed,,,,,,,high
-buafl,2018,1A Yorks/Lancs,2018-12-02,,day,,UCLan Rams,Sheffield Sabres,13,20,completed,,,,,,,high
-buafl,2018,1A Midlands,2018-12-02,,day,,Warwick Wolves,Leicester Longhorns,22,6,completed,,,,,,,high
-buafl,2018,1A Midlands,2018-12-02,,day,,Nottingham Trent Renegades,Loughborough Students,0,18,completed,,,,,,,high
-buafl,2018,1A South West,2018-12-02,,day,,Plymouth Blitz,Bath Killer Bees,0,39,completed,,,,,,,high
-buafl,2018,1A South,2018-12-02,,day,,Brunel Burners,Kingston Cougars,40,0,completed,,,,,,,high
-buafl,2018,1A South East,2018-12-02,,day,,QMBL Vipers,Canterbury Chargers,34,14,completed,,,,,,,high
-buafl,2018,2A Borders,2018-12-02,,day,,UWS Pyros,Sunderland Spartans,0,34,completed,,,,,,,high
-buafl,2018,2A Borders,2018-12-02,,day,,Edinburgh Predators,HWU Wolverines,25,0,completed,,,,,,,high
-buafl,2018,2A North,2018-12-02,,day,,Liverpool Raptors,Edge Hill Vikings,27,7,completed,,,,,,,high
-buafl,2018,2A Midlands,2018-12-02,,day,,Keele Crusaders,Staffordshire Stallions,0,40,completed,,,,,,,high
-buafl,2018,2A Midlands,2018-12-02,,day,,DMU Falcons,Chester Legion,27,4,completed,,,,,,,high
-buafl,2018,2A Midlands,2018-12-02,,day,,Lincoln Colonials,MMU Eagles,0,20,completed,,,,,,,high
-buafl,2018,2A South West,2018-12-02,,day,,Bath Spa Bulldogs,Bristol Barracuda,0,1,awarded,,,,,,,high
-buafl,2018,2A South West,2018-12-02,,day,,OBU Panthers,Bournemouth Bobcats,0,27,completed,,,,,,,high
-buafl,2018,2A South,2018-12-02,,day,,KCL Regents,Royal Holloway Bears,14,2,completed,,,,,,,high
-buafl,2018,2A South,2018-12-02,,day,,City Wolfpack,UCL Emperors,0,16,completed,,,,,,,high
-buafl,2018,2A South East,2018-12-02,,day,,Essex Blades,Anglia Ruskin Rhinos,33,2,completed,,,,,,,high
-buafl,2018,1A Yorks/Lancs,2018-12-08,,day,,Sheffield Hallam Warriors,UCLan Rams,14,7,completed,,,,,,,high
-buafl,2018,1A South,2018-11-24,,day,,Surrey Stingers,Reading Knights,17,0,completed,,,,,,,high
-buafl,2018,2A North,2018-12-08,,day,,Tarannau Aberystwyth,Leeds Gryphons,0,65,completed,,,,,,,high
-buafl,2018,Premiership North,2018-12-09,,day,,Nottingham Gold,Durham Saints,14,12,completed,,,,,,,high
-buafl,2018,Premiership North,2018-12-09,,day,,Leeds Beckett Carnegie,Stirling Clansmen,25,6,completed,,,,,,,high
-buafl,2018,Premiership South,2018-12-16,,day,,Birmingham Lions,UWE Bullets,6,22,completed,,,,,,,high
-buafl,2018,Premiership South,2018-12-09,,day,,Portsmouth Destroyers,Hertfordshire Hurricanes,7,34,completed,,,,,,,high
-buafl,2018,1A North,2018-12-09,,day,,Hull Sharks,Newcastle Raiders,6,22,completed,,,,,,,high
-buafl,2018,1A North,2018-12-09,,day,,Northumbria Mustangs,Edinburgh Napier Knights,9,6,completed,,,,,,,high
-buafl,2018,1A Yorks/Lancs,2018-12-09,,day,,Manchester Tyrants,Sheffield Sabres,6,52,completed,,,,,,,high
-buafl,2018,1A Midlands,2018-12-09,,day,,Coventry Jets,Loughborough Students,8,27,completed,,,,,,,high
-buafl,2018,1A Midlands,2018-12-09,,day,,Leicester Longhorns,Nottingham Trent Renegades,20,35,completed,,,,,,,high
-buafl,2018,1A South West,2018-12-09,,day,,Cardiff Cobras,Plymouth Blitz,27,42,completed,,,,,,,high
-buafl,2018,1A South East,2018-12-09,,day,,Canterbury Chargers,UEA Pirates,0,37,completed,,,,,,,high
-buafl,2018,1A South East,2018-12-09,,day,,Kent Falcons,Imperial Immortals,46,4,completed,,,,,,,high
-buafl,2018,2A Borders,2018-12-09,,day,,YSJ Jaguars,Teesside Cougars,20,23,completed,,,,,,,high
-buafl,2018,2A North,2018-12-09,,day,,Lancaster Bombers,Liverpool Raptors,0,23,completed,,,,,,,high
-buafl,2018,2A North,2018-12-09,,day,,Edge Hill Vikings,Bradford Bears,26,22,completed,,,,,,,high
-buafl,2018,2A Midlands,2018-12-09,,day,,DMU Falcons,Keele Crusaders,10,9,completed,,,,,,,high
-buafl,2018,2A South West,2018-12-09,,day,,Bournemouth Bobcats,Gloucestershire Gladiators,1,0,awarded,,,,,,,high
-buafl,2018,2A South West,2018-12-09,,day,,Worcester Royals,Solent Redhawks,19,14,completed,,,,,,,high
-buafl,2018,2A South,2018-12-09,,day,,UCL Emperors,Sussex Saxons,16,0,completed,,,,,,,high
-buafl,2018,1A South West,2018-12-16,,day,,Bath Killer Bees,Exeter Demons,26,34,completed,,,,,,,high
-buafl,2018,1A South,2018-12-16,,day,,Reading Knights,Brunel Burners,0,24,completed,,,,,,,high
-buafl,2018,Premiership North,2018-11-04,,day,,Durham Saints,Derby Braves,32,9,completed,,,,,,,high
-buafl,2018,Premiership North,2018-11-04,,day,,Stirling Clansmen,Leeds Beckett Carnegie,28,50,completed,,,,,,,high
-buafl,2018,Premiership South,2018-11-04,,day,,Birmingham Lions,Portsmouth Destroyers,16,13,completed,,,,,,,high
-buafl,2018,Premiership South,2018-11-04,,day,,Hertfordshire Hurricanes,Swansea Titans,26,36,completed,,,,,,,high
-buafl,2018,1A North,2018-11-04,,day,,Hull Sharks,Northumbria Mustangs,38,34,completed,,,,,,,high
-buafl,2018,1A North,2018-11-04,,day,,Newcastle Raiders,Glasgow Tigers,22,21,completed,,,,,,,high
-buafl,2018,1A Yorks/Lancs,2018-11-04,,day,,UCLan Rams,LJMU Fury,38,32,completed,,,,,,,high
-buafl,2018,1A Yorks/Lancs,2018-11-04,,day,,Sheffield Sabres,Sheffield Hallam Warriors,8,17,completed,,,,,,,high
-buafl,2018,1A Midlands,2018-11-04,,day,,Nottingham Trent Renegades,Warwick Wolves,18,0,completed,,,,,,,high
-buafl,2018,1A Midlands,2018-11-04,,day,,Loughborough Students,Leicester Longhorns,17,14,completed,,,,,,,high
-buafl,2018,1A South West,2018-11-04,,day,,Plymouth Blitz,Cardiff Cobras,0,41,completed,,,,,,,high
-buafl,2018,1A South,2018-11-04,,day,,Brunel Burners,Surrey Stingers,20,8,completed,,,,,,,high
-buafl,2018,1A South,2018-11-04,,day,,Reading Knights,Kingston Cougars,21,6,completed,,,,,,,high
-buafl,2018,1A South East,2018-11-04,,day,,Imperial Immortals,Kent Falcons,0,78,completed,,,,,,,high
-buafl,2018,1A South East,2018-11-04,,day,,QMBL Vipers,UEA Pirates,15,39,completed,,,,,,,high
-buafl,2018,2A Borders,2018-11-04,,day,,York Centurions,Teesside Cougars,18,12,completed,,Overtime,,,,,high
-buafl,2018,2A North,2019-02-03,,day,,Lancaster Bombers,Bangor MudDogs,8,0,completed,,,,,,,high
-buafl,2018,2A South West,2018-11-04,,day,,Gloucestershire Gladiators,OBU Panthers,14,25,completed,,,,,,,high
-buafl,2018,2A South West,2018-11-04,,day,,Bristol Barracuda,Solent Redhawks,13,12,completed,,,,,,,high
-buafl,2018,2A South,2018-11-04,,day,,Sussex Saxons,Royal Holloway Bears,6,2,completed,,,,,,,high
-buafl,2018,2A South,2018-11-04,,day,,KCL Regents,Greenwich Mariners,24,0,completed,,,,,,,high
-buafl,2018,Premiership South,2018-11-10,,day,,UWE Bullets,Birmingham Lions,34,40,completed,,,,,,,high
-buafl,2018,Premiership South,2018-11-10,,day,,Swansea Titans,Portsmouth Destroyers,20,0,completed,,,,,,,high
-buafl,2018,1A Yorks/Lancs,2018-11-10,,day,,Manchester Tyrants,UCLan Rams,15,44,completed,,,,,,,high
-buafl,2018,2A North,2018-11-10,,day,,Liverpool Raptors,Leeds Gryphons,6,21,completed,,,,,,,high
-buafl,2018,Premiership North,2018-11-11,,day,,Leeds Beckett Carnegie,Nottingham Gold,8,9,completed,,,,,,,high
-buafl,2018,1A North,2018-11-11,,day,,Hull Sharks,Edinburgh Napier Knights,0,15,completed,,,,,,,high
-buafl,2018,1A North,2018-11-11,,day,,Northumbria Mustangs,Glasgow Tigers,42,6,completed,,,,,,,high
-buafl,2018,1A Midlands,2018-11-11,,day,,Coventry Jets,Nottingham Trent Renegades,26,28,completed,,,,,,,high
-buafl,2018,1A Midlands,2018-11-11,,day,,Warwick Wolves,Loughborough Students,9,34,completed,,,,,,,high
-buafl,2018,1A South West,2018-11-11,,day,,Plymouth Blitz,Southampton Stags,12,65,completed,,,,,,,high
-buafl,2018,1A South West,2018-11-11,,day,,Exeter Demons,Bath Killer Bees,9,0,completed,,,,,,,high
-buafl,2018,1A South,2018-11-11,,day,,Surrey Stingers,Kingston Cougars,9,2,completed,,,,,,,high
-buafl,2018,1A South East,2018-11-11,,day,,UEA Pirates,Imperial Immortals,48,0,completed,,,,,,,high
-buafl,2018,1A South East,2018-11-11,,day,,Kent Falcons,Canterbury Chargers,21,12,completed,,,,,,,high
-buafl,2018,2A Borders,2018-11-11,,day,,HWU Wolverines,UWS Pyros,49,10,completed,,,,,,,high
-buafl,2018,2A North,2018-11-11,,day,,Edge Hill Vikings,Bangor MudDogs,7,6,completed,,,,,,,high
-buafl,2018,2A Midlands,2018-11-11,,day,,Chester Legion,Keele Crusaders,0,3,completed,,Overtime,,,,,high
-buafl,2018,2A Midlands,2018-11-04,,day,,DMU Falcons,Huddersfield Hawks,8,12,completed,,,,,,,high
-buafl,2018,2A South West,2018-11-11,,day,,Bath Spa Bulldogs,OBU Panthers,0,53,completed,,,,,,,high
-buafl,2018,2A South West,2018-11-11,,day,,Oxford Lancers,Worcester Royals,27,34,completed,,,,,,,high
-buafl,2018,2A South,2018-11-11,,day,,Greenwich Mariners,BNU Buccaneers,40,0,completed,,,,,,,high
-buafl,2018,2A South East,2018-11-11,,day,,Essex Blades,Cambridge Pythons,21,6,completed,,,,,,,high
-buafl,2018,1A Yorks/Lancs,2018-12-16,,day,,LJMU Fury,UCLan Rams,43,46,completed,,,,,,,high
-buafl,2018,Premiership North,2018-11-18,,day,,Derby Braves,Durham Saints,0,43,completed,,,,,,,high
-buafl,2018,Premiership South,2018-11-18,,day,,UWE Bullets,Hertfordshire Hurricanes,20,14,completed,,,,,,,high
-buafl,2018,1A North,2018-11-18,,day,,Edinburgh Napier Knights,Northumbria Mustangs,6,9,completed,,,,,,,high
-buafl,2018,1A Yorks/Lancs,2018-11-18,,day,,Sheffield Sabres,Manchester Tyrants,46,25,completed,,,,,,,high
-buafl,2018,1A Midlands,2018-11-18,,day,,Leicester Longhorns,Coventry Jets,14,25,completed,,,,,,,high
-buafl,2018,1A South West,2018-11-18,,day,,Cardiff Cobras,Southampton Stags,29,31,completed,,,,,,,high
-buafl,2018,1A South East,2018-11-18,,day,,Canterbury Chargers,QMBL Vipers,0,9,completed,,,,,,,high
-buafl,2018,2A Borders,2018-11-18,,day,,Edinburgh Predators,Sunderland Spartans,32,6,completed,,,,,,,high
-buafl,2018,2A Borders,2018-11-18,,day,,HWU Wolverines,YSJ Jaguars,16,8,completed,,,,,,,high
-buafl,2018,2A Borders,2018-12-09,,day,,York Centurions,UWS Pyros,18,2,completed,,,,,,,high
-buafl,2018,2A North,2018-11-18,,day,,Bradford Bears,Tarannau Aberystwyth,12,3,completed,,,,,,,high
-buafl,2018,2A North,2018-11-18,,day,,Bangor MudDogs,Liverpool Raptors,0,41,completed,,,,,,,high
-buafl,2018,2A North,2018-11-18,,day,,Leeds Gryphons,Lancaster Bombers,44,0,completed,,,,,,,high
-buafl,2018,2A Midlands,2018-11-18,,day,,MMU Eagles,Staffordshire Stallions,13,12,completed,,,,,,,high
-buafl,2018,2A Midlands,2018-11-18,,day,,Chester Legion,Lincoln Colonials,0,39,completed,,,,,,,high
-buafl,2018,2A South West,2018-11-18,,day,,Oxford Lancers,Bristol Barracuda,31,35,completed,,,,,,,high
-buafl,2018,2A South West,2018-11-18,,day,,Worcester Royals,Bath Spa Bulldogs,77,0,completed,,,,,,,high
-buafl,2018,2A South West,2018-11-18,,day,,Solent Redhawks,Gloucestershire Gladiators,21,6,completed,,,,,,,high
-buafl,2018,2A South,2018-11-18,,day,,UCL Emperors,Chichester Spitfires,6,12,completed,,Double Overtime,,,,,high
-buafl,2018,2A South,2018-11-18,,day,,Sussex Saxons,KCL Regents,11,6,completed,,,,,,,high
-buafl,2018,2A South East,2018-11-18,,day,,UEL Phoenix,Cambridge Pythons,8,26,completed,,,,,,,high
-buafl,2018,Premiership North,2018-11-24,,day,,Derby Braves,Nottingham Gold,0,43,completed,,,,,,,high
-buafl,2018,Premiership South,2018-11-24,,day,,Swansea Titans,Birmingham Lions,20,16,completed,,,,,,,high
-buafl,2018,Premiership South,2018-11-24,,day,,Portsmouth Destroyers,UWE Bullets,0,48,completed,,,,,,,high
-buafl,2018,Premiership North,2018-11-25,,day,,Stirling Clansmen,Durham Saints,9,6,completed,,,,,,,high
-buafl,2018,1A North,2018-11-25,,day,,Glasgow Tigers,Northumbria Mustangs,0,18,completed,,,,,,,high
-buafl,2018,1A North,2018-11-25,,day,,Edinburgh Napier Knights,Hull Sharks,32,0,completed,,,,,,,high
-buafl,2018,1A Yorks/Lancs,2018-11-25,,day,,LJMU Fury,Sheffield Sabres,6,26,completed,,,,,,,high
-buafl,2018,1A Yorks/Lancs,2018-11-25,,day,,Sheffield Hallam Warriors,Manchester Tyrants,46,6,completed,,,,,,,high
-buafl,2018,1A Midlands,2018-11-25,,day,,Warwick Wolves,Nottingham Trent Renegades,0,20,completed,,,,,,,high
-buafl,2018,1A Midlands,2018-11-25,,day,,Loughborough Students,Coventry Jets,0,8,completed,,,,,,,high
-buafl,2018,1A South West,2019-02-10,,day,,Bath Killer Bees,Cardiff Cobras,34,28,completed,,,,,,,high
-buafl,2018,1A South West,2018-11-25,,day,,Exeter Demons,Southampton Stags,19,31,completed,,,,,,,high
-buafl,2018,1A South,2018-12-09,,day,,Reading Knights,Surrey Stingers,21,2,completed,,,,,,,high
-buafl,2018,1A South East,2018-11-25,,day,,Imperial Immortals,QMBL Vipers,14,24,completed,,,,,,,high
-buafl,2018,1A South East,2018-11-25,,day,,UEA Pirates,Kent Falcons,0,14,completed,,,,,,,high
-buafl,2018,2A Borders,2018-11-25,,day,,YSJ Jaguars,York Centurions,7,18,completed,,,,,,,high
-buafl,2018,2A Borders,2018-11-25,,day,,UWS Pyros,Edinburgh Predators,0,1,awarded,,,,,,,high
-buafl,2018,2A Midlands,2018-11-25,,day,,Staffordshire Stallions,Huddersfield Hawks,36,0,completed,,,,,,,high
-buafl,2018,2A Midlands,2018-11-25,,day,,Keele Crusaders,MMU Eagles,6,14,completed,,,,,,,high
-buafl,2018,2A South West,2018-11-25,,day,,Bournemouth Bobcats,Oxford Lancers,24,6,completed,,,,,,,high
-buafl,2018,2A South West,2018-11-25,,day,,OBU Panthers,Bristol Barracuda,14,32,completed,,,,,,,high
-buafl,2018,2A South West,2018-11-25,,day,,Gloucestershire Gladiators,Worcester Royals,6,34,completed,,,,,,,high
-buafl,2018,2A South,2018-11-11,,day,,Chichester Spitfires,Sussex Saxons,2,15,completed,,,,,,,high
-buafl,2018,2A South,2018-11-25,,day,,City Wolfpack,Greenwich Mariners,35,22,completed,,,,,,,high
-buafl,2018,2A South,2018-11-25,,day,,KCL Regents,BNU Buccaneers,1,0,awarded,,,,,,,high
-buafl,2018,2A South East,2018-11-25,,day,,Cambridge Pythons,Anglia Ruskin Rhinos,35,0,completed,,,,,,,high
-buafl,2018,2A South East,2018-11-25,,day,,UEL Phoenix,Essex Blades,0,42,completed,,,,,,,high
-buafl,2018,Premiership North,2018-12-02,,day,,Derby Braves,Leeds Beckett Carnegie,11,49,completed,,,,,,,high
-buafl,2018,Premiership North,2018-12-02,,day,,Nottingham Gold,Stirling Clansmen,10,3,completed,,,,,,,high
-buafl,2018,Premiership South,2018-12-02,,day,,Birmingham Lions,Hertfordshire Hurricanes,0,35,completed,,,,,,,high
+competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase
+BUAFL,2018,Division 1 South Eastern,2018-12-09,Kent Falcons,Imperial Immortals,46,8,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Midlands,2018-12-09,DMU Lions,Keele Crusaders,10,9,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier North,2018-12-09,Leeds Beckett Carnegie,Stirling Clansmen,25,9,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier North,2018-12-09,Nottingham Gold,Durham Saints,14,12,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Northern,2018-12-09,Northumbria Mustangs,Edinburgh Napier Knights,9,6,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Southern,2018-12-09,Brighton Panthers,Kingston Cougars,12,3,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Northern,2018-12-09,Hull Sharks,Newcastle Raiders,6,22,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Midlands,2018-12-09,Leicester Longhorns,Nottingham Trent Renegades,20,35,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2018-12-09,Worcester Royals,Solent Redhawks,19,14,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Borders,2018-12-09,YSJ Jaguars,Teesside Cougars,20,23,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Eastern,2018-12-09,Canterbury CC Chargers,UEA Pirates,0,37,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2018-12-09,Bournemouth University Bobcats,Gloucestershire Gladiators,1,0,,,,,FALSE,day,,13:00,awarded,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Western,2018-12-09,Cardiff Cobras,Plymouth Blitz,47,42,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2018-12-09,UCL Emperors,Sussex Saxons,16,0,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier South,2018-12-09,Birmingham Lions,UWE Bullets,6,22,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier South,2018-12-09,Portsmouth Destroyers,Hertfordshire Hurricanes,7,41,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Yorkshire & Lancashire,2018-12-09,Manchester Tyrants,Sheffield Sabres,6,52,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Northern,2018-12-09,Edge Hill Vikings,Bradford Bears,24,22,,,,,FALSE,day,,14:30,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Northern,2018-12-09,Lancaster Bombers,Liverpool Raptors,0,23,,,,,FALSE,day,,14:30,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Midlands,2018-12-09,Coventry University Jets,Loughborough Students,8,27,,,,,FALSE,day,,17:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Northern,2018-11-10,Liverpool Raptors,Leeds Gryphons,6,21,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Yorkshire & Lancashire,2018-11-10,Manchester Tyrants,UCLan Rams,15,44,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier South,2018-11-10,Swansea Titans,Portsmouth Destroyers,20,0,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier South,2018-11-10,UWE Bullets,Birmingham Lions,34,40,,,,,FALSE,day,,16:30,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2018-11-02,Bath Spa Bulldogs,Bristol Barracuda,0,38,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Southern,2018-11-02,Surrey Stingers,Kingston Cougars,18,32,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Northern,2018-11-02,Glasgow Tigers,Northumbria Mustangs,18,22,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2018-11-02,Gloucestershire Gladiators,Oxford Brookes University,6,13,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier South,2018-11-02,Hertfordshire Hurricanes,Swansea Titans,36,32,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Borders,2018-11-02,Edinburgh Predators,Teesside Cougars,20,30,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier North,2018-11-02,Durham Saints,Derby Braves,21,6,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Eastern,2018-11-02,Essex Blades,UEL Phoenix,18,7,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Western,2018-11-02,Cardiff Cobras,Plymouth Blitz,8,32,,,,,FALSE,day,,13:30,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Northern,2018-11-02,Bangor MudDogs,Bradford Bears,28,6,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Yorkshire & Lancashire,2018-11-02,UCLan Rams,Sheffield Hallam Warriors,28,7,,,,,FALSE,day,,15:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Eastern,2018-11-02,Canterbury CC Chargers,Kent Falcons,0,20,,,,,FALSE,day,,17:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Northern,2018-11-02,Northumbria Mustangs,Glasgow Tigers,22,18,,,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Eastern,2018-11-11,UEA Pirates,Imperial Immortals,48,0,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Midlands,2018-11-11,Chester Legion,Keele Crusaders,0,3,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Midlands,2018-11-11,Warwick Wolves,Loughborough Students,9,34,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier North,2018-11-11,Leeds Beckett Carnegie,Nottingham Gold,8,9,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Borders,2018-11-11,HWU Wolverines,UWS Pyros,49,10,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Northern,2018-11-11,Edge Hill Vikings,Bangor MudDogs,7,6,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Southern,2018-11-11,Brighton Panthers,Brunel Burners,3,40,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Northern,2018-11-11,Hull Sharks,Edinburgh Napier Knights,0,15,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Southern,2018-11-11,Surrey Stingers,Kingston Cougars,9,12,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Midlands,2018-11-11,Coventry University Jets,Nottingham Trent Renegades,26,28,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2018-11-11,Bath Spa Bulldogs,Oxford Brookes University,0,53,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Western,2018-11-11,Exeter Demons,Bath Killer Bees,9,0,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Eastern,2018-11-11,Essex Blades,Cambridge Pythons,21,6,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Northern,2018-11-11,Northumbria Mustangs,Glasgow Tigers,48,6,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Midlands,2018-11-11,DMU Lions,Huddersfield Hawks,8,12,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2018-11-11,Oxford Lancers,Worcester Royals,27,34,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2018-11-11,Greenwich Mariners,BNU Buccaneers,40,0,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Eastern,2018-11-11,Kent Falcons,Canterbury CC Chargers,21,12,,,,,FALSE,day,,15:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Western,2018-11-11,Plymouth Blitz,Southampton Stags,12,65,,,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Yorkshire & Lancashire,2018-11-17,Liverpool Raptors,UCLan Rams,43,46,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2018-11-18,Worcester Royals,Bath Spa Bulldogs,77,0,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2018-11-18,Sussex Saxons,KCL Regents,11,6,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Borders,2018-11-18,York Centurions,UWS Pyros,18,2,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Midlands,2018-11-18,MMU Eagles,Staffordshire Stallions,13,12,,,,,FALSE,day,,12:30,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Northern,2018-11-18,Bradford Bears,Tarannau Aberystwyth,12,3,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Midlands,2018-11-18,Leicester Longhorns,Coventry University Jets,14,25,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier North,2018-11-18,Derby Braves,Durham Saints,0,43,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Northern,2018-11-18,Leeds Gryphons,Lancaster Bombers,48,0,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Eastern,2018-11-18,Canterbury CC Chargers,QMBL Vipers,0,9,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Southern,2018-11-18,Brunel Burners,Brighton Panthers,6,0,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2018-11-18,Oxford Lancers,Bristol Barracuda,31,35,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Eastern,2018-11-18,UEL Phoenix,Cambridge Pythons,8,26,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2018-11-18,Solent Redhawks,Gloucestershire Gladiators,21,6,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Western,2018-11-18,Cardiff Cobras,Southampton Stags,29,31,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2018-11-18,UCL Emperors,Chichester Spitfires,6,12,,,,,FALSE,day,,13:15,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Midlands,2018-11-18,Chester Legion,Lincoln Colonials,0,39,,,,,FALSE,day,,13:30,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Borders,2018-11-18,HWU Wolverines,YSJ Jaguars,16,8,,,,,FALSE,day,,13:30,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Northern,2018-11-18,Edinburgh Napier Knights,Northumbria Mustangs,6,9,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier South,2018-11-18,UWE Bullets,Hertfordshire Hurricanes,20,14,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Northern,2018-11-18,Bangor MudDogs,Liverpool Raptors,0,41,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Yorkshire & Lancashire,2018-11-18,Sheffield Sabres,Manchester Tyrants,46,25,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Borders,2018-11-18,Edinburgh Predators,Sunderland Spartans,33,6,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier North,2018-11-24,Derby Braves,Nottingham Gold,0,43,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier South,2018-11-24,Portsmouth Destroyers,UWE Bullets,0,48,,,,,FALSE,day,,15:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier South,2018-11-24,Swansea Titans,Birmingham Lions,20,16,,,,,FALSE,day,,16:30,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Southern,2018-11-25,Reading Knights,Surrey Stingers,21,2,,,,,FALSE,day,,11:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Eastern,2018-11-25,Cambridge Pythons,Anglia Ruskin Siege,35,0,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Western,2018-11-25,Bath Killer Bees,Cardiff Cobras,34,28,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Midlands,2018-11-25,Loughborough Students,Coventry University Jets,0,8,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier North,2018-11-25,Stirling Clansmen,Durham Saints,9,6,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Midlands,2018-11-25,Warwick Wolves,Nottingham Trent Renegades,0,20,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2018-11-25,Bournemouth University Bobcats,Oxford Lancers,24,6,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Eastern,2018-11-25,Imperial Immortals,QMBL Vipers,14,24,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Southern,2018-11-25,Kingston Cougars,Brighton Panthers,2,12,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2018-11-25,Oxford Brookes University,Bristol Barracuda,14,32,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Eastern,2018-11-25,UEL Phoenix,Essex Blades,0,42,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Midlands,2018-11-25,Staffordshire Stallions,Huddersfield Hawks,36,0,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Northern,2018-11-25,Edinburgh Napier Knights,Hull Sharks,32,0,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Yorkshire & Lancashire,2018-11-25,Liverpool Raptors,Sheffield Sabres,6,26,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Western,2018-11-25,Exeter Demons,Southampton Stags,19,31,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2018-11-25,Chichester Spitfires,Sussex Saxons,2,15,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2018-11-25,Gloucestershire Gladiators,Worcester Royals,6,34,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2018-11-25,City Wolfpack,Greenwich Mariners,35,22,,,,,FALSE,day,,13:30,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2018-11-25,KCL Regents,BNU Buccaneers,1,0,,,,,FALSE,day,,14:00,awarded,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Borders,2018-11-25,UWS Pyros,Edinburgh Predators,0,1,,,,,FALSE,day,,14:00,awarded,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Yorkshire & Lancashire,2018-11-25,Sheffield Hallam Warriors,Manchester Tyrants,46,6,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Borders,2018-11-25,YSJ Jaguars,York Centurions,7,18,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Northern,2018-11-25,Glasgow Tigers,Northumbria Mustangs,0,18,,,,,FALSE,day,,14:30,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Eastern,2018-11-25,UEA Pirates,Kent Falcons,0,14,,,,,FALSE,day,,15:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Midlands,2018-11-25,Keele Crusaders,MMU Eagles,6,14,,,,,FALSE,day,,17:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Southern,2018-12-16,Reading Knights,Brunel Burners,0,24,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Western,2018-12-16,Bath Killer Bees,Exeter Demons,26,34,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2019-01-20,Oxford Lancers,Solent Redhawks,0,7,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Western,2019-01-20,Exeter Demons,Cardiff Cobras,12,28,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Borders,2019-01-20,YSJ Jaguars,Edinburgh Predators,0,18,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2019-01-20,KCL Regents,City Wolfpack,28,0,,,,,FALSE,day,,14:15,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2019-01-20,BNU Buccaneers,Chichester Spitfires,0,1,,,,,FALSE,day,,,awarded,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Southern,2019-01-26,Brighton Panthers,Reading Knights,14,8,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2019-01-27,Oxford Lancers,Bath Spa Bulldogs,22,0,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier North,2019-01-27,Durham Saints,Nottingham Gold,0,26,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier North,2019-01-27,Derby Braves,Stirling Clansmen,0,35,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Borders,2019-01-27,UWS Pyros,YSJ Jaguars,0,30,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2019-01-27,Bristol Barracuda,Bournemouth University Bobcats,0,13,,,,,FALSE,day,,12:30,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Midlands,2019-01-27,Chester Legion,Staffordshire Stallions,0,44,,,,,FALSE,day,,12:30,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Northern,2019-01-27,Bangor MudDogs,Tarannau Aberystwyth,13,0,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Midlands,2019-01-27,Warwick Wolves,Coventry University Jets,0,28,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Northern,2019-01-27,Glasgow Tigers,Newcastle Raiders,0,24,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Eastern,2019-01-27,Kent Falcons,QMBL Vipers,16,40,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Eastern,2019-01-27,Cambridge Pythons,Essex Blades,0,25,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier South,2019-01-27,Hertfordshire Hurricanes,UWE Bullets,12,32,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Borders,2019-01-27,Edinburgh Predators,York Centurions,10,0,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2019-01-27,Greenwich Mariners,Chichester Spitfires,0,12,,,,,FALSE,day,,13:15,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2019-01-27,BNU Buccaneers,UCL Emperors,0,1,,,,,FALSE,day,,13:30,awarded,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Midlands,2019-01-27,MMU Eagles,DMU Lions,8,9,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Yorkshire & Lancashire,2019-01-27,Liverpool Raptors,Manchester Tyrants,15,23,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Borders,2019-01-27,HWU Wolverines,Sunderland Spartans,8,16,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2019-01-27,City Wolfpack,Royal Holloway Bears,6,34,,,,,FALSE,day,,15:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Southern,2019-01-27,Surrey Stingers,Brunel Burners,0,18,,,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Western,2019-01-27,Exeter Demons,Plymouth Blitz,26,8,,,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier South,2019-02-02,UWE Bullets,Portsmouth Destroyers,18,8,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier North,2019-02-14,Leeds Beckett Carnegie,Durham Saints,9,10,,,,,FALSE,day,,19:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier South,2019-02-16,Swansea Titans,UWE Bullets,6,32,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier South,2019-02-16,Portsmouth Destroyers,Birmingham Lions,18,45,,,,,FALSE,day,,16:30,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Eastern,2019-02-17,Essex Blades,UEL Phoenix,26,6,,,,,FALSE,day,,11:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2019-02-17,Solent Redhawks,Bath Spa Bulldogs,45,0,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Midlands,2019-02-17,Lincoln Colonials,DMU Lions,12,30,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Eastern,2019-02-17,Canterbury CC Chargers,Imperial Immortals,0,40,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Midlands,2019-02-17,Huddersfield Hawks,Keele Crusaders,12,14,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2019-02-17,Chichester Spitfires,KCL Regents,2,14,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Midlands,2019-02-17,Leicester Longhorns,Loughborough Students,0,8,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Southern,2019-02-17,Kingston Cougars,Reading Knights,12,6,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Midlands,2019-02-17,MMU Eagles,Chester Legion,30,14,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier North,2019-02-17,Stirling Clansmen,Nottingham Gold,7,27,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Borders,2019-02-17,Teesside Cougars,UWS Pyros,42,0,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Northern,2019-02-17,Edge Hill Vikings,Tarannau Aberystwyth,43,0,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Borders,2019-02-17,York Centurions,HWU Wolverines,6,7,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2019-02-17,Gloucestershire Gladiators,Oxford Lancers,14,37,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Southern,2019-02-17,Surrey Stingers,Brighton Panthers,19,12,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Eastern,2019-02-17,Anglia Ruskin Siege,Cambridge Pythons,0,25,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier North,2019-02-17,Leeds Beckett Carnegie,Derby Braves,15,13,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Eastern,2019-02-17,Kent Falcons,UEA Pirates,0,6,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Western,2019-02-17,Cardiff Cobras,Exeter Demons,13,24,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Northern,2019-02-17,Hull Sharks,Glasgow Tigers,14,13,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2019-02-17,City Wolfpack,Sussex Saxons,6,50,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Midlands,2019-02-17,Coventry University Jets,Warwick Wolves,34,21,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2019-02-17,Bristol Barracuda,Worcester Royals,14,20,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Northern,2019-02-17,Newcastle Raiders,Northumbria Mustangs,21,9,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Yorkshire & Lancashire,2019-02-17,UCLan Rams,Manchester Tyrants,28,6,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Northern,2019-02-17,Bangor MudDogs,Leeds Gryphons,0,56,,,,,FALSE,day,,14:30,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Yorkshire & Lancashire,2019-02-17,Sheffield Hallam Warriors,Liverpool Raptors,39,12,,,,,FALSE,day,,15:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Northern,2019-02-17,Bradford Bears,Liverpool Raptors,0,24,,,,,FALSE,day,,18:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2019-02-17,BNU Buccaneers,City Wolfpack,0,1,,,,,FALSE,day,,,awarded,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Northern,2019-02-17,Northumbria Mustangs,Newcastle Raiders,9,21,,,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Northern,2019-02-17,Bradford Bears,Leeds Gryphons,0,1,,,,,FALSE,day,,,awarded,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Western,2019-02-17,Southampton Stags,Plymouth Blitz,54,0,,,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Midlands,2019-02-20,Huddersfield Hawks,Chester Legion,0,0,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Western,2019-02-20,Cardiff Cobras,Bath Killer Bees,9,7,,,,,FALSE,day,,13:30,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Northern,2019-02-20,Glasgow Tigers,Edinburgh Napier Knights,6,14,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Northern,2019-02-20,Edge Hill Vikings,Lancaster Bombers,0,9,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier South,2019-02-20,Swansea Titans,Hertfordshire Hurricanes,6,7,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Eastern,2019-02-20,UEL Phoenix,Anglia Ruskin Siege,1,0,,,,,FALSE,day,,,awarded,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Western,2019-02-21,Exeter Demons,Southampton Stags,3,26,,,,,FALSE,day,,19:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2019-02-22,Oxford Brookes University,Oxford Lancers,0,48,,,,,FALSE,day,,18:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Northern,2019-02-23,Tarannau Aberystwyth,Lancaster Bombers,0,1,,,,,FALSE,day,,13:00,awarded,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Midlands,2019-02-23,Loughborough Students,Nottingham Trent Renegades,0,21,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Yorkshire & Lancashire,2019-02-23,Sheffield Sabres,UCLan Rams,14,38,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier South,2019-02-23,Hertfordshire Hurricanes,Birmingham Lions,20,43,,,,,FALSE,day,,16:30,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2019-02-24,UCL Emperors,KCL Regents,22,8,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2019-02-24,Bournemouth University Bobcats,Solent Redhawks,34,14,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier North,2019-02-24,Durham Saints,Stirling Clansmen,41,20,,,,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Southern,2019-02-24,Kingston Cougars,Brunel Burners,0,48,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Western,2019-02-24,Southampton Stags,Cardiff Cobras,23,7,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Midlands,2019-02-24,Staffordshire Stallions,DMU Lions,12,18,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Northern,2019-02-24,Edinburgh Napier Knights,Newcastle Raiders,0,17,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2019-02-24,Worcester Royals,Oxford Brookes University,1,0,,,,,FALSE,day,,13:00,awarded,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Eastern,2019-02-24,UEA Pirates,QMBL Vipers,47,6,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2019-02-24,Greenwich Mariners,Royal Holloway Bears,12,16,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier South,2019-02-24,UWE Bullets,Swansea Titans,6,48,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Borders,2019-02-24,Sunderland Spartans,Teesside Cougars,38,0,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Southern,2019-02-24,Reading Knights,Brighton Panthers,22,16,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Eastern,2019-02-24,Anglia Ruskin Siege,UEL Phoenix,8,28,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Midlands,2019-02-24,Lincoln Colonials,Huddersfield Hawks,0,0,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Northern,2019-02-24,Northumbria Mustangs,Hull Sharks,6,12,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Midlands,2019-02-24,Coventry University Jets,Leicester Longhorns,34,0,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2019-02-24,Sussex Saxons,BNU Buccaneers,1,0,,,,,FALSE,day,,14:00,awarded,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Northern,2019-02-24,Bangor MudDogs,Bradford Bears,13,6,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Yorkshire & Lancashire,2019-02-24,Manchester Tyrants,Sheffield Hallam Warriors,34,55,,,,,FALSE,day,,14:30,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Eastern,2019-02-24,Imperial Immortals,Canterbury CC Chargers,18,14,,,,,FALSE,day,,15:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier North,2019-02-24,Nottingham Gold,Leeds Beckett Carnegie,41,12,,,,,FALSE,day,,15:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2019-02-24,Royal Holloway Bears,BNU Buccaneers,1,0,,,,,FALSE,day,,,awarded,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2019-02-24,Gloucestershire Gladiators,Bristol Barracuda,0,1,,,,,FALSE,day,,,awarded,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Western,2019-02-24,Bath Killer Bees,Plymouth Blitz,20,16,,,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2019-02-03,Chichester Spitfires,City Wolfpack,36,0,,,,,FALSE,day,,11:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Eastern,2019-02-03,QMBL Vipers,Imperial Immortals,1,0,,,,,FALSE,day,,12:00,awarded,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 South Western,2019-02-03,Bath Spa Bulldogs,Bournemouth University Bobcats,0,1,,,,,FALSE,day,,12:30,awarded,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Midlands,2019-02-03,Nottingham Trent Renegades,Coventry University Jets,13,44,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Borders,2019-02-03,Teesside Cougars,HWU Wolverines,0,18,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2019-02-03,UCL Emperors,Royal Holloway Bears,14,18,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Premier North,2019-02-03,Nottingham Gold,Derby Braves,34,0,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Midlands,2019-02-03,Keele Crusaders,Lincoln Colonials,6,24,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Yorkshire & Lancashire,2019-02-03,Sheffield Hallam Warriors,Sheffield Sabres,30,27,,,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Southern,2019-02-03,Sussex Saxons,Greenwich Mariners,10,0,,,,,FALSE,day,,13:30,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 2 Borders,2019-02-03,Sunderland Spartans,York Centurions,0,0,,,,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Yorkshire & Lancashire,2019-02-03,Manchester Tyrants,Liverpool Raptors,0,38,,,,,FALSE,day,,15:00,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 Midlands,2019-02-03,Leicester Longhorns,Warwick Wolves,0,35,,,,,FALSE,day,,16:30,completed,high,FALSE,FALSE,,,,
+BUAFL,2018,Division 1 South Eastern,2019-02-03,Canterbury CC Chargers,Kent Falcons,0,46,,,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
