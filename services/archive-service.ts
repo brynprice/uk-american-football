@@ -75,7 +75,7 @@ export const ArchiveService = {
                 *, 
                 home_team:teams!home_team_id (*, team_aliases (*)), 
                 away_team:teams!away_team_id (*, team_aliases (*)), 
-                phase:phases(name)
+                phase:phases(name, season:seasons(year))
             `)
             .in("phase_id", filteredGameDescendantIds)
             .neq("status", "anomaly")
@@ -159,7 +159,7 @@ export const ArchiveService = {
             .from("games")
             .select(`
                 *,
-                phase:phases (*, season:seasons (*, competition:competitions (*))),
+                phase:phases (*, season:seasons (year, id, competition:competitions (*))),
                 home_team:teams!home_team_id (*, team_aliases (*)),
                 away_team:teams!away_team_id (*, team_aliases (*))
             `)
@@ -323,7 +323,7 @@ export const ArchiveService = {
                 *,
                 home_team:teams!home_team_id (*, team_aliases (*)),
                 away_team:teams!away_team_id (*, team_aliases (*)),
-                phase:phases (*, season:seasons (id, year, competition:competitions (name))),
+                phase:phases (*, season:seasons (year, id, competition:competitions (name))),
                 venue:venues (*)
             `)
             .or(`and(home_team_id.eq.${team1Id},away_team_id.eq.${team2Id}),and(home_team_id.eq.${team2Id},away_team_id.eq.${team1Id})`)

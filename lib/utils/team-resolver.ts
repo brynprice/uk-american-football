@@ -9,22 +9,28 @@ export interface TeamIdentity {
 }
 
 /**
- * Resolves the historical identity (name and logo) of a team for a specific date.
+ * Resolves the historical identity (name and logo) of a team for a specific season or date.
+ * If seasonYear is provided (preferred), it uses that. Otherwise, it falls back to gameDate.
  */
 export function resolveTeamIdentity(
     team: Team & { team_aliases?: TeamAlias[] },
-    gameDate: string | null
+    gameDateOrYear: string | number | null
 ): TeamIdentity {
-    if (!gameDate || !team.team_aliases || team.team_aliases.length === 0) {
+    if (!gameDateOrYear || !team.team_aliases || team.team_aliases.length === 0) {
         return {
             name: team.name,
             logo_url: team.logo_url
         };
     }
 
-    const year = new Date(gameDate).getFullYear();
+    let year: number;
+    if (typeof gameDateOrYear === 'number') {
+        year = gameDateOrYear;
+    } else {
+        year = new Date(gameDateOrYear).getFullYear();
+    }
 
-    // Find the alias that covers the game year
+    // Find the alias that covers the year
     const activeAlias = team.team_aliases.find(alias => {
         const start = alias.start_year || 0;
         const end = alias.end_year || 9999;
@@ -34,7 +40,6 @@ export function resolveTeamIdentity(
     if (activeAlias) {
         return {
             name: activeAlias.name,
-            // Fall back to team logo if alias logo is missing
             logo_url: activeAlias.logo_url || team.logo_url
         };
     }

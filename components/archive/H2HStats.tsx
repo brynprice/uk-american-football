@@ -90,7 +90,7 @@ export default function H2HStats({ team1, team2, games }: H2HStatsProps) {
                                             {game.phase.season.year} {game.phase.season.competition.name} &bull; {game.phase.name}
                                         </div>
                                         <div className="text-xs font-bold">
-                                            {resolveTeamIdentity(game.home_team, game.date).name} {game.home_score} &ndash; {game.away_score} {resolveTeamIdentity(game.away_team, game.date).name}
+                                            {resolveTeamIdentity(game.home_team, game.phase.season.year).name} {game.home_score} &ndash; {game.away_score} {resolveTeamIdentity(game.away_team, game.phase.season.year).name}
                                         </div>
                                     </div>
                                 </div>

@@ -24,8 +24,8 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
         game.participations
     );
 
-    const homeIdentity = resolveTeamIdentity(game.home_team, game.date);
-    const awayIdentity = resolveTeamIdentity(game.away_team, game.date);
+    const homeIdentity = resolveTeamIdentity(game.home_team, game.phase.season.year);
+    const awayIdentity = resolveTeamIdentity(game.away_team, game.phase.season.year);
 
     return (
         <ArchiveLayout>

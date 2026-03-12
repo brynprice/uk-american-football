@@ -5,9 +5,10 @@ interface StandingsTableProps {
     participations: any[];
     games: any[];
     phaseName: string;
+    seasonYear?: number;
 }
 
-export default function StandingsTable({ participations, games, phaseName }: StandingsTableProps) {
+export default function StandingsTable({ participations, games, phaseName, seasonYear }: StandingsTableProps) {
     if (!participations || participations.length === 0) return null;
 
     const standings = participations.map((p: any) => {
@@ -75,7 +76,7 @@ export default function StandingsTable({ participations, games, phaseName }: Sta
                             <tr key={p.id} className="border-b border-slate-100 transition-colors hover:bg-slate-50">
                                 <td className="py-3 px-4">
                                     <Link href={`/teams/${p.team_id}`} className="font-bold hover:text-blue-600">
-                                        {resolveTeamIdentity({ ...p.team, team_aliases: p.team?.team_aliases || [] }, games?.[0]?.date || null).name}
+                                        {resolveTeamIdentity({ ...p.team, team_aliases: p.team?.team_aliases || [] }, seasonYear || games?.[0]?.date || null).name}
                                     </Link>
                                 </td>
                                 <td className="py-3 px-2 text-center font-mono">{p.gp}</td>

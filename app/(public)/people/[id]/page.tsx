@@ -9,12 +9,11 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
 
     const gamesCoached = await ArchiveService.getPersonGamesAsCoach(id);
 
-    // Combine and sort career events (participations and game overrides)
     const seasonEvents = person.participations.map((p: any) => ({
         type: 'season',
         year: p.phase.season.year,
         competition: p.phase.season.competition.name,
-        team: p.team ? resolveTeamIdentity({ ...p.team, team_aliases: p.team.team_aliases || [] }, `${p.phase.season.year}-01-01`).name : 'Unknown Team',
+        team: p.team ? resolveTeamIdentity({ ...p.team, team_aliases: p.team.team_aliases || [] }, p.phase.season.year).name : 'Unknown Team',
         role: 'Head Coach',
         phase: p.phase.name,
         id: p.id
@@ -157,7 +156,7 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
                                             {person.hall_of_fame.map((hof: any) => (
                                                 <li key={hof.id} className="text-sm">
                                                     <div className="font-bold text-amber-900">
-                                                        {hof.team ? resolveTeamIdentity({ ...hof.team, team_aliases: hof.team.team_aliases || [] }, hof.year_inducted ? `${hof.year_inducted}-01-01` : null).name : 'Unknown Team'}
+                                                        {hof.team ? resolveTeamIdentity({ ...hof.team, team_aliases: hof.team.team_aliases || [] }, hof.year_inducted).name : 'Unknown Team'}
                                                     </div>
                                                     <div className="text-slate-600">
                                                         Inducted: <span className="font-semibold">{hof.year_inducted || 'Unknown'}</span>
@@ -176,7 +175,7 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
                                             {person.retired_jerseys.map((jersey: any) => (
                                                 <li key={jersey.id} className="text-sm">
                                                     <div className="font-bold text-amber-900">
-                                                        {jersey.team ? resolveTeamIdentity({ ...jersey.team, team_aliases: jersey.team.team_aliases || [] }, jersey.year_retired ? `${jersey.year_retired}-01-01` : null).name : 'Unknown Team'} <span className="inline-block ml-2 px-1.5 py-0.5 bg-slate-800 text-white rounded text-xs shadow-sm border border-slate-700">#{jersey.jersey_number}</span>
+                                                        {jersey.team ? resolveTeamIdentity({ ...jersey.team, team_aliases: jersey.team.team_aliases || [] }, jersey.year_retired).name : 'Unknown Team'} <span className="inline-block ml-2 px-1.5 py-0.5 bg-slate-800 text-white rounded text-xs shadow-sm border border-slate-700">#{jersey.jersey_number}</span>
                                                     </div>
                                                     <div className="text-slate-600">
                                                         Retired: <span className="font-semibold">{jersey.year_retired || 'Unknown'}</span>

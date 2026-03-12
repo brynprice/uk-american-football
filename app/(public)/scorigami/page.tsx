@@ -101,10 +101,10 @@ export default async function ScorigamiPage({ searchParams }: { searchParams: Pr
                                     </div>
                                     <div className="flex justify-between items-center">
                                         <div className="flex-1 flex items-center justify-end gap-3 pr-4 text-right">
-                                            <span className="font-black text-lg">{resolveTeamIdentity(game.away_team, game.date).name}</span>
-                                            {resolveTeamIdentity(game.away_team, game.date).logo_url && (
+                                            <span className="font-black text-lg">{resolveTeamIdentity(game.away_team, game.phase.season.year).name}</span>
+                                            {resolveTeamIdentity(game.away_team, game.phase.season.year).logo_url && (
                                                 <div className="w-8 h-8 bg-slate-50 p-1 flex items-center justify-center shrink-0 border border-slate-100 rounded">
-                                                    <img src={resolveTeamIdentity(game.away_team, game.date).logo_url!} alt="" className="max-w-full max-h-full object-contain" />
+                                                    <img src={resolveTeamIdentity(game.away_team, game.phase.season.year).logo_url!} alt="" className="max-w-full max-h-full object-contain" />
                                                 </div>
                                             )}
                                         </div>
@@ -118,12 +118,12 @@ export default async function ScorigamiPage({ searchParams }: { searchParams: Pr
                                             </span>
                                         </div>
                                         <div className="flex-1 flex items-center gap-3 pl-4">
-                                            {resolveTeamIdentity(game.home_team, game.date).logo_url && (
+                                            {resolveTeamIdentity(game.home_team, game.phase.season.year).logo_url && (
                                                 <div className="w-8 h-8 bg-slate-50 p-1 flex items-center justify-center shrink-0 border border-slate-100 rounded">
-                                                    <img src={resolveTeamIdentity(game.home_team, game.date).logo_url!} alt="" className="max-w-full max-h-full object-contain" />
+                                                    <img src={resolveTeamIdentity(game.home_team, game.phase.season.year).logo_url!} alt="" className="max-w-full max-h-full object-contain" />
                                                 </div>
                                             )}
-                                            <span className="font-black text-lg">{resolveTeamIdentity(game.home_team, game.date).name}</span>
+                                            <span className="font-black text-lg">{resolveTeamIdentity(game.home_team, game.phase.season.year).name}</span>
                                         </div>
                                     </div>
                                 </Link>
