@@ -42,9 +42,27 @@ if (supabaseServiceKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 const isSample = process.argv.includes('--sample');
+const isDryRun = process.argv.includes('--dry-run');
+
+if (isDryRun) {
+    console.log("--- [!] DRY RUN ACTIVE: No changes will be saved to the database ---");
+}
+
+const dryRunStats = {
+    added: { competitions: 0, seasons: 0, phases: 0, teams: 0, games: 0, people: 0, venues: 0, participations: 0 },
+    updated: { games: 0, participations: 0 },
+    seen: {
+        competitions: new Set(),
+        seasons: new Set(),
+        phases: new Set(),
+        teams: new Set(),
+        people: new Set(),
+        venues: new Set()
+    }
+};
 
 async function ensureSampleNote(entityType, entityId) {
-    if (!isSample || !entityId) return;
+    if (!isSample || !entityId || isDryRun) return;
 
     // Check if sample note already exists for this entity
     const { data: existing } = await supabase
@@ -85,6 +103,15 @@ async function getOrCreateCompetition(name, level = 'Senior') {
         return data.id;
     }
 
+    if (isDryRun) {
+        if (!dryRunStats.seen.competitions.has(cleanName)) {
+            dryRunStats.added.competitions++;
+            dryRunStats.seen.competitions.add(cleanName);
+        }
+        console.log(`  [Dry Run] Would create competition "${cleanName}"`);
+        return `dry-run-comp-${cleanName}`;
+    }
+
     console.log(`  [Lookup] Competition "${cleanName}" not found, creating...`);
     const { data: newData, error: insertError } = await supabase
         .from('competitions')
@@ -117,6 +144,16 @@ async function getOrCreateSeason(competitionId, year) {
     if (existing) {
         console.log(`  [Lookup] Found existing season for year ${cleanYear} (ID: ${existing.id})`);
         return existing.id;
+    }
+
+    if (isDryRun) {
+        const key = `${competitionId}-${cleanYear}`;
+        if (!dryRunStats.seen.seasons.has(key)) {
+            dryRunStats.added.seasons++;
+            dryRunStats.seen.seasons.add(key);
+        }
+        console.log(`  [Dry Run] Would create season ${cleanYear}`);
+        return `dry-run-season-${key}`;
     }
 
     console.log(`  [Lookup] Season for year ${cleanYear} not found, creating...`);
@@ -180,6 +217,16 @@ async function getOrCreatePhase(seasonId, name, parentPhaseName = null) {
         }
     }
 
+    if (isDryRun) {
+        const key = `${seasonId}-${name}`;
+        if (!dryRunStats.seen.phases.has(key)) {
+            dryRunStats.added.phases++;
+            dryRunStats.seen.phases.add(key);
+        }
+        console.log(`  [Dry Run] Would create phase "${name}"`);
+        return `dry-run-phase-${key}`;
+    }
+
     const { data: newData, error: insertError } = await supabase
         .from('phases')
         .insert({ season_id: seasonId, parent_phase_id: parentId, name, type: 'division' })
@@ -217,6 +264,15 @@ async function getOrCreateTeam(name) {
         return aliasData.team_id;
     }
 
+    if (isDryRun) {
+        if (!dryRunStats.seen.teams.has(cleanName)) {
+            dryRunStats.added.teams++;
+            dryRunStats.seen.teams.add(cleanName);
+        }
+        console.log(`  [Dry Run] Would create team "${cleanName}"`);
+        return `dry-run-team-${cleanName}`;
+    }
+
     // 3. Create new team if neither match
     const { data: newData, error: insertError } = await supabase
         .from('teams')
@@ -245,6 +301,14 @@ async function getOrCreatePerson(displayName) {
     if (error && error.code !== 'PGRST116') console.error("Error looking up person:", error);
     if (data) return data.id;
 
+    if (isDryRun) {
+        if (!dryRunStats.seen.people.has(displayName.trim())) {
+            dryRunStats.added.people++;
+            dryRunStats.seen.people.add(displayName.trim());
+        }
+        return `dry-run-person-${displayName.trim()}`;
+    }
+
     const { data: newData, error: insertError } = await supabase
         .from('people')
         .insert({
@@ -270,6 +334,14 @@ async function getOrCreateVenue(name) {
 
     if (data) return data.id;
 
+    if (isDryRun) {
+        if (!dryRunStats.seen.venues.has(name.trim())) {
+            dryRunStats.added.venues++;
+            dryRunStats.seen.venues.add(name.trim());
+        }
+        return `dry-run-venue-${name.trim()}`;
+    }
+
     const { data: newData, error: insertError } = await supabase
         .from('venues')
         .insert({ name: name.trim() })
@@ -290,10 +362,21 @@ async function ensureTeamParticipation(phaseId, teamId, coachId = null) {
 
     if (existing) {
         if (!existing.head_coach_id && coachId) {
-            await supabase.from('participations').update({ head_coach_id: coachId }).eq('id', existing.id);
+            if (isDryRun) {
+                console.log(`  [Dry Run] Would update participation for team ${teamId} with coach ${coachId}`);
+                dryRunStats.updated.participations++;
+            } else {
+                await supabase.from('participations').update({ head_coach_id: coachId }).eq('id', existing.id);
+            }
             existing.head_coach_id = coachId;
         }
         return existing;
+    }
+
+    if (isDryRun) {
+        console.log(`  [Dry Run] Would create participation for phase ${phaseId}, team ${teamId}`);
+        dryRunStats.added.participations++;
+        return { id: `dry-run-part-${phaseId}-${teamId}`, head_coach_id: coachId };
     }
 
     const { data: newData, error: insertError } = await supabase
@@ -411,63 +494,73 @@ async function importData(filePath) {
 
             if (existingGame) {
                 gameId = existingGame.id;
-                console.log(`  [Info] Game already exists (ID: ${gameId}). Updating fields...`);
+                console.log(`  [Info] Game already exists (ID: ${gameId}). ${isDryRun ? 'Would update' : 'Updating'} fields...`);
 
-                const { error: updateError } = await supabase
-                    .from('games')
-                    .update({
-                        home_score: home_score ? parseInt(home_score) : null,
-                        away_score: away_score ? parseInt(away_score) : null,
-                        date_precision: date_precision || (date ? 'day' : 'unknown'),
-                        date_display: date_display || (date ? date.split('-').reverse().join('/') : null),
-                        time: time || null,
-                        venue_id: venueId,
-                        notes: notes || null,
-                        status: status || existingGame.status || 'completed',
-                        confidence_level: (status === 'anomaly' || existingGame.status === 'anomaly') ? 'low' : (confidence_level || 'high'),
-                        is_playoff: ['true', 'yes', '1'].includes((is_playoff || '').toString().toLowerCase()),
-                        final_type: final_type ? final_type.toLowerCase().trim() : (['true', 'yes', '1'].includes((is_title_game || '').toString().toLowerCase()) ? 'title' : null),
-                        title_name: title_name || null,
-                        playoff_round: playoff_round ? playoff_round.trim() : null,
-                        is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase())
-                    })
-                    .eq('id', gameId);
+                if (isDryRun) {
+                    dryRunStats.updated.games++;
+                } else {
+                    const { error: updateError } = await supabase
+                        .from('games')
+                        .update({
+                            home_score: home_score ? parseInt(home_score) : null,
+                            away_score: away_score ? parseInt(away_score) : null,
+                            date_precision: date_precision || (date ? 'day' : 'unknown'),
+                            date_display: date_display || (date ? date.split('-').reverse().join('/') : null),
+                            time: time || null,
+                            venue_id: venueId,
+                            notes: notes || null,
+                            status: status || existingGame.status || 'completed',
+                            confidence_level: (status === 'anomaly' || existingGame.status === 'anomaly') ? 'low' : (confidence_level || 'high'),
+                            is_playoff: ['true', 'yes', '1'].includes((is_playoff || '').toString().toLowerCase()),
+                            final_type: final_type ? final_type.toLowerCase().trim() : (['true', 'yes', '1'].includes((is_title_game || '').toString().toLowerCase()) ? 'title' : null),
+                            title_name: title_name || null,
+                            playoff_round: playoff_round ? playoff_round.trim() : null,
+                            is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase())
+                        })
+                        .eq('id', gameId);
 
-                await ensureSampleNote('games', gameId);
+                    await ensureSampleNote('games', gameId);
                 if (updateError) console.warn(`  [Warning] Could not update existing game: ${updateError.message}`);
-            } else {
-                const { data: newGame, error: gameError } = await supabase
-                    .from('games')
-                    .insert({
-                        phase_id: phaseId,
-                        home_team_id: homeTeamId,
-                        away_team_id: awayTeamId,
-                        home_score: home_score ? parseInt(home_score) : null,
-                        away_score: away_score ? parseInt(away_score) : null,
-                        date: date || null,
-                        date_precision: date_precision || (date ? 'day' : 'unknown'),
-                        date_display: date_display || (date ? date.split('-').reverse().join('/') : null),
-                        time: time || null,
-                        venue_id: venueId,
-                        notes: notes || null,
-                        status: status || 'completed',
-                        confidence_level: status === 'anomaly' ? 'low' : (confidence_level || 'high'),
-                        is_playoff: ['true', 'yes', '1'].includes((is_playoff || '').toString().toLowerCase()),
-                        final_type: final_type ? final_type.toLowerCase().trim() : (['true', 'yes', '1'].includes((is_title_game || '').toString().toLowerCase()) ? 'title' : null),
-                        title_name: title_name || null,
-                        playoff_round: playoff_round ? playoff_round.trim() : null,
-                        is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase())
-                    })
-                    .select('id')
-                    .single();
-
-                if (gameError) {
-                    console.warn(`  [Warning] Could not insert game: ${gameError.message}`);
-                    continue;
                 }
-                gameId = newGame.id;
-                await ensureSampleNote('games', gameId);
-                console.log(`  [Success] Game recorded (ID: ${gameId}).`);
+            } else {
+                if (isDryRun) {
+                    console.log(`  [Dry Run] Would create new game.`);
+                    dryRunStats.added.games++;
+                    gameId = `dry-run-game-${count}`;
+                } else {
+                    const { data: newGame, error: gameError } = await supabase
+                        .from('games')
+                        .insert({
+                            phase_id: phaseId,
+                            home_team_id: homeTeamId,
+                            away_team_id: awayTeamId,
+                            home_score: home_score ? parseInt(home_score) : null,
+                            away_score: away_score ? parseInt(away_score) : null,
+                            date: date || null,
+                            date_precision: date_precision || (date ? 'day' : 'unknown'),
+                            date_display: date_display || (date ? date.split('-').reverse().join('/') : null),
+                            time: time || null,
+                            venue_id: venueId,
+                            notes: notes || null,
+                            status: status || 'completed',
+                            confidence_level: status === 'anomaly' ? 'low' : (confidence_level || 'high'),
+                            is_playoff: ['true', 'yes', '1'].includes((is_playoff || '').toString().toLowerCase()),
+                            final_type: final_type ? final_type.toLowerCase().trim() : (['true', 'yes', '1'].includes((is_title_game || '').toString().toLowerCase()) ? 'title' : null),
+                            title_name: title_name || null,
+                            playoff_round: playoff_round ? playoff_round.trim() : null,
+                            is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase())
+                        })
+                        .select('id')
+                        .single();
+
+                    if (gameError) {
+                        console.warn(`  [Warning] Could not insert game: ${gameError.message}`);
+                        continue;
+                    }
+                    gameId = newGame.id;
+                    await ensureSampleNote('games', gameId);
+                    console.log(`  [Success] Game recorded (ID: ${gameId}).`);
+                }
             }
 
             // 6. Link Coaches to Game (Game-Level overrides)
@@ -483,13 +576,17 @@ async function importData(filePath) {
                     .maybeSingle();
 
                 if (!existingStaff) {
-                    const { error: staffError } = await supabase.from('game_staff').insert({
-                        game_id: gameId,
-                        team_id: homeTeamId,
-                        person_id: homeCoachId,
-                        role: 'head_coach'
-                    });
-                    if (!staffError) console.log(`  [Success] Home coach (${home_coach}) linked as game override.`);
+                    if (isDryRun) {
+                        console.log(`  [Dry Run] Would link home coach (${home_coach}) as game override.`);
+                    } else {
+                        const { error: staffError } = await supabase.from('game_staff').insert({
+                            game_id: gameId,
+                            team_id: homeTeamId,
+                            person_id: homeCoachId,
+                            role: 'head_coach'
+                        });
+                        if (!staffError) console.log(`  [Success] Home coach (${home_coach}) linked as game override.`);
+                    }
                 } else {
                     console.log(`  [Info] Home coach (${home_coach}) already linked as game override.`);
                 }
@@ -506,13 +603,17 @@ async function importData(filePath) {
                     .maybeSingle();
 
                 if (!existingStaff) {
-                    const { error: staffError } = await supabase.from('game_staff').insert({
-                        game_id: gameId,
-                        team_id: awayTeamId,
-                        person_id: awayCoachId,
-                        role: 'head_coach'
-                    });
-                    if (!staffError) console.log(`  [Success] Away coach (${away_coach}) linked as game override.`);
+                    if (isDryRun) {
+                        console.log(`  [Dry Run] Would link away coach (${away_coach}) as game override.`);
+                    } else {
+                        const { error: staffError } = await supabase.from('game_staff').insert({
+                            game_id: gameId,
+                            team_id: awayTeamId,
+                            person_id: awayCoachId,
+                            role: 'head_coach'
+                        });
+                        if (!staffError) console.log(`  [Success] Away coach (${away_coach}) linked as game override.`);
+                    }
                 } else {
                     console.log(`  [Info] Away coach (${away_coach}) already linked as game override.`);
                 }
@@ -524,12 +625,27 @@ async function importData(filePath) {
     }
 
     console.log("--- Import Finished ---");
-    await calculateCompleteness();
+
+    if (isDryRun) {
+        console.log("\n--- DRY RUN SUMMARY ---");
+        console.log(`Records Processed: ${records.length}`);
+        console.log(`  Games: ${dryRunStats.added.games} to add, ${dryRunStats.updated.games} to update`);
+        console.log(`  Teams: ${dryRunStats.added.teams} to create`);
+        console.log(`  Competitions: ${dryRunStats.added.competitions} to create`);
+        console.log(`  Seasons: ${dryRunStats.added.seasons} to create`);
+        console.log(`  Phases: ${dryRunStats.added.phases} to create`);
+        console.log(`  People: ${dryRunStats.added.people} to create`);
+        console.log(`  Venues: ${dryRunStats.added.venues} to create`);
+        console.log(`  Participations: ${dryRunStats.added.participations} to add, ${dryRunStats.updated.participations} to update`);
+        console.log("------------------------");
+    } else {
+        await calculateCompleteness();
+    }
 }
 
 const fileArg = process.argv.filter(arg => !arg.startsWith('--'))[2];
 if (!fileArg) {
-    console.log("Usage: node scripts/import_data.mjs <path_to_csv> [--sample]");
+    console.log("Usage: node scripts/import_data.mjs <path_to_csv> [--sample] [--dry-run]");
 } else {
     importData(fileArg);
 }
