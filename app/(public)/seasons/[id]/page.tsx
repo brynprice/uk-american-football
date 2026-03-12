@@ -141,6 +141,12 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                                 {season.completeness_details?.unresolved_walkover_count > 0 && renderMissingDetail(
                                     `${season.completeness_details.unresolved_walkover_count} unresolved walkovers (-${Math.min(season.completeness_details.unresolved_walkover_count * 5, 20)} pts)`
                                 ) || null}
+                                {season.completeness_details?.anomaly_count > 0 && renderMissingDetail(
+                                    `${season.completeness_details.anomaly_count} game anomalies reported (-${Math.min(season.completeness_details.anomaly_count * 2, 10)} pts)`
+                                ) || null}
+                                {season.completeness_details?.phases_with_discrepancies > 0 && renderMissingDetail(
+                                    `${season.completeness_details.phases_with_discrepancies} divisions with game count errors (-${Math.min(season.completeness_details.phases_with_discrepancies * 5, 20)} pts)`
+                                ) || null}
 
                                 {Object.keys(season.completeness_details).length > 0 &&
                                     !season.completeness_details.missing_phases &&
@@ -152,6 +158,8 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                                     !(season.completeness_details.participations_missing_coach > 0) &&
                                     !season.completeness_details.missing_title_game &&
                                     !(season.completeness_details.unresolved_walkover_count > 0) &&
+                                    !(season.completeness_details.anomaly_count > 0) &&
+                                    !(season.completeness_details.phases_with_discrepancies > 0) &&
                                     !(season.completeness_details.missing_expected_ratio && season.completeness_details.missing_expected_ratio.split('/')[0] !== season.completeness_details.missing_expected_ratio.split('/')[1]) && (
                                         <div className="text-sm text-green-700 font-medium">All standard data points appear complete!</div>
                                     )}
