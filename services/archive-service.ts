@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase/client";
 import { Database } from "@/lib/supabase/types";
-import { isPlayoffPhase } from "@/lib/utils/phase-utils";
+import { isPlayoffPhase, sortPhasesInTreeOrder } from "@/lib/utils/phase-utils";
 
 export type Competition = Database["public"]["Tables"]["competitions"]["Row"];
 export type Season = Database["public"]["Tables"]["seasons"]["Row"];
@@ -24,7 +24,7 @@ export const ArchiveService = {
     },
 
     async getSeasonDetails(seasonId: string): Promise<any> {
-        const { data: seasonData, error } = await supabase.from("seasons").select("*, competition:competitions (*), phases (*)").eq("id", seasonId).single();
+        const { data: seasonData, error } = await supabase.from("seasons").select("*, competition:competitions (*), phases (*, ordinal)").eq("id", seasonId).single();
         if (error) throw error;
         if (!seasonData) throw new Error("Season not found");
 
@@ -33,6 +33,7 @@ export const ArchiveService = {
 
         return {
             ...(seasonData as any),
+            phases: sortPhasesInTreeOrder((seasonData as any).phases || []),
             archival_notes: notes || []
         };
     },

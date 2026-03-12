@@ -24,7 +24,7 @@ export default function PhaseView({ phases, parentPhaseId = null, seasonId, init
 
     const currentPhases = phases
         .filter(p => p.parent_phase_id === parentPhaseId)
-        .sort((a, b) => a.ordinal - b.ordinal);
+        .sort((a, b) => (a.ordinal || 0) - (b.ordinal || 0));
 
     if (currentPhases.length === 0) return null;
 

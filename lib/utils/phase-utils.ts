@@ -22,3 +22,20 @@ export function isPlayoffPhase(phase: { name?: string; type?: string | null; gam
 
     return !!(isNamedPlayoff || hasOnlyPlayoffGames);
 }
+/**
+ * Orders a flat list of phases into a sequence that respects its tree structure.
+ * Phases are ordered by a depth-first traversal of the hierarchy, 
+ * with siblings at each level sorted by their ordinal value.
+ */
+export function sortPhasesInTreeOrder(phases: any[], parentId: string | null = null): any[] {
+    const children = phases
+        .filter(p => p.parent_phase_id === parentId)
+        .sort((a, b) => (a.ordinal || 0) - (b.ordinal || 0));
+
+    const result: any[] = [];
+    for (const child of children) {
+        result.push(child);
+        result.push(...sortPhasesInTreeOrder(phases, child.id));
+    }
+    return result;
+}

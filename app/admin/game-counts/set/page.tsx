@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { createClient } from '@supabase/supabase-js';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
+import { sortPhasesInTreeOrder } from '@/lib/utils/phase-utils';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -154,7 +155,7 @@ export default function SetGameCountsPage() {
     function renderPhaseTree(parentId: string | null, depth: number): React.ReactNode {
         const children = phases
             .filter(p => p.parent_phase_id === parentId)
-            .sort((a, b) => a.ordinal - b.ordinal);
+            .sort((a, b) => (a.ordinal || 0) - (b.ordinal || 0));
 
         if (children.length === 0) return null;
 
