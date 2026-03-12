@@ -67,8 +67,7 @@ export default function SetGameCountsPage() {
             .from('phases')
             .select('id, name, type, max_games_per_team, games_validated, parent_phase_id')
             .eq('season_id', seasonId)
-            .order('ordinal', { ascending: true })
-            .order('name', { ascending: true });
+            .order('ordinal', { ascending: true });
 
         if (data) {
             setPhases(data as PhaseRow[]);
