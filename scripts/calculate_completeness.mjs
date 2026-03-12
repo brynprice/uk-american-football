@@ -31,12 +31,18 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
         games_missing_venues: 0,
         participations_missing_coach: 0,
         missing_title_game: true,
-        unresolved_walkover_count: 0
+        unresolved_walkover_count: 0,
+        anomaly_count: 0,
+        phases_with_discrepancies: 0
     };
 
     // 1. Structure (Phases & Participations)
     // Get all phases for the season
-    const { data: phases } = await supabase.from('phases').select('id').eq('season_id', seasonId);
+    const { data: phases } = await supabase
+        .from('phases')
+        .select('id, name, max_games_per_team, games_validated')
+        .eq('season_id', seasonId);
+
     if (!phases || phases.length === 0) {
         return { score: 0, details }; // Total failure
     }
@@ -77,7 +83,7 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
     // 2. Games Presence & Quality
     const { data: games } = await supabase
         .from('games')
-        .select('id, home_score, away_score, date, date_precision, venue_id, final_type, status')
+        .select('id, phase_id, home_team_id, away_team_id, home_score, away_score, date, date_precision, venue_id, final_type, status')
         .in('phase_id', phaseIds);
 
     if (games && games.length > 0) {
@@ -91,6 +97,11 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
         let hasTitle = false;
 
         games.forEach(g => {
+            if (g.status === 'anomaly') {
+                details.anomaly_count++;
+                return;
+            }
+
             if (g.home_score !== null && g.away_score !== null) scoreCount++;
             else details.games_missing_scores++;
 
@@ -113,7 +124,38 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
             }
         });
 
-        const scorePercent = scoreCount / totalGames;
+        // 3. Game Count Consistency Check
+        const gamesByPhase = new Map();
+        games.filter(g => g.status !== 'anomaly').forEach(g => {
+            if (!gamesByPhase.has(g.phase_id)) gamesByPhase.set(g.phase_id, []);
+            gamesByPhase.get(g.phase_id).push(g);
+        });
+
+        phases.forEach(p => {
+            if (p.max_games_per_team !== null && !p.games_validated) {
+                const phaseGames = gamesByPhase.get(p.id) || [];
+                const teamCounts = new Map();
+
+                phaseGames.forEach(g => {
+                    teamCounts.set(g.home_team_id, (teamCounts.get(g.home_team_id) || 0) + 1);
+                    teamCounts.set(g.away_team_id, (teamCounts.get(g.away_team_id) || 0) + 1);
+                });
+
+                let hasDiscrepancy = false;
+                for (const [teamId, count] of teamCounts) {
+                    if (count !== p.max_games_per_team) {
+                        hasDiscrepancy = true;
+                        break;
+                    }
+                }
+
+                if (hasDiscrepancy) {
+                    details.phases_with_discrepancies++;
+                }
+            }
+        });
+
+        const scorePercent = scoreCount / Math.max(1, totalGames - details.anomaly_count);
         const datePercent = dateCount / totalGames;
         const venuePercent = venueCount / totalGames;
 
@@ -129,9 +171,12 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
             }
         }
 
-        // Apply Penalty
-        const penalty = Math.min(details.unresolved_walkover_count * 5, 20);
-        score = Math.max(0, score - penalty);
+        // Apply Penalties
+        const walkoverPenalty = Math.min(details.unresolved_walkover_count * 5, 20);
+        const anomalyPenalty = Math.min(details.anomaly_count * 2, 10);
+        const discrepancyPenalty = Math.min(details.phases_with_discrepancies * 5, 20);
+
+        score = Math.max(0, score - walkoverPenalty - anomalyPenalty - discrepancyPenalty);
 
     } else if (participations && participations.some(p => p.wins !== null)) {
         // No individual games, but we have aggregated standings
