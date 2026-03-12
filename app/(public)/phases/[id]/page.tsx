@@ -24,11 +24,21 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                 >
                     &larr; Back to {phase.season.year} {phase.season.competition.name}
                 </Link>
-                <div className="flex flex-col gap-2">
-                    <h1 className="text-4xl font-black">{phase.name}</h1>
-                    <div className="text-sm text-slate-500 font-sans uppercase tracking-widest">
-                        {phase.type} &bull; {phase.games?.length || 0} Games {phase.isLeaf ? "in Phase" : "Rolled Up"}
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div className="flex flex-col gap-2">
+                        <h1 className="text-4xl font-black">{phase.name}</h1>
+                        <div className="text-sm text-slate-500 font-sans uppercase tracking-widest">
+                            {phase.type} &bull; {phase.games?.length || 0} Games {phase.isLeaf ? "in Phase" : "Rolled Up"}
+                        </div>
                     </div>
+                    <a
+                        href={`/api/export/phase/${id}`}
+                        className="bg-slate-900 text-white text-xs font-black uppercase px-4 py-2 rounded hover:bg-blue-600 transition-colors inline-flex items-center gap-2 w-fit"
+                        download
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
+                        Download CSV
+                    </a>
                 </div>
             </div>
 
