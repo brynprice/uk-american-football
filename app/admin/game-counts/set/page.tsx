@@ -16,6 +16,7 @@ interface PhaseRow {
     max_games_per_team: number | null;
     games_validated: boolean;
     parent_phase_id: string | null;
+    ordinal: number;
 }
 
 interface SeasonOption {
@@ -65,9 +66,8 @@ export default function SetGameCountsPage() {
 
         const { data } = await supabase
             .from('phases')
-            .select('id, name, type, max_games_per_team, games_validated, parent_phase_id')
-            .eq('season_id', seasonId)
-            .order('ordinal', { ascending: true });
+            .select('id, name, type, max_games_per_team, games_validated, parent_phase_id, ordinal')
+            .eq('season_id', seasonId);
 
         if (data) {
             setPhases(data as PhaseRow[]);
@@ -151,6 +151,71 @@ export default function SetGameCountsPage() {
         return name.includes('playoff') || type === 'playoffs';
     };
 
+    function renderPhaseTree(parentId: string | null, depth: number): React.ReactNode {
+        const children = phases
+            .filter(p => p.parent_phase_id === parentId)
+            .sort((a, b) => a.ordinal - b.ordinal);
+
+        if (children.length === 0) return null;
+
+        return (
+            <div className={`space-y-3 ${depth > 0 ? 'pl-6 border-l-2 border-slate-200 mt-3' : ''}`}>
+                {children.map(phase => {
+                    const hasKids = phases.some(p => p.parent_phase_id === phase.id);
+
+                    return (
+                        <div key={phase.id}>
+                            {/* Phase header / row */}
+                            <div
+                                className={`flex items-center justify-between gap-4 p-4 rounded border ${isPlayoff(phase)
+                                    ? 'bg-indigo-50 border-indigo-200'
+                                    : 'bg-white border-slate-200'
+                                    }`}
+                            >
+                                <div className="flex-1 min-w-0">
+                                    <div className={`font-bold truncate ${hasKids ? 'text-base uppercase tracking-tight' : 'text-sm'}`}>
+                                        {phase.name}
+                                    </div>
+                                    <div className="flex gap-2 mt-1">
+                                        {phase.type && (
+                                            <span className="text-[10px] font-black bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded uppercase font-sans">
+                                                {phase.type}
+                                            </span>
+                                        )}
+                                        {phase.games_validated && (
+                                            <span className="text-[10px] font-black bg-green-100 text-green-700 px-1.5 py-0.5 rounded uppercase font-sans">
+                                                Validated
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-2 shrink-0">
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        value={editValues[phase.id] || ''}
+                                        onChange={(e) => setEditValues(prev => ({ ...prev, [phase.id]: e.target.value }))}
+                                        placeholder="—"
+                                        className="w-20 border border-slate-200 px-2 py-1.5 rounded text-sm font-bold text-center"
+                                    />
+                                    <button
+                                        onClick={() => handleSingleSave(phase.id)}
+                                        disabled={saving}
+                                        className="text-[10px] font-black uppercase bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded transition-colors disabled:opacity-50"
+                                    >
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+                            {/* Recursively render children */}
+                            {hasKids && renderPhaseTree(phase.id, depth + 1)}
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    }
+
     return (
         <ArchiveLayout>
             <div className="mb-8">
@@ -214,53 +279,12 @@ export default function SetGameCountsPage() {
                         </p>
                     </div>
 
-                    {/* Individual Phase List */}
-                    <div className="space-y-3">
+                    {/* Individual Phase List — nested tree like Season page */}
+                    <div className="space-y-6">
                         <h3 className="text-xs font-black uppercase text-slate-400 tracking-widest font-sans border-b border-slate-200 pb-2">
                             All Phases ({phases.length})
                         </h3>
-                        {phases.map(phase => (
-                            <div
-                                key={phase.id}
-                                className={`flex items-center justify-between gap-4 p-4 rounded border ${isPlayoff(phase)
-                                    ? 'bg-indigo-50 border-indigo-200'
-                                    : phase.parent_phase_id ? 'bg-white border-slate-200 ml-6' : 'bg-white border-slate-200'
-                                    }`}
-                            >
-                                <div className="flex-1 min-w-0">
-                                    <div className="font-bold text-sm truncate">{phase.name}</div>
-                                    <div className="flex gap-2 mt-1">
-                                        {phase.type && (
-                                            <span className="text-[10px] font-black bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded uppercase font-sans">
-                                                {phase.type}
-                                            </span>
-                                        )}
-                                        {phase.games_validated && (
-                                            <span className="text-[10px] font-black bg-green-100 text-green-700 px-1.5 py-0.5 rounded uppercase font-sans">
-                                                Validated
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-2 shrink-0">
-                                    <input
-                                        type="number"
-                                        min="0"
-                                        value={editValues[phase.id] || ''}
-                                        onChange={(e) => setEditValues(prev => ({ ...prev, [phase.id]: e.target.value }))}
-                                        placeholder="—"
-                                        className="w-20 border border-slate-200 px-2 py-1.5 rounded text-sm font-bold text-center"
-                                    />
-                                    <button
-                                        onClick={() => handleSingleSave(phase.id)}
-                                        disabled={saving}
-                                        className="text-[10px] font-black uppercase bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded transition-colors disabled:opacity-50"
-                                    >
-                                        Save
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
+                        {renderPhaseTree(null, 0)}
                     </div>
                 </>
             )}
