@@ -2,6 +2,7 @@
 
 import { useState, FormEvent, useEffect } from "react";
 import { ProposalType, submitGameProposal } from "../../app/(public)/propose-game/actions";
+import { ArchiveService, Team, Phase } from "@/services/archive-service";
 
 interface GameProposalFormProps {
     gameId?: string;
@@ -28,6 +29,12 @@ interface GameProposalFormProps {
 
 export default function GameProposalForm({ gameId, initialData, onSuccess }: GameProposalFormProps) {
     const isUpdate = !!gameId;
+
+    // Data lists for dropdowns
+    const [teams, setTeams] = useState<Team[]>([]);
+    const [seasons, setSeasons] = useState<any[]>([]);
+    const [phases, setPhases] = useState<Phase[]>([]);
+    const [isLoadingData, setIsLoadingData] = useState(true);
 
     // Form State
     const [formData, setFormData] = useState({
@@ -59,6 +66,26 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [message, setMessage] = useState({ text: "", type: "" });
 
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const [teamsData, seasonsData, phasesData] = await Promise.all([
+                    ArchiveService.getTeams(),
+                    ArchiveService.getSeasons(),
+                    ArchiveService.getAllPhases()
+                ]);
+                setTeams(teamsData);
+                setSeasons(seasonsData);
+                setPhases(phasesData);
+            } catch (error) {
+                console.error("Error loading form data:", error);
+            } finally {
+                setIsLoadingData(false);
+            }
+        };
+        loadData();
+    }, []);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
         const val = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
@@ -68,6 +95,33 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
         } else {
             setFormData(prev => ({ ...prev, [name]: val }));
         }
+    };
+
+    const resetForm = () => {
+        setFormData({
+            competition: "BUAFL",
+            year: new Date().getFullYear().toString(),
+            phase: "",
+            date: "",
+            home_team: "",
+            away_team: "",
+            home_score: "",
+            away_score: "",
+            venue: "",
+            notes: "",
+            status: "completed",
+            is_playoff: false,
+            playoff_round: "",
+            final_type: "none",
+            title_name: "",
+            is_double_header: false,
+        });
+        setMetaData({
+            reason: "",
+            sourceUrl: "",
+            submittedByName: "",
+            submittedByEmail: "",
+        });
     };
 
     const handleSubmit = async (e: FormEvent) => {
@@ -93,6 +147,12 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
             }
 
             setMessage({ text: "Thank you! Your proposal has been submitted for review.", type: "success" });
+            
+            // Clear form on success
+            if (!isUpdate) {
+                resetForm();
+            }
+
             if (onSuccess) {
                 setTimeout(onSuccess, 2000);
             }
@@ -102,6 +162,14 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
             setIsSubmitting(false);
         }
     };
+
+    // Derived lists
+    const filteredPhases = formData.year 
+        ? phases.filter(p => {
+            const season = seasons.find(s => s.year.toString() === formData.year || `${s.competition?.name} ${s.year}` === formData.year);
+            return season ? p.season_id === season.id : true;
+        })
+        : phases;
 
     return (
         <div className="bg-white/80 backdrop-blur-md rounded-2xl border border-slate-200 shadow-2xl overflow-hidden max-w-4xl mx-auto">
@@ -184,37 +252,66 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
                             </select>
                         </div>
                         <div>
-                            <label className="block text-[10px] font-black uppercase text-slate-500 mb-1">Competition / Year</label>
-                            <div className="flex gap-2">
-                                <input
-                                    name="competition"
-                                    type="text"
-                                    value={formData.competition}
-                                    onChange={handleChange}
-                                    className="w-1/2 border border-slate-200 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
-                                />
-                                <input
-                                    name="year"
-                                    type="text"
-                                    value={formData.year}
-                                    onChange={handleChange}
-                                    className="w-1/2 border border-slate-200 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
-                                />
-                            </div>
+                            <label className="block text-[10px] font-black uppercase text-slate-500 mb-1">Season</label>
+                            <select
+                                name="year"
+                                value={formData.year}
+                                onChange={handleChange}
+                                className="w-full border border-slate-200 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                            >
+                                <option value="">Select Season...</option>
+                                {seasons.map(s => {
+                                    const seasonName = `${s.competition?.name} ${s.year}`;
+                                    return (
+                                        <option key={s.id} value={seasonName}>{seasonName}</option>
+                                    );
+                                })}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="md:col-span-2">
+                            <label className="block text-[10px] font-black uppercase text-slate-500 mb-1">Phase</label>
+                            <select
+                                name="phase"
+                                value={formData.phase}
+                                onChange={handleChange}
+                                className="w-full border border-slate-200 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                            >
+                                <option value="">Select Phase...</option>
+                                {filteredPhases.map(p => (
+                                    <option key={p.id} value={p.name}>{p.name}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div>
+                            <label className="block text-[10px] font-black uppercase text-slate-500 mb-1">Venue</label>
+                            <input
+                                name="venue"
+                                type="text"
+                                value={formData.venue}
+                                onChange={handleChange}
+                                placeholder="e.g. South Leeds Stadium"
+                                className="w-full border border-slate-200 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                            />
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-4 px-6 border-2 border-dashed border-slate-100 rounded-2xl">
                         <div className="space-y-4">
                             <h4 className="text-[10px] font-black uppercase text-center text-slate-300 tracking-[0.2em]">Home Team</h4>
-                            <input
+                            <select
                                 name="home_team"
-                                type="text"
                                 value={formData.home_team}
                                 onChange={handleChange}
-                                placeholder="Home Team Name"
-                                className="w-full border-b-2 border-slate-200 p-2 text-xl font-black text-center focus:border-blue-500 outline-none transition-all"
-                            />
+                                className="w-full border-b-2 border-slate-200 p-2 text-lg font-black text-center focus:border-blue-500 outline-none transition-all bg-transparent"
+                            >
+                                <option value="">Select Home Team...</option>
+                                {teams.map(t => (
+                                    <option key={t.id} value={t.name}>{t.name}</option>
+                                ))}
+                            </select>
                             <div className="flex items-center justify-center gap-2">
                                 <label className="text-[10px] font-black uppercase text-slate-400">Score:</label>
                                 <input
@@ -229,14 +326,17 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
 
                         <div className="space-y-4">
                             <h4 className="text-[10px] font-black uppercase text-center text-slate-300 tracking-[0.2em]">Away Team</h4>
-                            <input
+                            <select
                                 name="away_team"
-                                type="text"
                                 value={formData.away_team}
                                 onChange={handleChange}
-                                placeholder="Away Team Name"
-                                className="w-full border-b-2 border-slate-200 p-2 text-xl font-black text-center focus:border-blue-500 outline-none transition-all"
-                            />
+                                className="w-full border-b-2 border-slate-200 p-2 text-lg font-black text-center focus:border-blue-500 outline-none transition-all bg-transparent"
+                            >
+                                <option value="">Select Away Team...</option>
+                                {teams.map(t => (
+                                    <option key={t.id} value={t.name}>{t.name}</option>
+                                ))}
+                            </select>
                             <div className="flex items-center justify-center gap-2">
                                 <label className="text-[10px] font-black uppercase text-slate-400">Score:</label>
                                 <input
@@ -250,26 +350,15 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4">
                         <div>
-                            <label className="block text-[10px] font-black uppercase text-slate-500 mb-1">Venue</label>
-                            <input
-                                name="venue"
-                                type="text"
-                                value={formData.venue}
-                                onChange={handleChange}
-                                placeholder="e.g. South Leeds Stadium"
-                                className="w-full border border-slate-200 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-[10px] font-black uppercase text-slate-500 mb-1">Source URL / Link <span className="font-normal normal-case italic text-slate-400">(Proof of result)</span></label>
+                            <label className="block text-[10px] font-black uppercase text-slate-500 mb-1">Source <span className="font-normal normal-case italic text-slate-400">(Link, book, newspaper, etc.)</span></label>
                             <input
                                 name="sourceUrl"
-                                type="url"
+                                type="text"
                                 value={metaData.sourceUrl}
                                 onChange={handleChange}
-                                placeholder="https://..."
+                                placeholder="e.g. 2015 BUAFL Rulebook, or URL"
                                 className="w-full border border-slate-200 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                             />
                         </div>
@@ -292,7 +381,7 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
                 <div className="flex justify-end gap-4 p-4">
                     <button
                         type="submit"
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || isLoadingData}
                         className="bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-widest py-4 px-12 rounded-full shadow-xl disabled:opacity-50 transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
                     >
                         {isSubmitting ? (
