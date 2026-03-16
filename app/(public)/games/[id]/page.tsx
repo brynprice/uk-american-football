@@ -158,12 +158,23 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
             </div>
 
             {/* Sources & Accuracy */}
-            <section className="mt-12 text-xs text-slate-400 font-sans border-t pt-4">
-                <p className="mb-2 uppercase font-black tracking-widest">Archival Authenticity</p>
-                <div className="flex gap-6">
-                    <span>Confidence: <strong className="text-slate-600 uppercase italic">{game.confidence_level}</strong></span>
-                    <span>Date Precision: <strong className="text-slate-600 uppercase italic">{game.date_precision}</strong></span>
+            <section className="mt-12 text-xs text-slate-400 font-sans border-t pt-4 flex justify-between items-start">
+                <div>
+                    <p className="mb-2 uppercase font-black tracking-widest text-slate-500">Archival Authenticity</p>
+                    <div className="flex gap-6">
+                        <span>Confidence: <strong className="text-slate-600 uppercase italic">{game.confidence_level}</strong></span>
+                        <span>Date Precision: <strong className="text-slate-600 uppercase italic">{game.date_precision}</strong></span>
+                    </div>
                 </div>
+                <Link 
+                    href={`/propose-game?id=${game.id}`}
+                    className="bg-slate-100 hover:bg-amber-100 text-slate-600 hover:text-amber-800 px-4 py-2 rounded-lg font-black uppercase tracking-tighter transition-all flex items-center gap-2 border border-slate-200 hover:border-amber-200 shadow-sm"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                    </svg>
+                    Suggest Correction
+                </Link>
             </section>
         </ArchiveLayout>
     );

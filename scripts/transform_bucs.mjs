@@ -31,6 +31,9 @@ async function loadExistingData() {
     const { data: teams } = await supabase.from('teams').select('name');
     if (teams) teams.forEach(t => existingTeams.add(t.name.toLowerCase()));
 
+    const { data: aliases } = await supabase.from('team_aliases').select('name');
+    if (aliases) aliases.forEach(a => existingTeams.add(a.name.toLowerCase()));
+
     const { data: phases } = await supabase.from('phases').select('name, season:seasons(year)');
     if (phases) {
         phases.forEach(p => {

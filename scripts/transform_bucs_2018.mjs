@@ -31,6 +31,9 @@ async function loadExistingData() {
     const { data: teams } = await supabase.from('teams').select('name');
     if (teams) teams.forEach(t => existingTeams.add(t.name.toLowerCase()));
 
+    const { data: aliases } = await supabase.from('team_aliases').select('name');
+    if (aliases) aliases.forEach(a => existingTeams.add(a.name.toLowerCase()));
+
     const { data: phases } = await supabase.from('phases').select('name, season:seasons(year)');
     if (phases) {
         phases.forEach(p => {
@@ -189,13 +192,14 @@ async function transformData(inputPath, outputPath, overriddenYear = "2018") {
             const month = d.getUTCMonth();
             const year = d.getUTCFullYear();
 
-            // Default regular season window
-            let seasonStart = new Date(Date.UTC(2018, 10, 2)); // Nov 2 2018
-            let seasonEnd = new Date(Date.UTC(2019, 2, 31));   // Mar 31 2019
+            const yearInt = parseInt(overriddenYear);
+            // Default regular season window: Nov of Year to Mar of Year+1
+            let seasonStart = new Date(Date.UTC(yearInt, 10, 2)); 
+            let seasonEnd = new Date(Date.UTC(yearInt + 1, 2, 31));   
 
-            // narrowed Playoff window: Feb 14 - Mar 31
+            // narrowed Playoff window: Feb 14 - Mar 31 of Year+1
             if (isPlayoff) {
-                seasonStart = new Date(Date.UTC(2019, 1, 14));
+                seasonStart = new Date(Date.UTC(yearInt + 1, 1, 14));
             }
 
             const getScore = (dateObj) => {
@@ -321,4 +325,5 @@ async function transformData(inputPath, outputPath, overriddenYear = "2018") {
 
 const input = process.argv[2] || 'data/bucs_data.xlsx';
 const output = process.argv[3] || 'data/transformed_bucs_games.csv';
-transformData(input, output);
+const year = process.argv[4] || '2018';
+transformData(input, output, year);

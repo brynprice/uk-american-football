@@ -54,26 +54,27 @@ async function checkDataLinkage() {
 
     const phasesWithDirectGames = new Set(gameCounts.map(g => g.phase_id));
 
-    // 3. Fetch participations to check for standings
+    // 3. Fetch participations to check for standings and coaching records
     const { data: participations, error: partError } = await supabase
         .from('participations')
-        .select('id, phase_id, team:teams(name), wins, losses, ties, points_for, points_against');
+        .select('id, phase_id, team:teams(name), wins, losses, ties, points_for, points_against, head_coach_id');
 
     if (partError) {
         console.error("Error fetching participations:", partError);
         process.exit(1);
     }
 
-    // Identify phases that have "standings data" (any record with stats)
-    const phasesWithDirectStandings = new Set();
+    // Identify phases that have "data" (any record with stats or coaching)
+    const phasesWithDirectDataPoints = new Set();
     participations.forEach(p => {
         const hasStats = p.wins !== null || p.losses !== null || p.ties !== null || p.points_for !== null || p.points_against !== null;
-        if (hasStats) {
-            phasesWithDirectStandings.add(p.phase_id);
+        const hasCoach = p.head_coach_id !== null;
+        if (hasStats || hasCoach) {
+            phasesWithDirectDataPoints.add(p.phase_id);
         }
     });
 
-    const hasDirectData = (id) => phasesWithDirectGames.has(id) || phasesWithDirectStandings.has(id);
+    const hasDirectData = (id) => phasesWithDirectGames.has(id) || phasesWithDirectDataPoints.has(id);
 
     // Map hierarchy
     const parentToChildren = {};

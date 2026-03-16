@@ -1,0 +1,78 @@
+﻿competition,year,phase,date,time,date_precision,date_display,away_team,home_team,away_score,home_score,status,venue,notes,away_coach,home_coach,is_double_header,is_playoff,confidence_level
+buafl,2025,Division 1 South Eastern,2026-02-15,13:00,day,,UCL Emperors,Brighton Panthers,8,24,completed,Falmer Campus,,,Ethan Butcher,,,high
+buafl,2025,Division 1 South Eastern,2026-02-08,13:00,day,,Kingston Cougars,Brighton Panthers,0,24,completed,Falmer Campus,,,Ethan Butcher,,,high
+buafl,2025,Division 1 South Eastern,2026-02-01,13:00,day,,KCL Regents,Brighton Panthers,14,0,completed,Falmer Campus,,,Ethan Butcher,,,high
+buafl,2025,Division 1 South Eastern,2025-12-07,12:00,day,,Brighton Panthers,KCL Regents,8,13,completed,,,Ethan Butcher,,,,high
+buafl,2025,Division 1 South Eastern,2025-11-23,15:00,day,,Brighton Panthers,Kent Falcons,0,24,completed,The Pavillion,,Ethan Butcher,,,,high
+buafl,2025,Division 1 South Eastern,2025-11-16,12:00,day,,Brighton Panthers,Kingston Cougars,8,0,completed,,,Ethan Butcher,,,,high
+buafl,2025,Division 1 South Eastern,2025-11-09,13:00,day,,Kent Falcons,Brighton Panthers,0,12,completed,Falmer Campus,,,Ethan Butcher,,,high
+buafl,2025,Division 1 South Eastern,2025-11-02,15:30,day,,UCL Emperors,Brighton Panthers,0,43,completed,Falmer Campus,,,Ethan Butcher,,,high
+buafl,2024,Division 1 Southern,2025-02-09,,day,,Brighton Panthers,Brunel Burners,8,45,completed,,,Georgia Teague,,,,high
+buafl,2024,Division 1 Southern,2025-02-02,13:30,day,,Oxford Lancers,Brighton Panthers,30,0,completed,Falmer Campus,,,Georgia Teague,,,high
+buafl,2024,Division 1 Southern,2025-01-19,13:30,day,,Reading Knights,Brighton Panthers,0,42,completed,Falmer Campus,,,Georgia Teague,,,high
+buafl,2024,Division 1 Southern,2024-12-08,13:30,day,,Hertfordshire Hurricanes,Brighton Panthers,18,14,completed,Falmer Campus,,,Georgia Teague,,,high
+buafl,2024,Division 1 Southern,2024-12-01,13:30,day,,Brunel Burners,Brighton Panthers,11,8,completed,Falmer Campus,,,Georgia Teague,,,high
+buafl,2024,Division 1 Southern,2024-11-03,14:00,day,,Brighton Panthers,Hertfordshire Hurricanes,0,43,completed,,,Georgia Teague,,,,high
+buafl,2024,Division 1 Southern,2024-10-27,12:00,day,,Brighton Panthers,Reading Knights,6,2,completed,,,Georgia Teague,,,,high
+buafl,2023,Division 2 Southern,2024-02-11,13:30,day,,Sussex Saxons,Brighton Panthers,0,26,completed,Falmer Campus,,,Georgia Teague,,,high
+buafl,2023,Division 2 Southern,2024-01-28,12:00,day,,Brighton Panthers,Surrey Stingers,28,20,completed,,,Georgia Teague,,,,high
+buafl,2023,Division 2 Southern,2023-12-10,13:00,day,,Brighton Panthers,Solent Redhawks,32,6,completed,Test Park,,Georgia Teague,,,,high
+buafl,2023,Division 2 Southern,2023-12-03,13:00,day,,Oxford Brookes University,Brighton Panthers,0,20,completed,Falmer Campus,,,Georgia Teague,,,high
+buafl,2023,Division 2 Southern,2023-10-29,13:00,day,,Chichester Spitfires,Brighton Panthers,6,38,completed,Falmer Campus,,,Georgia Teague,,,high
+buafl,2022,Division 2 Southern,2023-02-12,,day,,Brighton Panthers,Chichester Spitfires,34,0,completed,,,Ollie Kent,,,,high
+buafl,2022,Division 2 Southern,2023-02-05,,day,,Brighton Panthers,Oxford Brookes University,20,6,completed,,,Ollie Kent,,,,high
+buafl,2022,Division 2 Southern,2023-01-22,,day,,Surrey Stingers,Brighton Panthers,0,36,completed,Falmer Campus,,,Ollie Kent,,,high
+buafl,2022,Division 2 Southern,2022-12-04,,day,,Brighton Panthers,Reading Knights,0,20,completed,,,Ollie Kent,,,,high
+buafl,2022,Division 2 Southern,2022-11-20,,day,,Winchester Silverbacks,Brighton Panthers,8,38,completed,Falmer Campus,,,Ollie Kent,,,high
+buafl,2022,Division 2 Southern,2022-11-13,,day,,Solent Redhawks,Brighton Panthers,19,32,completed,Falmer Campus,,,Ollie Kent,,,high
+buafl,2021,Division 2 Southern,2022-02-20,,day,,Oxford Lancers,Brighton Panthers,20,6,completed,Falmer Campus,,,Ollie Kent,,,high
+buafl,2021,Division 2 Southern,2022-02-06,,day,,UCL Emperors,Brighton Panthers,0,22,completed,Falmer Campus,,,Ollie Kent,,,high
+buafl,2021,Division 2 Southern,2022-01-23,,day,,Brighton Panthers,Kingston Cougars,1,0,awarded,,Covid Walkover,Ollie Kent,,,,high
+buafl,2021,Division 2 Southern,2021-12-12,,day,,Chichester Spitfires,Brighton Panthers,0,1,awarded,Falmer Campus,Covid Walkover,,Ollie Kent,,,high
+buafl,2021,Division 2 Southern,2021-11-21,,day,,Winchester Silverbacks,Brighton Panthers,12,26,completed,Falmer Campus,,,Ollie Kent,,,high
+buafl,2021,Division 2 Southern,2021-11-07,,day,,Oxford Brookes University,Brighton Panthers,14,14,completed,Falmer Campus,,,Ollie Kent,,,high
+buafl,2019,Division 1 Southern,2020-02-15,,day,,Reading Knights,Brighton Panthers,14,0,completed,Falmer Campus,,,Chris Denny,,,high
+buafl,2019,Division 1 Southern,2020-02-01,,day,,Portsmouth Destroyers,Brighton Panthers,15,0,completed,Falmer Campus,,,Chris Denny,,,high
+buafl,2019,Division 1 Southern,2020-01-25,,day,,Brighton Panthers,Surrey Stingers,6,18,completed,,,Chris Denny,,,,high
+buafl,2019,Division 1 Southern,2019-11-30,,day,,Brighton Panthers,Reading Knights,6,39,completed,,,Chris Denny,,,,high
+buafl,2019,Division 1 Southern,2019-11-24,,day,,Royal Holloway Bears,Brighton Panthers,42,6,completed,Falmer Campus,,,Chris Denny,,,high
+buafl,2019,Division 1 Southern,2019-11-16,,day,,Brighton Panthers,Portsmouth Destroyers,0,51,completed,,,Chris Denny,,,,high
+buafl,2019,Division 1 Southern,2019-11-10,,day,,Surrey Stingers,Brighton Panthers,13,8,completed,Falmer Campus,,,Chris Denny,,,high
+buafl,2019,Division 1 Southern,2019-11-03,,day,,Brighton Panthers,Royal Holloway Bears,8,32,completed,,,Chris Denny,,,,high
+buafl,2018,Division 1 Southern,2019-02-23,,day,,Brighton Panthers,Reading Knights,14,8,completed,,,Chris Denny,,,,high
+buafl,2018,Division 1 Southern,2019-02-17,,day,,Surrey Stingers,Brighton Panthers,19,12,completed,Falmer Campus,,,Chris Denny,,,high
+buafl,2018,Division 1 Southern,2018-12-09,,day,,Brighton Panthers,Kingston Cougars,12,3,completed,,,Chris Denny,,,,high
+buafl,2018,Division 1 Southern,2019-01-27,,day,,Reading Knights,Brighton Panthers,22,16,completed,Falmer Campus,,,Chris Denny,,,high
+buafl,2018,Division 1 Southern,2018-11-25,,day,,Kingston Cougars,Brighton Panthers,2,12,completed,Falmer Campus,,,Chris Denny,,,high
+buafl,2018,Division 1 Southern,2018-11-18,,day,,Brunel Burners,Brighton Panthers,6,0,completed,Falmer Campus,,,Chris Denny,,,high
+buafl,2018,Division 1 Southern,2018-11-11,,day,,Brighton Panthers,Brunel Burners,3,40,completed,,,Chris Denny,,,,high
+buafl,2017,Division 2 Southern,2018-02-25,,day,,City Wolfpack,Brighton Panthers,0,36,completed,Falmer Campus,,,Richard Cooling,,,high
+buafl,2017,Division 2 Southern,2018-02-04,,day,,BNU Buccaneers,Brighton Panthers,0,1,awarded,Falmer Campus,,,Richard Cooling,,,high
+buafl,2017,Division 2 Southern,2017-12-10,,day,,Chichester Spitfires,Brighton Panthers,2,28,completed,Falmer Campus,,,Richard Cooling,,,high
+buafl,2017,Division 2 Southern,2017-12-03,,day,,Brighton Panthers,KCL Regents,14,0,completed,,,Richard Cooling,,,,high
+buafl,2017,Division 2 Southern,2017-11-26,,day,,Brighton Panthers,UCL Emperors,26,12,completed,,,Richard Cooling,,,,high
+buafl,2017,Division 2 Southern,2017-11-19,,day,,Brighton Panthers,Royal Holloway Bears,34,0,completed,,,Richard Cooling,,,,high
+buafl,2016,Division 1 South Eastern,2017-02-26,,day,,Surrey Stingers,Brighton Panthers,26,12,completed,Falmer Campus,,,Richard Cooling,,,high
+buafl,2016,Division 1 South Eastern,2017-02-19,,day,,Brighton Panthers,Reading Knights,6,15,completed,,,Richard Cooling,,,,high
+buafl,2016,Division 1 South Eastern,2017-02-12,,day,,Brighton Panthers,Sussex Saxons,6,14,completed,,,Richard Cooling,,,,high
+buafl,2016,Division 1 South Eastern,2017-01-29,,day,,Brighton Panthers,Portsmouth Destroyers,0,10,completed,,,Richard Cooling,,,,high
+buafl,2016,Division 1 South Eastern,2016-12-11,,day,,Sussex Saxons,Brighton Panthers,20,6,completed,Falmer Campus,,,Richard Cooling,,,high
+buafl,2016,Division 1 South Eastern,2016-12-04,,day,,Brighton Panthers,Surrey Stingers,0,16,completed,,,Richard Cooling,,,,high
+buafl,2016,Division 1 South Eastern,2016-11-13,,day,,Reading Knights,Brighton Panthers,7,0,completed,Falmer Campus,,,Richard Cooling,,,high
+buafl,2016,Division 1 South Eastern,2016-11-06,,day,,Portsmouth Destroyers,Brighton Panthers,24,0,completed,Falmer Campus,,,Richard Cooling,,,high
+buafl,2015,Division 1 South Eastern,2016-02-21,,day,,Brighton Panthers,Kent Falcons,0,8,completed,,,Chris Denny,,,,high
+buafl,2015,Division 1 South Eastern,2016-02-07,,day,,Brighton Panthers,Sussex Saxons,28,0,completed,,,Chris Denny,,,,high
+buafl,2015,Division 1 South Eastern,2016-01-31,,day,,Cambridge Pythons,Brighton Panthers,7,33,completed,Falmer Campus,,,Chris Denny,,,high
+buafl,2015,Division 1 South Eastern,2016-01-24,,day,,Brighton Panthers,UEA Pirates,14,6,completed,,,Chris Denny,,,,high
+buafl,2015,Division 1 South Eastern,2015-12-06,,day,,Kent Falcons,Brighton Panthers,2,9,completed,Falmer Campus,,,Chris Denny,,,high
+buafl,2015,Division 1 South Eastern,2015-11-29,,day,,UEA Pirates,Brighton Panthers,6,8,completed,Falmer Campus,,,Chris Denny,,,high
+buafl,2015,Division 1 South Eastern,2015-11-22,,day,,Brighton Panthers,Cambridge Pythons,12,6,completed,,Overtime. 6-6 at the end of regulation.,Chris Denny,,,,high
+buafl,2015,Division 1 South Eastern,2015-11-08,,day,,Sussex Saxons,Brighton Panthers,20,0,completed,Falmer Campus,,,Chris Denny,,,high
+buafl,2014,Premier South,2015-02-15,,day,,Brighton Panthers,Hertfordshire Hurricanes,0,78,completed,,,Chris Denny,,,,high
+buafl,2014,Premier South,2015-02-08,,day,,Brighton Panthers,Bath Killer Bees,2,57,completed,,,Chris Denny,,,,high
+buafl,2014,Premier South,2015-02-01,,day,,Imperial Immortals,Brighton Panthers,2,0,completed,Falmer Campus,,,Chris Denny,,,high
+buafl,2014,Premier South,2015-01-25,,day,,Birmingham Lions,Brighton Panthers,54,0,completed,Falmer Campus,,,Chris Denny,,,high
+buafl,2014,Premier South,2014-11-30,,day,,Hertfordshire Hurricanes,Brighton Panthers,58,0,completed,Falmer Campus,,,Chris Denny,,,high
+buafl,2014,Premier South,2014-11-16,,day,,Brighton Panthers,Birmingham Lions,0,67,completed,,,Chris Denny,,,,high
+buafl,2014,Premier South,2014-11-09,,day,,Brighton Panthers,Imperial Immortals,6,12,completed,,,Chris Denny,,,,high
+buafl,2014,Premier South,2014-11-02,,day,,Bath Killer Bees,Brighton Panthers,27,7,completed,Falmer Campus,,,Chris Denny,,,high
