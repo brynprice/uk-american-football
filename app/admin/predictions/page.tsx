@@ -57,7 +57,7 @@ export default function PredictionsPage() {
                 .from("games")
                 .select(`
                     *,
-                    phase:phases(season:seasons(year))
+                    phase:phases!games_phase_id_fkey(season:seasons(year))
                 `)
                 .or(`and(home_team_id.eq.${homeTeamId},away_team_id.eq.${awayTeamId}),and(home_team_id.eq.${awayTeamId},away_team_id.eq.${homeTeamId})`)
                 .eq('status', 'completed');
@@ -67,8 +67,8 @@ export default function PredictionsPage() {
             const startYear = currentYear - 2;
 
             const [homeHistory, awayHistory] = await Promise.all([
-                supabase.from("games").select("*, phase:phases(season:seasons(year))").or(`home_team_id.eq.${homeTeamId},away_team_id.eq.${homeTeamId}`).eq('status', 'completed').filter('phase.season.year', 'gte', startYear),
-                supabase.from("games").select("*, phase:phases(season:seasons(year))").or(`home_team_id.eq.${awayTeamId},away_team_id.eq.${awayTeamId}`).eq('status', 'completed').filter('phase.season.year', 'gte', startYear)
+                supabase.from("games").select("*, phase:phases!games_phase_id_fkey(season:seasons(year))").or(`home_team_id.eq.${homeTeamId},away_team_id.eq.${homeTeamId}`).eq('status', 'completed').filter('phase.season.year', 'gte', startYear),
+                supabase.from("games").select("*, phase:phases!games_phase_id_fkey(season:seasons(year))").or(`home_team_id.eq.${awayTeamId},away_team_id.eq.${awayTeamId}`).eq('status', 'completed').filter('phase.season.year', 'gte', startYear)
             ]);
 
             const hGames = (homeHistory.data || []) as any[];

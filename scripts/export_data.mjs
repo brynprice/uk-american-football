@@ -79,7 +79,7 @@ async function exportData(outputPath) {
                 venue:venues(name),
                 home_team:teams!home_team_id(name),
                 away_team:teams!away_team_id(name),
-                phase:phases(
+                phase:phases!games_phase_id_fkey(
                     id,
                     name,
                     parent:phases(name),

@@ -110,7 +110,7 @@ export default function SetCoachPage() {
                     away_score,
                     home_team:teams!home_team_id(id, name),
                     away_team:teams!away_team_id(id, name),
-                    phase:phases(id, name),
+                    phase:phases!games_phase_id_fkey(id, name),
                     staff:game_staff(id, person:people(display_name))
                 `)
                 .in("phase_id", phaseIds)

@@ -24,7 +24,7 @@ export default async function AdminProposalsPage() {
                 time,
                 home_team_id,
                 away_team_id,
-                phase:phases(name),
+                phase:phases!games_phase_id_fkey(name),
                 home_team:teams!home_team_id(name),
                 away_team:teams!away_team_id(name),
                 game_staff(role, team_id, person:people(display_name))

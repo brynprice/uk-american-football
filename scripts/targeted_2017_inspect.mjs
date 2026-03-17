@@ -20,7 +20,7 @@ async function check() {
                 id,
                 date,
                 phase_id, 
-                phase:phases(
+                phase:phases!games_phase_id_fkey(
                     name,
                     season:seasons(year)
                 )

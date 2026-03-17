@@ -77,7 +77,7 @@ export const ArchiveService = {
                 *, 
                 home_team:teams!home_team_id (*, team_aliases (*)), 
                 away_team:teams!away_team_id (*, team_aliases (*)), 
-                phase:phases(name, season:seasons(year)),
+                phase:phases!games_phase_id_fkey(name, season:seasons(year)),
                 away_phase:phases!away_phase_id(name)
             `)
             .or(`phase_id.in.(${phaseFilter}),away_phase_id.in.(${phaseFilter})`)
@@ -117,7 +117,7 @@ export const ArchiveService = {
                 home_team:teams!home_team_id (*, team_aliases (*)), 
                 away_team:teams!away_team_id (*, team_aliases (*)), 
                 venue:venues (*), 
-                phase:phases (*, season:seasons (id, year, competition:competitions (name))), 
+                phase:phases!games_phase_id_fkey (*, season:seasons (id, year, competition:competitions (name))), 
                 away_phase:phases!away_phase_id (name),
                 game_staff (*, person:people (*))
             `)
@@ -180,7 +180,7 @@ export const ArchiveService = {
     },
 
     async getPersonDetails(personId: string): Promise<any> {
-        const { data, error } = await supabase.from("people").select("*, game_staff (*, game:games (*, phase:phases (*, season:seasons (*, competition:competitions (*))))), participations (*, team:teams (*, team_aliases (*)), phase:phases (*, season:seasons (*, competition:competitions (*)))), hall_of_fame (*, team:teams (*, team_aliases (*))), retired_jerseys (*, team:teams (*, team_aliases (*)))").eq("id", personId).single();
+        const { data, error } = await supabase.from("people").select("*, game_staff (*, game:games (*, phase:phases!games_phase_id_fkey (*, season:seasons (*, competition:competitions (*))))), participations (*, team:teams (*, team_aliases (*)), phase:phases (*, season:seasons (*, competition:competitions (*)))), hall_of_fame (*, team:teams (*, team_aliases (*))), retired_jerseys (*, team:teams (*, team_aliases (*)))").eq("id", personId).single();
         if (error) throw error;
         if (!data) throw new Error("Person not found");
         return data;
@@ -190,7 +190,7 @@ export const ArchiveService = {
         // Query games where (home = scoreA AND away = scoreB) OR (home = scoreB AND away = scoreA)
         const { data, error } = await supabase
             .from('games')
-            .select('*, phase:phases(*, season:seasons(*, competition:competitions(*))), home_team:teams!home_team_id(*, team_aliases(*)), away_team:teams!away_team_id(*, team_aliases(*)), venue:venues(*)')
+            .select('*, phase:phases!games_phase_id_fkey(*, season:seasons(*, competition:competitions(*))), home_team:teams!home_team_id(*, team_aliases(*)), away_team:teams!away_team_id(*, team_aliases(*)), venue:venues(*)')
             .or(`and(home_score.eq.${scoreA},away_score.eq.${scoreB}),and(home_score.eq.${scoreB},away_score.eq.${scoreA})`)
             .neq("status", "anomaly")
             .order('date', { ascending: false });
@@ -236,7 +236,7 @@ export const ArchiveService = {
 
         // Fetch all games in those phases
         if (phaseIds.length > 0 || explicitGameIds.length > 0) {
-            let q = supabase.from('games').select('*, phase:phases(*)');
+            let q = supabase.from('games').select('*, phase:phases!games_phase_id_fkey(*)');
 
             if (phaseIds.length > 0 && explicitGameIds.length > 0) {
                 q = q.or(`phase_id.in.(${phaseIds.join(',')}),id.in.(${explicitGameIds.join(',')})`);

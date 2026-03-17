@@ -19,7 +19,7 @@ export default async function WalkoverManagerPage() {
             notes,
             home_team:teams!home_team_id(name),
             away_team:teams!away_team_id(name),
-            phase:phases(name, season:seasons(year, competition:competitions(name)))
+            phase:phases!games_phase_id_fkey(name, season:seasons(year, competition:competitions(name)))
         `)
         .eq("status", "awarded")
         .is("home_score", null)
