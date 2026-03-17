@@ -2,6 +2,17 @@
 
 This guide explains how to use the data import scripts to populate the database with historical teams, seasons, competitions, and game data.
 
+## 🚀 Quick Reference: Logo Sync
+If you have added new logo files to `public/images/logos/` and want to link them to teams in the database:
+
+```bash
+# Preview matches (Recommended)
+node scripts/sync_logos.mjs --dry-run
+
+# Run live sync
+node scripts/sync_logos.mjs
+```
+
 ## Prerequisites
 
 Before running any import scripts, you must configure your environment:
