@@ -21,9 +21,13 @@ export default async function AdminProposalsPage() {
                 home_score,
                 away_score,
                 date,
+                time,
+                home_team_id,
+                away_team_id,
                 phase:phases(name),
                 home_team:teams!home_team_id(name),
-                away_team:teams!away_team_id(name)
+                away_team:teams!away_team_id(name),
+                game_staff(role, team_id, person:people(display_name))
             )
         `)
         .eq("status", "pending")

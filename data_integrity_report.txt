@@ -1,0 +1,1132 @@
+[dotenv@17.3.1] injecting env (3) from .env.local -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+--- Checking Phase Data Linkage ---
+Searching for phases with neither games nor standings records...
+
+Found 207 phases with missing data linkage:
+
+[!] British Universities American Football League (2025) - Phase: "Division 1 North" (ID: bf7473ed-f6c7-42c2-952b-06248c6bab97)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2025) - Phase: "Division 1 South" (ID: 19debb56-9ba0-4491-a622-aa74a2d1a87e)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2025) - Phase: "Division 2" (ID: 62a04b79-27dd-4da5-8204-8082fff79956)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2025) - Phase: "Division 2 South" (ID: aafd4f28-17b8-4343-94c3-5d38562d217f)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2024) - Phase: "Premiership" (ID: 58d1552b-f30b-46de-bf61-d540935cade5)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2024) - Phase: "Division 1" (ID: a1c181f3-6d05-41fa-9d23-b84539d9cd90)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2024) - Phase: "Division 1 North" (ID: 4cb3e53e-2ee6-44fd-9441-522db95e5434)
+    (No participations recorded for this phase)
+
+[!] British Collegiate American Football League (1987) - Phase: "Playoffs" (ID: 8af9184e-4234-4600-95bb-04a814ab816e)
+    Participating Teams (4):
+      - Stirling Clansmen
+      - Cardiff Cobras
+      - Strathclyde Hawks
+      - Hull Sharks
+
+[!] British Universities American Football League (2024) - Phase: "Division 1 South" (ID: edd9782e-f9f5-4b9b-8b85-cf9b2bd77d1b)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2024) - Phase: "Division 2 North" (ID: 89990e18-5d11-455f-8d80-e9861d1e1402)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2024) - Phase: "Division 2 South" (ID: e39a5855-ca31-4c06-99e8-32af59469efb)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2018) - Phase: "Division 1 South Western" (ID: e8ed8ea2-01d8-40af-bad4-9f788d710a1e)
+    Participating Teams (5):
+      - Plymouth Blitz
+      - Cardiff Cobras
+      - Bath Killer Bees
+      - Exeter Demons
+      - Southampton Stags
+
+[!] British Universities American Football League (2025) - Phase: "Division 2 North" (ID: 742d4112-8acf-4f62-99f9-114ff2df2c36)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2024) - Phase: "Premier" (ID: d8f5cf16-f37f-4705-8722-07fa4fb1b78f)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2024) - Phase: "Premier North/South" (ID: 58ae7c3c-4b43-4b30-84c1-ba5e591572d7)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2024) - Phase: "Division 2" (ID: b8fecd8d-7058-4f2e-ae8b-dc3ec235fefc)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2018) - Phase: "Division 2" (ID: 460f3363-8f31-43ed-be4a-3b9237cf40a1)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2018) - Phase: "Division 2 North" (ID: d7f95d32-768b-4643-8864-1c75e1bd1276)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2018) - Phase: "Northern Conference Cup" (ID: ccd8ab13-e02a-4a69-bae0-c14fccd78bd7)
+    Participating Teams (12):
+      - DMU Lions
+      - Sunderland Spartans
+      - Leeds Gryphons
+      - HWU Wolverines
+      - Liverpool Raptors
+      - MMU Eagles
+      - Edinburgh Predators
+      - Staffordshire Stallions
+      - Edinburgh Napier Knights
+      - Coventry University Jets
+      - Bangor MudDogs
+      - Huddersfield Hawks
+
+[!] British Universities American Football League (2018) - Phase: "Division 2 Borders" (ID: 04c6c3dc-3722-4418-8921-75a6ca5206f5)
+    Participating Teams (7):
+      - Edinburgh Predators
+      - Teesside Cougars
+      - YSJ Jaguars
+      - UWS Pyros
+      - HWU Wolverines
+      - York Centurions
+      - Sunderland Spartans
+
+[!] British Universities American Football League (2025) - Phase: "Premier" (ID: f0668041-519d-4fbd-964a-3406464d4a55)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2025) - Phase: "Premier North/South" (ID: 5a0c0d5e-4227-4f69-b257-f84488407644)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2025) - Phase: "Division 1" (ID: 11d7903c-0058-4a99-8606-9150dc9935d3)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2018) - Phase: "Division 2 South" (ID: 06be63ee-4dec-4de8-a2ff-396a99d65f2a)
+    (No participations recorded for this phase)
+
+[!] British Collegiate American Football League (1989) - Phase: "Playoffs" (ID: 9fad03fe-fb17-47bc-bded-ef35d18930fc)
+    Participating Teams (4):
+      - Birmingham Lions
+      - Strathclyde Hawks
+      - Teesside Cougars
+      - Warwick Wolves
+
+[!] British Collegiate American Football League (2005) - Phase: "Central Division" (ID: 4e2142dc-242f-4bac-82cc-b90b85cd43ca)
+    (No participations recorded for this phase)
+
+[!] British Collegiate American Football League (2005) - Phase: "Southern Division" (ID: bff1e2f7-2563-461f-bf0b-a4e9ab6aa6ee)
+    Participating Teams (9):
+      - Brighton Panthers
+      - Greenwich Mariners
+      - Southampton Stags
+      - Oxford Cavaliers
+      - Surrey Stingers
+      - Royal Holloway Bears
+      - UEA Pirates
+      - Reading Knights
+      - Kent Falcons
+
+[!] British Universities American Football League (2019) - Phase: "Premier North/South" (ID: c6afa420-efd5-498f-b0e0-066ab89aa9ea)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Premier North" (ID: 74094431-0ca7-4ff2-8a9e-ae43329f696c)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Division 1 Midlands" (ID: 198d5068-5a4b-4dec-a983-4f917ae25ec1)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Division 1 South Western" (ID: 5666ea96-0a0b-4316-9c31-f07a9a4bb47a)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Division 2" (ID: 8e1f36a1-45fb-45b4-9d96-5a5aab31ea72)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Division 2 Northern" (ID: 4485664e-0e84-4533-ba55-53899bf486ca)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Division 2 Southern" (ID: 7700714c-ab81-48e6-9f60-2216824cc814)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2018) - Phase: "Southern Conference Cup" (ID: adbf30c6-8424-4f18-af3e-acd423f5e5c7)
+    Participating Teams (11):
+      - Essex Blades
+      - Sussex Saxons
+      - Royal Holloway Bears
+      - Cambridge Pythons
+      - Worcester Royals
+      - UEL Phoenix
+      - Bournemouth University Bobcats
+      - Brighton Panthers
+      - KCL Regents
+      - Southampton Stags
+      - Oxford Brookes University
+
+[!] British Universities American Football League (2018) - Phase: "Division 2 South Western" (ID: 42aa1f11-146c-4a39-ab86-aefb4b868351)
+    Participating Teams (8):
+      - Solent Redhawks
+      - Worcester Royals
+      - Oxford Brookes University
+      - Oxford Lancers
+      - Gloucestershire Gladiators
+      - Bournemouth University Bobcats
+      - Bristol Barracuda
+      - Bath Spa Bulldogs
+
+[!] British Universities American Football League (2018) - Phase: "Division 2 Southern" (ID: caafc5d4-953a-49d4-a0cd-6f81286277a6)
+    Participating Teams (8):
+      - KCL Regents
+      - Sussex Saxons
+      - UCL Emperors
+      - BNU Buccaneers
+      - Greenwich Mariners
+      - Chichester Spitfires
+      - City Wolfpack
+      - Royal Holloway Bears
+
+[!] British Universities American Football League (2018) - Phase: "Division 2 South Eastern" (ID: e419006a-9cab-46ae-9ebf-ceb7ec925d23)
+    Participating Teams (4):
+      - Cambridge Pythons
+      - UEL Phoenix
+      - Essex Blades
+      - Anglia Ruskin Siege
+
+[!] British Universities American Football League (2010) - Phase: "Borders Division" (ID: ef355f5c-1479-4d12-972d-ed8e107cbdf3)
+    (No participations recorded for this phase)
+
+[!] British Collegiate American Football League (2005) - Phase: "Northern Conference" (ID: 9eed4593-a310-410e-88b9-f1fbc6eccf7d)
+    (No participations recorded for this phase)
+
+[!] British Collegiate American Football League (2005) - Phase: "Eastern Division" (ID: f7725fd1-8167-4cb9-af88-f20889d33440)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2025) - Phase: "Premiership" (ID: 33dacf42-1323-4c0a-b1e4-c21095e765ee)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2021) - Phase: "Division 1 North" (ID: 52d1f5d1-392a-47cf-80ce-2b2c1d76ab8a)
+    (No participations recorded for this phase)
+
+[!] British Collegiate American Football League (1986) - Phase: "Playoffs" (ID: 4ade0581-4514-41da-a323-673808f6585d)
+    Participating Teams (2):
+      - Newcastle Raiders
+      - Hull Sharks
+
+[!] British Collegiate American Football League (1990) - Phase: "Playoffs" (ID: 90bb381c-6b87-419a-84e8-78ce747ecddf)
+    Participating Teams (2):
+      - UEA Pirates
+      - Teesside Cougars
+
+[!] British Collegiate American Football League (1991) - Phase: "Playoffs" (ID: 5825e127-aebe-421a-9d78-bdaeac0146a6)
+    Participating Teams (2):
+      - Glasgow Tigers
+      - Southampton Stags
+
+[!] British Collegiate American Football League (2003) - Phase: "Playoffs" (ID: 9d015957-e34e-4818-9af0-ce69a3b76660)
+    Participating Teams (2):
+      - Staffordshire Stallions
+      - Hertfordshire Hurricanes
+
+[!] British Collegiate American Football League (2005) - Phase: "Playoffs" (ID: d800b99d-3f28-4ac5-a474-c23cf76b94c6)
+    Participating Teams (2):
+      - Teesside Cougars
+      - Southampton Stags
+
+[!] British Universities American Football League (2021) - Phase: "Division 1 Midlands" (ID: 7ba690cc-0e11-477e-9753-e2b55a0371cc)
+    Participating Teams (4):
+      - Loughborough Students
+      - Warwick Wolves
+      - Leicester Longhorns
+      - Nottingham Trent Renegades
+
+[!] British Universities American Football League (2019) - Phase: "National Championship" (ID: 0268aeba-a0a7-4fb7-bfda-5575fde16272)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Division 1" (ID: b1c7329e-3587-4552-af35-475bf7bd0b48)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Division 1 North" (ID: a4df6c5a-7a07-48d8-b070-35aa3749ac4f)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Division 1 Yorkshire" (ID: 474fc6f3-b8a7-4206-9e1c-a0512fe10623)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Division 1 South" (ID: cbb32c90-635d-40d8-a3db-feeca230c35c)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Division 1 South Eastern" (ID: ff879353-1fd1-4ea0-9573-91d570ed2d2a)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Division 2 North" (ID: 0abf722f-c0e1-4194-bd68-727b86ebc72b)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Division 2 Borders" (ID: d2fbe85a-1040-486d-9274-0402b1f79e8f)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Division 2 South" (ID: ee3ed3c2-eaea-4476-87d3-bc891815bd3c)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Division 2 South Western" (ID: ddc3a1d5-49c3-4712-b537-1e45764cbbab)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2018) - Phase: "Premier South" (ID: 937587af-1fe3-4e7f-9def-b8bb68110999)
+    Participating Teams (5):
+      - UWE Bullets
+      - Birmingham Lions
+      - Hertfordshire Hurricanes
+      - Portsmouth Destroyers
+      - Swansea Titans
+
+[!] British Collegiate American Football League (1988) - Phase: "Playoffs" (ID: 3a7c947c-61ee-4a67-bbfc-719fd5195c32)
+    Participating Teams (5):
+      - Loughborough Students
+      - Hull Sharks
+      - Teesside Cougars
+      - Cardiff Cobras
+      - Strathclyde Hawks
+
+[!] British Collegiate American Football League (1994) - Phase: "Playoffs" (ID: 13054ff5-b0b3-41b8-8bce-171cca21871e)
+    Participating Teams (2):
+      - Cambridge Pythons
+      - Loughborough Students
+
+[!] British Universities American Football League (2025) - Phase: "National Trophy" (ID: 387c4188-4744-4202-a347-ecce9a4dc7c1)
+    Participating Teams (16):
+      - Edinburgh Napier Knights
+      - Glasgow Tigers
+      - Nottingham Green
+      - Stirling Clansmen
+      - KCL Regents
+      - UCLan Rams
+      - MMU Eagles
+      - Hertfordshire Hurricanes
+      - Birmingham Lions
+      - Manchester Tyrants
+      - Sheffield Hallam Warriors
+      - Kent Falcons
+      - Oxford Brookes University
+      - Bristol Barracuda
+      - Bournemouth University Bobcats
+      - Brighton Panthers
+
+[!] British Universities American Football League (2025) - Phase: "Northern Conference Cup" (ID: 23b3ed0d-efd3-41a6-9f5e-16741ac0db0c)
+    Participating Teams (8):
+      - York Centurions
+      - DMU Lions
+      - Coventry University Jets
+      - Hull Sharks
+      - LJMU Fury
+      - Sunderland Spartans
+      - Cambridge Pythons
+      - Lancaster Bombers
+
+[!] British Universities American Football League (2025) - Phase: "Southern Conference Cup" (ID: 9c741b94-0f6f-49c9-b280-e65dcd07f603)
+    Participating Teams (8):
+      - Reading Knights
+      - Sussex Saxons
+      - Gloucestershire Gladiators
+      - QMBL Vipers
+      - UWE Bullets 2s
+      - Surrey Stingers
+      - Imperial Immortals
+      - Swansea Titans
+
+[!] British Universities American Football League (2023) - Phase: "Premier North/South" (ID: 67c40523-41d1-4898-a635-9594c09a5e79)
+    (No participations recorded for this phase)
+
+[!] British Collegiate American Football League (1995) - Phase: "Playoffs" (ID: 85439f73-ddaf-48cd-8bf7-11e925c2a0c0)
+    Participating Teams (2):
+      - Cardiff Cobras
+      - Leeds Gryphons
+
+[!] British Collegiate American Football League (1996) - Phase: "Playoffs" (ID: f6d1b294-f79e-4676-bcb7-6485f16b24d1)
+    Participating Teams (2):
+      - Tarannau Aberystwyth
+      - Loughborough Students
+
+[!] British Collegiate American Football League (1997) - Phase: "Playoffs" (ID: 1113d62d-18e1-4371-9668-a4efcec35b2a)
+    Participating Teams (2):
+      - Leeds Gryphons
+      - Hertfordshire Hurricanes
+
+[!] British Universities American Football League (2023) - Phase: "Division 1" (ID: 969e2c1a-1d18-4587-b68b-57398c9f3afc)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2021) - Phase: "Premier North/South" (ID: 410b4852-7184-4ba4-85c6-5d597ecde4dd)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2016) - Phase: "Regular Season" (ID: 0c538120-27d4-4427-83dc-4c5d78e2ddaa)
+    Participating Teams (5):
+      - Surrey Stingers
+      - Sussex Saxons
+      - Portsmouth Destroyers
+      - Brighton Panthers
+      - Reading Knights
+
+[!] British Universities American Football League (2015) - Phase: "Division 1 South Eastern" (ID: 9da129ff-e93e-4102-81ba-922aacb8e379)
+    Participating Teams (5):
+      - Kent Falcons
+      - Sussex Saxons
+      - Brighton Panthers
+      - UEA Pirates
+      - Cambridge Pythons
+
+[!] British Universities American Football League (2014) - Phase: "Premier South" (ID: 02241b18-4310-4b9b-a824-cfee23c658f5)
+    Participating Teams (5):
+      - Hertfordshire Hurricanes
+      - Bath Killer Bees
+      - Brighton Panthers
+      - Imperial Immortals
+      - Birmingham Lions
+
+[!] British Universities American Football League (2013) - Phase: "South Coast Conference" (ID: e706a283-000e-4eaf-a56c-f2ca25134400)
+    Participating Teams (9):
+      - Oxford Brookes University
+      - Sussex Saxons
+      - Southampton Stags
+      - Portsmouth Destroyers
+      - Surrey Stingers
+      - Brighton Panthers
+      - Solent Redhawks
+      - Reading Knights
+      - Oxford Lancers
+
+[!] British Universities American Football League (2012) - Phase: "South Eastern B" (ID: 3e1dcc0c-ece6-4fd5-9cc5-fc4fbd944fb5)
+    Participating Teams (9):
+      - Brighton Panthers
+      - Royal Holloway Bears
+      - BNU Buccaneers
+      - Southampton Stags
+      - Portsmouth Destroyers
+      - Surrey Stingers
+      - Oxford Lancers
+      - Kingston Cougars
+      - Reading Knights
+
+[!] British Universities American Football League (2011) - Phase: "Regular Season" (ID: c535f3cf-3d09-444a-8099-5350fde5f62c)
+    Participating Teams (9):
+      - Brighton Panthers
+      - LSBU Spartans
+      - Essex Blades
+      - Hertfordshire Hurricanes
+      - Westminster Dragons
+      - Greenwich Mariners
+      - Kent Falcons
+      - Canterbury CC Chargers
+      - UEA Pirates
+
+[!] British Universities American Football League (2009) - Phase: "Regular Season" (ID: 3364d85c-c75e-4761-b2af-6f9754c1aa39)
+    Participating Teams (9):
+      - Brighton Panthers
+      - Greenwich Mariners
+      - Anglia Ruskin Phantoms
+      - Portsmouth Destroyers
+      - UEA Pirates
+      - Imperial Immortals
+      - Southampton Stags
+      - Royal Holloway Bears
+      - Solent Redhawks
+
+[!] British Universities American Football League (2008) - Phase: "Regular Season" (ID: 07b0ead3-5aac-48a9-abef-3681eb415151)
+    Participating Teams (9):
+      - Hertfordshire Hurricanes
+      - Brighton Panthers
+      - Southampton Stags
+      - Greenwich Mariners
+      - Portsmouth Destroyers
+      - Royal Holloway Bears
+      - Surrey Stingers
+      - UEA Pirates
+      - Anglia Ruskin Phantoms
+
+[!] British Universities American Football League (2007) - Phase: "Regular Season" (ID: 88ed0151-17f1-4dd4-a3b9-ea60cf1b0e14)
+    Participating Teams (6):
+      - Surrey Stingers
+      - Brighton Panthers
+      - Royal Holloway Bears
+      - Portsmouth Destroyers
+      - Southampton Stags
+      - Reading Knights
+
+[!] British Collegiate American Football League (2006) - Phase: "Regular Season" (ID: c291c67d-ed7d-48f9-ac5a-af84c04eedfe)
+    Participating Teams (8):
+      - Portsmouth Destroyers
+      - Brighton Panthers
+      - Southampton Stags
+      - Anglia Ruskin Phantoms
+      - Reading Knights
+      - UWE Bullets
+      - Surrey Stingers
+      - Oxford Cavaliers
+
+[!] British Collegiate American Football League (2005) - Phase: "Regular Season" (ID: c51b0512-e9b9-48bb-ba6f-5cba8656e166)
+    Participating Teams (9):
+      - Brighton Panthers
+      - Greenwich Mariners
+      - Southampton Stags
+      - Oxford Cavaliers
+      - Surrey Stingers
+      - Royal Holloway Bears
+      - UEA Pirates
+      - Reading Knights
+      - Kent Falcons
+
+[!] British Collegiate American Football League (2004) - Phase: "Regular Season" (ID: c451621d-041e-4a5f-82c4-413302a00436)
+    Participating Teams (8):
+      - Brighton Panthers
+      - Reading Knights
+      - Southampton Stags
+      - Warwick Wolves
+      - Essex Blades
+      - Surrey Stingers
+      - UWE Bullets
+      - Kent Falcons
+
+[!] British Collegiate American Football League (2003) - Phase: "Regular Season" (ID: 8df1cf17-577d-4223-9347-7b1ff82571f8)
+    Participating Teams (7):
+      - Brighton Panthers
+      - Essex Blades
+      - Anglia Ruskin Phantoms
+      - Plymouth Blitz
+      - Reading Knights
+      - Surrey Stingers
+      - Southampton Stags
+
+[!] British Universities American Football League (2010) - Phase: "South Eastern Division" (ID: 03117cbc-8c3a-4b96-af74-e7eab8913e83)
+    Participating Teams (9):
+      - Brighton Panthers
+      - Canterbury CC Chargers
+      - KCL Regents
+      - Kent Falcons
+      - Hertfordshire Hurricanes
+      - Solent Redhawks
+      - Greenwich Mariners
+      - Southampton Stags
+      - Portsmouth Destroyers
+
+[!] British Universities American Football League (2007) - Phase: "Southern Division" (ID: bf3e05b4-9949-4fbe-983a-50d5460038f8)
+    Participating Teams (6):
+      - Surrey Stingers
+      - Brighton Panthers
+      - Royal Holloway Bears
+      - Portsmouth Destroyers
+      - Southampton Stags
+      - Reading Knights
+
+[!] British Collegiate American Football League (2006) - Phase: "Southern Division" (ID: 0d3fe8d8-e79b-4617-bfc7-0881835c3486)
+    Participating Teams (8):
+      - Portsmouth Destroyers
+      - Brighton Panthers
+      - Southampton Stags
+      - Anglia Ruskin Phantoms
+      - Reading Knights
+      - UWE Bullets
+      - Surrey Stingers
+      - Oxford Cavaliers
+
+[!] British Collegiate American Football League (2004) - Phase: "Southern Division" (ID: 195a0802-1e9b-443c-9461-afe858e43276)
+    Participating Teams (8):
+      - Brighton Panthers
+      - Reading Knights
+      - Southampton Stags
+      - Warwick Wolves
+      - Essex Blades
+      - Surrey Stingers
+      - UWE Bullets
+      - Kent Falcons
+
+[!] British Collegiate American Football League (2003) - Phase: "Southern Division" (ID: 06cb946d-0249-4904-a591-5b75ffb32381)
+    Participating Teams (7):
+      - Brighton Panthers
+      - Essex Blades
+      - Anglia Ruskin Phantoms
+      - Plymouth Blitz
+      - Reading Knights
+      - Southampton Stags
+      - Surrey Stingers
+
+[!] British Universities American Football League (2021) - Phase: "Division 1 South Western" (ID: 1aba96e6-46fb-4e62-aaf8-c6a1551158e8)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Premier South" (ID: 530dc336-9932-4c32-9163-168d2182eecf)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2018) - Phase: "Division 2 Northern" (ID: d2ef0563-1140-4e4a-9fc7-73429392fa06)
+    Participating Teams (7):
+      - Liverpool Raptors
+      - Lancaster Bombers
+      - Leeds Gryphons
+      - Bangor MudDogs
+      - Bradford Bears
+      - Edge Hill Vikings
+      - Tarannau Aberystwyth
+
+[!] British Universities American Football League (2017) - Phase: "Premier North/South" (ID: bf7a6b1f-2a17-4eb6-b4b5-d9454f4e1766)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2017) - Phase: "National Championship" (ID: 44fd4b18-e23d-4ed3-a6a0-db8f22e28fdc)
+    Participating Teams (2):
+      - Stirling Clansmen
+      - Derby Braves
+
+[!] British Universities American Football League (2010) - Phase: "Thames Valley Division" (ID: ac4b4801-258c-4304-b5d9-c6d0fcf64226)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2010) - Phase: "South Eastern Division" (ID: e186bcc6-5c77-4a64-8f2d-4b0d6cb87b88)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2025) - Phase: "National Championship" (ID: 011e40da-c0a8-4a0c-a408-c6fb4839cda7)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2025) - Phase: "National Vase" (ID: 9528dca7-3565-4ec6-a3f7-4f8241527c65)
+    Participating Teams (8):
+      - Brunel Burners
+      - Newcastle Raiders
+      - Nottingham Trent Renegades
+      - Portsmouth Destroyers
+      - SGS Pride
+      - Northumbria Mustangs
+      - Warwick Wolves
+      - Cardiff Cobras
+
+[!] British Collegiate American Football League (1992) - Phase: "Playoffs" (ID: ec58561a-beb2-4c26-8c55-e807a7296165)
+    Participating Teams (2):
+      - Leeds Gryphons
+      - Southampton Stags
+
+[!] British Collegiate American Football League (1993) - Phase: "Playoffs" (ID: 1fa63e3a-d468-45d7-967b-838c3ba93d62)
+    Participating Teams (2):
+      - Leicester Longhorns
+      - Glasgow Tigers
+
+[!] British Collegiate American Football League (1998) - Phase: "Playoffs" (ID: c5b67ff6-ce8c-420c-8f27-e66a0236ece6)
+    Participating Teams (2):
+      - Loughborough Students
+      - Hertfordshire Hurricanes
+
+[!] British Collegiate American Football League (1999) - Phase: "Playoffs" (ID: e3fe269a-78cf-4716-b31d-9a7fa9374fd9)
+    Participating Teams (2):
+      - Leicester Longhorns
+      - Hertfordshire Hurricanes
+
+[!] British Collegiate American Football League (2000) - Phase: "Playoffs" (ID: e8cd9204-1d32-4f5a-9f7e-b86fb6ddbb6e)
+    Participating Teams (2):
+      - Loughborough Students
+      - Oxford Cavaliers
+
+[!] British Collegiate American Football League (2001) - Phase: "Playoffs" (ID: 14cf5e49-56dd-44ab-9a32-ec5f992d03b4)
+    Participating Teams (2):
+      - Oxford Cavaliers
+      - Loughborough Students
+
+[!] British Collegiate American Football League (2005) - Phase: "Southern Conference" (ID: b6e5ca5e-77dc-47af-b364-1414218b2c60)
+    (No participations recorded for this phase)
+
+[!] British Collegiate American Football League (2005) - Phase: "Western Division" (ID: 1e7deeb2-eb0c-4fa2-a568-7e96f75fc105)
+    (No participations recorded for this phase)
+
+[!] British Collegiate American Football League (2002) - Phase: "Playoffs" (ID: b78a5908-be34-4162-8d0c-947b5837f7d0)
+    Participating Teams (2):
+      - Hertfordshire Hurricanes
+      - Stirling Clansmen
+
+[!] British Collegiate American Football League (2004) - Phase: "Playoffs" (ID: 18c9a3d5-600a-4224-8265-de5f7aecb455)
+    Participating Teams (2):
+      - Glasgow Tigers
+      - Birmingham Lions
+
+[!] British Collegiate American Football League (2006) - Phase: "Playoffs" (ID: 430f0eed-ede7-49b5-8fc4-001f2b96f3ea)
+    Participating Teams (2):
+      - Loughborough Students
+      - UWE Bullets
+
+[!] British Universities American Football League (2010) - Phase: "Northern Division" (ID: ca74b99b-f669-406f-808a-0b0ef0b9ed66)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2010) - Phase: "Midland Division" (ID: 77c774ca-b80b-4dcf-8d48-f3c37d37ad18)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2021) - Phase: "Division 2 North" (ID: ec476546-a8d3-4b0b-80ea-3765d82f323a)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2021) - Phase: "Southern Conference Cup" (ID: 298ea559-1dfd-439c-949f-6dc1e9d2b091)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2021) - Phase: "Division 2 South Western" (ID: b876bb0f-406a-4a5f-b655-afef446381ff)
+    Participating Teams (2):
+      - Bath Spa Bulldogs
+      - Bournemouth University Bobcats
+
+[!] British Universities American Football League (2021) - Phase: "Division 2 Southern" (ID: 5da9c578-7a4c-42be-b262-c089faeff95f)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2018) - Phase: "Division 1" (ID: 080edd48-9eb0-44b3-be1d-271d06e32569)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2018) - Phase: "National Trophy" (ID: ec967776-c9de-4f3e-868f-368435e047df)
+    Participating Teams (15):
+      - Newcastle Raiders
+      - Nottingham Trent Renegades
+      - Coventry University Jets
+      - UCLan Rams
+      - UEA Pirates
+      - QMBL Vipers
+      - Kent Falcons
+      - Exeter Demons
+      - Sheffield Hallam Warriors
+      - Hull Sharks
+      - Edinburgh Napier Knights
+      - UWE Bullets
+      - Plymouth Blitz
+      - Reading Knights
+      - Nottingham Gold
+
+[!] British Universities American Football League (2018) - Phase: "Division 1 North" (ID: 966981c0-ee8a-4ab5-a247-5bf4e9744ebc)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2018) - Phase: "Division 1 Yorkshire & Lancashire" (ID: e9bde178-51dc-40b6-86f2-83b9f79b388d)
+    Participating Teams (5):
+      - Sheffield Sabres
+      - Manchester Tyrants
+      - UCLan Rams
+      - Liverpool Raptors
+      - Sheffield Hallam Warriors
+
+[!] British Universities American Football League (2021) - Phase: "Division 2 South Eastern" (ID: 5d777014-a27c-4620-92c3-db9ad701ae03)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "National Trophy" (ID: 06e63c71-a810-46a8-b61d-91e231657a78)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Division 1 Northern" (ID: 5a9326a3-0c86-4169-be01-9061580cd1be)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Division 1 Southern" (ID: 46a0c06d-9d26-43a6-9f15-3be5a74851d8)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Northern Conference Cup" (ID: 0a941f7a-7070-45c5-91b4-d7abc849d7ea)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Division 2 Midlands" (ID: fc4abbaa-bf0f-4698-94f1-88c9003774a1)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Southern Conference Cup" (ID: 94ca46c7-5c7b-4566-aad2-dae224a40e42)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2019) - Phase: "Division 2 South Eastern" (ID: f1baa07e-737c-4678-829a-05347cd8926d)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2023) - Phase: "Division 1 North" (ID: 4b5687e4-9d2d-4f4a-80e1-443b0213355b)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2018) - Phase: "Premier North/South" (ID: 52c23cd3-5bf4-4777-8b1b-72aea44a6d78)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2018) - Phase: "National Championship" (ID: 4f87a52e-466e-4007-aa30-bff64ae5d4fa)
+    Participating Teams (10):
+      - Swansea Titans
+      - Durham Saints
+      - Leeds Beckett Carnegie
+      - Birmingham Lions
+      - Nottingham Gold
+      - Hertfordshire Hurricanes
+      - UWE Bullets
+      - Stirling Clansmen
+      - Derby Braves
+      - Loughborough Students
+
+[!] British Universities American Football League (2018) - Phase: "Division 1 Midlands" (ID: 832ff2a8-e3eb-4fd6-bc8c-434bd7c8442c)
+    Participating Teams (5):
+      - Nottingham Trent Renegades
+      - Leicester Longhorns
+      - Loughborough Students
+      - Coventry University Jets
+      - Warwick Wolves
+
+[!] British Universities American Football League (2018) - Phase: "Division 1 South" (ID: 8b0a3dbc-f377-417b-8813-dcd879395260)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2017) - Phase: "Premier South" (ID: d69283b5-a2f1-4bd6-8954-2e652d6d35fc)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2017) - Phase: "Division 1" (ID: fb90a26b-14cd-4f23-bdf0-2396ede28769)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2017) - Phase: "National Trophy" (ID: 19ea3b2a-696a-423e-afe7-c6b71baea406)
+    Participating Teams (4):
+      - Sheffield Hallam Warriors
+      - Hull Sharks
+      - Edinburgh Napier Knights
+      - UWE Bullets
+
+[!] British Universities American Football League (2023) - Phase: "Division 2 North" (ID: 4218ab1e-d80d-4a54-b89d-ab0aa17be55a)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2023) - Phase: "Division 2 South" (ID: cbe9f093-cb30-4a7c-9413-7b0659d57bf1)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2021) - Phase: "National Championship" (ID: 09574270-e488-4075-b8c9-8cdc7ef009b9)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2021) - Phase: "Division 1" (ID: 42eefb4f-1ede-403a-ade9-b06a0d6ecd01)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2021) - Phase: "Division 1 Northern" (ID: 37927e2f-6730-47fd-b86d-6b1f87f366ac)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2021) - Phase: "Division 1 South" (ID: 17d88480-3e45-4946-9d9d-5843faaa538f)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2017) - Phase: "Division 1 North" (ID: d5000e83-c72d-4b38-9a71-5043362954d1)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2017) - Phase: "Division 1 Northern" (ID: 802f883c-da42-4208-b5ab-ad1e9e3753e4)
+    Participating Teams (5):
+      - Sunderland Spartans
+      - Glasgow Tigers
+      - Hull Sharks
+      - Edinburgh Napier Knights
+      - Northumbria Mustangs
+
+[!] British Universities American Football League (2017) - Phase: "Division 1 Yorkshire" (ID: 4226ac09-d265-41a2-934e-c30f862ff4f5)
+    Participating Teams (5):
+      - Sheffield Sabres
+      - Leeds Gryphons
+      - Liverpool Raptors
+      - UCLan Rams
+      - Sheffield Hallam Warriors
+
+[!] British Universities American Football League (2010) - Phase: "Regular Season" (ID: c6a8d6b9-6d38-4aac-a127-9dbb6c2b331f)
+    Participating Teams (9):
+      - Brighton Panthers
+      - Canterbury CC Chargers
+      - KCL Regents
+      - Kent Falcons
+      - Hertfordshire Hurricanes
+      - Solent Redhawks
+      - Greenwich Mariners
+      - Southampton Stags
+      - Portsmouth Destroyers
+
+[!] British Universities American Football League (2017) - Phase: "Division 1 Midlands" (ID: f66a2c43-20a4-4143-b138-fdb24a0279d9)
+    Participating Teams (6):
+      - Nottingham Gold
+      - Warwick Wolves
+      - Leicester Longhorns
+      - Nottingham Trent Renegades
+      - Staffordshire Stallions
+      - Loughborough Students
+
+[!] British Universities American Football League (2017) - Phase: "Division 1 South" (ID: 2bb4a5bc-68bd-4db7-84fc-caaa31495523)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2017) - Phase: "Division 1 Southern" (ID: 7e5a2981-74a1-431a-8ab3-a9abb16c2c0c)
+    Participating Teams (6):
+      - Kingston Cougars
+      - Surrey Stingers
+      - Brunel Burners
+      - Sussex Saxons
+      - Reading Knights
+      - Portsmouth Destroyers
+
+[!] British Universities American Football League (2017) - Phase: "Division 1 South Eastern" (ID: 2882e7b4-a311-4971-a162-9c5e8b8fc77a)
+    Participating Teams (5):
+      - Canterbury CC Chargers
+      - Kent Falcons
+      - Cambridge Pythons
+      - Imperial Immortals
+      - UEA Pirates
+
+[!] British Universities American Football League (2017) - Phase: "Division 2" (ID: 04858ece-fe16-4ce4-a70a-5600a0a6fdfa)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2017) - Phase: "Division 2 North" (ID: aed34afa-da2a-4661-8d24-5f3faa41ab63)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2017) - Phase: "Northern Conference Cup" (ID: 74a6cff5-f440-4030-916c-9a7370fb4008)
+    Participating Teams (2):
+      - Bangor MudDogs
+      - Huddersfield Hawks
+
+[!] British Universities American Football League (2017) - Phase: "Division 2 Borders" (ID: bc447ccc-5c11-4eec-bba3-d73ac311ab2a)
+    Participating Teams (8):
+      - Newcastle Raiders
+      - YSJ Jaguars
+      - Lancaster Bombers
+      - HWU Wolverines
+      - Edinburgh Predators
+      - UWS Pyros
+      - York Centurions
+      - Teesside Cougars
+
+[!] British Universities American Football League (2017) - Phase: "Division 2 Midlands" (ID: 6692df06-56d7-41ed-b077-eed29ef414f5)
+    Participating Teams (7):
+      - Huddersfield Hawks
+      - Lincoln Colonials
+      - Coventry University Jets
+      - Worcester Royals
+      - MMU Eagles
+      - DMU Lions
+      - Northampton Nemesis
+
+[!] British Universities American Football League (2017) - Phase: "Division 2 South" (ID: 51a46eb5-cdab-4f9a-ba13-4d60ce1d3ed5)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2017) - Phase: "Southern Conference Cup" (ID: 71ab6277-5fab-481f-984a-72a29546a489)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2017) - Phase: "Division 2 South Western" (ID: 50cd7a37-020a-46a3-bf54-9f11db8adab8)
+    Participating Teams (7):
+      - Bath Spa Bulldogs
+      - Oxford Lancers
+      - Gloucestershire Gladiators
+      - Bristol Barracuda
+      - Southampton Stags
+      - Oxford Brookes University
+      - Bournemouth University Bobcats
+
+[!] British Universities American Football League (2010) - Phase: "Playoffs" (ID: 4219d793-e43b-4ccc-b93f-6a5394465048)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2016) - Phase: "National Championship" (ID: 7ff28b65-a532-4af2-8d07-e6b4bc622548)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2016) - Phase: "Premier North" (ID: a3f81d89-70c6-4ded-8f92-6aa1eaec0bf1)
+    Participating Teams (2):
+      - Stirling Clansmen
+      - Loughborough Students
+
+[!] British Universities American Football League (2016) - Phase: "Premier South" (ID: a0ac3209-eed7-48f7-9605-b537c96fd764)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2016) - Phase: "Division 1" (ID: 6386fdfa-341d-49c4-a242-f31027bf1f34)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2016) - Phase: "National Trophy" (ID: d48f4a15-7c1d-417b-9089-5bd5a03e1133)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2016) - Phase: "Division 1 North" (ID: df2cfcf1-52bf-446d-af46-d954b69fd142)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2016) - Phase: "Division 1 North Western" (ID: 1b31a91e-f777-4e59-b4e1-982017a4e434)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2016) - Phase: "Division 1 Northern" (ID: 358475f6-4dee-4d80-a30a-01f3a22f36eb)
+    Participating Teams (4):
+      - Glasgow Tigers
+      - Northumbria Mustangs
+      - Newcastle Raiders
+      - Hull Sharks
+
+[!] British Universities American Football League (2016) - Phase: "Division 1 Midlands" (ID: 4421d782-302b-4a88-ac2f-933d8c3c94e1)
+    Participating Teams (2):
+      - Warwick Wolves
+      - Staffordshire Stallions
+
+[!] British Universities American Football League (2016) - Phase: "Division 1 South" (ID: d8bcd922-4665-4134-8ad6-c97aa3431a81)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2016) - Phase: "Division 1 South Western" (ID: d79f3b82-d1a3-49c5-b431-ce750f21864d)
+    Participating Teams (4):
+      - UWE Bullets
+      - Oxford Lancers
+      - Cardiff Cobras
+      - Solent Redhawks
+
+[!] British Universities American Football League (2016) - Phase: "Division 1 Southern" (ID: 981d1b49-c450-47c6-9c69-7b782ea44334)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2016) - Phase: "Division 1 South Eastern" (ID: 18db4001-335b-4395-8380-8408109134c0)
+    Participating Teams (2):
+      - Royal Holloway Bears
+      - Cambridge Pythons
+
+[!] British Universities American Football League (2016) - Phase: "Division 2" (ID: c7ae82ae-5dab-4e94-bae0-152c17799eb8)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2016) - Phase: "Division 2 North" (ID: 82361eed-ae50-4563-a15b-41b60c8461bd)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2016) - Phase: "Northern Conference Cup" (ID: 7aceaad3-ae4c-4857-8bdf-edde636202d2)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2016) - Phase: "Division 2 Borders" (ID: bcc72b90-06ee-4a5e-acbe-e89995f418ac)
+    Participating Teams (4):
+      - HWU Wolverines
+      - Edinburgh Predators
+      - York Centurions
+      - UWS Pyros
+
+[!] British Universities American Football League (2016) - Phase: "Division 2 Northern" (ID: 70ed06e1-1c41-4aa2-b2e2-206e87e0d11f)
+    Participating Teams (4):
+      - Bangor MudDogs
+      - Edge Hill Vikings
+      - Bradford Bears
+      - Keele Crusaders
+
+[!] British Universities American Football League (2016) - Phase: "Division 2 Midlands" (ID: 778191a1-e613-4ef3-b361-b3f04fa9c787)
+    Participating Teams (2):
+      - Leicester Longhorns
+      - Lincoln Colonials
+
+[!] British Universities American Football League (2016) - Phase: "Division 2 South" (ID: 10161874-aae9-4cfe-bab2-17ea4767b6f7)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2016) - Phase: "Southern Conference Cup" (ID: c0763a02-4f94-4db8-af28-6000d10c93bb)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2016) - Phase: "Division 2 South Western" (ID: b4b3012e-1dad-4c85-8451-7264ace3ebd5)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2016) - Phase: "Division 2 Southern" (ID: f860419f-5e72-49aa-9e87-c8abefc80f24)
+    Participating Teams (2):
+      - UCL Emperors
+      - BNU Buccaneers
+
+[!] British Universities American Football League (2023) - Phase: "Division 1 South" (ID: e0d754cd-0900-47bc-8603-14156fe4b533)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2021) - Phase: "Division 1 Southern" (ID: a6d02f9d-a857-42b7-96b5-52b6216b5db2)
+    Participating Teams (2):
+      - Sussex Saxons
+      - Portsmouth Destroyers
+
+[!] British Universities American Football League (2021) - Phase: "Division 2" (ID: 312f6640-4fef-40df-9581-3894b1482061)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2016) - Phase: "Division 2 South Eastern" (ID: a511bbed-aeb6-4e35-bbc6-8555820d2545)
+    Participating Teams (2):
+      - Canterbury CC Chargers
+      - Greenwich Mariners
+
+[!] British Universities American Football League (2010) - Phase: "Challenge Trophy" (ID: f71d4eaa-a33a-4a71-83c1-4a34f13f92e4)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2010) - Phase: "South Western Division" (ID: b7c90fdd-cd6d-4c1a-a516-5b6617e4bfc6)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2021) - Phase: "Division 2 Midlands" (ID: 5038617c-65c9-4e97-b94c-8c3f4eaf227c)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2021) - Phase: "Division 2 South" (ID: 7c39bf62-95e2-4f8f-98af-1e3af198eb0d)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2017) - Phase: "Premier North" (ID: d68f47fc-db08-4066-aaa3-b76a86a8f517)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2017) - Phase: "Division 1 South Western" (ID: 45ac3ff2-a640-49de-824f-310bd3a5d316)
+    Participating Teams (6):
+      - Solent Redhawks
+      - Exeter Demons
+      - UWE Bullets
+      - Plymouth Blitz
+      - Cardiff Cobras
+      - Bath Killer Bees
+
+[!] British Universities American Football League (2017) - Phase: "Division 2 Northern" (ID: 14ad9601-9ebb-4ead-9127-e80ff099aea6)
+    Participating Teams (8):
+      - Bangor MudDogs
+      - Keele Crusaders
+      - Manchester Tyrants
+      - Edge Hill Vikings
+      - Tarannau Aberystwyth
+      - Liverpool Raptors
+      - Chester Legion
+      - Bradford Bears
+
+[!] British Universities American Football League (2017) - Phase: "Division 2 Southern" (ID: fab9660c-ee00-49d6-9eec-f0b58a583b86)
+    Participating Teams (7):
+      - Royal Holloway Bears
+      - Brighton Panthers
+      - KCL Regents
+      - City Wolfpack
+      - BNU Buccaneers
+      - Chichester Spitfires
+      - UCL Emperors
+
+[!] British Universities American Football League (2017) - Phase: "Division 2 South Eastern" (ID: d57ffa72-ff8e-42a4-8b35-b466c476ea57)
+    Participating Teams (6):
+      - UEL Phoenix
+      - QMBL Vipers
+      - Westminster Dragons
+      - Essex Blades
+      - Anglia Ruskin Siege
+      - Greenwich Mariners
+
+[!] British Universities American Football League (2016) - Phase: "Premier North/South" (ID: c23fabbb-8d39-4386-a80f-76a7fc8082a5)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2022) - Phase: "Division 2 South" (ID: 332c6eb3-8a12-4f70-85d7-de15b38cbcf9)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2022) - Phase: "Southern Conference Cup" (ID: 912e6462-43b6-43cc-bd8a-97b0f7a0296b)
+    Participating Teams (8):
+      - Reading Knights
+      - Gloucestershire Gladiators
+      - Bath Killer Bees
+      - Solent Redhawks
+      - UCL Emperors
+      - KCL Regents
+      - Greenwich Mariners
+      - Brighton Panthers
+
+[!] British Universities American Football League (2023) - Phase: "Division 2" (ID: da03a0e3-f945-4597-a982-18424f4578c5)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2022) - Phase: "Premier North/South" (ID: 7dac9232-8b72-4f15-90df-009edb7ed567)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2022) - Phase: "National Championship" (ID: 25efb10d-01aa-4860-87e0-5d881488645b)
+    Participating Teams (8):
+      - UWE Bullets
+      - Newcastle Raiders
+      - Nottingham Gold
+      - UEA Pirates
+      - Leeds Beckett Carnegie
+      - Birmingham Lions
+      - SGS Pride
+      - Durham Saints
+
+[!] British Universities American Football League (2022) - Phase: "Division 1" (ID: 88f296dd-1e83-4508-aa73-b03ed1d5ea3d)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2022) - Phase: "National Trophy" (ID: c5b5b061-4f5f-4d1b-9172-4531628a6adb)
+    Participating Teams (16):
+      - Portsmouth Destroyers
+      - Royal Holloway Bears
+      - Loughborough Students
+      - Warwick Wolves
+      - Bournemouth University Bobcats
+      - Bristol Barracuda
+      - Nottingham Trent Renegades
+      - Glasgow Tigers
+      - Hertfordshire Hurricanes
+      - Exeter Demons
+      - Essex Blades
+      - Brunel Burners
+      - Sheffield Hallam Warriors
+      - LJMU Fury
+      - Leeds Gryphons
+      - Edinburgh Predators
+
+[!] British Universities American Football League (2022) - Phase: "Division 1 North" (ID: 1f8df9f8-c4b3-4ba5-921c-9984d343dab8)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2022) - Phase: "Division 1 South" (ID: 744b2578-c49b-4fd9-9b3d-1e323238f551)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2022) - Phase: "Division 2" (ID: 6fd16d3e-f217-42d3-a091-8e7838fb041d)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2022) - Phase: "Division 2 North" (ID: f5ae44f9-dedd-4888-ad3a-e3e19526f6f0)
+    (No participations recorded for this phase)
+
+[!] British Universities American Football League (2022) - Phase: "Northern Conference Cup" (ID: 738423df-eadb-4c7d-9915-0577bca72329)
+    Participating Teams (8):
+      - Aberdeen Bulls
+      - Nottingham Green
+      - Leicester Longhorns
+      - Derby Braves
+      - Liverpool Raptors
+      - Bradford Bears
+      - HWU Wolverines
+      - York Centurions
+

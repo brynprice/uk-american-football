@@ -180,10 +180,27 @@ Used for modern Playwaze/BUCS Play data (2019-present) where data is formatted i
 
 #### BUCS Tabular Transformer (`transform_bucs_2018.mjs`)
 Used for the 2018/19 BUCS season data which used a standard tabular Excel format with headers.
-*   **Command**: `node scripts/transform_bucs_2018.mjs <input.xlsx> <output.csv>`
-*   **Behavior**: Parses the tabular format, converts Excel serial dates/times, and applies the same mapping logic as the chunk transformer.
+*   **Command**: `node scripts/transform_bucs_2018.mjs <input.xlsx> <output.csv> [year]`
+*   **Behavior**: Parses the tabular format, converts Excel serial dates/times, and applies the same mapping logic as the chunk transformer. The `[year]` defaults to 2018.
 
-### 12. Data Completeness Score (`calculate_completeness.mjs`)
+### 12. Logo Synchronization (`sync_logos.mjs`)
+
+Automatically matches image files in `public/images/logos/` to teams or team aliases in the database.
+
+*   **Command**: `node scripts/sync_logos.mjs [--dry-run]`
+*   **Behavior**: 
+    1. Scans `public/images/logos/` for image files.
+    2. Slugifies the filenames (e.g., `edge-hill-vikings.png` -> `edge-hill-vikings`).
+    3. Matches these slugs against slugified names in the `teams` and `team_aliases` tables.
+    4. Updates the `logo_url` in the database with the correct relative path (e.g., `/images/logos/edge-hill-vikings.png`).
+*   **Git Push**: After adding new logos to the folder, you should push them to the repository:
+    ```bash
+    git add public/images/logos/
+    git commit -m "Add new team logos"
+    git push origin main
+    ```
+
+### 13. Data Completeness Score (`calculate_completeness.mjs`)
 
 The Archive features a dynamic Data Completeness Score (0-100%) for each season to indicate the depth and quality of the historical records available.
 
@@ -204,3 +221,14 @@ The 100-point score is weighted across four categories:
 4.  **Context & Personnel (20 pts):**
     *   *Coaches (15 pts):* Percentage of participating teams that have a head coach assigned.
     *   *Title Game (5 pts):* Is there at least one game marked as a `title_game` for the season?
+
+### 14. Phase Data Linkage Check (`check_phase_data_linkage.mjs`)
+
+A database health utility designed to find and clean up "orphaned" records where teams are enrolled in phases that have no results.
+
+*   **Command**: `node scripts/check_phase_data_linkage.mjs`
+*   **Behavior**:
+    1.  **Hierarchy-Aware Analysis**: A phase is only considered empty if it has no games, no standings data, **no head coach assignments**, AND none of its child phases have data.
+    2.  **Safeguards**: Automatically excludes current or future seasons from deletion to protect upcoming schedule placeholders.
+    3.  **Orphan Cleanup**: Identifies `participation` records linked to empty past phases.
+    4.  **Interactive**: Lists problematic records and asks for confirmation (`y/N`) before deleting the orphaned participations.

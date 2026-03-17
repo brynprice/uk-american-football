@@ -34,6 +34,8 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
     const [teams, setTeams] = useState<Team[]>([]);
     const [seasons, setSeasons] = useState<any[]>([]);
     const [phases, setPhases] = useState<Phase[]>([]);
+    const [people, setPeople] = useState<any[]>([]);
+    const [venues, setVenues] = useState<any[]>([]);
     const [isLoadingData, setIsLoadingData] = useState(true);
 
     // Form State
@@ -42,10 +44,13 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
         year: initialData?.year || new Date().getFullYear().toString(),
         phase: initialData?.phase || "",
         date: initialData?.date || "",
+        time: (initialData as any)?.time || "",
         home_team: initialData?.home_team || "",
         away_team: initialData?.away_team || "",
         home_score: initialData?.home_score || "",
         away_score: initialData?.away_score || "",
+        home_coach: (initialData as any)?.home_coach || "",
+        away_coach: (initialData as any)?.away_coach || "",
         venue: initialData?.venue || "",
         notes: initialData?.notes || "",
         status: initialData?.status || "completed",
@@ -69,14 +74,18 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
     useEffect(() => {
         const loadData = async () => {
             try {
-                const [teamsData, seasonsData, phasesData] = await Promise.all([
+                const [teamsData, seasonsData, phasesData, peopleData, venuesData] = await Promise.all([
                     ArchiveService.getTeams(),
                     ArchiveService.getSeasons(),
-                    ArchiveService.getAllPhases()
+                    ArchiveService.getAllPhases(),
+                    ArchiveService.getPeople(),
+                    ArchiveService.getVenues()
                 ]);
                 setTeams(teamsData);
                 setSeasons(seasonsData);
                 setPhases(phasesData);
+                setPeople(peopleData);
+                setVenues(venuesData);
             } catch (error) {
                 console.error("Error loading form data:", error);
             } finally {
@@ -103,10 +112,13 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
             year: new Date().getFullYear().toString(),
             phase: "",
             date: "",
+            time: "",
             home_team: "",
             away_team: "",
             home_score: "",
             away_score: "",
+            home_coach: "",
+            away_coach: "",
             venue: "",
             notes: "",
             status: "completed",
@@ -226,13 +238,24 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
                 <section className="space-y-6">
                     <h3 className="text-xs font-black uppercase tracking-widest text-slate-400">Game Information</h3>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div>
                             <label className="block text-[10px] font-black uppercase text-slate-500 mb-1">Date</label>
                             <input
                                 name="date"
                                 type="date"
                                 value={formData.date}
+                                onChange={handleChange}
+                                className="w-full border border-slate-200 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-[10px] font-black uppercase text-slate-500 mb-1">Time</label>
+                            <input
+                                name="time"
+                                type="text"
+                                placeholder="e.g. 14:00"
+                                value={formData.time}
                                 onChange={handleChange}
                                 className="w-full border border-slate-200 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                             />
@@ -293,6 +316,7 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
                                 value={formData.venue}
                                 onChange={handleChange}
                                 placeholder="e.g. South Leeds Stadium"
+                                list="venues-list"
                                 className="w-full border border-slate-200 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                             />
                         </div>
@@ -322,6 +346,18 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
                                     className="w-20 border border-slate-200 rounded p-2 text-2xl font-black text-center"
                                 />
                             </div>
+                            <div className="space-y-1">
+                                <label className="block text-[10px] font-black uppercase text-slate-500 text-center">Head Coach</label>
+                                <input
+                                    name="home_coach"
+                                    type="text"
+                                    value={formData.home_coach}
+                                    onChange={handleChange}
+                                    placeholder="Select or type coach name..."
+                                    list="people-list"
+                                    className="w-full border border-slate-100 rounded p-2 text-sm text-center italic"
+                                />
+                            </div>
                         </div>
 
                         <div className="space-y-4">
@@ -345,6 +381,18 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
                                     value={formData.away_score}
                                     onChange={handleChange}
                                     className="w-20 border border-slate-200 rounded p-2 text-2xl font-black text-center"
+                                />
+                            </div>
+                            <div className="space-y-1">
+                                <label className="block text-[10px] font-black uppercase text-slate-500 text-center">Head Coach</label>
+                                <input
+                                    name="away_coach"
+                                    type="text"
+                                    value={formData.away_coach}
+                                    onChange={handleChange}
+                                    placeholder="Select or type coach name..."
+                                    list="people-list"
+                                    className="w-full border border-slate-100 rounded p-2 text-sm text-center italic"
                                 />
                             </div>
                         </div>
@@ -398,6 +446,18 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
                     </button>
                 </div>
             </form>
+
+            <datalist id="people-list">
+                {people.map(p => (
+                    <option key={p.id} value={p.display_name} />
+                ))}
+            </datalist>
+
+            <datalist id="venues-list">
+                {venues.map(v => (
+                    <option key={v.id} value={v.name} />
+                ))}
+            </datalist>
         </div>
     );
 }

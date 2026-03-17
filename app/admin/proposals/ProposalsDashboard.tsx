@@ -57,7 +57,7 @@ export default function ProposalsDashboard({ proposals: initialProposals }: { pr
     }
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-8" suppressHydrationWarning>
             {proposals.map(proposal => (
                 <div key={proposal.id} className="bg-white border-2 border-slate-900 rounded shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
                     {/* Header */}
@@ -73,7 +73,7 @@ export default function ProposalsDashboard({ proposals: initialProposals }: { pr
                                 {proposal.proposal_type === 'update' ? 'Correction Suggested' : 'New Game Reported'}
                             </span>
                         </div>
-                        <span className="text-xs font-sans opacity-80">
+                        <span className="text-xs font-sans opacity-80" suppressHydrationWarning>
                             Submitted {new Date(proposal.created_at).toLocaleDateString()} by {proposal.submitted_by_name || 'Anonymous'}
                         </span>
                     </div>
@@ -94,8 +94,22 @@ export default function ProposalsDashboard({ proposals: initialProposals }: { pr
                                     </span>
                                 </div>
                                 <div className="flex justify-between border-b border-slate-200 pb-1">
-                                    <span className="text-slate-500 italic">Date / Venue:</span>
-                                    <span className="font-bold">{proposal.proposed_data.date || 'Unknown'} @ {proposal.proposed_data.venue || 'Unknown'}</span>
+                                    <span className="text-slate-500 italic">Date / Time:</span>
+                                    <span className="font-bold">{proposal.proposed_data.date || 'Unknown'} {proposal.proposed_data.time ? `@ ${proposal.proposed_data.time}` : ''}</span>
+                                </div>
+                                <div className="flex justify-between border-b border-slate-200 pb-1">
+                                    <span className="text-slate-500 italic">Venue:</span>
+                                    <span className="font-bold">{proposal.proposed_data.venue || 'Unknown'}</span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4 pt-2">
+                                    <div>
+                                        <span className="text-slate-500 italic text-[10px] block">Home Coach:</span>
+                                        <span className="font-bold text-xs">{proposal.proposed_data.home_coach || 'N/A'}</span>
+                                    </div>
+                                    <div>
+                                        <span className="text-slate-500 italic text-[10px] block">Away Coach:</span>
+                                        <span className="font-bold text-xs">{proposal.proposed_data.away_coach || 'N/A'}</span>
+                                    </div>
                                 </div>
                                 <div className="pt-2">
                                     <span className="text-slate-500 italic block mb-1">Reason:</span>
@@ -127,8 +141,22 @@ export default function ProposalsDashboard({ proposals: initialProposals }: { pr
                                         </span>
                                     </div>
                                     <div className="flex justify-between border-b border-slate-200 pb-1">
-                                        <span className="text-slate-500 italic">Date:</span>
-                                        <span>{proposal.game.date || 'Unknown'}</span>
+                                        <span className="text-slate-500 italic">Date / Time:</span>
+                                        <span>{proposal.game.date || 'Unknown'} {proposal.game.time ? `@ ${proposal.game.time}` : ''}</span>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4 pt-2">
+                                        <div>
+                                            <span className="text-slate-500 italic text-[10px] block">Home Coach:</span>
+                                            <span className="text-xs">
+                                                {proposal.game.game_staff?.find((s: any) => s.role === 'head_coach' && s.team_id === proposal.game.home_team_id)?.person?.display_name || 'Unknown'}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span className="text-slate-500 italic text-[10px] block">Away Coach:</span>
+                                            <span className="text-xs">
+                                                {proposal.game.game_staff?.find((s: any) => s.role === 'head_coach' && s.team_id === proposal.game.away_team_id)?.person?.display_name || 'Unknown'}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="mt-4 p-4 bg-amber-50 rounded border border-amber-100">
@@ -163,14 +191,14 @@ export default function ProposalsDashboard({ proposals: initialProposals }: { pr
                         <div className="flex gap-4">
                             <button
                                 onClick={() => handleReject(proposal.id)}
-                                disabled={processingId === proposal.id}
+                                disabled={processingId !== null}
                                 className="bg-white hover:bg-red-50 text-red-600 border-2 border-red-600 font-black uppercase tracking-widest py-2 px-6 rounded transition-all disabled:opacity-50"
                             >
-                                Reject
+                                {processingId === proposal.id ? "Processing..." : "Reject"}
                             </button>
                             <button
                                 onClick={() => handleApprove(proposal.id)}
-                                disabled={processingId === proposal.id}
+                                disabled={processingId !== null}
                                 className="bg-slate-900 hover:bg-blue-600 text-white font-black uppercase tracking-widest py-2 px-6 rounded shadow-md transition-all disabled:opacity-50"
                             >
                                 {processingId === proposal.id ? "Processing..." : "Approve & Apply"}
