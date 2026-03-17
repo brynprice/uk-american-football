@@ -109,7 +109,7 @@ A comprehensive script that imports game results and automatically creates missi
   node scripts/import_data.mjs data/games.csv [--sample]
   ```
 * **CSV Columns Required**: `competition`, `year`, `home_team`, `away_team`
-* **Optional Columns**: `phase`, `parent_phase`, `date` (YYYY-MM-DD), `date_precision` (day/month/year/unknown), `date_display` (e.g. "Spring 1994"), `time` (HH:MM), `home_score`, `away_score`, `venue`, `notes`, `status` (completed/cancelled/postponed/awarded), `confidence_level` (high/medium/low), `is_playoff` (true/yes/1), `playoff_round` (e.g. "Quarter-Final"), `final_type` (title/bowl), `title_name` (e.g. "National Trophy"), `is_double_header` (true/yes/1), `home_coach`, `away_coach`
+* **Optional Columns**: `phase`, `parent_phase`, `date` (YYYY-MM-DD), `date_precision` (day/month/year/unknown), `date_display` (e.g. "Spring 1994"), `time` (HH:MM), `home_score`, `away_score`, `venue`, `notes`, `status` (completed/cancelled/postponed/awarded), `confidence_level` (high/medium/low), `is_playoff` (true/yes/1), `playoff_round` (e.g. "Quarter-Final"), `final_type` (title/bowl), `title_name` (e.g. "National Trophy"), `is_double_header` (true/yes/1), `home_coach`, `away_coach`, **`away_phase`**, **`away_parent_phase`**
 * **Behavior**: 
   1. Resolves or creates Competition, Season, and Phase (uses `parent_phase` to disambiguate identical phase names).
   2. Resolves or creates Home and Away Teams.
@@ -118,6 +118,16 @@ A comprehensive script that imports game results and automatically creates missi
      - If the game **does not exist**, it inserts a new record. 
      - If it **already exists**, it updates the existing record with the latest scores, venue, notes, status, and flags from the CSV.
   5. Links head coaches to the specific game in `game_staff` **only if** a season-level participation record does not exist for that team/phase. It will never create a season-level `participations` record itself.
+
+#### Inter-Phase Games
+When a regular season game is played between teams from **different phases** (e.g. Division 1 Southern vs Division 1 South Western), set `away_phase` to the **away team's phase name**. Use `away_parent_phase` to disambiguate if needed.
+
+```csv
+competition,year,phase,parent_phase,away_phase,away_parent_phase,date,home_team,away_team,...
+BUAFL,2010,Division 1 Southern,Division 1,Division 1 South Western,Division 1,2010-11-06,Brighton Panthers,Exeter Demons,...
+```
+
+With this set, the game will appear in **both** phase views in the archive, and each team's participation record will be updated under their respective phase.
 
 ### 7. Standings Import (`import_standings.mjs`)
 Imports aggregate win/loss/points records for teams in a specific phase. Use this for historical seasons where individual game scores are missing.

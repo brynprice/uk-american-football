@@ -376,11 +376,12 @@ async function transformBucsData(inputPath, outputPath, overriddenYear = null) {
 
     // 3. Write standard format to CSV
     const headers = [
-        "competition", "year", "phase", "date", "away_team", "home_team",
+        "competition", "year", "phase", "parent_phase", "away_phase", "away_parent_phase",
+        "date", "away_team", "home_team",
         "away_score", "home_score", "venue", "notes", "away_coach", "home_coach",
         "is_double_header", "date_precision", "date_display", "time", "status",
         "confidence_level", "is_playoff", "is_title_game", "final_type",
-        "title_name", "playoff_round", "parent_phase"
+        "title_name", "playoff_round"
     ];
 
     const csvString = toCSV(games, headers);

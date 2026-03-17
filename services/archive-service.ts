@@ -69,16 +69,18 @@ export const ArchiveService = {
             return p ? !isPlayoffPhase(p) : true;
         });
 
-        // 5. Fetch all games for these phases
+        // 5. Fetch all games for these phases (including inter-phase games where this phase is the away team's phase)
+        const phaseFilter = filteredGameDescendantIds.join(',');
         const { data: games, error: gamesError } = await supabase
             .from("games")
             .select(`
                 *, 
                 home_team:teams!home_team_id (*, team_aliases (*)), 
                 away_team:teams!away_team_id (*, team_aliases (*)), 
-                phase:phases(name, season:seasons(year))
+                phase:phases(name, season:seasons(year)),
+                away_phase:phases!away_phase_id(name)
             `)
-            .in("phase_id", filteredGameDescendantIds)
+            .or(`phase_id.in.(${phaseFilter}),away_phase_id.in.(${phaseFilter})`)
             .neq("status", "anomaly")
             .order("date", { ascending: false });
 
@@ -116,6 +118,7 @@ export const ArchiveService = {
                 away_team:teams!away_team_id (*, team_aliases (*)), 
                 venue:venues (*), 
                 phase:phases (*, season:seasons (id, year, competition:competitions (name))), 
+                away_phase:phases!away_phase_id (name),
                 game_staff (*, person:people (*))
             `)
             .eq("id", gameId)

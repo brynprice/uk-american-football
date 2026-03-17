@@ -279,7 +279,9 @@ async function transformData(inputPath, outputPath, overriddenYear = "2018") {
             final_type: "",
             title_name: "",
             playoff_round: "",
-            parent_phase: ""
+            parent_phase: "",
+            away_phase: "",
+            away_parent_phase: ""
         };
 
         // INTEGRITY CHECK: Is this an anomaly?
@@ -296,11 +298,12 @@ async function transformData(inputPath, outputPath, overriddenYear = "2018") {
     }
 
     const headers = [
-        "competition", "year", "phase", "date", "away_team", "home_team",
+        "competition", "year", "phase", "parent_phase", "away_phase", "away_parent_phase",
+        "date", "away_team", "home_team",
         "away_score", "home_score", "venue", "notes", "away_coach", "home_coach",
         "is_double_header", "date_precision", "date_display", "time", "status",
         "confidence_level", "is_playoff", "is_title_game", "final_type",
-        "title_name", "playoff_round", "parent_phase"
+        "title_name", "playoff_round"
     ];
 
     fs.writeFileSync(outputPath, toCSV(games, headers), 'utf8');

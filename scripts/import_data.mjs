@@ -446,7 +446,9 @@ async function importData(filePath) {
                 final_type,
                 title_name,
                 playoff_round,
-                parent_phase
+                parent_phase,
+                away_phase,
+                away_parent_phase
             } = record;
 
             // Validation: Skip if core identifiers are missing
@@ -463,6 +465,13 @@ async function importData(filePath) {
             const seasonId = await getOrCreateSeason(competitionId, year);
             const phaseId = await getOrCreatePhase(seasonId, phase || 'Regular Season', parent_phase);
 
+            // Resolve away phase if this is an inter-phase game
+            let awayPhaseId = null;
+            if (away_phase && away_phase.trim()) {
+                awayPhaseId = await getOrCreatePhase(seasonId, away_phase.trim(), away_parent_phase);
+                console.log(`  [Inter-Phase] Away team phase resolved to: ${awayPhaseId}`);
+            }
+
             // 2. Resolve Teams
             const homeTeamId = await getOrCreateTeam(home_team);
             const awayTeamId = await getOrCreateTeam(away_team);
@@ -477,7 +486,8 @@ async function importData(filePath) {
             let awayPart = null;
             if (status !== 'anomaly') {
                 homePart = await ensureTeamParticipation(phaseId, homeTeamId, homeCoachId);
-                awayPart = await ensureTeamParticipation(phaseId, awayTeamId, awayCoachId);
+                // Away team participates in their own phase (awayPhaseId if inter-phase, else phaseId)
+                awayPart = await ensureTeamParticipation(awayPhaseId || phaseId, awayTeamId, awayCoachId);
             }
 
 
@@ -515,7 +525,8 @@ async function importData(filePath) {
                             final_type: final_type ? final_type.toLowerCase().trim() : (['true', 'yes', '1'].includes((is_title_game || '').toString().toLowerCase()) ? 'title' : null),
                             title_name: title_name || null,
                             playoff_round: playoff_round ? playoff_round.trim() : null,
-                            is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase())
+                            is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase()),
+                            away_phase_id: awayPhaseId || null
                         })
                         .eq('id', gameId);
 
@@ -532,6 +543,7 @@ async function importData(filePath) {
                         .from('games')
                         .insert({
                             phase_id: phaseId,
+                            away_phase_id: awayPhaseId || null,
                             home_team_id: homeTeamId,
                             away_team_id: awayTeamId,
                             home_score: home_score ? parseInt(home_score) : null,

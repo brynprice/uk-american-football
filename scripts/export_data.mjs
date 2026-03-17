@@ -75,6 +75,7 @@ async function exportData(outputPath) {
                 home_team_id,
                 away_team_id,
                 phase_id,
+                away_phase_id,
                 venue:venues(name),
                 home_team:teams!home_team_id(name),
                 away_team:teams!away_team_id(name),
@@ -86,6 +87,10 @@ async function exportData(outputPath) {
                         year,
                         competition:competitions(name)
                     )
+                ),
+                away_phase:phases!away_phase_id(
+                    name,
+                    parent:phases(name)
                 ),
                 game_staff(
                     role,
@@ -149,11 +154,12 @@ async function exportData(outputPath) {
     console.log("Transforming data to CSV format...");
 
     const headers = [
-        "competition", "year", "phase", "date", "away_team", "home_team",
+        "competition", "year", "phase", "parent_phase", "away_phase", "away_parent_phase",
+        "date", "away_team", "home_team",
         "away_score", "home_score", "venue", "notes", "away_coach", "home_coach",
         "is_double_header", "date_precision", "date_display", "time", "status",
         "confidence_level", "is_playoff", "is_title_game", "final_type",
-        "title_name", "playoff_round", "parent_phase"
+        "title_name", "playoff_round"
     ];
 
     const csvData = allGames.map(game => {
@@ -162,10 +168,13 @@ async function exportData(outputPath) {
         const season = phase.season || {};
         const competition = season.competition || {};
         const parentPhase = phase.parent || {};
+        const awayPhase = game.away_phase || {};
+        const awayParentPhase = awayPhase.parent || {};
 
         // Head coach default (from participations)
+        // For inter-phase games, the away team's coach is in their own phase
         let homeCoach = coachMap[`${game.phase_id}_${game.home_team_id}`] || "";
-        let awayCoach = coachMap[`${game.phase_id}_${game.away_team_id}`] || "";
+        let awayCoach = coachMap[`${game.away_phase_id || game.phase_id}_${game.away_team_id}`] || "";
 
         // Override with game staff if present (role = head_coach)
         if (game.game_staff && game.game_staff.length > 0) {
@@ -187,7 +196,10 @@ async function exportData(outputPath) {
         return {
             competition: competition.name || "",
             year: season.year || "",
-            phase: phase.name || "Regular Season", // Best effort default
+            phase: phase.name || "Regular Season",
+            parent_phase: parentPhase.name || "",
+            away_phase: awayPhase.name || "",
+            away_parent_phase: awayParentPhase.name || "",
             date: game.date || "",
             away_team: game.away_team?.name || "",
             home_team: game.home_team?.name || "",

@@ -1,0 +1,21 @@
+# Inter-Phase Games Support (`away_phase_id`)
+
+- [/] Database Migration
+  - [ ] Create `20260317_away_phase_id.sql` migration file
+- [/] Archive Service
+  - [ ] Update `getPhaseData()` to include games via `away_phase_id`
+  - [ ] Update `getGameDetails()` to select `away_phase`
+- [/] Import Script
+  - [ ] Add `away_phase` and `away_parent_phase` column support to `import_data.mjs`
+  - [ ] Ensure away team participation uses `away_phase_id` when present
+  - [ ] Include `away_phase_id` in game insert/update payloads
+- [ ] Export Script
+  - [ ] Add `away_phase_id` to game select in `export_data.mjs`
+  - [ ] Add `away_phase` and `away_parent_phase` to CSV output
+  - [ ] Fix coach fallback to use `away_phase_id` for away team
+- [ ] Transform Scripts
+  - [ ] Add `away_phase` and `away_parent_phase` headers to `transform_bucs.mjs` output
+  - [ ] Add `away_phase` and `away_parent_phase` headers to `transform_bucs_2018.mjs` output
+- [ ] Documentation
+  - [ ] Update `DATA_IMPORT_GUIDE.md` with new columns and inter-phase game explanation
+- [ ] Push to GitHub
