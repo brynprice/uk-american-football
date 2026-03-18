@@ -165,6 +165,33 @@ export default function PredictionsPage() {
         }
     };
 
+    const savePrediction = async () => {
+        if (!prediction || !homeTeamId || !awayTeamId) return;
+
+        try {
+            const { error } = await supabase.from("predictions").insert({
+                home_team_id: homeTeamId,
+                away_team_id: awayTeamId,
+                predicted_home_score: prediction.homeScore,
+                predicted_away_score: prediction.awayScore,
+                win_probability: prediction.winProbability,
+                confidence: prediction.confidence,
+                weights: {
+                    h2hWeight: 0.6,
+                    commonWeight: 0.4,
+                    recencyModifier: 1.5,
+                    baseline: 20
+                }
+            });
+
+            if (error) throw error;
+            alert("Prediction recorded successfully!");
+        } catch (err) {
+            console.error(err);
+            alert("Failed to record prediction.");
+        }
+    };
+
     if (isInitialLoading) return <div className="p-8">Loading predictor...</div>;
 
     return (
@@ -243,6 +270,13 @@ export default function PredictionsPage() {
                                     </div>
                                 </div>
                                 <div className="mt-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Calculated Win Probability</div>
+                                
+                                <button
+                                    onClick={savePrediction}
+                                    className="mt-8 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest py-2 px-6 rounded hover:bg-slate-800 transition-colors"
+                                >
+                                    Record This Prediction
+                                </button>
                             </div>
 
                             {/* Signal Card */}
