@@ -26,7 +26,7 @@ export default function AdminAnomaliesPage() {
                 *,
                 home_team:teams!home_team_id (name),
                 away_team:teams!away_team_id (name),
-                phase:phases (name, season:seasons (year, competition:competitions (name)))
+                phase:phases!games_phase_id_fkey (name, season:seasons (year, competition:competitions (name)))
             `)
             .eq('status', 'anomaly')
             .order('date', { ascending: false });

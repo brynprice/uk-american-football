@@ -53,7 +53,7 @@ export async function GET(
                 home_team:teams!home_team_id (*, team_aliases (*)),
                 away_team:teams!away_team_id (*, team_aliases (*)),
                 venue:venues (name),
-                phase:phases (name, parent_phase:phases!parent_phase_id (name))
+                phase:phases!games_phase_id_fkey (name, parent_phase:phases!parent_phase_id (name))
             `)
             .in("phase_id", descendantIds)
             .neq("status", "anomaly")

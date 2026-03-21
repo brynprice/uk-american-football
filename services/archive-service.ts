@@ -180,7 +180,7 @@ export const ArchiveService = {
             .from("games")
             .select(`
                 *,
-                phase:phases (*, season:seasons (year, id, competition:competitions (*))),
+                phase:phases!games_phase_id_fkey (*, season:seasons (year, id, competition:competitions (*))),
                 home_team:teams!home_team_id (*, team_aliases (*)),
                 away_team:teams!away_team_id (*, team_aliases (*))
             `)
@@ -356,7 +356,7 @@ export const ArchiveService = {
                 *,
                 home_team:teams!home_team_id (*, team_aliases (*)),
                 away_team:teams!away_team_id (*, team_aliases (*)),
-                phase:phases (*, season:seasons (year, id, competition:competitions (name))),
+                phase:phases!games_phase_id_fkey (*, season:seasons (year, id, competition:competitions (name))),
                 venue:venues (*)
             `)
             .or(`and(home_team_id.eq.${team1Id},away_team_id.eq.${team2Id}),and(home_team_id.eq.${team2Id},away_team_id.eq.${team1Id})`)
