@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import PhaseView from '@/components/archive/PhaseView';
+import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
 export const revalidate = 0;
 
 export default async function SeasonPage({ params }: { params: Promise<{ id: string }> }) {
@@ -81,12 +82,71 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                     </div>
                     <PhaseView phases={season.phases} seasonId={season.id} />
 
-                    {season.phases.length === 0 && (
+                {season.phases.length === 0 && (
                         <div className="p-8 text-center bg-white border border-dashed border-slate-300 rounded text-slate-400 font-sans">
                             {season.completeness_details?.status === 'cancelled' ? 'No competitive divisions were formed.' : 'No divisions or phases recorded for this season.'}
                         </div>
                     )}
                 </section>
+
+                {season.unphased_games && season.unphased_games.length > 0 && (
+                    <section>
+                        <div className="flex justify-between items-end mb-6 border-b-2 border-slate-900 pb-2">
+                            <h3 className="text-xl font-black uppercase tracking-widest font-sans">Friendlies & Exhibitions</h3>
+                        </div>
+                        <div className="space-y-4">
+                            {season.unphased_games.map((game: any) => (
+                                <Link
+                                    key={game.id}
+                                    href={`/games/${game.id}`}
+                                    className="block bg-white border border-slate-200 p-4 hover:border-blue-500 transition-all shadow-sm group"
+                                >
+                                    <div className="flex justify-between items-center mb-2">
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-xs font-sans text-slate-500 uppercase tracking-tighter">
+                                                {game.date_display || (game.date ? new Date(game.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : "Unknown Date")}
+                                            </span>
+                                            <span className={`text-[10px] font-black px-1.5 py-0.5 rounded uppercase ${game.game_type === 'varsity' ? 'bg-amber-100 text-amber-700 border border-amber-200' :
+                                                    game.game_type === 'associate' ? 'bg-purple-100 text-purple-700 border border-purple-200' :
+                                                        game.game_type === 'old_boys' ? 'bg-slate-100 text-slate-600 border border-slate-200' :
+                                                            'bg-blue-100 text-blue-700 border border-blue-200'
+                                                }`}>
+                                                {game.game_type || 'Friendly'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <div className="flex-1 flex items-center justify-end gap-3 pr-4 text-right">
+                                            <span className="font-black text-lg group-hover:text-blue-700 transition-colors">{resolveTeamIdentity(game.away_team, season.year).name}</span>
+                                            {resolveTeamIdentity(game.away_team, season.year).logo_url && (
+                                                <div className="w-8 h-8 bg-slate-50 p-1 flex items-center justify-center shrink-0 border border-slate-100 rounded">
+                                                    <img src={resolveTeamIdentity(game.away_team, season.year).logo_url!} alt="" className="max-w-full max-h-full object-contain" />
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="flex items-center gap-4 bg-slate-50 px-4 py-1 rounded border border-slate-100 font-black">
+                                            <span className={game.away_score > game.home_score ? "text-blue-700" : ""}>
+                                                {game.away_score ?? "-"}
+                                            </span>
+                                            <span className="text-slate-300 font-serif font-normal italic text-sm">at</span>
+                                            <span className={game.home_score > game.away_score ? "text-blue-700" : ""}>
+                                                {game.home_score ?? "-"}
+                                            </span>
+                                        </div>
+                                        <div className="flex-1 flex items-center justify-start gap-3 pl-4 text-left">
+                                            {resolveTeamIdentity(game.home_team, season.year).logo_url && (
+                                                <div className="w-8 h-8 bg-slate-50 p-1 flex items-center justify-center shrink-0 border border-slate-100 rounded">
+                                                    <img src={resolveTeamIdentity(game.home_team, season.year).logo_url!} alt="" className="max-w-full max-h-full object-contain" />
+                                                </div>
+                                            )}
+                                            <span className="font-black text-lg group-hover:text-blue-700 transition-colors">{resolveTeamIdentity(game.home_team, season.year).name}</span>
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </section>
+                )}
 
                 {/* Footnotes/Sources Section */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

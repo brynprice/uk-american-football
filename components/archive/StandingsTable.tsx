@@ -26,6 +26,7 @@ export default function StandingsTable({ participations, games, phaseName, seaso
         } else {
             const teamGames = games.filter((g: any) =>
                 (g.status?.toLowerCase() === 'completed' || g.status?.toLowerCase() === 'awarded') &&
+                (g.game_type === 'league' || !g.game_type) &&
                 (g.home_team_id === p.team_id || g.away_team_id === p.team_id)
             );
 

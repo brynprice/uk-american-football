@@ -448,7 +448,8 @@ async function importData(filePath) {
                 playoff_round,
                 parent_phase,
                 away_phase,
-                away_parent_phase
+                away_parent_phase,
+                game_type
             } = record;
 
             // Validation: Skip if core identifiers are missing
@@ -463,7 +464,7 @@ async function importData(filePath) {
             // 1. Resolve Parents
             const competitionId = await getOrCreateCompetition(competition);
             const seasonId = await getOrCreateSeason(competitionId, year);
-            const phaseId = await getOrCreatePhase(seasonId, phase || 'Regular Season', parent_phase);
+            const phaseId = (phase && phase.trim()) ? await getOrCreatePhase(seasonId, phase.trim(), parent_phase) : null;
 
             // Resolve away phase if this is an inter-phase game
             let awayPhaseId = null;
@@ -496,7 +497,8 @@ async function importData(filePath) {
             const { data: existingGame } = await supabase
                 .from('games')
                 .select('id')
-                .eq('phase_id', phaseId)
+                .eq('season_id', seasonId)
+                .is('phase_id', phaseId)
                 .eq('home_team_id', homeTeamId)
                 .eq('away_team_id', awayTeamId)
                 .eq('date', date || null)
@@ -526,7 +528,9 @@ async function importData(filePath) {
                             title_name: title_name || null,
                             playoff_round: playoff_round ? playoff_round.trim() : null,
                             is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase()),
-                            away_phase_id: awayPhaseId || null
+                            away_phase_id: awayPhaseId || null,
+                            game_type: game_type || 'league',
+                            season_id: seasonId
                         })
                         .eq('id', gameId);
 
@@ -560,7 +564,9 @@ async function importData(filePath) {
                             final_type: final_type ? final_type.toLowerCase().trim() : (['true', 'yes', '1'].includes((is_title_game || '').toString().toLowerCase()) ? 'title' : null),
                             title_name: title_name || null,
                             playoff_round: playoff_round ? playoff_round.trim() : null,
-                            is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase())
+                            is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase()),
+                            game_type: game_type || 'league',
+                            season_id: seasonId
                         })
                         .select('id')
                         .single();

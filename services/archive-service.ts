@@ -31,10 +31,27 @@ export const ArchiveService = {
         // Fetch archival notes for this season
         const { data: notes } = await supabase.from("notes").select("*").eq("entity_id", seasonId).eq("entity_type", "seasons");
 
+        // Fetch unphased games (friendlies) for this season
+        const { data: unphasedGames, error: gamesError } = await supabase
+            .from("games")
+            .select(`
+                *, 
+                home_team:teams!home_team_id (*, team_aliases (*)), 
+                away_team:teams!away_team_id (*, team_aliases (*)),
+                venue:venues (*)
+            `)
+            .eq("season_id", seasonId)
+            .is("phase_id", null)
+            .neq("status", "anomaly")
+            .order("date", { ascending: false });
+
+        if (gamesError) throw gamesError;
+
         return {
             ...(seasonData as any),
             phases: sortPhasesInTreeOrder((seasonData as any).phases || []),
-            archival_notes: notes || []
+            archival_notes: notes || [],
+            unphased_games: unphasedGames || []
         };
     },
 

@@ -209,6 +209,8 @@ export interface Database {
           away_team_id: string
           home_score: number | null
           away_score: number | null
+          game_type: string
+          season_id: string | null
           date: string | null
           date_precision: string
           date_display: string | null
@@ -229,6 +231,8 @@ export interface Database {
           away_team_id: string
           home_score?: number | null
           away_score?: number | null
+          game_type?: string
+          season_id?: string | null
           date?: string | null
           date_precision?: string
           date_display?: string | null
@@ -249,6 +253,8 @@ export interface Database {
           away_team_id?: string
           home_score?: number | null
           away_score?: number | null
+          game_type?: string
+          season_id?: string | null
           date?: string | null
           date_precision?: string
           date_display?: string | null
