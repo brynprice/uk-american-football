@@ -3,6 +3,7 @@ import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import { resolveHeadCoach } from '@/lib/utils/coach-resolver';
 import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
+export const revalidate = 0;
 
 export default async function GamePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;

@@ -2,6 +2,7 @@ import { ArchiveService } from "@/services/archive-service";
 import ArchiveLayout from "@/components/archive/ArchiveLayout";
 import GameProposalForm from "@/components/archive/GameProposalForm";
 import { resolveTeamIdentity } from "@/lib/utils/team-resolver";
+export const revalidate = 0;
 
 export default async function ProposeGamePage({
     searchParams
