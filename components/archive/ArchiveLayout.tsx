@@ -13,7 +13,7 @@ export default function ArchiveLayout({
                         Britball Archive
                     </Link>
                     <nav className="space-x-6 text-sm uppercase tracking-widest font-sans font-medium">
-                        <Link href="/" className="hover:text-blue-700">Competitions</Link>
+                        <Link href="/competitions" className="hover:text-blue-700">Competitions</Link>
                         <Link href="/teams" className="hover:text-blue-700">Teams</Link>
                         <Link href="/people" className="hover:text-blue-700">People</Link>
                         <Link href="/venues" className="hover:text-blue-700">Venues</Link>
