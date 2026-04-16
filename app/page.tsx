@@ -43,15 +43,36 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="mb-12 p-8 bg-slate-50 border-l-8 border-slate-900">
-        <h2 className="text-2xl font-black uppercase italic mb-4">About the Project</h2>
-        <p className="text-slate-700 font-sans leading-relaxed mb-4">
-          The <strong>Britball Archive</strong> is a community-driven project dedicated to preserving the rich and often fragmented history of American football in the United Kingdom. 
-          From the first games in the early 1980s to the present day, we aim to provide a comprehensive record of every competition, club, and score.
-        </p>
-        <p className="text-slate-700 font-sans leading-relaxed">
-          This archive is a living record. We rely on historical data, archival research, and contributions from the community to ensure that the legacy of those who played and built the game is preserved for future generations.
-        </p>
+      <section className="mb-12 grid grid-cols-1 md:grid-cols-2 gap-12 bg-slate-50 border-y-2 border-slate-200">
+        <div className="p-8 md:p-12 border-b-2 md:border-b-0 md:border-r-2 border-slate-200">
+          <h2 className="text-3xl font-black uppercase italic mb-6 tracking-tighter">The Mission</h2>
+          <div className="space-y-4 text-slate-700 font-sans leading-relaxed">
+            <p>
+              The <strong>Britball Archive</strong> is the definitive historical record of American football in the United Kingdom. 
+              Our mission is to catalog every game ever played on British soil—from the pioneering regional leagues of the 1980s to the elite national championships of today.
+            </p>
+            <p>
+              British American football has a rich, multi-decade legacy that often lives in dusty programmes, old local newspapers, and the memories ofThose who played. We are digitising this history to ensure that every touchdown, rivalry, and championship is preserved for future generations of fans and players.
+            </p>
+          </div>
+        </div>
+
+        <div className="p-8 md:p-12">
+          <h2 className="text-3xl font-black uppercase italic mb-6 tracking-tighter">How You Can Help</h2>
+          <div className="space-y-4 text-slate-700 font-sans leading-relaxed">
+            <p>
+              This is a community-driven project, and we need your help to fill the gaps in the record. If you have historical information, you can contribute in several ways:
+            </p>
+            <ul className="list-disc pl-5 space-y-2">
+              <li><strong>Missing Scores:</strong> Use our <Link href="/propose-game" className="text-blue-600 font-bold hover:underline">Contribute</Link> tool to submit missing game results or corrections.</li>
+              <li><strong>Archival Material:</strong> If you have old programmes, league handbooks, or newspaper clippings, please get in touch.</li>
+              <li><strong>Verify Data:</strong> Browse your old team's history and let us know if you spot any inconsistencies.</li>
+            </ul>
+            <p className="pt-4 border-t border-slate-200 text-sm italic">
+              Spotted an error? Have a lead on old records? Email us at <a href="mailto:ukaffootballproject@gmail.com" className="text-blue-600 font-bold hover:underline">ukaffootballproject@gmail.com</a>
+            </p>
+          </div>
+        </div>
       </section>
 
       <section className="bg-slate-900 text-white p-8 rounded shadow-lg">
