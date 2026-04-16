@@ -11,7 +11,8 @@ export default async function HomePage() {
       <section className="mb-12">
         <h1 className="text-4xl font-black mb-4 border-b-4 border-slate-900 pb-2">Historic Competitions</h1>
         <p className="text-lg text-slate-600 mb-8 max-w-2xl font-sans">
-          Explore the rich history of American football leagues in the UK, from the early regional pioneer days to modern national championships.
+          Welcome to the <strong>Britball Archive</strong>, the home for British American Football history. 
+          Explore leagues, teams, and scores from the early regional pioneer days to modern national championships.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -42,9 +43,20 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <section className="mb-12 p-8 bg-slate-50 border-l-8 border-slate-900">
+        <h2 className="text-2xl font-black uppercase italic mb-4">About the Project</h2>
+        <p className="text-slate-700 font-sans leading-relaxed mb-4">
+          The <strong>Britball Archive</strong> is a community-driven project dedicated to preserving the rich and often fragmented history of American football in the United Kingdom. 
+          From the first games in the early 1980s to the present day, we aim to provide a comprehensive record of every competition, club, and score.
+        </p>
+        <p className="text-slate-700 font-sans leading-relaxed">
+          This archive is a living record. We rely on historical data, archival research, and contributions from the community to ensure that the legacy of those who played and built the game is preserved for future generations.
+        </p>
+      </section>
+
       <section className="bg-slate-900 text-white p-8 rounded shadow-lg">
         <h3 className="text-xl font-bold mb-4 font-sans uppercase tracking-widest text-slate-400">Archive Status</h3>
-        <p className="text-sm opacity-75 mb-6">Database connected. Waiting for historical records.</p>
+        <p className="text-sm opacity-75 mb-6">Britball Archive database connected. Actively expanding historical records.</p>
 
         <div className="mt-8 pt-8 border-t border-slate-800 text-xs text-slate-400 font-sans italic leading-relaxed">
           <p>Whilst every effort has been made to accurately record results, if you see any inconsistencies or errors, please email <a href="mailto:ukaffootballproject@gmail.com" className="text-blue-400 hover:underline">ukaffootballproject@gmail.com</a></p>

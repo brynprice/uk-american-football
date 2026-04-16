@@ -1,4 +1,4 @@
-# Data Import Guide: UK American Football Archive
+# Data Import Guide: Britball Archive
 
 This guide explains how to use the data import scripts to populate the database with historical teams, seasons, competitions, and game data.
 

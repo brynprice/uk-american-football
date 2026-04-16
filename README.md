@@ -1,4 +1,4 @@
-# UK American Football Archive
+# Britball Archive
 
 A web application built to archive, catalog, and display the history of American Football in the United Kingdom. This project tracks competitions, seasons, phases, teams, venues, people, and game results across the history of the sport in the UK.
 

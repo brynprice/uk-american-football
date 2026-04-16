@@ -1,4 +1,4 @@
--- UK American Football Archive - SQL Schema
+-- Britball Archive - SQL Schema
 -- Production-grade historical archive schema
 
 -- 1. EXTENSIONS
