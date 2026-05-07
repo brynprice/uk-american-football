@@ -101,8 +101,7 @@ Imports season-level team participation and default head coach linking for a giv
 * **Optional Columns**: `phase` (defaults to "Regular Season"), `head_coach`
 * **Behavior**: **Does not abstract parent entities**. It requires that the Competition, Season, Phase, and Team all exist. If they do not exist, the record is skipped. If `head_coach` is provided but not found in the `people` table, the person record is created. Updates existing participation records or creates new ones.
 
-### 6. Unified Data Import (`import_data.mjs`)
-A comprehensive script that imports game results and automatically creates missing related entities (competitions, seasons, phases, teams, venues).
+A comprehensive script that imports game results. It requires that the Competition, Season, and Phase records already exist in the database (use `import_phases.mjs` or separate scripts first). It will still automatically create missing teams, venues, and people (coaches).
 * **Standard File**: `data/games.csv`
 * **Usage**:
   ```bash
@@ -111,7 +110,7 @@ A comprehensive script that imports game results and automatically creates missi
 * **CSV Columns Required**: `competition`, `year`, `home_team`, `away_team`
 * **Optional Columns**: `phase`, `parent_phase`, `date` (YYYY-MM-DD), `date_precision` (day/month/year/unknown), `date_display` (e.g. "Spring 1994"), `time` (HH:MM), `home_score`, `away_score`, `venue`, `notes`, `status` (completed/cancelled/postponed/awarded), `confidence_level` (high/medium/low), `is_playoff` (true/yes/1), `playoff_round` (e.g. "Quarter-Final"), `final_type` (title/bowl), `title_name` (e.g. "National Trophy"), `is_double_header` (true/yes/1), `home_coach`, `away_coach`, **`away_phase`**, **`away_parent_phase`**
 * **Behavior**: 
-  1. Resolves or creates Competition, Season, and Phase (uses `parent_phase` to disambiguate identical phase names).
+  1. Resolves Competition, Season, and Phase (uses `parent_phase` to disambiguate identical phase names). **Skips the record if any are not found.**
   2. Resolves or creates Home and Away Teams.
   3. Resolves or creates Coaches and Venues.
   4. **Upsert Behavior**: Matches games by `phase_id`, `home_team_id`, `away_team_id`, and `date`. 

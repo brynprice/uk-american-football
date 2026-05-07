@@ -1,0 +1,23 @@
+﻿competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal
+bafanl,2026,Premiership,Tier,,high,0
+bafanl,2026,Playoffs,Playoffs,Premiership,high,0
+bafanl,2026,Premiership North,Division,Premiership,high,1
+bafanl,2026,Premiership South,Division,Premiership,high,2
+bafanl,2026,Division One,Tier,,high,1
+bafanl,2026,Playoffs,Playoffs,Division One,high,0
+bafanl,2026,Northern Football Conference,Conference,Division One,high,1
+bafanl,2026,Southern Football Conference,Conference,Division One,high,2
+bafanl,2026,NFC 1 Scotland,Division,Northern Football Conference,high,0
+bafanl,2026,NFC 1 North,Division,Northern Football Conference,high,1
+bafanl,2026,NFC 1 Midlands,Division,Northern Football Conference,high,2
+bafanl,2026,SFC 1 West,Division,Southern Football Conference,high,0
+bafanl,2026,SFC 1 Central,Division,Southern Football Conference,high,1
+bafanl,2026,SFC 1 East,Division,Southern Football Conference,high,2
+bafanl,2026,Division Two,Tier,,high,2
+bafanl,2026,Playoffs,Playoffs,Division Two,high,0
+bafanl,2026,Northern Football Conference,Conference,Division Two,high,1
+bafanl,2026,Southern Football Conference,Conference,Division Two,high,2
+bafanl,2026,NFC 2 North,Division,Northern Football Conference,high,0
+bafanl,2026,NFC 2 Midlands,Division,Northern Football Conference,high,1
+bafanl,2026,SFC 2 West,Division,Southern Football Conference,high,0
+bafanl,2026,SFC 2 East,Division,Southern Football Conference,high,1

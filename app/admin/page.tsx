@@ -1,12 +1,36 @@
 import Link from "next/link";
 import ArchiveLayout from "@/components/archive/ArchiveLayout";
+import { createClient } from "@/lib/supabase/server";
+import { signOut } from "@/app/login/actions";
 
-export default function AdminDashboard() {
+export default async function AdminDashboard() {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
     return (
         <ArchiveLayout>
-            <div className="mb-12">
-                <h1 className="text-4xl font-black mb-2 uppercase italic tracking-tighter">Admin Dashboard</h1>
-                <p className="text-slate-500 font-sans">Manage the historical archive and resolve data issues.</p>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
+                <div>
+                    <h1 className="text-4xl font-black mb-2 uppercase italic tracking-tighter">Admin Dashboard</h1>
+                    <p className="text-slate-500 font-sans">Manage the historical archive and resolve data issues.</p>
+                </div>
+                
+                {user && (
+                    <div className="flex items-center gap-4 bg-white border-2 border-slate-900 p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                        <div className="font-sans text-right">
+                            <p className="text-[10px] uppercase font-black text-slate-400 leading-none mb-1">Logged in as</p>
+                            <p className="font-bold text-sm leading-none">{user.email}</p>
+                        </div>
+                        <form action={signOut}>
+                            <button 
+                                type="submit"
+                                className="bg-slate-900 text-white text-[10px] uppercase font-black px-3 py-2 hover:bg-red-600 transition-colors shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-[2px] active:translate-y-[2px]"
+                            >
+                                Sign Out
+                            </button>
+                        </form>
+                    </div>
+                )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

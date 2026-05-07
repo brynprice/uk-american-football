@@ -49,12 +49,9 @@ if (isDryRun) {
 }
 
 const dryRunStats = {
-    added: { competitions: 0, seasons: 0, phases: 0, teams: 0, games: 0, people: 0, venues: 0, participations: 0 },
+    added: { teams: 0, games: 0, people: 0, venues: 0, participations: 0 },
     updated: { games: 0, participations: 0 },
     seen: {
-        competitions: new Set(),
-        seasons: new Set(),
-        phases: new Set(),
         teams: new Set(),
         people: new Set(),
         venues: new Set()
@@ -87,7 +84,7 @@ async function ensureSampleNote(entityType, entityId) {
 
 const slugify = (text) => text.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
 
-async function getOrCreateCompetition(name, level = 'Senior') {
+async function getCompetition(name) {
     const cleanName = name.trim();
     const slug = slugify(cleanName);
 
@@ -103,31 +100,13 @@ async function getOrCreateCompetition(name, level = 'Senior') {
         return data.id;
     }
 
-    if (isDryRun) {
-        if (!dryRunStats.seen.competitions.has(cleanName)) {
-            dryRunStats.added.competitions++;
-            dryRunStats.seen.competitions.add(cleanName);
-        }
-        console.log(`  [Dry Run] Would create competition "${cleanName}"`);
-        return `dry-run-comp-${cleanName}`;
-    }
-
-    console.log(`  [Lookup] Competition "${cleanName}" not found, creating...`);
-    const { data: newData, error: insertError } = await supabase
-        .from('competitions')
-        .insert({ name: cleanName, slug, level })
-        .select('id')
-        .single();
-
-    if (insertError) throw insertError;
-    await ensureSampleNote('competitions', newData.id);
-    return newData.id;
+    return null;
 }
 
-async function getOrCreateSeason(competitionId, year) {
+async function getSeason(competitionId, year) {
     const cleanYear = parseInt(year);
     if (isNaN(cleanYear)) {
-        throw new Error(`Invalid year provided for season creation: ${year}`);
+        throw new Error(`Invalid year provided for season lookup: ${year}`);
     }
 
     const { data: existing, error } = await supabase
@@ -146,33 +125,10 @@ async function getOrCreateSeason(competitionId, year) {
         return existing.id;
     }
 
-    if (isDryRun) {
-        const key = `${competitionId}-${cleanYear}`;
-        if (!dryRunStats.seen.seasons.has(key)) {
-            dryRunStats.added.seasons++;
-            dryRunStats.seen.seasons.add(key);
-        }
-        console.log(`  [Dry Run] Would create season ${cleanYear}`);
-        return `dry-run-season-${key}`;
-    }
-
-    console.log(`  [Lookup] Season for year ${cleanYear} not found, creating...`);
-    const { data: newData, error: insertError } = await supabase
-        .from('seasons')
-        .insert({
-            competition_id: competitionId,
-            year: cleanYear,
-            name: `${cleanYear} Season`
-        })
-        .select('id')
-        .single();
-
-    if (insertError) throw insertError;
-    await ensureSampleNote('seasons', newData.id);
-    return newData.id;
+    return null;
 }
 
-async function getOrCreatePhase(seasonId, name, parentPhaseName = null) {
+async function getPhase(seasonId, name, parentPhaseName = null) {
     const { data: phases, error } = await supabase
         .from('phases')
         .select('id, parent_phase_id')
@@ -196,8 +152,6 @@ async function getOrCreatePhase(seasonId, name, parentPhaseName = null) {
 
         if (parentData) {
             parentId = parentData.id;
-        } else {
-            console.warn(`  [Warning] Parent phase "${parentPhaseName}" not found; proceeding without it.`);
         }
     }
 
@@ -217,25 +171,7 @@ async function getOrCreatePhase(seasonId, name, parentPhaseName = null) {
         }
     }
 
-    if (isDryRun) {
-        const key = `${seasonId}-${name}`;
-        if (!dryRunStats.seen.phases.has(key)) {
-            dryRunStats.added.phases++;
-            dryRunStats.seen.phases.add(key);
-        }
-        console.log(`  [Dry Run] Would create phase "${name}"`);
-        return `dry-run-phase-${key}`;
-    }
-
-    const { data: newData, error: insertError } = await supabase
-        .from('phases')
-        .insert({ season_id: seasonId, parent_phase_id: parentId, name, type: 'division' })
-        .select('id')
-        .single();
-
-    if (insertError) throw insertError;
-    await ensureSampleNote('phases', newData.id);
-    return newData.id;
+    return null;
 }
 
 async function getOrCreateTeam(name) {
@@ -462,14 +398,32 @@ async function importData(filePath) {
             console.log(`Processing: ${year} ${competition} - ${away_team} @ ${home_team}`);
 
             // 1. Resolve Parents
-            const competitionId = await getOrCreateCompetition(competition);
-            const seasonId = await getOrCreateSeason(competitionId, year);
-            const phaseId = (phase && phase.trim()) ? await getOrCreatePhase(seasonId, phase.trim(), parent_phase) : null;
+            const competitionId = await getCompetition(competition);
+            if (!competitionId) {
+                console.warn(`  [Skip] Competition "${competition}" not found. skipping record.`);
+                continue;
+            }
+
+            const seasonId = await getSeason(competitionId, year);
+            if (!seasonId) {
+                console.warn(`  [Skip] Season ${year} for competition "${competition}" not found. skipping record.`);
+                continue;
+            }
+
+            const phaseId = (phase && phase.trim()) ? await getPhase(seasonId, phase.trim(), parent_phase) : null;
+            if (phase && phase.trim() && !phaseId) {
+                console.warn(`  [Skip] Phase "${phase}" not found for season ${year}. skipping record.`);
+                continue;
+            }
 
             // Resolve away phase if this is an inter-phase game
             let awayPhaseId = null;
             if (away_phase && away_phase.trim()) {
-                awayPhaseId = await getOrCreatePhase(seasonId, away_phase.trim(), away_parent_phase);
+                awayPhaseId = await getPhase(seasonId, away_phase.trim(), away_parent_phase);
+                if (!awayPhaseId) {
+                    console.warn(`  [Skip] Away Phase "${away_phase}" not found for season ${year}. skipping record.`);
+                    continue;
+                }
                 console.log(`  [Inter-Phase] Away team phase resolved to: ${awayPhaseId}`);
             }
 
@@ -649,9 +603,6 @@ async function importData(filePath) {
         console.log(`Records Processed: ${records.length}`);
         console.log(`  Games: ${dryRunStats.added.games} to add, ${dryRunStats.updated.games} to update`);
         console.log(`  Teams: ${dryRunStats.added.teams} to create`);
-        console.log(`  Competitions: ${dryRunStats.added.competitions} to create`);
-        console.log(`  Seasons: ${dryRunStats.added.seasons} to create`);
-        console.log(`  Phases: ${dryRunStats.added.phases} to create`);
         console.log(`  People: ${dryRunStats.added.people} to create`);
         console.log(`  Venues: ${dryRunStats.added.venues} to create`);
         console.log(`  Participations: ${dryRunStats.added.participations} to add, ${dryRunStats.updated.participations} to update`);

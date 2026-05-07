@@ -273,6 +273,17 @@ buafl,2014,London Division,Division,Division 1,medium,6
 buafl,2014,East Division,Division,Division 1,medium,7
 buafl,2014,South West Division,Division,Division 1,medium,8
 buafl,2014,South East Division,Division,Division 1,medium,9
+,2013,Playoffs,Playoffs,,high,0
+buafl,2013,National Championship,Playoffs,Playoffs,high,0
+,,National Trophy,Playoffs,Playoffs,high,1
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
 buafl,2010,Playoffs,Playoffs,,low,0
 buafl,2010,Challenge Trophy,Playoffs,,low,1
 buafl,2010,Regular Season,Tier,,low,2

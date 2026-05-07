@@ -1,0 +1,6 @@
+competition,year,phase,parent_phase,away_phase,away_parent_phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round
+BUAFL,2014,National Championship,,,,2015-03-16,Hertfordshire Hurricanes,Durham Saints,19,14,,,,,FALSE,day,,13:00,completed,low,TRUE,FALSE,,,Semi-Final
+BUAFL,2014,National Championship,,,,2015-03-16,Stirling Clansmen,Birmingham Lions,35,13,,,,,FALSE,day,,13:00,completed,low,TRUE,FALSE,,,Semi-Final
+BUAFL,2014,National Championship,,,,2015-03-21,Stirling Clansmen,Hertfordshire Hurricanes,46,6,Allianz Park,,,,FALSE,day,,14:30,completed,high,TRUE,TRUE,Title,College Bowl XXIX,Final
+BUAFL,2014,National Trophy (North),,,,,Sheffield Hallam Warriors,Glasgow Tigers,26,6,,,,,,month,March 2015,,completed,high,TRUE,TRUE,Bowl,National Trophy (North),Final
+BUAFL,2014,National Trophy (South),,,,,Surrey Stingers,Kingston Cougars,9,42,,,,,,month,March 2015,,completed,high,TRUE,TRUE,Bowl,National Trophy (South),Final
