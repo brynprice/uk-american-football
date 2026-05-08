@@ -3,11 +3,17 @@ import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import { resolveHeadCoach } from '@/lib/utils/coach-resolver';
 import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
+import DeleteGameButton from '@/components/archive/DeleteGameButton';
+import { createClient } from '@/lib/supabase/server';
 export const revalidate = 0;
 
 export default async function GamePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const game = await ArchiveService.getGameDetails(id);
+
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    const isAdmin = !!user;
 
     const homeCoach = resolveHeadCoach(
         game.id,
@@ -31,9 +37,14 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
     return (
         <ArchiveLayout>
             <div className="mb-12">
-                <Link href={`/seasons/${game.phase.season.id}`} className="text-blue-600 hover:underline text-sm mb-4 inline-block">
-                    &larr; Back to {game.phase.season.year} {game.phase.season.competition.name}
-                </Link>
+                <div className="flex justify-between items-start mb-4">
+                    <Link href={`/seasons/${game.phase.season.id}`} className="text-blue-600 hover:underline text-sm inline-block">
+                        &larr; Back to {game.phase.season.year} {game.phase.season.competition.name}
+                    </Link>
+                    {isAdmin && (
+                        <DeleteGameButton gameId={game.id} redirectUrl={`/phases/${game.phase_id}`} />
+                    )}
+                </div>
 
                 <div className="bg-white border-2 border-slate-900 shadow-xl overflow-hidden rounded">
                     {/* Game Header */}
