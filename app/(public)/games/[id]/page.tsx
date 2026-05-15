@@ -31,18 +31,25 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
         game.participations
     );
 
-    const homeIdentity = resolveTeamIdentity(game.home_team, game.phase.season.year);
-    const awayIdentity = resolveTeamIdentity(game.away_team, game.phase.season.year);
+    const season = game.phase?.season || game.season;
+    const year = season?.year;
+
+    const homeIdentity = resolveTeamIdentity(game.home_team, year);
+    const awayIdentity = resolveTeamIdentity(game.away_team, year);
 
     return (
         <ArchiveLayout>
             <div className="mb-12">
                 <div className="flex justify-between items-start mb-4">
-                    <Link href={`/seasons/${game.phase.season.id}`} className="text-blue-600 hover:underline text-sm inline-block">
-                        &larr; Back to {game.phase.season.year} {game.phase.season.competition.name}
-                    </Link>
+                    {season ? (
+                        <Link href={`/seasons/${season.id}`} className="text-blue-600 hover:underline text-sm inline-block">
+                            &larr; Back to {season.year} {season.competition?.name || 'Season'}
+                        </Link>
+                    ) : (
+                        <div></div>
+                    )}
                     {isAdmin && (
-                        <DeleteGameButton gameId={game.id} redirectUrl={`/phases/${game.phase_id}`} />
+                        <DeleteGameButton gameId={game.id} redirectUrl={game.phase_id ? `/phases/${game.phase_id}` : '/'} />
                     )}
                 </div>
 
@@ -54,7 +61,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                             {game.time && ` @ ${game.time.substring(0, 5)}`}
                         </span>
                         <div className="flex items-center gap-3">
-                            <span className="font-black">{game.phase.name}</span>
+                            {game.phase?.name && <span className="font-black">{game.phase.name}</span>}
                             {game.is_double_header && (
                                 <span className="bg-amber-400 text-slate-900 px-2 py-0.5 rounded text-[10px] font-black normal-case tracking-normal">Double Header</span>
                             )}

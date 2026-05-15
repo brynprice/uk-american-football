@@ -2,6 +2,8 @@
  * Diagnostic: Find Coach-Only Phases
  */
 import { createClient } from '@supabase/supabase-js';
+import WebSocket from 'ws';
+globalThis.WebSocket = WebSocket;
 import dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
 

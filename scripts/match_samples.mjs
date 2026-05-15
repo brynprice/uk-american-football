@@ -1,4 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
+import WebSocket from 'ws';
+globalThis.WebSocket = WebSocket;
 import fs from 'fs';
 import { parse } from 'csv-parse/sync';
 import dotenv from 'dotenv';

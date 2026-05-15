@@ -8,6 +8,8 @@
 import fs from 'fs';
 import { parse } from 'csv-parse/sync';
 import { createClient } from '@supabase/supabase-js';
+import WebSocket from 'ws';
+globalThis.WebSocket = WebSocket;
 import dotenv from 'dotenv';
 import { run as calculateCompleteness } from './calculate_completeness.mjs';
 
@@ -133,7 +135,7 @@ async function getPhase(seasonId, name, parentPhaseName = null) {
         .from('phases')
         .select('id, parent_phase_id')
         .eq('season_id', seasonId)
-        .eq('name', name);
+        .ilike('name', name.trim());
 
     if (error) console.error("Error looking up phase:", error);
 
@@ -147,7 +149,7 @@ async function getPhase(seasonId, name, parentPhaseName = null) {
             .from('phases')
             .select('id')
             .eq('season_id', seasonId)
-            .eq('name', parentPhaseName.trim())
+            .ilike('name', parentPhaseName.trim())
             .maybeSingle();
 
         if (parentData) {

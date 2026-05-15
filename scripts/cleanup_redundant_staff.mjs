@@ -5,6 +5,8 @@
  * the phase-wide (season) head_coach assignment in the participations table.
  */
 import { createClient } from '@supabase/supabase-js';
+import WebSocket from 'ws';
+globalThis.WebSocket = WebSocket;
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';

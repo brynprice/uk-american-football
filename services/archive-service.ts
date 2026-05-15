@@ -136,6 +136,7 @@ export const ArchiveService = {
                 venue:venues (*), 
                 phase:phases!games_phase_id_fkey (*, season:seasons (id, year, competition:competitions (name))), 
                 away_phase:phases!away_phase_id (name),
+                season:seasons!games_season_id_fkey (id, year, competition:competitions (name)),
                 game_staff (*, person:people (*))
             `)
             .eq("id", gameId)

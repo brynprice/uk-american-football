@@ -1,4 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
+import WebSocket from 'ws';
+globalThis.WebSocket = WebSocket;
 import fs from 'fs';
 import { parse } from 'csv-parse/sync';
 import dotenv from 'dotenv';
@@ -107,7 +109,7 @@ async function importPhases(filePath) {
                     .from('phases')
                     .select('id')
                     .eq('season_id', season.id)
-                    .eq('name', parent_phase)
+                    .ilike('name', parent_phase.trim())
                     .order('created_at', { ascending: true })
                     .limit(1);
 
@@ -144,7 +146,7 @@ async function importPhases(filePath) {
                 .from('phases')
                 .select('id, parent_phase_id')
                 .eq('season_id', season.id)
-                .eq('name', phase_name);
+                .ilike('name', phase_name.trim());
 
             let existingPhase = null;
             if (phasesByName && phasesByName.length > 0) {
