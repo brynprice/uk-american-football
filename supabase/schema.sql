@@ -54,6 +54,7 @@ CREATE TABLE teams (
   folded_year INT,
   notes TEXT,
   logo_url TEXT,
+  team_type TEXT DEFAULT 'Adult',
   created_at TIMESTAMPTZ DEFAULT now()
 );
 

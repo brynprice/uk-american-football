@@ -63,7 +63,7 @@ async function importTeams(filePath) {
     let count = 0;
     for (const record of records) {
         count++;
-        const { name, location, founded_year, folded_year, notes, logo_url } = record;
+        const { name, location, founded_year, folded_year, notes, logo_url, team_type } = record;
 
         if (!name) {
             console.warn(`[Warning] Skipping record with missing name:`, record);
@@ -87,7 +87,8 @@ async function importTeams(filePath) {
                 founded_year: founded_year ? parseInt(founded_year) : null,
                 folded_year: folded_year ? parseInt(folded_year) : null,
                 notes: notes || null,
-                logo_url: logo_url || null
+                logo_url: logo_url || null,
+                team_type: team_type || 'Adult'
             }).eq('id', existing.id);
             await ensureSampleNote('teams', existing.id);
         } else {
@@ -98,7 +99,8 @@ async function importTeams(filePath) {
                 founded_year: founded_year ? parseInt(founded_year) : null,
                 folded_year: folded_year ? parseInt(folded_year) : null,
                 notes: notes || null,
-                logo_url: logo_url || null
+                logo_url: logo_url || null,
+                team_type: team_type || 'Adult'
             }).select('id').single();
 
             if (!insertError && newData) {

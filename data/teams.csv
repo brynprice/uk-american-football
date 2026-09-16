@@ -1,35 +1,35 @@
-﻿name,location,founded_year,folded_year,notes
-Anglia Ruskin Phantoms,Cambridge,,,
-Bath Killer Bees,Bath,,,
-Birmingham Lions,Birmingham,,,
-BNU Buccaneers,Wycombe,,,
-UWE Bullets,Bristol,,,
-Brunel Burners,London,,,
-Cambridge Pythons,Cambridge,,,
-Canterbury Chargers,Canterbury,,,
-Chichester Spitfires,Chichester,,,
-City Wolfpack,London,,,
-Essex Blades,Colchester,,,
-Greenwich Mariners,London,,,
-Hertfordshire Hurricanes,Hatfield,,,
-Imperial Immortals,London,,,
-Kent Falcons,Canterbury,,,
-KCL Regents,London,,,
-Kingston Cougars,London,,,
-LSBU Spartans,London,,,
-OBU Panthers,Oxford,,,
-Oxford Cavaliers,Oxford,,,
-Oxford Lancers,Oxford,,,
-Plymouth Blitz,Plymouth,,,
-Portsmouth Destroyers,Portsmouth,,,
-Reading Knights,Reading,,,
-Royal Holloway Bears,Egham,,,
-Solent Redhawks,Southampton,,,
-Southampton Stags,Southamptpon,,,
-Surrey Stingers,Guildford,,,
-Sussex Saxons,Brighton,,,
-UCL Emperors,London,,,
-UEA Pirates,Norwich,,,
-Warwick Wolves,Warwick,,,
-Westminster Dragons,London,,,
-Winchester Silverbacks,Winchester,,,
+name,location,founded_year,folded_year,notes,team_type
+Anglia Ruskin Phantoms,Cambridge,,,,University
+Bath Killer Bees,Bath,,,,University
+Birmingham Lions,Birmingham,,,,University
+BNU Buccaneers,Wycombe,,,,University
+UWE Bullets,Bristol,,,,University
+Brunel Burners,London,,,,University
+Cambridge Pythons,Cambridge,,,,University
+Canterbury Chargers,Canterbury,,,,University
+Chichester Spitfires,Chichester,,,,University
+City Wolfpack,London,,,,University
+Essex Blades,Colchester,,,,University
+Greenwich Mariners,London,,,,University
+Hertfordshire Hurricanes,Hatfield,,,,University
+Imperial Immortals,London,,,,University
+Kent Falcons,Canterbury,,,,University
+KCL Regents,London,,,,University
+Kingston Cougars,London,,,,University
+LSBU Spartans,London,,,,University
+OBU Panthers,Oxford,,,,University
+Oxford Cavaliers,Oxford,,,,University
+Oxford Lancers,Oxford,,,,University
+Plymouth Blitz,Plymouth,,,,University
+Portsmouth Destroyers,Portsmouth,,,,University
+Reading Knights,Reading,,,,University
+Royal Holloway Bears,Egham,,,,University
+Solent Redhawks,Southampton,,,,University
+Southampton Stags,Southamptpon,,,,University
+Surrey Stingers,Guildford,,,,University
+Sussex Saxons,Brighton,,,,University
+UCL Emperors,London,,,,University
+UEA Pirates,Norwich,,,,University
+Warwick Wolves,Warwick,,,,University
+Westminster Dragons,London,,,,University
+Winchester Silverbacks,Winchester,,,,University

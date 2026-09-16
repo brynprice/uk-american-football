@@ -33,7 +33,14 @@ export default async function TeamsListPage() {
                                 )}
                             </div>
                             <div className="flex-grow">
-                                <h2 className="text-xl font-bold group-hover:text-blue-700 transition-colors leading-tight">{team.name}</h2>
+                                <div className="flex items-start justify-between gap-2">
+                                    <h2 className="text-xl font-bold group-hover:text-blue-700 transition-colors leading-tight">{team.name}</h2>
+                                    {team.team_type && (
+                                        <span className="shrink-0 bg-slate-100 text-slate-700 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded border border-slate-200 font-sans">
+                                            {team.team_type}
+                                        </span>
+                                    )}
+                                </div>
                                 <div className="text-sm text-slate-500 font-sans mt-2">
                                     {team.location || "Unknown Location"}
                                 </div>

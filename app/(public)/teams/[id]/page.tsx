@@ -142,7 +142,14 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                         </div>
                     )}
                     <div className="flex-1">
-                        <h1 className="text-5xl font-black mb-2">{team.name}</h1>
+                        <div className="flex flex-wrap items-center gap-3 mb-2">
+                            <h1 className="text-5xl font-black">{team.name}</h1>
+                            {team.team_type && (
+                                <span className="bg-blue-50 text-blue-700 text-xs font-black uppercase tracking-wider px-2.5 py-1 rounded border border-blue-200 font-sans">
+                                    {team.team_type}
+                                </span>
+                            )}
+                        </div>
                         <div className="flex gap-4 items-center mb-4">
                             <span className="text-slate-500 font-sans uppercase tracking-widest text-xs">
                                 {team.location} &bull; Founded {team.founded_year || "Unknown"}

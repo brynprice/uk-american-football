@@ -123,6 +123,7 @@ export interface Database {
           folded_year: number | null
           notes: string | null
           logo_url: string | null
+          team_type: 'Adult' | 'Womens' | 'University' | 'Flag' | 'U19s' | string | null
           created_at: string
         }
         Insert: {
@@ -133,6 +134,7 @@ export interface Database {
           folded_year?: number | null
           notes?: string | null
           logo_url?: string | null
+          team_type?: 'Adult' | 'Womens' | 'University' | 'Flag' | 'U19s' | string | null
           created_at?: string
         }
         Update: {
@@ -143,6 +145,7 @@ export interface Database {
           folded_year?: number | null
           notes?: string | null
           logo_url?: string | null
+          team_type?: 'Adult' | 'Womens' | 'University' | 'Flag' | 'U19s' | string | null
           created_at?: string
         }
       }
