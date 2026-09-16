@@ -32,17 +32,17 @@ export default async function TeamsListPage() {
                                     <div className="text-[10px] text-slate-300 font-black uppercase tracking-tighter">No Logo</div>
                                 )}
                             </div>
-                            <div className="flex-grow">
-                                <div className="flex items-start justify-between gap-2">
-                                    <h2 className="text-xl font-bold group-hover:text-blue-700 transition-colors leading-tight">{team.name}</h2>
+                            <div className="flex-grow min-w-0">
+                                <h2 className="text-xl font-bold group-hover:text-blue-700 transition-colors leading-tight break-words">{team.name}</h2>
+                                <div className="flex flex-wrap items-center gap-2 mt-2">
                                     {team.team_type && (
-                                        <span className="shrink-0 bg-slate-100 text-slate-700 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded border border-slate-200 font-sans">
+                                        <span className="inline-block bg-slate-100 text-slate-700 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded border border-slate-200 font-sans">
                                             {team.team_type}
                                         </span>
                                     )}
-                                </div>
-                                <div className="text-sm text-slate-500 font-sans mt-2">
-                                    {team.location || "Unknown Location"}
+                                    <span className="text-sm text-slate-500 font-sans">
+                                        {team.location || "Unknown Location"}
+                                    </span>
                                 </div>
                                 {team.founded_year && (
                                     <div className="text-xs text-slate-400 font-sans mt-1">
