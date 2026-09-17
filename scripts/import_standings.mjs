@@ -55,6 +55,60 @@ async function ensureSampleNote(entityType, entityId) {
     }
 }
 
+async function getTeam(name, year = null) {
+    if (!name) return null;
+    const cleanName = name.trim();
+    const numericYear = year ? parseInt(year, 10) : null;
+
+    if (numericYear) {
+        const { data: aliases } = await supabase
+            .from('team_aliases')
+            .select('team_id, start_year, end_year')
+            .eq('name', cleanName);
+
+        if (aliases && aliases.length > 0) {
+            const matchingAlias = aliases.find(a => {
+                const start = a.start_year || 0;
+                const end = a.end_year || 9999;
+                return numericYear >= start && numericYear <= end;
+            });
+            if (matchingAlias) return matchingAlias.team_id;
+        }
+
+        const { data: primaryTeams } = await supabase
+            .from('teams')
+            .select('id, founded_year, folded_year')
+            .eq('name', cleanName);
+
+        if (primaryTeams && primaryTeams.length > 0) {
+            const matchingTeam = primaryTeams.find(t => {
+                const start = t.founded_year || 0;
+                const end = t.folded_year || 9999;
+                return numericYear >= start && numericYear <= end;
+            });
+            if (matchingTeam) return matchingTeam.id;
+        }
+    }
+
+    const { data: primaryData } = await supabase
+        .from('teams')
+        .select('id')
+        .eq('name', cleanName)
+        .maybeSingle();
+
+    if (primaryData) return primaryData.id;
+
+    const { data: aliasData } = await supabase
+        .from('team_aliases')
+        .select('team_id')
+        .eq('name', cleanName)
+        .maybeSingle();
+
+    if (aliasData) return aliasData.team_id;
+
+    return null;
+}
+
 async function importStandings(filePath) {
     const fileContent = fs.readFileSync(filePath);
     const records = parse(fileContent, {
@@ -160,23 +214,7 @@ async function importStandings(filePath) {
         }
 
         // 4. Find team
-        let teamId = null;
-        const { data: teamRecord } = await supabase
-            .from('teams')
-            .select('id')
-            .eq('name', teamName)
-            .maybeSingle();
-
-        if (teamRecord) {
-            teamId = teamRecord.id;
-        } else {
-            const { data: aliasRecord } = await supabase
-                .from('team_aliases')
-                .select('team_id')
-                .eq('name', teamName)
-                .maybeSingle();
-            if (aliasRecord) teamId = aliasRecord.team_id;
-        }
+        const teamId = await getTeam(teamName, cleanYear);
 
         if (!teamId) {
             console.warn(`  [Skip] Team "${teamName}" not found.`);

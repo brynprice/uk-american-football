@@ -51,10 +51,9 @@ if (isDryRun) {
 }
 
 const dryRunStats = {
-    added: { teams: 0, games: 0, people: 0, venues: 0, participations: 0 },
+    added: { games: 0, people: 0, venues: 0, participations: 0 },
     updated: { games: 0, participations: 0 },
     seen: {
-        teams: new Set(),
         people: new Set(),
         venues: new Set()
     }
@@ -176,20 +175,59 @@ async function getPhase(seasonId, name, parentPhaseName = null) {
     return null;
 }
 
-async function getOrCreateTeam(name) {
+async function getTeam(name, year = null) {
+    if (!name) return null;
     const cleanName = name.trim();
+    const numericYear = year ? parseInt(year, 10) : null;
 
-    // 1. Check primary team name
-    const { data, error } = await supabase
+    if (numericYear) {
+        // 1. Check team_aliases for an alias active in numericYear
+        const { data: aliases } = await supabase
+            .from('team_aliases')
+            .select('team_id, start_year, end_year')
+            .eq('name', cleanName);
+
+        if (aliases && aliases.length > 0) {
+            const matchingAlias = aliases.find(a => {
+                const start = a.start_year || 0;
+                const end = a.end_year || 9999;
+                return numericYear >= start && numericYear <= end;
+            });
+            if (matchingAlias) {
+                console.log(`  [Info] Resolved team "${cleanName}" via alias for year ${numericYear}.`);
+                return matchingAlias.team_id;
+            }
+        }
+
+        // 2. Check primary team names for a team active in numericYear
+        const { data: primaryTeams } = await supabase
+            .from('teams')
+            .select('id, founded_year, folded_year')
+            .eq('name', cleanName);
+
+        if (primaryTeams && primaryTeams.length > 0) {
+            const matchingTeam = primaryTeams.find(t => {
+                const start = t.founded_year || 0;
+                const end = t.folded_year || 9999;
+                return numericYear >= start && numericYear <= end;
+            });
+            if (matchingTeam) {
+                return matchingTeam.id;
+            }
+        }
+    }
+
+    // Fallback: Check primary team name
+    const { data: primaryData, error } = await supabase
         .from('teams')
         .select('id')
         .eq('name', cleanName)
         .maybeSingle();
 
     if (error && error.code !== 'PGRST116') console.error("Error looking up team:", error);
-    if (data) return data.id;
+    if (primaryData) return primaryData.id;
 
-    // 2. Check team aliases
+    // Fallback: Check team aliases
     const { data: aliasData, error: aliasError } = await supabase
         .from('team_aliases')
         .select('team_id')
@@ -202,24 +240,7 @@ async function getOrCreateTeam(name) {
         return aliasData.team_id;
     }
 
-    if (isDryRun) {
-        if (!dryRunStats.seen.teams.has(cleanName)) {
-            dryRunStats.added.teams++;
-            dryRunStats.seen.teams.add(cleanName);
-        }
-        console.log(`  [Dry Run] Would create team "${cleanName}"`);
-        return `dry-run-team-${cleanName}`;
-    }
-
-    // 3. Create new team if neither match
-    const { data: newData, error: insertError } = await supabase
-        .from('teams')
-        .insert({ name: cleanName })
-        .select('id')
-        .single();
-
-    if (insertError) throw insertError;
-    return newData.id;
+    return null;
 }
 
 async function getOrCreatePerson(displayName) {
@@ -430,8 +451,17 @@ async function importData(filePath) {
             }
 
             // 2. Resolve Teams
-            const homeTeamId = await getOrCreateTeam(home_team);
-            const awayTeamId = await getOrCreateTeam(away_team);
+            const homeTeamId = await getTeam(home_team, year);
+            if (!homeTeamId) {
+                console.warn(`  [Skip] Home team "${home_team}" not found in teams or team_aliases. skipping record.`);
+                continue;
+            }
+
+            const awayTeamId = await getTeam(away_team, year);
+            if (!awayTeamId) {
+                console.warn(`  [Skip] Away team "${away_team}" not found in teams or team_aliases. skipping record.`);
+                continue;
+            }
 
             // 3. Resolve Coaches & Venues
             const homeCoachId = await getOrCreatePerson(home_coach);
@@ -450,15 +480,26 @@ async function importData(filePath) {
 
             // 5. Resolve or Create Game
             let gameId;
-            const { data: existingGame } = await supabase
+            let gameQuery = supabase
                 .from('games')
-                .select('id')
+                .select('id, status')
                 .eq('season_id', seasonId)
-                .is('phase_id', phaseId)
                 .eq('home_team_id', homeTeamId)
-                .eq('away_team_id', awayTeamId)
-                .eq('date', date || null)
-                .maybeSingle();
+                .eq('away_team_id', awayTeamId);
+
+            if (phaseId) {
+                gameQuery = gameQuery.eq('phase_id', phaseId);
+            } else {
+                gameQuery = gameQuery.is('phase_id', null);
+            }
+
+            if (date) {
+                gameQuery = gameQuery.eq('date', date);
+            } else {
+                gameQuery = gameQuery.is('date', null);
+            }
+
+            const { data: existingGame } = await gameQuery.maybeSingle();
 
             if (existingGame) {
                 gameId = existingGame.id;
@@ -604,7 +645,6 @@ async function importData(filePath) {
         console.log("\n--- DRY RUN SUMMARY ---");
         console.log(`Records Processed: ${records.length}`);
         console.log(`  Games: ${dryRunStats.added.games} to add, ${dryRunStats.updated.games} to update`);
-        console.log(`  Teams: ${dryRunStats.added.teams} to create`);
         console.log(`  People: ${dryRunStats.added.people} to create`);
         console.log(`  Venues: ${dryRunStats.added.venues} to create`);
         console.log(`  Participations: ${dryRunStats.added.participations} to add, ${dryRunStats.updated.participations} to update`);

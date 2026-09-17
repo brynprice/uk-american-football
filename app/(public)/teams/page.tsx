@@ -34,18 +34,18 @@ export default async function TeamsListPage() {
                             </div>
                             <div className="flex-grow min-w-0">
                                 <h2 className="text-xl font-bold group-hover:text-blue-700 transition-colors leading-tight break-words">{team.name}</h2>
-                                <div className="flex flex-wrap items-center gap-2 mt-2">
-                                    {team.team_type && (
+                                {team.team_type && (
+                                    <div className="mt-2">
                                         <span className="inline-block bg-slate-100 text-slate-700 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded border border-slate-200 font-sans">
                                             {team.team_type}
                                         </span>
-                                    )}
-                                    <span className="text-sm text-slate-500 font-sans">
-                                        {team.location || "Unknown Location"}
-                                    </span>
+                                    </div>
+                                )}
+                                <div className="text-sm text-slate-500 font-sans mt-1.5">
+                                    {team.location || "Unknown Location"}
                                 </div>
                                 {team.founded_year && (
-                                    <div className="text-xs text-slate-400 font-sans mt-1">
+                                    <div className="text-xs text-slate-400 font-sans mt-0.5">
                                         Founded: {team.founded_year}
                                     </div>
                                 )}

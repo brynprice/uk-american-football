@@ -91,6 +91,60 @@ async function getOrCreatePerson(displayName) {
     return newData.id;
 }
 
+async function getTeam(name, year = null) {
+    if (!name) return null;
+    const cleanName = name.trim();
+    const numericYear = year ? parseInt(year, 10) : null;
+
+    if (numericYear) {
+        const { data: aliases } = await supabase
+            .from('team_aliases')
+            .select('team_id, start_year, end_year')
+            .eq('name', cleanName);
+
+        if (aliases && aliases.length > 0) {
+            const matchingAlias = aliases.find(a => {
+                const start = a.start_year || 0;
+                const end = a.end_year || 9999;
+                return numericYear >= start && numericYear <= end;
+            });
+            if (matchingAlias) return matchingAlias.team_id;
+        }
+
+        const { data: primaryTeams } = await supabase
+            .from('teams')
+            .select('id, founded_year, folded_year')
+            .eq('name', cleanName);
+
+        if (primaryTeams && primaryTeams.length > 0) {
+            const matchingTeam = primaryTeams.find(t => {
+                const start = t.founded_year || 0;
+                const end = t.folded_year || 9999;
+                return numericYear >= start && numericYear <= end;
+            });
+            if (matchingTeam) return matchingTeam.id;
+        }
+    }
+
+    const { data: primaryData } = await supabase
+        .from('teams')
+        .select('id')
+        .eq('name', cleanName)
+        .maybeSingle();
+
+    if (primaryData) return primaryData.id;
+
+    const { data: aliasData } = await supabase
+        .from('team_aliases')
+        .select('team_id')
+        .eq('name', cleanName)
+        .maybeSingle();
+
+    if (aliasData) return aliasData.team_id;
+
+    return null;
+}
+
 async function importAwards(filePath) {
     const input = fs.readFileSync(filePath);
     const records = parse(input, {
@@ -131,28 +185,7 @@ async function importAwards(filePath) {
         }
 
         // 1. Find the team
-        let teamId = null;
-        const { data: teamRecord } = await supabase
-            .from('teams')
-            .select('id')
-            .eq('name', teamName)
-            .maybeSingle();
-
-        if (teamRecord) {
-            teamId = teamRecord.id;
-        } else {
-            // Check aliases
-            const { data: aliasRecord } = await supabase
-                .from('team_aliases')
-                .select('team_id')
-                .eq('name', teamName)
-                .maybeSingle();
-
-            if (aliasRecord) {
-                teamId = aliasRecord.team_id;
-                console.log(`  [Info] Resolved team "${teamName}" via alias.`);
-            }
-        }
+        const teamId = await getTeam(teamName, awardYear);
 
         if (!teamId) {
             console.warn(`  [Skip] Team "${teamName}" not found in database (checked primary and aliases).`);
