@@ -49,6 +49,11 @@ export default async function TeamsListPage() {
                                         Founded: {team.founded_year}
                                     </div>
                                 )}
+                                {team.folded_year && (
+                                    <div className="text-xs text-red-600 font-sans mt-0.5">
+                                        Folded: {team.folded_year}
+                                    </div>
+                                )}
                             </div>
                         </Link>
                     ))}
