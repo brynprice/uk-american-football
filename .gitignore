@@ -56,3 +56,6 @@ scripts/dump_*.mjs
 
 # excel lock files
 data/~$*.xlsx
+
+scratch/
+

@@ -1,0 +1,12 @@
+competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal,max_games_per_team
+BUAFL,2013,Playoffs,Playoffs,,high,1,
+BUAFL,2013,Championship Playoffs,Playoffs,Playoffs,high,1,
+BUAFL,2013,Trophy Playoffs,Playoffs,Playoffs,high,2,
+BUAFL,2013,Big North Western Conference,Division,,high,2,8
+BUAFL,2013,Midlands Athletics Conference,Division,,high,3,8
+BUAFL,2013,North Eastern Conference,Division,,high,4,8
+BUAFL,2013,Oyster Card Conference,Division,,high,5,8
+BUAFL,2013,Saltire Conference,Division,,high,6,8
+BUAFL,2013,South Central Conference,Division,,high,7,8
+BUAFL,2013,South Coast Conference,Division,,high,8,8
+BUAFL,2013,South Western Athletics Conference,Division,,high,9,8
