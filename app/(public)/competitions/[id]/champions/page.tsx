@@ -10,18 +10,24 @@ export default async function CompetitionChampionsPage({
     params: Promise<{ id: string }>;
 }) {
     const { id } = await params;
-    const [championsData, allCompetitions] = await Promise.all([
-        ArchiveService.getCompetitionChampions(id),
+
+    const [currentComp, allCompetitions] = await Promise.all([
+        ArchiveService.getCompetitionById(id),
         ArchiveService.getCompetitions()
+    ]);
+
+    const [singleCompChampionsData, levelChampionsData] = await Promise.all([
+        ArchiveService.getChampions({ competitionId: id }),
+        currentComp?.level ? ArchiveService.getChampions({ level: currentComp.level }) : null
     ]);
 
     return (
         <ArchiveLayout>
             <ChampionsView
-                competition={championsData.competition}
+                competition={currentComp}
                 allCompetitions={allCompetitions}
-                champions={championsData.champions}
-                leaderboard={championsData.leaderboard}
+                singleCompChampionsData={singleCompChampionsData}
+                levelChampionsData={levelChampionsData}
             />
         </ArchiveLayout>
     );

@@ -5,68 +5,148 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 interface ChampionsViewProps {
-    competition: any;
+    competition?: any;
     allCompetitions: any[];
-    champions: any[];
-    leaderboard: any[];
+    levelChampionsData?: any;
+    singleCompChampionsData?: any;
+    allChampionsData?: any;
 }
 
 export default function ChampionsView({
     competition,
     allCompetitions,
-    champions,
-    leaderboard
+    levelChampionsData,
+    singleCompChampionsData,
+    allChampionsData
 }: ChampionsViewProps) {
     const router = useRouter();
+
+    // Scope: 'level' (e.g. All Uniball) vs 'single' (e.g. BUAFL only) vs 'all' (Global Roll of Honour)
+    const [scope, setScope] = useState<'level' | 'single' | 'all'>(
+        competition && levelChampionsData?.champions?.length > singleCompChampionsData?.champions?.length
+            ? 'level'
+            : competition
+            ? 'single'
+            : 'all'
+    );
     const [filterType, setFilterType] = useState<'all' | 'title' | 'bowl'>('all');
 
-    const filteredChampions = champions.filter((c) => {
+    // Determine current active dataset based on scope
+    const activeData = scope === 'level'
+        ? (levelChampionsData || allChampionsData)
+        : scope === 'single'
+        ? (singleCompChampionsData || levelChampionsData)
+        : (allChampionsData || levelChampionsData);
+
+    const champions = activeData?.champions || [];
+    const leaderboard = activeData?.leaderboard || [];
+
+    const filteredChampions = champions.filter((c: any) => {
         if (filterType === 'title') return c.finalType === 'title';
         if (filterType === 'bowl') return c.finalType === 'bowl';
         return true;
     });
 
-    const titleCount = champions.filter((c) => c.finalType === 'title').length;
-    const bowlCount = champions.filter((c) => c.finalType === 'bowl').length;
+    const titleCount = champions.filter((c: any) => c.finalType === 'title').length;
+    const bowlCount = champions.filter((c: any) => c.finalType === 'bowl').length;
+
+    // Related competitions in the same level (e.g., BCAFL + BUAFL)
+    const currentLevel = competition?.level || levelChampionsData?.selectedLevel;
+    const sameLevelComps = allCompetitions.filter((c) => c.level === currentLevel);
 
     return (
         <div className="space-y-10">
-            {/* Top Navigation & Competition Switcher */}
+            {/* Top Navigation & Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b-4 border-slate-900 pb-6">
                 <div>
-                    <Link
-                        href={`/competitions/${competition.id}`}
-                        className="text-xs font-black uppercase text-blue-600 hover:underline tracking-widest mb-2 inline-block font-sans"
-                    >
-                        &larr; Back to {competition.name}
-                    </Link>
+                    {competition && (
+                        <Link
+                            href={`/competitions/${competition.id}`}
+                            className="text-xs font-black uppercase text-blue-600 hover:underline tracking-widest mb-2 inline-block font-sans"
+                        >
+                            &larr; Back to {competition.name}
+                        </Link>
+                    )}
                     <h1 className="text-4xl sm:text-5xl font-black uppercase italic tracking-tight">
-                        {competition.name}
+                        {scope === 'level' && currentLevel
+                            ? `${currentLevel} Roll of Honour`
+                            : competition
+                            ? competition.name
+                            : 'Roll of Honour'}
                     </h1>
                     <p className="text-slate-500 font-sans text-sm mt-1 uppercase tracking-wider font-bold">
-                        🏆 Roll of Honour & Bowl Game Winners
+                        🏆 Historical Champions & Bowl Game Winners
+                        {scope === 'level' && sameLevelComps.length > 1 && (
+                            <span className="text-amber-700 ml-2 font-black">
+                                (Combining {sameLevelComps.map((c) => c.slug?.toUpperCase() || c.name).join(' + ')})
+                            </span>
+                        )}
                     </p>
                 </div>
 
-                {/* Competition Switcher Dropdown */}
-                <div className="flex items-center gap-3 bg-slate-100 p-2 rounded-lg border border-slate-200">
+                {/* Competition / Level Switcher Dropdown */}
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 bg-slate-100 p-2 rounded-lg border border-slate-200">
                     <label htmlFor="league-select" className="text-xs font-black uppercase text-slate-500 font-sans whitespace-nowrap pl-2">
-                        Switch League:
+                        View League:
                     </label>
                     <select
                         id="league-select"
-                        value={competition.id}
-                        onChange={(e) => router.push(`/competitions/${e.target.value}/champions`)}
+                        value={competition?.id || 'all'}
+                        onChange={(e) => {
+                            const val = e.target.value;
+                            if (val === 'all') {
+                                router.push('/champions');
+                            } else {
+                                router.push(`/competitions/${val}/champions`);
+                            }
+                        }}
                         className="bg-white border border-slate-300 font-bold text-xs uppercase px-3 py-1.5 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
                     >
+                        <option value="all">-- All Leagues (Global) --</option>
                         {allCompetitions.map((comp) => (
                             <option key={comp.id} value={comp.id}>
-                                {comp.name}
+                                {comp.name} {comp.level ? `(${comp.level})` : ''}
                             </option>
                         ))}
                     </select>
                 </div>
             </div>
+
+            {/* Multi-League / Scope Toggle Banner (When multiple leagues share the same level) */}
+            {sameLevelComps.length > 1 && competition && (
+                <div className="bg-amber-50 border-2 border-amber-200 rounded-lg p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div>
+                        <div className="text-xs font-black uppercase text-amber-800 font-sans tracking-wider">
+                            💡 Multi-League Tier History ({currentLevel})
+                        </div>
+                        <p className="text-xs text-amber-900 font-sans mt-0.5">
+                            {currentLevel} champions span multiple historical leagues ({sameLevelComps.map(c => c.name).join(', ')}).
+                        </p>
+                    </div>
+                    <div className="flex gap-2 font-sans shrink-0">
+                        <button
+                            onClick={() => setScope('level')}
+                            className={`px-3 py-1.5 rounded text-xs font-black uppercase transition-all ${
+                                scope === 'level'
+                                    ? 'bg-amber-500 text-slate-950 shadow'
+                                    : 'bg-white text-slate-700 hover:bg-amber-100 border border-amber-300'
+                            }`}
+                        >
+                            All {currentLevel} Champions
+                        </button>
+                        <button
+                            onClick={() => setScope('single')}
+                            className={`px-3 py-1.5 rounded text-xs font-black uppercase transition-all ${
+                                scope === 'single'
+                                    ? 'bg-amber-500 text-slate-950 shadow'
+                                    : 'bg-white text-slate-700 hover:bg-amber-100 border border-amber-300'
+                            }`}
+                        >
+                            {competition.slug?.toUpperCase() || competition.name} Only
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {/* Leaderboard & Stats Summary */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -87,11 +167,11 @@ export default function ChampionsView({
                     {leaderboard.length > 0 && (
                         <div className="bg-white p-6 border-2 border-slate-200 rounded-lg shadow-sm">
                             <h3 className="text-xs font-black uppercase text-slate-500 tracking-wider mb-4 font-sans border-b pb-2 flex items-center justify-between">
-                                <span>Most Titles in League</span>
+                                <span>Most Titles {scope === 'level' && currentLevel ? `in ${currentLevel}` : 'in League'}</span>
                                 <span>Wins</span>
                             </h3>
                             <div className="space-y-3">
-                                {leaderboard.slice(0, 5).map((item, idx) => (
+                                {leaderboard.slice(0, 8).map((item: any, idx: number) => (
                                     <div key={item.teamId} className="flex items-center justify-between text-sm">
                                         <div className="flex items-center gap-3 min-w-0">
                                             <span className="font-mono text-xs font-black text-slate-400 w-4">
@@ -174,7 +254,7 @@ export default function ChampionsView({
 
                     {/* Timeline of Title Games */}
                     <div className="space-y-4">
-                        {filteredChampions.map((item) => (
+                        {filteredChampions.map((item: any) => (
                             <div
                                 key={item.id}
                                 className={`bg-white border-2 rounded-lg p-6 shadow-sm transition-all hover:shadow-md ${
@@ -184,11 +264,20 @@ export default function ChampionsView({
                                 }`}
                             >
                                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4 pb-3 border-b border-slate-100">
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex flex-wrap items-center gap-2">
                                         <span className="text-xs font-black font-sans uppercase bg-slate-900 text-white px-2.5 py-1 rounded">
                                             {item.seasonName}
                                         </span>
-                                        <h3 className="text-lg font-black text-slate-900">{item.titleName}</h3>
+                                        {/* Host League Badge */}
+                                        {item.competition && (
+                                            <Link
+                                                href={`/competitions/${item.competition.id}`}
+                                                className="text-[10px] font-black font-sans uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-700 hover:bg-blue-100 hover:text-blue-800 border border-slate-200 transition-colors"
+                                            >
+                                                {item.competition.slug?.toUpperCase() || item.competition.name}
+                                            </Link>
+                                        )}
+                                        <h3 className="text-lg font-black text-slate-900 ml-1">{item.titleName}</h3>
                                     </div>
                                     <div className="text-xs text-slate-400 font-sans font-semibold">
                                         {item.date || item.seasonYear} {item.venue?.city ? `• ${item.venue.city}` : ''}

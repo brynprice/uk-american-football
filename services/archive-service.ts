@@ -383,11 +383,38 @@ export const ArchiveService = {
         return uniqueGames;
     },
 
-    async getCompetitionChampions(competitionId: string): Promise<any> {
-        const competition = await this.getCompetitionById(competitionId);
-        const seasonIds = competition.seasons?.map((s: any) => s.id) || [];
+    async getChampions(options: { competitionId?: string; level?: string } = {}): Promise<any> {
+        const { competitionId, level } = options;
+
+        let selectedCompetitions: Competition[] = [];
+        if (competitionId) {
+            const comp = await this.getCompetitionById(competitionId);
+            if (comp) selectedCompetitions = [comp];
+        } else if (level) {
+            const { data } = await supabase.from("competitions").select("*").eq("level", level);
+            selectedCompetitions = data || [];
+        } else {
+            const { data } = await supabase.from("competitions").select("*");
+            selectedCompetitions = data || [];
+        }
+
+        // Fetch all seasons for these competitions
+        const compIds = selectedCompetitions.map(c => c.id);
+        let seasonQuery = supabase.from("seasons").select("id, year, competition_id");
+        if (compIds.length > 0) {
+            seasonQuery = seasonQuery.in("competition_id", compIds);
+        }
+        const { data: seasonsData } = await seasonQuery;
+        const seasonIds = (seasonsData as any[])?.map((s: any) => s.id) || [];
+
         if (seasonIds.length === 0) {
-            return { competition, champions: [], leaderboard: [] };
+            return {
+                selectedCompetition: competitionId ? selectedCompetitions[0] : null,
+                selectedLevel: level || null,
+                allCompetitions: selectedCompetitions,
+                champions: [],
+                leaderboard: []
+            };
         }
 
         const { data: gamesData, error } = await supabase
@@ -398,7 +425,10 @@ export const ArchiveService = {
                 away_team:teams!away_team_id (*, team_aliases (*)),
                 phase:phases!games_phase_id_fkey (
                     id, name, type,
-                    season:seasons (id, year, name)
+                    season:seasons (
+                        id, year, name,
+                        competition:competitions (id, name, level, slug)
+                    )
                 ),
                 venue:venues (*)
             `)
@@ -443,6 +473,8 @@ export const ArchiveService = {
                 score: homeScore
             };
 
+            const hostCompetition = game.phase?.season?.competition || null;
+
             return {
                 id: game.id,
                 titleName: game.title_name || (game.final_type === 'title' ? 'National Championship' : 'Bowl Game'),
@@ -452,6 +484,7 @@ export const ArchiveService = {
                 seasonName: game.phase?.season?.name || `${seasonYear} Season`,
                 phaseName: game.phase?.name,
                 venue: game.venue,
+                competition: hostCompetition,
                 winner,
                 runnerUp
             };
@@ -489,9 +522,15 @@ export const ArchiveService = {
         });
 
         return {
-            competition,
+            selectedCompetition: competitionId ? selectedCompetitions[0] : null,
+            selectedLevel: level || null,
+            allCompetitions: selectedCompetitions,
             champions: processedChampions,
             leaderboard
         };
+    },
+
+    async getCompetitionChampions(competitionId: string): Promise<any> {
+        return this.getChampions({ competitionId });
     }
 };
