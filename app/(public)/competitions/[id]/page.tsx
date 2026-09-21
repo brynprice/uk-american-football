@@ -12,8 +12,26 @@ export default async function CompetitionPage({ params }: { params: Promise<{ id
             <div className="mb-8">
                 <Link href="/" className="text-blue-600 hover:underline text-sm mb-4 inline-block">&larr; Back to Competitions</Link>
                 <h1 className="text-4xl font-black mb-2">{competition.name}</h1>
-                <div className="text-sm text-slate-500 mb-4 max-w-2xl leading-relaxed whitespace-pre-wrap">
+                <div className="text-sm text-slate-500 mb-6 max-w-2xl leading-relaxed whitespace-pre-wrap">
                     {competition.description}
+                </div>
+
+                <div className="bg-slate-900 text-white p-6 rounded-lg shadow-md border-l-8 border-amber-400 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div>
+                        <div className="text-xs font-black uppercase text-amber-400 font-sans tracking-widest mb-1">
+                            🏆 League Roll of Honour
+                        </div>
+                        <h3 className="text-xl font-black">Champions & Bowl Game Winners</h3>
+                        <p className="text-xs text-slate-400 font-sans mt-0.5">
+                            Browse national title holders, bowl winners, and trophy records over all seasons.
+                        </p>
+                    </div>
+                    <Link
+                        href={`/competitions/${competition.id}/champions`}
+                        className="px-5 py-2.5 bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider rounded hover:bg-amber-300 transition-colors shrink-0 shadow-sm"
+                    >
+                        View Champions &rarr;
+                    </Link>
                 </div>
             </div>
 

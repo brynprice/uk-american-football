@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabase/client";
 import { Database } from "@/lib/supabase/types";
 import { isPlayoffPhase, sortPhasesInTreeOrder } from "@/lib/utils/phase-utils";
+import { resolveTeamIdentity } from "@/lib/utils/team-resolver";
 
 export type Competition = Database["public"]["Tables"]["competitions"]["Row"];
 export type Season = Database["public"]["Tables"]["seasons"]["Row"];
@@ -380,5 +381,117 @@ export const ArchiveService = {
         });
 
         return uniqueGames;
+    },
+
+    async getCompetitionChampions(competitionId: string): Promise<any> {
+        const competition = await this.getCompetitionById(competitionId);
+        const seasonIds = competition.seasons?.map((s: any) => s.id) || [];
+        if (seasonIds.length === 0) {
+            return { competition, champions: [], leaderboard: [] };
+        }
+
+        const { data: gamesData, error } = await supabase
+            .from("games")
+            .select(`
+                *,
+                home_team:teams!home_team_id (*, team_aliases (*)),
+                away_team:teams!away_team_id (*, team_aliases (*)),
+                phase:phases!games_phase_id_fkey (
+                    id, name, type,
+                    season:seasons (id, year, name)
+                ),
+                venue:venues (*)
+            `)
+            .in("season_id", seasonIds)
+            .in("final_type", ["title", "bowl"])
+            .neq("status", "anomaly")
+            .order("date", { ascending: false });
+
+        if (error) throw error;
+        const games = gamesData || [];
+
+        const processedChampions = games.map((game: any) => {
+            const seasonYear = game.phase?.season?.year || (game.date ? new Date(game.date).getFullYear() : 0);
+            const homeIdentity = resolveTeamIdentity(game.home_team, seasonYear);
+            const awayIdentity = resolveTeamIdentity(game.away_team, seasonYear);
+
+            const homeScore = game.home_score ?? 0;
+            const awayScore = game.away_score ?? 0;
+
+            const isHomeWinner = homeScore >= awayScore;
+            const winner = isHomeWinner ? {
+                ...game.home_team,
+                displayName: homeIdentity.name,
+                displayLogo: homeIdentity.logo_url || game.home_team?.logo_url,
+                score: homeScore
+            } : {
+                ...game.away_team,
+                displayName: awayIdentity.name,
+                displayLogo: awayIdentity.logo_url || game.away_team?.logo_url,
+                score: awayScore
+            };
+
+            const runnerUp = isHomeWinner ? {
+                ...game.away_team,
+                displayName: awayIdentity.name,
+                displayLogo: awayIdentity.logo_url || game.away_team?.logo_url,
+                score: awayScore
+            } : {
+                ...game.home_team,
+                displayName: homeIdentity.name,
+                displayLogo: homeIdentity.logo_url || game.home_team?.logo_url,
+                score: homeScore
+            };
+
+            return {
+                id: game.id,
+                titleName: game.title_name || (game.final_type === 'title' ? 'National Championship' : 'Bowl Game'),
+                finalType: game.final_type,
+                date: game.date,
+                seasonYear,
+                seasonName: game.phase?.season?.name || `${seasonYear} Season`,
+                phaseName: game.phase?.name,
+                venue: game.venue,
+                winner,
+                runnerUp
+            };
+        });
+
+        // Sort by seasonYear desc then date desc
+        processedChampions.sort((a, b) => {
+            if (b.seasonYear !== a.seasonYear) return b.seasonYear - a.seasonYear;
+            return (b.date || '').localeCompare(a.date || '');
+        });
+
+        // Leaderboard
+        const leaderMap = new Map<string, { teamId: string; name: string; logoUrl: string | null; titlesCount: number; bowlsCount: number }>();
+        processedChampions.forEach((item) => {
+            const teamId = item.winner.id;
+            const existing = leaderMap.get(teamId) || {
+                teamId,
+                name: item.winner.name,
+                logoUrl: item.winner.displayLogo || item.winner.logo_url,
+                titlesCount: 0,
+                bowlsCount: 0
+            };
+
+            if (item.finalType === 'title') {
+                existing.titlesCount += 1;
+            } else {
+                existing.bowlsCount += 1;
+            }
+            leaderMap.set(teamId, existing);
+        });
+
+        const leaderboard = Array.from(leaderMap.values()).sort((a, b) => {
+            if (b.titlesCount !== a.titlesCount) return b.titlesCount - a.titlesCount;
+            return b.bowlsCount - a.bowlsCount;
+        });
+
+        return {
+            competition,
+            champions: processedChampions,
+            leaderboard
+        };
     }
 };
