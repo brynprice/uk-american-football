@@ -220,33 +220,55 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                     <section>
                         <h3 className="text-xl font-black uppercase border-b-2 border-slate-900 pb-2 mb-6 font-sans">Season History</h3>
                         <div className="space-y-4">
-                            {team.participations?.sort((a: any, b: any) => b.phase.season.year - a.phase.season.year).map((p: any) => {
-                                const isPlayoff = p.phase?.type?.toLowerCase() === 'playoffs' || p.phase.name.toLowerCase().includes('playoff');
+                            {team.participations
+                                ?.filter((p: any) => p.phase && p.phase.season)
+                                .sort((a: any, b: any) => {
+                                    const yearA = a.phase?.season?.year || 0;
+                                    const yearB = b.phase?.season?.year || 0;
 
-                                return (
-                                    <div key={p.id} className="flex gap-4 items-start group">
-                                        <div className={`w-28 pt-1 text-sm font-black transition-colors ${isPlayoff ? 'text-indigo-400 group-hover:text-indigo-600' : 'text-slate-400 group-hover:text-blue-600'}`}>
-                                            {p.phase.season.name || p.phase.season.year}
-                                        </div>
-                                        <div className={`flex-1 p-4 border shadow-sm border-l-4 transition-all ${isPlayoff
-                                            ? 'bg-indigo-50 border-indigo-200 border-l-indigo-600 hover:border-l-indigo-800'
-                                            : 'bg-white border-slate-200 border-l-slate-800 hover:border-l-blue-600'
-                                            }`}>
-                                            <div className="flex flex-col">
-                                                <Link href={`/seasons/${p.phase.season.id}`} className={`font-bold hover:underline ${isPlayoff ? 'text-indigo-900' : 'text-slate-800 hover:text-blue-700'}`}>
-                                                    {p.phase.season.competition.name}
-                                                </Link>
-                                                <Link href={`/phases/${p.phase.id}`} className={`text-[10px] uppercase font-black font-sans hover:underline mt-0.5 w-fit ${isPlayoff ? 'text-indigo-500 hover:text-indigo-700' : 'text-slate-500 hover:text-slate-700'}`}>
-                                                    {p.phase.name}
-                                                </Link>
+                                    if (yearA !== yearB) {
+                                        return yearB - yearA;
+                                    }
+
+                                    const isPlayoffA = a.phase?.type?.toLowerCase() === 'playoffs' || a.phase?.name?.toLowerCase().includes('playoff');
+                                    const isPlayoffB = b.phase?.type?.toLowerCase() === 'playoffs' || b.phase?.name?.toLowerCase().includes('playoff');
+
+                                    if (isPlayoffA && !isPlayoffB) return -1;
+                                    if (!isPlayoffA && isPlayoffB) return 1;
+
+                                    return (a.phase?.ordinal || 0) - (b.phase?.ordinal || 0);
+                                })
+                                .map((p: any) => {
+                                    const isPlayoff = p.phase?.type?.toLowerCase() === 'playoffs' || p.phase?.name?.toLowerCase().includes('playoff');
+
+                                    return (
+                                        <div key={p.id} className="flex gap-4 items-start group">
+                                            <div className={`w-28 pt-1 text-sm font-black transition-colors ${isPlayoff ? 'text-indigo-400 group-hover:text-indigo-600' : 'text-slate-400 group-hover:text-blue-600'}`}>
+                                                {p.phase?.season?.name || p.phase?.season?.year}
                                             </div>
-                                            {p.notes && <p className="text-xs text-slate-500 mt-2 italic font-serif">{p.notes}</p>}
+                                            <div className={`flex-1 p-4 border shadow-sm border-l-4 transition-all ${isPlayoff
+                                                ? 'bg-indigo-50 border-indigo-200 border-l-indigo-600 hover:border-l-indigo-800'
+                                                : 'bg-white border-slate-200 border-l-slate-800 hover:border-l-blue-600'
+                                                }`}>
+                                                <div className="flex flex-col">
+                                                    {p.phase?.season?.id && p.phase?.season?.competition?.name && (
+                                                        <Link href={`/seasons/${p.phase.season.id}`} className={`font-bold hover:underline ${isPlayoff ? 'text-indigo-900' : 'text-slate-800 hover:text-blue-700'}`}>
+                                                            {p.phase.season.competition.name}
+                                                        </Link>
+                                                    )}
+                                                    {p.phase?.id && p.phase?.name && (
+                                                        <Link href={`/phases/${p.phase.id}`} className={`text-[10px] uppercase font-black font-sans hover:underline mt-0.5 w-fit ${isPlayoff ? 'text-indigo-500 hover:text-indigo-700' : 'text-slate-500 hover:text-slate-700'}`}>
+                                                            {p.phase.name}
+                                                        </Link>
+                                                    )}
+                                                </div>
+                                                {p.notes && <p className="text-xs text-slate-500 mt-2 italic font-serif">{p.notes}</p>}
+                                            </div>
                                         </div>
-                                    </div>
-                                );
-                            })}
+                                    );
+                                })}
 
-                            {(!team.participations || team.participations.length === 0) && (
+                            {(!team.participations || team.participations.filter((p: any) => p.phase && p.phase.season).length === 0) && (
                                 <p className="text-slate-400 italic font-sans py-4">No seasonal records found for this team.</p>
                             )}
                         </div>
