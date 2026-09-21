@@ -78,57 +78,67 @@ export default async function ScorigamiPage({ searchParams }: { searchParams: Pr
 
                     {games.length > 0 ? (
                         <div className="space-y-4">
-                            {games.map((game: any) => (
-                                <Link
-                                    key={game.id}
-                                    href={`/games/${game.id}`}
-                                    className="block bg-white border border-slate-200 p-4 hover:border-blue-500 transition-all shadow-sm"
-                                >
-                                    <div className="flex justify-between items-center mb-2">
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-xs font-sans text-slate-500 uppercase tracking-tighter">
-                                                {game.date_display || (game.date ? new Date(game.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : "Unknown Date")}
-                                            </span>
-                                            <span className="text-[10px] font-black bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded uppercase">
-                                                {game.phase?.season?.competition?.name}
-                                            </span>
-                                            <span className="text-[10px] font-black bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded uppercase">
-                                                {game.phase?.name}
-                                            </span>
-                                        </div>
-                                        {game.is_playoff && (
-                                            <span className="text-[10px] font-black bg-slate-900 text-white px-2 py-0.5 rounded uppercase">Postseason</span>
-                                        )}
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                        <div className="flex-1 flex items-center justify-end gap-3 pr-4 text-right">
-                                            <span className="font-black text-lg">{resolveTeamIdentity(game.away_team, game.phase.season.year).name}</span>
-                                            {resolveTeamIdentity(game.away_team, game.phase.season.year).logo_url && (
-                                                <div className="w-8 h-8 bg-slate-50 p-1 flex items-center justify-center shrink-0 border border-slate-100 rounded">
-                                                    <img src={resolveTeamIdentity(game.away_team, game.phase.season.year).logo_url!} alt="" className="max-w-full max-h-full object-contain" />
-                                                </div>
+                            {games.map((game: any) => {
+                                const seasonYear = game.phase?.season?.year ?? (game.date ? new Date(game.date).getFullYear() : null);
+                                const awayIdentity = resolveTeamIdentity(game.away_team, seasonYear);
+                                const homeIdentity = resolveTeamIdentity(game.home_team, seasonYear);
+
+                                return (
+                                    <Link
+                                        key={game.id}
+                                        href={`/games/${game.id}`}
+                                        className="block bg-white border border-slate-200 p-4 hover:border-blue-500 transition-all shadow-sm"
+                                    >
+                                        <div className="flex justify-between items-center mb-2">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-xs font-sans text-slate-500 uppercase tracking-tighter">
+                                                    {game.date_display || (game.date ? new Date(game.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : "Unknown Date")}
+                                                </span>
+                                                {game.phase?.season?.competition?.name && (
+                                                    <span className="text-[10px] font-black bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded uppercase">
+                                                        {game.phase.season.competition.name}
+                                                    </span>
+                                                )}
+                                                {game.phase?.name && (
+                                                    <span className="text-[10px] font-black bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded uppercase">
+                                                        {game.phase.name}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            {game.is_playoff && (
+                                                <span className="text-[10px] font-black bg-slate-900 text-white px-2 py-0.5 rounded uppercase">Postseason</span>
                                             )}
                                         </div>
-                                        <div className="flex items-center gap-4 bg-slate-50 px-4 py-1 rounded border border-slate-100 font-black">
-                                            <span className={game.away_score > game.home_score ? "text-blue-700" : ""}>
-                                                {game.away_score ?? "-"}
-                                            </span>
-                                            <span className="text-slate-300 font-serif font-normal italic text-sm">at</span>
-                                            <span className={game.home_score > game.away_score ? "text-blue-700" : ""}>
-                                                {game.home_score ?? "-"}
-                                            </span>
+                                        <div className="flex justify-between items-center">
+                                            <div className="flex-1 flex items-center justify-end gap-3 pr-4 text-right">
+                                                <span className="font-black text-lg">{awayIdentity.name}</span>
+                                                {awayIdentity.logo_url && (
+                                                    <div className="w-8 h-8 bg-slate-50 p-1 flex items-center justify-center shrink-0 border border-slate-100 rounded">
+                                                        <img src={awayIdentity.logo_url} alt="" className="max-w-full max-h-full object-contain" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="flex items-center gap-4 bg-slate-50 px-4 py-1 rounded border border-slate-100 font-black">
+                                                <span className={game.away_score > game.home_score ? "text-blue-700" : ""}>
+                                                    {game.away_score ?? "-"}
+                                                </span>
+                                                <span className="text-slate-300 font-serif font-normal italic text-sm">at</span>
+                                                <span className={game.home_score > game.away_score ? "text-blue-700" : ""}>
+                                                    {game.home_score ?? "-"}
+                                                </span>
+                                            </div>
+                                            <div className="flex-1 flex items-center gap-3 pl-4">
+                                                {homeIdentity.logo_url && (
+                                                    <div className="w-8 h-8 bg-slate-50 p-1 flex items-center justify-center shrink-0 border border-slate-100 rounded">
+                                                        <img src={homeIdentity.logo_url} alt="" className="max-w-full max-h-full object-contain" />
+                                                    </div>
+                                                )}
+                                                <span className="font-black text-lg">{homeIdentity.name}</span>
+                                            </div>
                                         </div>
-                                        <div className="flex-1 flex items-center gap-3 pl-4">
-                                            {resolveTeamIdentity(game.home_team, game.phase.season.year).logo_url && (
-                                                <div className="w-8 h-8 bg-slate-50 p-1 flex items-center justify-center shrink-0 border border-slate-100 rounded">
-                                                    <img src={resolveTeamIdentity(game.home_team, game.phase.season.year).logo_url!} alt="" className="max-w-full max-h-full object-contain" />
-                                                </div>
-                                            )}
-                                            <span className="font-black text-lg">{resolveTeamIdentity(game.home_team, game.phase.season.year).name}</span>
-                                        </div>
-                                    </div>
-                                </Link>
-                            ))}
+                                    </Link>
+                                );
+                            })}
                         </div>
                     ) : (
                         <div className="bg-slate-50 border-2 border-dashed border-slate-200 p-12 text-center text-slate-500">

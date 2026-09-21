@@ -78,6 +78,7 @@ export default function H2HStats({ team1, team2, games }: H2HStatsProps) {
                         const isLoss = score1 < score2;
                         const isTie = score1 === score2 && score1 !== null;
 
+                        const seasonYear = game.phase?.season?.year ?? (game.date ? new Date(game.date).getFullYear() : null);
                         return (
                             <div key={game.id} className="bg-white border border-slate-200 p-3 flex items-center justify-between group hover:border-blue-500 transition-all">
                                 <div className="flex items-center gap-3">
@@ -87,10 +88,10 @@ export default function H2HStats({ team1, team2, games }: H2HStatsProps) {
                                     </div>
                                     <div>
                                         <div className="text-[9px] text-slate-400 uppercase font-black">
-                                            {game.phase.season.year} {game.phase.season.competition.name} &bull; {game.phase.name}
+                                            {[seasonYear, game.phase?.season?.competition?.name, game.phase?.name].filter(Boolean).join(' ')}
                                         </div>
                                         <div className="text-xs font-bold">
-                                            {resolveTeamIdentity(game.home_team, game.phase.season.year).name} {game.home_score} &ndash; {game.away_score} {resolveTeamIdentity(game.away_team, game.phase.season.year).name}
+                                            {resolveTeamIdentity(game.home_team, seasonYear).name} {game.home_score} &ndash; {game.away_score} {resolveTeamIdentity(game.away_team, seasonYear).name}
                                         </div>
                                     </div>
                                 </div>
@@ -167,7 +168,11 @@ export default function H2HStats({ team1, team2, games }: H2HStatsProps) {
                         <div className="text-xs font-black uppercase text-slate-400 mb-2 tracking-widest">Total Matchups</div>
                         <div className="text-6xl font-black text-slate-900 tabular-nums">{stats.overall.played}</div>
                         <p className="text-sm text-slate-500 font-serif italic mt-4 max-w-xs mx-auto">
-                            The historical series between these clubs spanning {games.length > 0 ? `${games[games.length - 1].phase.season.year} to ${games[0].phase.season.year}` : 'all recorded time'}.
+                            The historical series between these clubs spanning {(() => {
+                                const firstYear = games[games.length - 1]?.phase?.season?.year ?? (games[games.length - 1]?.date ? new Date(games[games.length - 1].date).getFullYear() : null);
+                                const lastYear = games[0]?.phase?.season?.year ?? (games[0]?.date ? new Date(games[0].date).getFullYear() : null);
+                                return firstYear && lastYear ? `${firstYear} to ${lastYear}` : 'all recorded time';
+                            })()}.
                         </p>
                     </div>
                 </div>
