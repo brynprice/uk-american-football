@@ -31,13 +31,9 @@ export default async function CompetitionsPage() {
                             <p className="text-slate-500 text-sm line-clamp-3 font-sans leading-relaxed mb-6">
                                 {comp.description || "Historical records, standings, and game logs for this competition."}
                             </p>
-                            <div className="flex items-center justify-between text-xs font-black uppercase tracking-widest pt-4 border-t border-slate-100">
-                                <span className="text-blue-600 group-hover:translate-x-1 transition-transform">
-                                    Browse Records &rarr;
-                                </span>
-                                <span className="text-amber-700 bg-amber-50 px-2.5 py-1 rounded border border-amber-200">
-                                    🏆 Champions
-                                </span>
+                            <div className="flex items-center text-xs font-black uppercase tracking-widest text-blue-600">
+                                <span>Browse Records</span>
+                                <span className="ml-2 group-hover:translate-x-2 transition-transform">&rarr;</span>
                             </div>
                         </Link>
                     ))}
