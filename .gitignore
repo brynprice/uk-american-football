@@ -58,4 +58,6 @@ scripts/dump_*.mjs
 data/~$*.xlsx
 
 scratch/
+scratch_*.json
+
 

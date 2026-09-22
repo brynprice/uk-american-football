@@ -1,165 +1,165 @@
-﻿competition,year,phase,date,time,date_precision,date_display,away_team,home_team,away_score,home_score,status,venue,notes,away_coach,home_coach,is_double_header,is_playoff,confidence_level
-buafl,2025,Division 1 South Eastern,15/02/2026,13:00,day,,UCL Emperors,Brighton Panthers,8,24,completed,Falmer Campus,,,Ethan Butcher,,,high
-buafl,2025,Division 1 South Eastern,08/02/2026,13:00,day,,Kingston Cougars,Brighton Panthers,0,24,completed,Falmer Campus,,,Ethan Butcher,,,high
-buafl,2025,Division 1 South Eastern,01/02/2026,13:00,day,,KCL Regents,Brighton Panthers,14,0,completed,Falmer Campus,,,Ethan Butcher,,,high
-buafl,2025,Division 1 South Eastern,07/12/2025,12:00,day,,Brighton Panthers,KCL Regents,8,13,completed,,,Ethan Butcher,,,,high
-buafl,2025,Division 1 South Eastern,23/11/2025,15:00,day,,Brighton Panthers,Kent Falcons,0,24,completed,The Pavillion,,Ethan Butcher,,,,high
-buafl,2025,Division 1 South Eastern,16/11/2025,12:00,day,,Brighton Panthers,Kingston Cougars,8,0,completed,,,Ethan Butcher,,,,high
-buafl,2025,Division 1 South Eastern,09/11/2025,13:00,day,,Kent Falcons,Brighton Panthers,0,12,completed,Falmer Campus,,,Ethan Butcher,,,high
-buafl,2025,Division 1 South Eastern,02/11/2025,15:30,day,,UCL Emperors,Brighton Panthers,0,43,completed,Falmer Campus,,,Ethan Butcher,,,high
-buafl,2024,Division 1 Southern,09/02/2025,,day,,Brighton Panthers,Brunel Burners,8,45,completed,,,Georgia Teague,,,,high
-buafl,2024,Division 1 Southern,02/02/2025,13:30,day,,Oxford Lancers,Brighton Panthers,30,0,completed,Falmer Campus,,,Georgia Teague,,,high
-buafl,2024,Division 1 Southern,19/01/2025,13:30,day,,Reading Knights,Brighton Panthers,0,42,completed,Falmer Campus,,,Georgia Teague,,,high
-buafl,2024,Division 1 Southern,08/12/2024,13:30,day,,Hertfordshire Hurricanes,Brighton Panthers,18,14,completed,Falmer Campus,,,Georgia Teague,,,high
-buafl,2024,Division 1 Southern,01/12/2024,13:30,day,,Brunel Burners,Brighton Panthers,11,8,completed,Falmer Campus,,,Georgia Teague,,,high
-buafl,2024,Division 1 Southern,03/11/2024,14:00,day,,Brighton Panthers,Hertfordshire Hurricanes,0,43,completed,,,Georgia Teague,,,,high
-buafl,2024,Division 1 Southern,27/10/2024,12:00,day,,Brighton Panthers,Reading Knights,6,2,completed,,,Georgia Teague,,,,high
-buafl,2023,Division 2 Southern,11/02/2024,13:30,day,,Sussex Saxons,Brighton Panthers,0,26,completed,Falmer Campus,,,Georgia Teague,,,high
-buafl,2023,Division 2 Southern,28/01/2024,12:00,day,,Brighton Panthers,Surrey Stingers,28,20,completed,,,Georgia Teague,,,,high
-buafl,2023,Division 2 Southern,10/12/2023,13:00,day,,Brighton Panthers,Solent Redhawks,32,6,completed,Test Park,,Georgia Teague,,,,high
-buafl,2023,Division 2 Southern,03/12/2023,13:00,day,,Oxford Brookes University,Brighton Panthers,0,20,completed,Falmer Campus,,,Georgia Teague,,,high
-buafl,2023,Division 2 Southern,29/10/2023,13:00,day,,Chichester Spitfires,Brighton Panthers,6,38,completed,Falmer Campus,,,Georgia Teague,,,high
-buafl,2022,Division 2 Southern,12/02/2023,,day,,Brighton Panthers,Chichester Spitfires,34,0,completed,,,Ollie Kent,,,,high
-buafl,2022,Division 2 Southern,05/02/2023,,day,,Brighton Panthers,Oxford Brookes University,20,6,completed,,,Ollie Kent,,,,high
-buafl,2022,Division 2 Southern,22/01/2023,,day,,Surrey Stingers,Brighton Panthers,0,36,completed,Falmer Campus,,,Ollie Kent,,,high
-buafl,2022,Division 2 Southern,04/12/2022,,day,,Brighton Panthers,Reading Knights,0,20,completed,,,Ollie Kent,,,,high
-buafl,2022,Division 2 Southern,20/11/2022,,day,,Winchester Silverbacks,Brighton Panthers,8,38,completed,Falmer Campus,,,Ollie Kent,,,high
-buafl,2022,Division 2 Southern,13/11/2022,,day,,Solent Redhawks,Brighton Panthers,19,32,completed,Falmer Campus,,,Ollie Kent,,,high
-buafl,2021,Division 2 Southern,20/02/2022,,day,,Oxford Lancers,Brighton Panthers,20,6,completed,Falmer Campus,,,Ollie Kent,,,high
-buafl,2021,Division 2 Southern,06/02/2022,,day,,UCL Emperors,Brighton Panthers,0,22,completed,Falmer Campus,,,Ollie Kent,,,high
-buafl,2021,Division 2 Southern,23/01/2022,,day,,Brighton Panthers,Kingston Cougars,1,0,awarded,,Covid Walkover,Ollie Kent,,,,high
-buafl,2021,Division 2 Southern,12/12/2021,,day,,Chichester Spitfires,Brighton Panthers,0,1,awarded,Falmer Campus,Covid Walkover,,Ollie Kent,,,high
-buafl,2021,Division 2 Southern,21/11/2021,,day,,Winchester Silverbacks,Brighton Panthers,12,26,completed,Falmer Campus,,,Ollie Kent,,,high
-buafl,2021,Division 2 Southern,07/11/2021,,day,,Oxford Brookes University,Brighton Panthers,14,14,completed,Falmer Campus,,,Ollie Kent,,,high
-buafl,2019,Division 1 Southern,15/02/2020,,day,,Reading Knights,Brighton Panthers,14,0,completed,Falmer Campus,,,Chris Denny,,,high
-buafl,2019,Division 1 Southern,01/02/2020,,day,,Portsmouth Destroyers,Brighton Panthers,15,0,completed,Falmer Campus,,,Chris Denny,,,high
-buafl,2019,Division 1 Southern,25/01/2020,,day,,Brighton Panthers,Surrey Stingers,6,18,completed,,,Chris Denny,,,,high
-buafl,2019,Division 1 Southern,30/11/2019,,day,,Brighton Panthers,Reading Knights,6,39,completed,,,Chris Denny,,,,high
-buafl,2019,Division 1 Southern,24/11/2019,,day,,Royal Holloway Bears,Brighton Panthers,42,6,completed,Falmer Campus,,,Chris Denny,,,high
-buafl,2019,Division 1 Southern,16/11/2019,,day,,Brighton Panthers,Portsmouth Destroyers,0,51,completed,,,Chris Denny,,,,high
-buafl,2019,Division 1 Southern,10/11/2019,,day,,Surrey Stingers,Brighton Panthers,13,8,completed,Falmer Campus,,,Chris Denny,,,high
-buafl,2019,Division 1 Southern,03/11/2019,,day,,Brighton Panthers,Royal Holloway Bears,8,32,completed,,,Chris Denny,,,,high
-buafl,2018,Division 1 Southern,23/02/2019,,day,,Brighton Panthers,Reading Knights,14,8,completed,,,Chris Denny,,,,high
-buafl,2018,Division 1 Southern,17/02/2019,,day,,Surrey Stingers,Brighton Panthers,19,12,completed,Falmer Campus,,,Chris Denny,,,high
-buafl,2018,Division 1 Southern,09/12/2018,,day,,Brighton Panthers,Kingston Cougars,12,3,completed,,,Chris Denny,,,,high
-buafl,2018,Division 1 Southern,27/01/2019,,day,,Reading Knights,Brighton Panthers,22,16,completed,Falmer Campus,,,Chris Denny,,,high
-buafl,2018,Division 1 Southern,25/11/2018,,day,,Kingston Cougars,Brighton Panthers,2,12,completed,Falmer Campus,,,Chris Denny,,,high
-buafl,2018,Division 1 Southern,18/11/2018,,day,,Brunel Burners,Brighton Panthers,6,0,completed,Falmer Campus,,,Chris Denny,,,high
-buafl,2018,Division 1 Southern,11/11/2018,,day,,Brighton Panthers,Brunel Burners,3,40,completed,,,Chris Denny,,,,high
-buafl,2017,Division 2 Southern,25/02/2018,,day,,City Wolfpack,Brighton Panthers,0,36,completed,Falmer Campus,,,Richard Cooling,,,high
-buafl,2017,Division 2 Southern,04/02/2018,,day,,BNU Buccaneers,Brighton Panthers,0,1,awarded,Falmer Campus,,,Richard Cooling,,,high
-buafl,2017,Division 2 Southern,10/12/2017,,day,,Chichester Spitfires,Brighton Panthers,2,28,completed,Falmer Campus,,,Richard Cooling,,,high
-buafl,2017,Division 2 Southern,03/12/2017,,day,,Brighton Panthers,KCL Regents,14,0,completed,,,Richard Cooling,,,,high
-buafl,2017,Division 2 Southern,26/11/2017,,day,,Brighton Panthers,UCL Emperors,26,12,completed,,,Richard Cooling,,,,high
-buafl,2017,Division 2 Southern,19/11/2017,,day,,Brighton Panthers,Royal Holloway Bears,34,0,completed,,,Richard Cooling,,,,high
-buafl,2016,Division 1 South Eastern,26/02/2017,,day,,Surrey Stingers,Brighton Panthers,26,12,completed,Falmer Campus,,,Richard Cooling,,,high
-buafl,2016,Division 1 South Eastern,19/02/2017,,day,,Brighton Panthers,Reading Knights,6,15,completed,,,Richard Cooling,,,,high
-buafl,2016,Division 1 South Eastern,12/02/2017,,day,,Brighton Panthers,Sussex Saxons,6,14,completed,,,Richard Cooling,,,,high
-buafl,2016,Division 1 South Eastern,29/01/2017,,day,,Brighton Panthers,Portsmouth Destroyers,0,10,completed,,,Richard Cooling,,,,high
-buafl,2016,Division 1 South Eastern,11/12/2016,,day,,Sussex Saxons,Brighton Panthers,20,6,completed,Falmer Campus,,,Richard Cooling,,,high
-buafl,2016,Division 1 South Eastern,04/12/2016,,day,,Brighton Panthers,Surrey Stingers,0,16,completed,,,Richard Cooling,,,,high
-buafl,2016,Division 1 South Eastern,13/11/2016,,day,,Reading Knights,Brighton Panthers,7,0,completed,Falmer Campus,,,Richard Cooling,,,high
-buafl,2016,Division 1 South Eastern,06/11/2016,,day,,Portsmouth Destroyers,Brighton Panthers,24,0,completed,Falmer Campus,,,Richard Cooling,,,high
-buafl,2015,Division 1 South Eastern,21/02/2016,,day,,Brighton Panthers,Kent Falcons,0,8,completed,,,Chris Denny,,,,high
-buafl,2015,Division 1 South Eastern,07/02/2016,,day,,Brighton Panthers,Sussex Saxons,28,0,completed,,,Chris Denny,,,,high
-buafl,2015,Division 1 South Eastern,31/01/2016,,day,,Cambridge Pythons,Brighton Panthers,7,33,completed,Falmer Campus,,,Chris Denny,,,high
-buafl,2015,Division 1 South Eastern,24/01/2016,,day,,Brighton Panthers,UEA Pirates,14,6,completed,,,Chris Denny,,,,high
-buafl,2015,Division 1 South Eastern,06/12/2015,,day,,Kent Falcons,Brighton Panthers,2,9,completed,Falmer Campus,,,Chris Denny,,,high
-buafl,2015,Division 1 South Eastern,29/11/2015,,day,,UEA Pirates,Brighton Panthers,6,8,completed,Falmer Campus,,,Chris Denny,,,high
-buafl,2015,Division 1 South Eastern,22/11/2015,,day,,Brighton Panthers,Cambridge Pythons,12,6,completed,,Overtime. 6-6 at the end of regulation.,Chris Denny,,,,high
-buafl,2015,Division 1 South Eastern,08/11/2015,,day,,Sussex Saxons,Brighton Panthers,20,0,completed,Falmer Campus,,,Chris Denny,,,high
-buafl,2014,Premier South,15/02/2015,,day,,Brighton Panthers,Hertfordshire Hurricanes,0,78,completed,,,Chris Denny,,,,high
-buafl,2014,Premier South,08/02/2015,,day,,Brighton Panthers,Bath Killer Bees,2,57,completed,,,Chris Denny,,,,high
-buafl,2014,Premier South,01/02/2015,,day,,Imperial Immortals,Brighton Panthers,2,0,completed,Falmer Campus,,,Chris Denny,,,high
-buafl,2014,Premier South,25/01/2015,,day,,Birmingham Lions,Brighton Panthers,54,0,completed,Falmer Campus,,,Chris Denny,,,high
-buafl,2014,Premier South,30/11/2014,,day,,Hertfordshire Hurricanes,Brighton Panthers,58,0,completed,Falmer Campus,,,Chris Denny,,,high
-buafl,2014,Premier South,16/11/2014,,day,,Brighton Panthers,Birmingham Lions,0,67,completed,,,Chris Denny,,,,high
-buafl,2014,Premier South,09/11/2014,,day,,Brighton Panthers,Imperial Immortals,6,12,completed,,,Chris Denny,,,,high
-buafl,2014,Premier South,02/11/2014,,day,,Bath Killer Bees,Brighton Panthers,27,7,completed,Falmer Campus,,,Chris Denny,,,high
-buafl,2013,South Coast Conference,23/02/2014,,day,,Oxford Brookes University,Brighton Panthers,0,24,completed,Falmer Campus,,,Chris Denny,,,high
-buafl,2013,South Coast Conference,16/02/2014,,day,,Brighton Panthers,Solent Redhawks,54,28,completed,,,Chris Denny,,,,high
-buafl,2013,South Coast Conference,09/02/2014,,day,,Portsmouth Destroyers,Brighton Panthers,6,7,completed,Falmer Campus,,,Chris Denny,,,high
-buafl,2013,South Coast Conference,02/02/2014,,day,,Brighton Panthers,Sussex Saxons,55,0,completed,,,Chris Denny,,,,high
-buafl,2013,South Coast Conference,26/01/2014,,day,,Reading Knights,Brighton Panthers,0,26,completed,Falmer Campus,,,Chris Denny,,,high
-buafl,2013,South Coast Conference,24/11/2013,,day,,Brighton Panthers,Surrey Stingers,15,0,completed,,,Chris Denny,,,,high
-buafl,2013,South Coast Conference,17/11/2013,,day,,Southampton Stags,Brighton Panthers,6,7,completed,Falmer Campus,,,Chris Denny,,,high
-buafl,2013,South Coast Conference,10/11/2013,,day,,Brighton Panthers,Oxford Lancers,48,0,completed,,,Chris Denny,,,,high
-buafl,2012,South Eastern B,24/02/2013,,day,,Brighton Panthers,Kingston Cougars,3,18,completed,,,James Ormrod,,,,high
-buafl,2012,South Eastern B,17/02/2013,,day,,Brighton Panthers,Reading Knights,0,6,completed,,,James Ormrod,,,,high
-buafl,2012,South Eastern B,10/02/2013,,day,,BNU Buccaneers,Brighton Panthers,14,12,completed,Falmer Campus,,,James Ormrod,,,high
-buafl,2012,South Eastern B,03/02/2013,,day,,Southampton Stags,Brighton Panthers,2,3,completed,Falmer Campus,,,James Ormrod,,,high
-buafl,2012,South Eastern B,27/01/2013,,day,,Portsmouth Destroyers,Brighton Panthers,6,14,completed,Falmer Campus,,,James Ormrod,,,high
-buafl,2012,South Eastern B,02/12/2012,,day,,Surrey Stingers,Brighton Panthers,8,14,completed,Falmer Campus,,,James Ormrod,,,high
-buafl,2012,South Eastern B,25/11/2012,,day,,Brighton Panthers,Royal Holloway Bears,28,0,completed,,,James Ormrod,,,,high
-buafl,2012,South Eastern B,18/11/2012,,day,,Brighton Panthers,Oxford Lancers,25,0,completed,,,James Ormrod,,,,high
-buafl,2011,,04/03/2012,,day,,Essex Blades,Brighton Panthers,0,15,completed,Falmer Campus,,,James Ormrod,,,high
-buafl,2011,,26/02/2012,,day,,Brighton Panthers,LSBU Spartans,11,0,completed,,,James Ormrod,,,,high
-buafl,2011,,19/02/2012,,day,,Brighton Panthers,Hertfordshire Hurricanes,7,54,completed,,,James Ormrod,,,,high
-buafl,2011,,29/01/2012,,day,,Brighton Panthers,Westminster Dragons,35,0,completed,,,James Ormrod,,,,high
-buafl,2011,,11/12/2011,,day,,Greenwich Mariners,Brighton Panthers,19,0,completed,Falmer Campus,,,James Ormrod,,,high
-buafl,2011,,20/11/2011,,day,,Kent Falcons,Brighton Panthers,13,8,completed,Falmer Campus,,,James Ormrod,,,high
-buafl,2011,,13/11/2011,,day,,Canterbury CC Chargers,Brighton Panthers,12,21,completed,Falmer Campus,,,James Ormrod,,,high
-buafl,2011,,06/11/2011,,day,,Brighton Panthers,UEA Pirates,18,24,completed,,Quadruple Overtime. 6-6 at the end of regulation.,James Ormrod,,,,high
-buafl,2010,South Eastern Division,06/03/2011,,day,,Canterbury CC Chargers,Brighton Panthers,14,26,completed,Falmer Campus,,,Martin Harrison,,,high
-buafl,2010,South Eastern Division,27/02/2011,,day,,KCL Regents,Brighton Panthers,22,28,completed,Falmer Campus,,,Martin Harrison,,,high
-buafl,2010,South Eastern Division,13/02/2011,,day,,Brighton Panthers,Kent Falcons,0,6,completed,,,Martin Harrison,,,,high
-buafl,2010,South Eastern Division,30/01/2011,,day,,Hertfordshire Hurricanes,Brighton Panthers,57,0,completed,Falmer Campus,score in doubt,,Martin Harrison,,,medium
-buafl,2010,South Eastern Division,23/01/2011,,day,,Brighton Panthers,Solent Redhawks,17,22,completed,,,Martin Harrison,,,,high
-buafl,2010,South Eastern Division,29/11/2010,,day,,Brighton Panthers,Greenwich Mariners,27,6,completed,,,Martin Harrison,,,,high
-buafl,2010,South Eastern Division,14/11/2010,,day,,Brighton Panthers,Southampton Stags,13,27,completed,,,Martin Harrison,,,,high
-buafl,2010,South Eastern Division,07/11/2010,,day,,Portsmouth Destroyers,Brighton Panthers,32,0,completed,Falmer Campus,,,Martin Harrison,,,high
-buafl,2009,,28/02/2010,,day,,Greenwich Mariners,Brighton Panthers,26,9,completed,Falmer Campus,,,Tony Bainbridge,,,high
-buafl,2009,,21/02/2010,,day,,Anglia Ruskin Phantoms,Brighton Panthers,14,27,completed,Falmer Campus,,,Tony Bainbridge,,,high
-buafl,2009,,31/01/2010,,day,,Brighton Panthers,Portsmouth Destroyers,20,30,completed,,,Tony Bainbridge,,,,high
-buafl,2009,,13/12/2009,,day,,Brighton Panthers,UEA Pirates,10,8,completed,,,Tony Bainbridge,,,,high
-buafl,2009,,29/11/2009,,day,,Imperial Immortals,Brighton Panthers,2,33,completed,Falmer Campus,,,Tony Bainbridge,,,high
-buafl,2009,,22/11/2009,,day,,Brighton Panthers,Southampton Stags,6,14,completed,,,Tony Bainbridge,,,,high
-buafl,2009,,15/11/2009,,day,,Brighton Panthers,Royal Holloway Bears,18,0,completed,,,Vacant,,,,high
-buafl,2009,,08/11/2009,,day,,Solent Redhawks,Brighton Panthers,20,0,completed,Falmer Campus,,,Jim Roberson,,,high
-buafl,2008,,22/02/2009,,day,,Brighton Panthers,Hertfordshire Hurricanes,14,57,completed,,,Tony Bainbridge,,,,high
-buafl,2008,,15/02/2009,,day,,Brighton Panthers,Southampton Stags,18,65,completed,,,Tony Bainbridge,,,,high
-buafl,2008,,08/02/2009,,day,,Greenwich Mariners,Brighton Panthers,19,0,completed,Falmer Campus,,,Tony Bainbridge,,,high
-buafl,2008,,31/01/2009,,day,,Brighton Panthers,Portsmouth Destroyers,3,0,completed,,,Tony Bainbridge,,,,high
-buafl,2008,,25/01/2009,,day,,Royal Holloway Bears,Brighton Panthers,0,46,completed,Falmer Campus,,,Tony Bainbridge,,,high
-buafl,2008,,07/12/2008,,day,,Surrey Stingers,Brighton Panthers,7,12,completed,Falmer Campus,,,Tony Bainbridge,,,high
-buafl,2008,,23/11/2008,,day,,UEA Pirates,Brighton Panthers,19,13,completed,Falmer Campus,Double Overtime,,Tony Bainbridge,,,high
-buafl,2008,,09/11/2008,,day,,Brighton Panthers,Anglia Ruskin Phantoms,26,6,completed,,,Tony Bainbridge,,,,high
-buafl,2007,Southern Division,24/02/2008,,day,,Brighton Panthers,Surrey Stingers,35,6,completed,,,Eber Kington,,,,high
-buafl,2007,Southern Division,17/02/2008,,day,,Royal Holloway Bears,Brighton Panthers,7,6,completed,Falmer Campus,,,Eber Kington,,,high
-buafl,2007,Southern Division,10/02/2007,,day,,Brighton Panthers,Portsmouth Destroyers,0,10,completed,,,Eber Kington,,,,high
-buafl,2007,Southern Division,03/02/2008,,day,,Brighton Panthers,Southampton Stags,0,58,completed,,,Eber Kington,,,,high
-buafl,2007,Southern Division,02/12/2007,,day,,Southampton Stags,Brighton Panthers,45,0,completed,Falmer Campus,,,Eber Kington,,,high
-buafl,2007,Southern Division,25/11/2007,,day,,Reading Knights,Brighton Panthers,23,8,completed,Falmer Campus,,,Eber Kington,,,high
-buafl,2007,Southern Division,18/11/2007,,day,,Brighton Panthers,Royal Holloway Bears,6,13,completed,Falmer Campus,Played at Brighton,Eber Kington,,,,high
-buafl,2007,Southern Division,09/11/2007,,day,,Portsmouth Destroyers,Brighton Panthers,7,8,completed,Falmer Campus,Friday Night Lights,,Eber Kington,,,high
-bcafl,2006,Southern Division,,,,,Brighton Panthers,Portsmouth Destroyers,28,2,completed,,,Eber Kington,,,,high
-bcafl,2006,Southern Division,,,,,Southampton Stags,Brighton Panthers,40,0,completed,,,,Eber Kington,,,high
-bcafl,2006,Southern Division,,,,,Brighton Panthers,Anglia Ruskin Phantoms,46,0,completed,,,Eber Kington,,,,high
-bcafl,2006,Southern Division,,,,,Reading Knights,Brighton Panthers,22,20,completed,,,,Eber Kington,,,high
-bcafl,2006,Southern Division,,,,,UWE Bullets,Brighton Panthers,0,0,completed,,,,Eber Kington,,,high
-bcafl,2006,Southern Division,,,,,Brighton Panthers,Surrey Stingers,2,16,completed,,,Eber Kington,,,,high
-bcafl,2006,Southern Division,,,,,Brighton Panthers,Oxford Cavaliers,12,7,completed,,,Eber Kington,,,,high
-bcafl,2006,Southern Division,,,,,Anglia Ruskin Phantoms,Brighton Panthers,8,18,completed,,,,Eber Kington,,,high
-bcafl,2005,Southern Division,,,,,Greenwich Mariners,Brighton Panthers,30,2,completed,,,,Chris Emery,,,high
-bcafl,2005,Southern Division,,,,,Southampton Stags,Brighton Panthers,85,0,completed,,,,Chris Emery,,,high
-bcafl,2005,Southern Division,,,,,Brighton Panthers,Oxford Cavaliers,6,12,completed,,,Chris Emery,,,,high
-bcafl,2005,Southern Division,,,,,Brighton Panthers,Surrey Stingers,0,28,completed,,,Chris Emery,,,,high
-bcafl,2005,Southern Division,,,,,Royal Holloway Bears,Brighton Panthers,0,32,completed,,,,Chris Emery,,,high
-bcafl,2005,Southern Division,,,,,Brighton Panthers,UEA Pirates,6,20,completed,,,Chris Emery,,,,high
-bcafl,2005,Southern Division,,,,,Brighton Panthers,Reading Knights,16,8,completed,,,Chris Emery,,,,high
-bcafl,2005,Southern Division,,,,,Kent Falcons,Brighton Panthers,8,6,completed,,,,Chris Emery,,,high
-bcafl,2004,Southern Division,,,,,Reading Knights,Brighton Panthers,10,30,completed,,,,Chris Emery,,,high
-bcafl,2004,Southern Division,,,,,Brighton Panthers,Southampton Stags,0,61,completed,,,Chris Emery,,,,high
-bcafl,2004,Southern Division,,,,,Brighton Panthers,Warwick Wolves,20,26,completed,,,Chris Emery,,,,high
-bcafl,2004,Southern Division,,,,,Essex Blades,Brighton Panthers,21,15,completed,,,,Chris Emery,,,high
-bcafl,2004,Southern Division,,,,,Brighton Panthers,Surrey Stingers,0,0,completed,,,Chris Emery,,,,high
-bcafl,2004,Southern Division,,,,,UWE Bullets,Brighton Panthers,20,8,completed,,,,Chris Emery,,,high
-bcafl,2004,Southern Division,,,,,Southampton Stags,Brighton Panthers,13,21,completed,,,,Chris Emery,,,high
-bcafl,2004,Southern Division,,,,,Brighton Panthers,Kent Falcons,14,0,completed,,,Chris Emery,,,,high
-bcafl,2003,Southern Division,,,,,Essex Blades,Brighton Panthers,9,8,completed,,,,Chris Emery,,,high
-bcafl,2003,Southern Division,,,,,Brighton Panthers,Anglia Ruskin Phantoms,1,0,awarded,,,Chris Emery,,,,high
-bcafl,2003,Southern Division,,,,,Plymouth Blitz,Brighton Panthers,6,0,completed,,,,Chris Emery,,,high
-bcafl,2003,Southern Division,,,,,Reading Knights,Brighton Panthers,0,21,completed,,,,Chris Emery,,,high
-bcafl,2003,Southern Division,,,,,Brighton Panthers,Southampton Stags,0,56,completed,,,Chris Emery,,,,high
-bcafl,2003,Southern Division,,,,,Brighton Panthers,Surrey Stingers,6,2,completed,,,Chris Emery,,yes,,high
-bcafl,2003,Southern Division,,,,,Brighton Panthers,Reading Knights,8,0,completed,,,Chris Emery,,,,high
+competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase
+,2025,Division 1 South Eastern,15/02/2026,UCL Emperors,Brighton Panthers,8,24,Falmer Campus,,,Ethan Butcher,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+,2025,Division 1 South Eastern,08/02/2026,Kingston Cougars,Brighton Panthers,0,24,Falmer Campus,,,Ethan Butcher,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+,2025,Division 1 South Eastern,01/02/2026,KCL Regents,Brighton Panthers,14,0,Falmer Campus,,,Ethan Butcher,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+,2025,Division 1 South Eastern,07/12/2025,Brighton Panthers,KCL Regents,8,13,,,Ethan Butcher,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+,2025,Division 1 South Eastern,23/11/2025,Brighton Panthers,Kent Falcons,0,24,The Pavillion,,Ethan Butcher,,FALSE,day,,15:00,completed,high,FALSE,FALSE,,,,
+,2025,Division 1 South Eastern,16/11/2025,Brighton Panthers,Kingston Cougars,8,0,,,Ethan Butcher,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+,2025,Division 1 South Eastern,09/11/2025,Kent Falcons,Brighton Panthers,0,12,Falmer Campus,,,Ethan Butcher,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+,2025,Division 1 South Eastern,02/11/2025,UCL Emperors,Brighton Panthers,0,43,Falmer Campus,,,Ethan Butcher,FALSE,day,,15:30,completed,high,FALSE,FALSE,,,,
+,2024,Division 1 Southern,09/02/2025,Brighton Panthers,Brunel Burners,8,45,,,Georgia Teague,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2024,Division 1 Southern,02/02/2025,Oxford Lancers,Brighton Panthers,30,0,Falmer Campus,,,Georgia Teague,FALSE,day,,13:30,completed,high,FALSE,FALSE,,,,
+,2024,Division 1 Southern,19/01/2025,Reading Knights,Brighton Panthers,0,42,Falmer Campus,,,Georgia Teague,FALSE,day,,13:30,completed,high,FALSE,FALSE,,,,
+,2024,Division 1 Southern,08/12/2024,Hertfordshire Hurricanes,Brighton Panthers,18,14,Falmer Campus,,,Georgia Teague,FALSE,day,,13:30,completed,high,FALSE,FALSE,,,,
+,2024,Division 1 Southern,01/12/2024,Brunel Burners,Brighton Panthers,11,8,Falmer Campus,,,Georgia Teague,FALSE,day,,13:30,completed,high,FALSE,FALSE,,,,
+,2024,Division 1 Southern,03/11/2024,Brighton Panthers,Hertfordshire Hurricanes,0,43,,,Georgia Teague,,FALSE,day,,14:00,completed,high,FALSE,FALSE,,,,
+,2024,Division 1 Southern,27/10/2024,Brighton Panthers,Reading Knights,6,2,,,Georgia Teague,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+,2023,Division 2 Southern,11/02/2024,Sussex Saxons,Brighton Panthers,0,26,Falmer Campus,,,Georgia Teague,FALSE,day,,13:30,completed,high,FALSE,FALSE,,,,
+,2023,Division 2 Southern,28/01/2024,Brighton Panthers,Surrey Stingers,28,20,,,Georgia Teague,,FALSE,day,,12:00,completed,high,FALSE,FALSE,,,,
+,2023,Division 2 Southern,10/12/2023,Brighton Panthers,Solent Redhawks,32,6,Test Park,,Georgia Teague,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+,2023,Division 2 Southern,03/12/2023,Oxford Brookes University,Brighton Panthers,0,20,Falmer Campus,,,Georgia Teague,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+,2023,Division 2 Southern,29/10/2023,Chichester Spitfires,Brighton Panthers,6,38,Falmer Campus,,,Georgia Teague,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,
+,2022,Division 2 Southern,12/02/2023,Brighton Panthers,Chichester Spitfires,34,0,,,Ollie Kent,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2022,Division 2 Southern,05/02/2023,Brighton Panthers,Oxford Brookes University,20,6,,,Ollie Kent,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2022,Division 2 Southern,22/01/2023,Surrey Stingers,Brighton Panthers,0,36,Falmer Campus,,,Ollie Kent,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2022,Division 2 Southern,04/12/2022,Brighton Panthers,Reading Knights,0,20,,,Ollie Kent,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2022,Division 2 Southern,20/11/2022,Winchester Silverbacks,Brighton Panthers,8,38,Falmer Campus,,,Ollie Kent,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2022,Division 2 Southern,13/11/2022,Solent Redhawks,Brighton Panthers,19,32,Falmer Campus,,,Ollie Kent,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2021,Division 2 Southern,20/02/2022,Oxford Lancers,Brighton Panthers,20,6,Falmer Campus,,,Ollie Kent,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2021,Division 2 Southern,06/02/2022,UCL Emperors,Brighton Panthers,0,22,Falmer Campus,,,Ollie Kent,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2021,Division 2 Southern,23/01/2022,Brighton Panthers,Kingston Cougars,1,0,,Covid Walkover,Ollie Kent,,FALSE,day,,,awarded,high,FALSE,FALSE,,,,
+,2021,Division 2 Southern,12/12/2021,Chichester Spitfires,Brighton Panthers,0,1,Falmer Campus,Covid Walkover,,Ollie Kent,FALSE,day,,,awarded,high,FALSE,FALSE,,,,
+,2021,Division 2 Southern,21/11/2021,Winchester Silverbacks,Brighton Panthers,12,26,Falmer Campus,,,Ollie Kent,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2021,Division 2 Southern,07/11/2021,Oxford Brookes University,Brighton Panthers,14,14,Falmer Campus,,,Ollie Kent,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2019,Division 1 Southern,15/02/2020,Reading Knights,Brighton Panthers,14,0,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2019,Division 1 Southern,01/02/2020,Portsmouth Destroyers,Brighton Panthers,15,0,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2019,Division 1 Southern,25/01/2020,Brighton Panthers,Surrey Stingers,6,18,,,Chris Denny,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2019,Division 1 Southern,30/11/2019,Brighton Panthers,Reading Knights,6,39,,,Chris Denny,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2019,Division 1 Southern,24/11/2019,Royal Holloway Bears,Brighton Panthers,42,6,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2019,Division 1 Southern,16/11/2019,Brighton Panthers,Portsmouth Destroyers,0,51,,,Chris Denny,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2019,Division 1 Southern,10/11/2019,Surrey Stingers,Brighton Panthers,13,8,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2019,Division 1 Southern,03/11/2019,Brighton Panthers,Royal Holloway Bears,8,32,,,Chris Denny,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2018,Division 1 Southern,23/02/2019,Brighton Panthers,Reading Knights,14,8,,,Chris Denny,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2018,Division 1 Southern,17/02/2019,Surrey Stingers,Brighton Panthers,19,12,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2018,Division 1 Southern,09/12/2018,Brighton Panthers,Kingston Cougars,12,3,,,Chris Denny,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2018,Division 1 Southern,27/01/2019,Reading Knights,Brighton Panthers,22,16,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2018,Division 1 Southern,25/11/2018,Kingston Cougars,Brighton Panthers,2,12,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2018,Division 1 Southern,18/11/2018,Brunel Burners,Brighton Panthers,6,0,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2018,Division 1 Southern,11/11/2018,Brighton Panthers,Brunel Burners,3,40,,,Chris Denny,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2017,Division 2 Southern,25/02/2018,City Wolfpack,Brighton Panthers,0,36,Falmer Campus,,,Richard Cooling,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2017,Division 2 Southern,04/02/2018,BNU Buccaneers,Brighton Panthers,0,1,Falmer Campus,,,Richard Cooling,FALSE,day,,,awarded,high,FALSE,FALSE,,,,
+,2017,Division 2 Southern,10/12/2017,Chichester Spitfires,Brighton Panthers,2,28,Falmer Campus,,,Richard Cooling,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2017,Division 2 Southern,03/12/2017,Brighton Panthers,KCL Regents,14,0,,,Richard Cooling,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2017,Division 2 Southern,26/11/2017,Brighton Panthers,UCL Emperors,26,12,,,Richard Cooling,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2017,Division 2 Southern,19/11/2017,Brighton Panthers,Royal Holloway Bears,34,0,,,Richard Cooling,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2016,Division 1 South Eastern,26/02/2017,Surrey Stingers,Brighton Panthers,26,12,Falmer Campus,,,Richard Cooling,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2016,Division 1 South Eastern,19/02/2017,Brighton Panthers,Reading Knights,6,15,,,Richard Cooling,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2016,Division 1 South Eastern,12/02/2017,Brighton Panthers,Sussex Saxons,6,14,,,Richard Cooling,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2016,Division 1 South Eastern,29/01/2017,Brighton Panthers,Portsmouth Destroyers,0,10,,,Richard Cooling,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2016,Division 1 South Eastern,11/12/2016,Sussex Saxons,Brighton Panthers,20,6,Falmer Campus,,,Richard Cooling,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2016,Division 1 South Eastern,04/12/2016,Brighton Panthers,Surrey Stingers,0,16,,,Richard Cooling,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2016,Division 1 South Eastern,13/11/2016,Reading Knights,Brighton Panthers,7,0,Falmer Campus,,,Richard Cooling,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2016,Division 1 South Eastern,06/11/2016,Portsmouth Destroyers,Brighton Panthers,24,0,Falmer Campus,,,Richard Cooling,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2015,Division 1 South Eastern,21/02/2016,Brighton Panthers,Kent Falcons,0,8,,,Chris Denny,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2015,Division 1 South Eastern,07/02/2016,Brighton Panthers,Sussex Saxons,28,0,,,Chris Denny,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2015,Division 1 South Eastern,31/01/2016,Cambridge Pythons,Brighton Panthers,7,33,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2015,Division 1 South Eastern,24/01/2016,Brighton Panthers,UEA Pirates,14,6,,,Chris Denny,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2015,Division 1 South Eastern,06/12/2015,Kent Falcons,Brighton Panthers,2,9,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2015,Division 1 South Eastern,29/11/2015,UEA Pirates,Brighton Panthers,6,8,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2015,Division 1 South Eastern,22/11/2015,Brighton Panthers,Cambridge Pythons,12,6,,Overtime. 6-6 at the end of regulation.,Chris Denny,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2015,Division 1 South Eastern,08/11/2015,Sussex Saxons,Brighton Panthers,20,0,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2014,Premier South,15/02/2015,Brighton Panthers,Hertfordshire Hurricanes,0,78,,,Chris Denny,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2014,Premier South,08/02/2015,Brighton Panthers,Bath Killer Bees,2,57,,,Chris Denny,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2014,Premier South,01/02/2015,Imperial Immortals,Brighton Panthers,2,0,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2014,Premier South,25/01/2015,Birmingham Lions,Brighton Panthers,54,0,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2014,Premier South,30/11/2014,Hertfordshire Hurricanes,Brighton Panthers,58,0,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2014,Premier South,16/11/2014,Brighton Panthers,Birmingham Lions,0,67,,,Chris Denny,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2014,Premier South,09/11/2014,Brighton Panthers,Imperial Immortals,6,12,,,Chris Denny,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2014,Premier South,02/11/2014,Bath Killer Bees,Brighton Panthers,27,7,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2013,South Coast Conference,23/02/2014,Oxford Brookes University,Brighton Panthers,0,24,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2013,South Coast Conference,16/02/2014,Brighton Panthers,Solent Redhawks,54,28,,,Chris Denny,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2013,South Coast Conference,09/02/2014,Portsmouth Destroyers,Brighton Panthers,6,7,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2013,South Coast Conference,02/02/2014,Brighton Panthers,Sussex Saxons,55,0,,,Chris Denny,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2013,South Coast Conference,26/01/2014,Reading Knights,Brighton Panthers,0,26,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2013,South Coast Conference,24/11/2013,Brighton Panthers,Surrey Stingers,15,0,,,Chris Denny,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2013,South Coast Conference,17/11/2013,Southampton Stags,Brighton Panthers,6,7,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2013,South Coast Conference,10/11/2013,Brighton Panthers,Oxford Lancers,48,0,,,Chris Denny,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2012,South Eastern B,24/02/2013,Brighton Panthers,Kingston Cougars,3,18,,,James Ormrod,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2012,South Eastern B,17/02/2013,Brighton Panthers,Reading Knights,0,6,,,James Ormrod,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2012,South Eastern B,10/02/2013,BNU Buccaneers,Brighton Panthers,14,12,Falmer Campus,,,James Ormrod,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2012,South Eastern B,03/02/2013,Southampton Stags,Brighton Panthers,2,3,Falmer Campus,,,James Ormrod,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2012,South Eastern B,27/01/2013,Portsmouth Destroyers,Brighton Panthers,6,14,Falmer Campus,,,James Ormrod,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2012,South Eastern B,02/12/2012,Surrey Stingers,Brighton Panthers,8,14,Falmer Campus,,,James Ormrod,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2012,South Eastern B,25/11/2012,Brighton Panthers,Royal Holloway Bears,28,0,,,James Ormrod,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2012,South Eastern B,18/11/2012,Brighton Panthers,Oxford Lancers,25,0,,,James Ormrod,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2011,,04/03/2012,Essex Blades,Brighton Panthers,0,15,Falmer Campus,,,James Ormrod,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2011,,26/02/2012,Brighton Panthers,LSBU Spartans,11,0,,,James Ormrod,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2011,,19/02/2012,Brighton Panthers,Hertfordshire Hurricanes,7,54,,,James Ormrod,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2011,,29/01/2012,Brighton Panthers,Westminster Dragons,35,0,,,James Ormrod,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2011,,11/12/2011,Greenwich Mariners,Brighton Panthers,19,0,Falmer Campus,,,James Ormrod,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2011,,20/11/2011,Kent Falcons,Brighton Panthers,13,8,Falmer Campus,,,James Ormrod,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2011,,13/11/2011,Canterbury CC Chargers,Brighton Panthers,12,21,Falmer Campus,,,James Ormrod,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2011,,06/11/2011,Brighton Panthers,UEA Pirates,18,24,,Quadruple Overtime. 6-6 at the end of regulation.,James Ormrod,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2010,South Eastern Division,06/03/2011,Canterbury CC Chargers,Brighton Panthers,14,26,Falmer Campus,,,Martin Harrison,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2010,South Eastern Division,27/02/2011,KCL Regents,Brighton Panthers,22,28,Falmer Campus,,,Martin Harrison,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2010,South Eastern Division,13/02/2011,Brighton Panthers,Kent Falcons,0,6,,,Martin Harrison,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2010,South Eastern Division,30/01/2011,Hertfordshire Hurricanes,Brighton Panthers,57,0,Falmer Campus,score in doubt,,Martin Harrison,FALSE,day,,,completed,medium,FALSE,FALSE,,,,
+,2010,South Eastern Division,23/01/2011,Brighton Panthers,Solent Redhawks,17,22,,,Martin Harrison,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2010,South Eastern Division,29/11/2010,Brighton Panthers,Greenwich Mariners,27,6,,,Martin Harrison,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2010,South Eastern Division,14/11/2010,Brighton Panthers,Southampton Stags,13,27,,,Martin Harrison,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2010,South Eastern Division,07/11/2010,Portsmouth Destroyers,Brighton Panthers,32,0,Falmer Campus,,,Martin Harrison,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2009,,28/02/2010,Greenwich Mariners,Brighton Panthers,26,9,Falmer Campus,,,Tony Bainbridge,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2009,,21/02/2010,Anglia Ruskin Phantoms,Brighton Panthers,14,27,Falmer Campus,,,Tony Bainbridge,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2009,,31/01/2010,Brighton Panthers,Portsmouth Destroyers,20,30,,,Tony Bainbridge,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2009,,13/12/2009,Brighton Panthers,UEA Pirates,10,8,,,Tony Bainbridge,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2009,,29/11/2009,Imperial Immortals,Brighton Panthers,2,33,Falmer Campus,,,Tony Bainbridge,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2009,,22/11/2009,Brighton Panthers,Southampton Stags,6,14,,,Tony Bainbridge,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2009,,15/11/2009,Brighton Panthers,Royal Holloway Bears,18,0,,,Vacant,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2009,,08/11/2009,Solent Redhawks,Brighton Panthers,20,0,Falmer Campus,,,Jim Roberson,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2008,,22/02/2009,Brighton Panthers,Hertfordshire Hurricanes,14,57,,,Tony Bainbridge,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2008,,15/02/2009,Brighton Panthers,Southampton Stags,18,65,,,Tony Bainbridge,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2008,,08/02/2009,Greenwich Mariners,Brighton Panthers,19,0,Falmer Campus,,,Tony Bainbridge,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2008,,31/01/2009,Brighton Panthers,Portsmouth Destroyers,3,0,,,Tony Bainbridge,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2008,,25/01/2009,Royal Holloway Bears,Brighton Panthers,0,46,Falmer Campus,,,Tony Bainbridge,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2008,,07/12/2008,Surrey Stingers,Brighton Panthers,7,12,Falmer Campus,,,Tony Bainbridge,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2008,,23/11/2008,UEA Pirates,Brighton Panthers,19,13,Falmer Campus,Double Overtime,,Tony Bainbridge,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2008,,09/11/2008,Brighton Panthers,Anglia Ruskin Phantoms,26,6,,,Tony Bainbridge,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2007,Southern Division,24/02/2008,Brighton Panthers,Surrey Stingers,35,6,,,Eber Kington,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2007,Southern Division,17/02/2008,Royal Holloway Bears,Brighton Panthers,7,6,Falmer Campus,,,Eber Kington,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2007,Southern Division,10/02/2007,Brighton Panthers,Portsmouth Destroyers,0,10,,,Eber Kington,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2007,Southern Division,03/02/2008,Brighton Panthers,Southampton Stags,0,58,,,Eber Kington,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2007,Southern Division,02/12/2007,Southampton Stags,Brighton Panthers,45,0,Falmer Campus,,,Eber Kington,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2007,Southern Division,25/11/2007,Reading Knights,Brighton Panthers,23,8,Falmer Campus,,,Eber Kington,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2007,Southern Division,18/11/2007,Brighton Panthers,Royal Holloway Bears,6,13,Falmer Campus,Played at Brighton,Eber Kington,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2007,Southern Division,09/11/2007,Portsmouth Destroyers,Brighton Panthers,7,8,Falmer Campus,Friday Night Lights,,Eber Kington,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2006,Southern Division,,Brighton Panthers,Portsmouth Destroyers,28,2,,,Eber Kington,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2006,Southern Division,,Southampton Stags,Brighton Panthers,40,0,,,,Eber Kington,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2006,Southern Division,,Brighton Panthers,Anglia Ruskin Phantoms,46,0,,,Eber Kington,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2006,Southern Division,,Reading Knights,Brighton Panthers,22,20,,,,Eber Kington,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2006,Southern Division,,UWE Bullets,Brighton Panthers,0,0,,,,Eber Kington,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2006,Southern Division,,Brighton Panthers,Surrey Stingers,2,16,,,Eber Kington,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2006,Southern Division,,Brighton Panthers,Oxford Cavaliers,12,7,,,Eber Kington,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2006,Southern Division,,Anglia Ruskin Phantoms,Brighton Panthers,8,18,,,,Eber Kington,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2005,Southern Division,,Greenwich Mariners,Brighton Panthers,30,2,,,,Chris Emery,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2005,Southern Division,,Southampton Stags,Brighton Panthers,85,0,,,,Chris Emery,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2005,Southern Division,,Brighton Panthers,Oxford Cavaliers,6,12,,,Chris Emery,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2005,Southern Division,,Brighton Panthers,Surrey Stingers,0,28,,,Chris Emery,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2005,Southern Division,,Royal Holloway Bears,Brighton Panthers,0,32,,,,Chris Emery,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2005,Southern Division,,Brighton Panthers,UEA Pirates,6,20,,,Chris Emery,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2005,Southern Division,,Brighton Panthers,Reading Knights,16,8,,,Chris Emery,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2005,Southern Division,,Kent Falcons,Brighton Panthers,8,6,,,,Chris Emery,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2004,Southern Division,,Reading Knights,Brighton Panthers,10,30,,,,Chris Emery,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2004,Southern Division,,Brighton Panthers,Southampton Stags,0,61,,,Chris Emery,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2004,Southern Division,,Brighton Panthers,Warwick Wolves,20,26,,,Chris Emery,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2004,Southern Division,,Essex Blades,Brighton Panthers,21,15,,,,Chris Emery,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2004,Southern Division,,Brighton Panthers,Surrey Stingers,0,0,,,Chris Emery,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2004,Southern Division,,UWE Bullets,Brighton Panthers,20,8,,,,Chris Emery,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2004,Southern Division,,Southampton Stags,Brighton Panthers,13,21,,,,Chris Emery,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2004,Southern Division,,Brighton Panthers,Kent Falcons,14,0,,,Chris Emery,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2003,Southern Division,,Essex Blades,Brighton Panthers,9,8,,,,Chris Emery,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2003,Southern Division,,Brighton Panthers,Anglia Ruskin Phantoms,1,0,,,Chris Emery,,FALSE,day,,,awarded,high,FALSE,FALSE,,,,
+,2003,Southern Division,,Plymouth Blitz,Brighton Panthers,6,0,,,,Chris Emery,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2003,Southern Division,,Reading Knights,Brighton Panthers,0,21,,,,Chris Emery,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2003,Southern Division,,Brighton Panthers,Southampton Stags,0,56,,,Chris Emery,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2003,Southern Division,,Brighton Panthers,Surrey Stingers,6,2,,,Chris Emery,,yes,day,,,completed,high,FALSE,FALSE,,,,
+,2003,Southern Division,,Brighton Panthers,Reading Knights,8,0,,,Chris Emery,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
