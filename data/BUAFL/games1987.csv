@@ -1,0 +1,8 @@
+competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase
+,,,,Manchester MPs,Hull Sharks,0,41,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Hull Sharks,Manchester MPs,1,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Newcastle Scholars,Hull Sharks,0,1,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Hull Sharks,Teesside Demons,27,12,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Teesside Demons,Hull Sharks,0,52,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Hull Sharks,Strathclyde Hawks,22,0,,,,,FALSE,day,,,completed,high,True,FALSE,,,,
+,,,,Hull Sharks,Cardiff Cobras,0,0,,,,,FALSE,day,,,completed,high,True,FALSE,,,,

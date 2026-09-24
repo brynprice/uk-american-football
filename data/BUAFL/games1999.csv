@@ -1,0 +1,10 @@
+competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase
+,,,,Bath Killer Bees,Cardiff Cobras,39,30,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Birmingham Lions,Bath Killer Bees,6,33,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Reading Knights,Bath Killer Bees,6,12,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bristol Bullets,Bath Killer Bees,7,20,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Southampton Stags,30,7,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Cardiff Cobras,Bath Killer Bees,20,17,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Derby Braves,45,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Surrey Stingers,25,26,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Oxford Cavaliers,38,46,,,,,FALSE,day,,,completed,high,True,FALSE,,,,

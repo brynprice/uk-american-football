@@ -1,0 +1,16 @@
+competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase,away_phase
+BUAFL,2010,South Eastern Conference,2011-03-06,Canterbury CC Chargers,Brighton Tsunami,14,26,Falmer Campus,Brighton Tsunami historical records,,Martin Harrison,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,,
+BUAFL,2010,South Eastern Conference,2011-02-27,KCL Regents,Brighton Tsunami,22,28,Falmer Campus,Brighton Tsunami historical records,,Martin Harrison,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,,
+BUAFL,2010,South Eastern Conference,2011-02-13,Brighton Tsunami,Kent Falcons,0,6,,Brighton Tsunami historical records,Martin Harrison,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,,
+BUAFL,2010,South Eastern Conference,2011-01-30,Hertfordshire Hurricanes,Brighton Tsunami,57,0,Falmer Campus,Brighton Tsunami historical records (score in doubt),,Martin Harrison,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,,
+BUAFL,2010,Thames Valley Conference,2011-01-23,Brighton Tsunami,Solent Redhawks,17,22,,Brighton Tsunami historical records,Martin Harrison,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,,South Eastern Conference
+BUAFL,2010,South Eastern Conference,2010-11-29,Brighton Tsunami,Greenwich Mariners,27,6,,Brighton Tsunami historical records,Martin Harrison,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,,
+BUAFL,2010,Thames Valley Conference,2010-11-14,Brighton Tsunami,Southampton Stags,13,27,,Brighton Tsunami historical records,Martin Harrison,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,,South Eastern Conference
+BUAFL,2010,South Eastern Conference,2010-11-07,Portsmouth Destroyers,Brighton Tsunami,32,0,Falmer Campus,Brighton Tsunami historical records,,Martin Harrison,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,,Thames Valley Conference
+BUAFL,2010,South Western Conference,,Bath Killer Bees,Swansea Titans,42,0,,https://americanfootball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,season,,13:00,completed,high,FALSE,FALSE,,,,,
+BUAFL,2010,South Western Conference,2011-03-06,Cardiff Cobras,Bath Killer Bees,12,6,,https://americanfootball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,day,,13:00,completed,high,FALSE,FALSE,,,,,
+BUAFL,2010,South Western Conference,,Bath Killer Bees,Plymouth Blitz,0,0,,https://americanfootball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,season,,13:00,completed,high,FALSE,FALSE,,,,,
+BUAFL,2010,South Western Conference,,Bath Spa Bulldogs,Bath Killer Bees,0,43,,https://americanfootball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,season,,13:00,completed,high,FALSE,FALSE,,,,,
+BUAFL,2010,South Western Conference,,UWE Bullets,Bath Killer Bees,23,6,,https://americanfootball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,season,,13:00,completed,high,FALSE,FALSE,,,,,
+BUAFL,2010,South Western Conference,,Bath Killer Bees,Exeter Demons,6,0,,https://americanfootball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,season,,13:00,completed,high,FALSE,FALSE,,,,,
+BUAFL,2010,South Western Conference,,Bath Killer Bees,Bristol Barracuda,14,20,,https://americanfootball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,season,,13:00,completed,high,FALSE,FALSE,,,,,

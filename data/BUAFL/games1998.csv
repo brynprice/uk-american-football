@@ -1,0 +1,10 @@
+competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase
+,,,,Hertfordshire Hurricanes,Bath Killer Bees,14,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Cardiff Cobras,Bath Killer Bees,6,9,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Reading Knights,19,2,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Southampton Stags,Bath Killer Bees,30,15,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Kent Falcons,45,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Oxford Cavaliers,7,27,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Reading Knights,Bath Killer Bees,6,22,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Bristol Bullets,45,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Southampton Stags,6,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,

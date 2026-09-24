@@ -61,6 +61,11 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                             {game.time && ` @ ${game.time.substring(0, 5)}`}
                         </span>
                         <div className="flex items-center gap-3">
+                            {game.title_name && (
+                                <span className="bg-amber-500 text-white px-2 py-0.5 rounded text-[10px] font-black normal-case tracking-normal">
+                                    🏆 {game.title_name}
+                                </span>
+                            )}
                             {game.phase?.name && <span className="font-black">{game.phase.name}</span>}
                             {game.is_double_header && (
                                 <span className="bg-amber-400 text-slate-900 px-2 py-0.5 rounded text-[10px] font-black normal-case tracking-normal">Double Header</span>

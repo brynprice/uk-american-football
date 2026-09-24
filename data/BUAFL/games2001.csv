@@ -1,0 +1,10 @@
+competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase
+,,,,Plymouth Blitz,Bath Killer Bees,0,29,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Cardiff Cobras,Bath Killer Bees,6,6,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Plymouth Blitz,42,12,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Tarannau Aberystwyth,3,28,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Southampton Stags,29,8,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bristol Bullets,Bath Killer Bees,0,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Southampton Stags,Bath Killer Bees,14,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Bristol Bullets,18,22,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Tarannau Aberystwyth,Bath Killer Bees,0,8,,,,,FALSE,day,,,completed,high,False,FALSE,,,,

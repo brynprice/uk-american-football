@@ -1,0 +1,14 @@
+competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal,max_games_per_team
+BUAFL,2009,National Championship,Playoffs,,high,1,
+BUAFL,2009,Conference 1,Conference,,high,2,
+BUAFL,2009,Conference 1 - North,Division,Conference 1,high,3,8
+BUAFL,2009,Conference 1 - South,Division,Conference 1,high,4,8
+BUAFL,2009,Conference 2,Conference,,high,5,
+BUAFL,2009,Conference 2 - North,Division,Conference 2,high,6,8
+BUAFL,2009,Conference 2 - South,Division,Conference 2,high,7,8
+BUAFL,2009,Conference 3,Conference,,high,8,
+BUAFL,2009,Conference 3 - South West,Division,Conference 3,high,9,8
+BUAFL,2009,Conference 3 - Wales,Division,Conference 3,high,10,8
+BUAFL,2009,Conference 4,Conference,,high,11,
+BUAFL,2009,Conference 4 - South,Division,Conference 4,high,12,8
+BUAFL,2009,Conference 4 - East,Division,Conference 4,high,13,8

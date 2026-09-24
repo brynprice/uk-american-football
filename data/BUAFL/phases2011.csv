@@ -1,0 +1,11 @@
+competition_name,year,phase_name,parent_phase,type,ordinal
+BUAFL,2011,Playoffs,,Playoffs,1
+BUAFL,2011,National Championship,Playoffs,Playoffs,2
+BUAFL,2011,National Trophy,Playoffs,Playoffs,3
+BUAFL,2011,Midlands,,Division,4
+BUAFL,2011,North Eastern,,Division,5
+BUAFL,2011,North Western,,Division,6
+BUAFL,2011,Scottish,,Division,7
+BUAFL,2011,South Eastern 1A,,Division,8
+BUAFL,2011,South Eastern 1B,,Division,9
+BUAFL,2011,South Western,,Division,10

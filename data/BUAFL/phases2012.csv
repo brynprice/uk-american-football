@@ -1,9 +1,10 @@
 competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal,max_games_per_team
-BUAFL,2012,Playoffs,Playoffs,,high,1,
-BUAFL,2012,Big North Western Conference,Division,,high,2,8
-BUAFL,2012,Midlands Athletics Conference,Division,,high,3,8
-BUAFL,2012,North Eastern Conference,Division,,high,4,8
-BUAFL,2012,Saltire Conference,Division,,high,5,8
-BUAFL,2012,South Eastern A Conference,Division,,high,6,8
-BUAFL,2012,South Eastern B Conference,Division,,high,7,8
-BUAFL,2012,Western Conference,Division,,high,8,8
+BUAFL,2012,National Championship,Playoffs,,high,1,
+BUAFL,2012,National Trophy,Playoffs,,high,2,
+BUAFL,2012,Big North Western Conference,Division,,high,3,8
+BUAFL,2012,Midlands Athletics Conference,Division,,high,4,8
+BUAFL,2012,North Eastern Conference,Division,,high,5,8
+BUAFL,2012,Oyster Card Conference,Division,,high,6,8
+BUAFL,2012,Saltire Conference,Division,,high,7,8
+BUAFL,2012,South Central Conference,Division,,high,8,8
+BUAFL,2012,South Western Athletics Conference,Division,,high,9,8

@@ -1,0 +1,12 @@
+competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal,max_games_per_team
+BUAFL,2007,National Championship,Playoffs,,high,1,
+BUAFL,2007,Northern Conference,Conference,,high,2,
+BUAFL,2007,Scottish Division,Division,Northern Conference,high,3,8
+BUAFL,2007,North-East Division,Division,Northern Conference,high,4,8
+BUAFL,2007,Roses Division,Division,Northern Conference,high,5,8
+BUAFL,2007,Midland Division,Division,Northern Conference,high,6,8
+BUAFL,2007,Southern Conference,Conference,,high,7,
+BUAFL,2007,Central Division,Division,Southern Conference,high,8,8
+BUAFL,2007,Southern Division,Division,Southern Conference,high,9,8
+BUAFL,2007,Eastern Division,Division,Southern Conference,high,10,8
+BUAFL,2007,Western Division,Division,Southern Conference,high,11,8

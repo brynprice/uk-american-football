@@ -32,6 +32,7 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
         games_missing_dates: 0,
         games_missing_venues: 0,
         participations_missing_coach: 0,
+        missing_playoffs: true,
         missing_title_game: true,
         unresolved_walkover_count: 0,
         anomaly_count: 0,
@@ -85,7 +86,7 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
     // 2. Games Presence & Quality
     const { data: games } = await supabase
         .from('games')
-        .select('id, phase_id, home_team_id, away_team_id, home_score, away_score, date, date_precision, venue_id, final_type, status')
+        .select('id, phase_id, home_team_id, away_team_id, home_score, away_score, date, date_precision, venue_id, final_type, status, is_playoff')
         .in('phase_id', phaseIds);
 
     if (games && games.length > 0) {
@@ -97,12 +98,15 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
         let dateCount = 0;
         let venueCount = 0;
         let hasTitle = false;
+        let hasPlayoffs = false;
 
         games.forEach(g => {
             if (g.status === 'anomaly') {
                 details.anomaly_count++;
                 return;
             }
+
+            if (g.is_playoff) hasPlayoffs = true;
 
             if (g.home_score !== null && g.away_score !== null) scoreCount++;
             else details.games_missing_scores++;
@@ -165,6 +169,10 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
         score += Math.round(datePercent * 10);
         score += Math.round(venuePercent * 5);
 
+        if (hasPlayoffs || isInterrupted) {
+            details.missing_playoffs = false;
+        }
+
         if (hasTitle || isInterrupted) {
             score += 5;
             details.missing_title_game = false;
@@ -177,8 +185,9 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
         const walkoverPenalty = Math.min(details.unresolved_walkover_count * 5, 20);
         const anomalyPenalty = Math.min(details.anomaly_count * 2, 10);
         const discrepancyPenalty = Math.min(details.phases_with_discrepancies * 5, 20);
+        const missingPlayoffsPenalty = (!hasPlayoffs && !isInterrupted) ? 5 : 0;
 
-        score = Math.max(0, score - walkoverPenalty - anomalyPenalty - discrepancyPenalty);
+        score = Math.max(0, score - walkoverPenalty - anomalyPenalty - discrepancyPenalty - missingPlayoffsPenalty);
 
     } else if (participations && participations.some(p => p.wins !== null)) {
         // No individual games, but we have aggregated standings

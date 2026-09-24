@@ -212,10 +212,21 @@ export const ArchiveService = {
             .select('*, phase:phases!games_phase_id_fkey(*, season:seasons(*, competition:competitions(*))), home_team:teams!home_team_id(*, team_aliases(*)), away_team:teams!away_team_id(*, team_aliases(*)), venue:venues(*)')
             .or(`and(home_score.eq.${scoreA},away_score.eq.${scoreB}),and(home_score.eq.${scoreB},away_score.eq.${scoreA})`)
             .neq("status", "anomaly")
-            .order('date', { ascending: false });
+            .order('date', { ascending: false, nullsFirst: false });
 
         if (error) throw error;
-        return data || [];
+        
+        const games: any[] = data || [];
+        return games.sort((a, b) => {
+            if (!a.date && !b.date) {
+                const yearA = a.phase?.season?.year ?? 0;
+                const yearB = b.phase?.season?.year ?? 0;
+                return yearB - yearA;
+            }
+            if (!a.date) return 1;
+            if (!b.date) return -1;
+            return b.date.localeCompare(a.date);
+        });
     },
 
     async getPersonGamesAsCoach(personId: string): Promise<any[]> {

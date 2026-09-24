@@ -113,6 +113,11 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                                                 }`}>
                                                 {game.game_type || 'Friendly'}
                                             </span>
+                                            {game.title_name && (
+                                                <span className="text-[10px] font-black bg-amber-500 text-white px-2 py-0.5 rounded uppercase shadow-sm flex items-center gap-1">
+                                                    🏆 {game.title_name}
+                                                </span>
+                                            )}
                                         </div>
                                     </div>
                                     <div className="flex justify-between items-center">

@@ -1,0 +1,8 @@
+competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase
+,,,,Bath Killer Bees,Cardiff Cobras,0,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Leicester Lemmings,3,14,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Southampton Stags,Bath Killer Bees,6,6,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Tarannau Aberystwyth,Bath Killer Bees,0,35,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Hertfordshire Hurricanes,Bath Killer Bees,12,6,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Bristol Bullets,19,21,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Reading Knights,42,12,,,,,FALSE,day,,,completed,high,False,FALSE,,,,

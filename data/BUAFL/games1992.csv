@@ -1,0 +1,9 @@
+competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase
+,,,,Bath Killer Bees,Southampton Stags,0,70,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Oxford Cavaliers,Bath Killer Bees,20,18,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Leicester Lemmings,0,32,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Birmingham Lions,Bath Killer Bees,0,1,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Birmingham Lions,0,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bristol Bullets,Bath Killer Bees,0,6,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Bristol Bullets,36,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Staffordshire Stallions,Bath Killer Bees,6,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,

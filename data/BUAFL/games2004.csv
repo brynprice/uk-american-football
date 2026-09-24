@@ -1,0 +1,11 @@
+competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase
+,,,,Tarannau Aberystwyth,Bath Killer Bees,8,19,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Plymouth Blitz,23,14,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Bristol Bullets,34,31,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Tarannau Aberystwyth,25,10,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bath Killer Bees,Oxford Cavaliers,25,26,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Plymouth Blitz,Bath Killer Bees,9,7,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Oxford Cavaliers,Bath Killer Bees,14,6,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Cardiff Cobras,Bath Killer Bees,3,6,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+,,,,Bristol Bullets,Bath Killer Bees,22,19,,,,,FALSE,day,,,completed,high,True,FALSE,,,,
+,,,2004-11-07,UWE Bullets,Bath Killer Bees,9,14,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
