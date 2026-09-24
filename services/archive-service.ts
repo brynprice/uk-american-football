@@ -249,11 +249,6 @@ export const ArchiveService = {
         }
 
         // 3. Fetch all games for the phases the coach was active in, PLUS the games they were explicitly staff for
-        const phaseTeamPairs = participations?.map(p => `(phase_id.eq.${p.phase_id},and(home_team_id.eq.${p.team_id},away_team_id.eq.${p.team_id}))`) || [];
-
-        let queryRows: any[] = [];
-
-        // Due to PostgREST limitations with complex ORs, we might need to fetch games for simply the phase_ids, then filter
         const phaseIds = participations?.map(p => p.phase_id) || [];
 
         const { data: staffGames } = await supabase
@@ -264,14 +259,16 @@ export const ArchiveService = {
 
         const explicitGameIds = staffGames?.map(s => s.game_id) || [];
 
-        // Fetch all games in those phases
+        let queryRows: any[] = [];
+
+        // Fetch all games in those phases (checking both phase_id and away_phase_id)
         if (phaseIds.length > 0 || explicitGameIds.length > 0) {
             let q = supabase.from('games').select('*, phase:phases!games_phase_id_fkey(*)');
 
             if (phaseIds.length > 0 && explicitGameIds.length > 0) {
-                q = q.or(`phase_id.in.(${phaseIds.join(',')}),id.in.(${explicitGameIds.join(',')})`);
+                q = q.or(`phase_id.in.(${phaseIds.join(',')}),away_phase_id.in.(${phaseIds.join(',')}),id.in.(${explicitGameIds.join(',')})`);
             } else if (phaseIds.length > 0) {
-                q = q.in('phase_id', phaseIds);
+                q = q.or(`phase_id.in.(${phaseIds.join(',')}),away_phase_id.in.(${phaseIds.join(',')})`);
             } else {
                 q = q.in('id', explicitGameIds);
             }
@@ -282,8 +279,8 @@ export const ArchiveService = {
 
         // 4. Filter games where this person was ACTUALLY the head coach
         const actualGames = queryRows.filter(game => {
-            const isHome = participations?.some(p => p.phase_id === game.phase_id && p.team_id === game.home_team_id) || staffGames?.some(s => s.game_id === game.id && s.team_id === game.home_team_id);
-            const isAway = participations?.some(p => p.phase_id === game.phase_id && p.team_id === game.away_team_id) || staffGames?.some(s => s.game_id === game.id && s.team_id === game.away_team_id);
+            const isHome = participations?.some(p => (p.phase_id === game.phase_id || p.phase_id === game.away_phase_id) && p.team_id === game.home_team_id) || staffGames?.some(s => s.game_id === game.id && s.team_id === game.home_team_id);
+            const isAway = participations?.some(p => (p.phase_id === game.phase_id || p.phase_id === game.away_phase_id) && p.team_id === game.away_team_id) || staffGames?.some(s => s.game_id === game.id && s.team_id === game.away_team_id);
 
             if (!isHome && !isAway) return false;
 
@@ -295,12 +292,12 @@ export const ArchiveService = {
                 return overrideId === personId;
             } else {
                 // If there's no override, they coached if they are the season default
-                return participations?.some(p => p.phase_id === game.phase_id && p.team_id === teamId);
+                return participations?.some(p => (p.phase_id === game.phase_id || p.phase_id === game.away_phase_id) && p.team_id === teamId);
             }
         });
 
         return actualGames.map(game => {
-            const isHome = participations?.some(p => p.phase_id === game.phase_id && p.team_id === game.home_team_id) || staffGames?.some(s => s.game_id === game.id && s.team_id === game.home_team_id);
+            const isHome = participations?.some(p => (p.phase_id === game.phase_id || p.phase_id === game.away_phase_id) && p.team_id === game.home_team_id) || staffGames?.some(s => s.game_id === game.id && s.team_id === game.home_team_id);
             const teamId = isHome ? game.home_team_id : game.away_team_id;
             const isOverride = explicitGameIds.includes(game.id) && staffGames?.some(s => s.game_id === game.id && s.team_id === teamId);
             return {
