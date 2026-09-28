@@ -408,7 +408,11 @@ async function importData(filePath) {
                 parent_phase,
                 away_phase,
                 away_parent_phase,
-                game_type
+                game_type,
+                game_mvp,
+                mvp,
+                home_mvp,
+                away_mvp
             } = record;
 
             // Validation: Skip if core identifiers are missing
@@ -480,26 +484,28 @@ async function importData(filePath) {
 
             // 5. Resolve or Create Game
             let gameId;
-            let gameQuery = supabase
+            let { data: existingGame } = await supabase
                 .from('games')
                 .select('id, status')
                 .eq('season_id', seasonId)
                 .eq('home_team_id', homeTeamId)
-                .eq('away_team_id', awayTeamId);
+                .eq('away_team_id', awayTeamId)
+                .eq('date', date)
+                .maybeSingle();
 
-            if (phaseId) {
-                gameQuery = gameQuery.eq('phase_id', phaseId);
-            } else {
-                gameQuery = gameQuery.is('phase_id', null);
+            // Fallback: Check for legacy game with same date & teams if season_id was unlinked
+            if (!existingGame && date) {
+                const { data: legacyGame } = await supabase
+                    .from('games')
+                    .select('id, status')
+                    .eq('home_team_id', homeTeamId)
+                    .eq('away_team_id', awayTeamId)
+                    .eq('date', date)
+                    .maybeSingle();
+                if (legacyGame) {
+                    existingGame = legacyGame;
+                }
             }
-
-            if (date) {
-                gameQuery = gameQuery.eq('date', date);
-            } else {
-                gameQuery = gameQuery.is('date', null);
-            }
-
-            const { data: existingGame } = await gameQuery.maybeSingle();
 
             if (existingGame) {
                 gameId = existingGame.id;
@@ -631,6 +637,57 @@ async function importData(filePath) {
                     }
                 } else {
                     console.log(`  [Info] Away coach (${away_coach}) already linked as game override.`);
+                }
+            }
+
+            // 7. Link MVPs to Game
+            const mvpName = game_mvp || mvp;
+            if (mvpName) {
+                const mvpPersonId = await getOrCreatePerson(mvpName);
+                if (mvpPersonId) {
+                    const { data: existingMvp } = await supabase
+                        .from('game_staff')
+                        .select('id')
+                        .eq('game_id', gameId)
+                        .eq('person_id', mvpPersonId)
+                        .eq('role', 'game_mvp')
+                        .maybeSingle();
+
+                    if (!existingMvp) {
+                        if (isDryRun) {
+                            console.log(`  [Dry Run] Would link Game MVP (${mvpName}).`);
+                        } else {
+                            await supabase.from('game_staff').insert({
+                                game_id: gameId,
+                                team_id: homeTeamId,
+                                person_id: mvpPersonId,
+                                role: 'game_mvp'
+                            });
+                            console.log(`  [Success] Game MVP (${mvpName}) linked to game.`);
+                        }
+                    }
+                }
+            }
+
+            if (home_mvp) {
+                const homeMvpId = await getOrCreatePerson(home_mvp);
+                if (homeMvpId) {
+                    const { data: existing } = await supabase.from('game_staff').select('id').eq('game_id', gameId).eq('person_id', homeMvpId).eq('role', 'home_mvp').maybeSingle();
+                    if (!existing && !isDryRun) {
+                        await supabase.from('game_staff').insert({ game_id: gameId, team_id: homeTeamId, person_id: homeMvpId, role: 'home_mvp' });
+                        console.log(`  [Success] Home MVP (${home_mvp}) linked to game.`);
+                    }
+                }
+            }
+
+            if (away_mvp) {
+                const awayMvpId = await getOrCreatePerson(away_mvp);
+                if (awayMvpId) {
+                    const { data: existing } = await supabase.from('game_staff').select('id').eq('game_id', gameId).eq('person_id', awayMvpId).eq('role', 'away_mvp').maybeSingle();
+                    if (!existing && !isDryRun) {
+                        await supabase.from('game_staff').insert({ game_id: gameId, team_id: awayTeamId, person_id: awayMvpId, role: 'away_mvp' });
+                        console.log(`  [Success] Away MVP (${away_mvp}) linked to game.`);
+                    }
                 }
             }
 
