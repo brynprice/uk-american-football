@@ -76,6 +76,13 @@ export default async function AdminDashboard() {
                     </p>
                 </Link>
 
+                <Link href="/admin/champions" className="group bg-white border-2 border-slate-900 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all">
+                    <h2 className="text-2xl font-black mb-4 uppercase tracking-tight group-hover:text-blue-700">Divisional Champions &rarr;</h2>
+                    <p className="text-slate-600 font-sans leading-relaxed">
+                        Designate official division and conference champions for each season phase.
+                    </p>
+                </Link>
+
                 <Link href="/admin/proposals" className="group bg-amber-400 text-slate-900 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all">
                     <h2 className="text-2xl font-black mb-4 uppercase tracking-tight group-hover:text-amber-800">Review Proposals &rarr;</h2>
                     <p className="font-sans leading-relaxed font-bold">

@@ -381,6 +381,12 @@ export interface Database {
           head_coach_id: string | null
           notes: string | null
           created_at: string
+          wins: number | null
+          losses: number | null
+          ties: number | null
+          points_for: number | null
+          points_against: number | null
+          is_champion: boolean | null
         }
         Insert: {
           id?: string
@@ -389,6 +395,12 @@ export interface Database {
           head_coach_id?: string | null
           notes?: string | null
           created_at?: string
+          wins?: number | null
+          losses?: number | null
+          ties?: number | null
+          points_for?: number | null
+          points_against?: number | null
+          is_champion?: boolean | null
         }
         Update: {
           id?: string
@@ -397,6 +409,12 @@ export interface Database {
           head_coach_id?: string | null
           notes?: string | null
           created_at?: string
+          wins?: number | null
+          losses?: number | null
+          ties?: number | null
+          points_for?: number | null
+          points_against?: number | null
+          is_champion?: boolean | null
         }
       }
     }

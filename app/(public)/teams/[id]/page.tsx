@@ -370,6 +370,46 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                         );
                     })()}
 
+                    {/* Divisional Champions Section */}
+                    {(() => {
+                        const divisionalTitles = (team.participations || [])
+                            .filter((p: any) => p.is_champion)
+                            .sort((a: any, b: any) => (b.phase?.season?.year || 0) - (a.phase?.season?.year || 0));
+
+                        if (divisionalTitles.length === 0) return null;
+
+                        return (
+                            <section className="bg-white p-6 border-2 border-slate-100 shadow-md rounded-lg relative overflow-hidden">
+                                <h4 className="text-xs font-black uppercase text-slate-400 mb-6 tracking-tighter flex items-center gap-2 font-sans">
+                                    🥇 Divisional Champions
+                                </h4>
+                                <div className="space-y-4">
+                                    {divisionalTitles.map((p: any, idx: number) => (
+                                        <div key={`div-champ-${idx}`} className="flex gap-3 items-center">
+                                            <div className="w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center shrink-0 shadow-sm border-2 border-white ring-1 ring-slate-300">
+                                                <span className="text-[10px] font-black uppercase">{p.phase?.season?.year}</span>
+                                            </div>
+                                            <div>
+                                                <div className="font-bold text-slate-900 leading-tight">
+                                                    {p.phase?.id ? (
+                                                        <Link href={`/phases/${p.phase.id}`} className="hover:text-blue-700 hover:underline">
+                                                            {p.phase.name}
+                                                        </Link>
+                                                    ) : (
+                                                        p.phase?.name
+                                                    )}
+                                                </div>
+                                                <div className="text-[10px] text-slate-500 uppercase font-black font-sans tracking-wide mt-0.5">
+                                                    Division Champion &bull; {p.phase?.season?.competition?.name}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        );
+                    })()}
+
                     <H2HSelector teamId={id} opponents={opponents} />
 
                     <section className="bg-white p-6 border border-slate-200 shadow-sm">
