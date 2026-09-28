@@ -183,6 +183,7 @@ export const ArchiveService = {
             .select(`
                 *,
                 phase:phases!games_phase_id_fkey (*, season:seasons (year, id, competition:competitions (*))),
+                away_phase:phases!away_phase_id (*, season:seasons (year, id, competition:competitions (*))),
                 home_team:teams!home_team_id (*, team_aliases (*)),
                 away_team:teams!away_team_id (*, team_aliases (*))
             `)

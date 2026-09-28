@@ -34,14 +34,17 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
 
         // 2. Aggregate from games for phases that DON'T have manual stats
         team.games?.forEach((g: any) => {
-            const isPlayoff = g.is_playoff || isPlayoffPhase(g.phase || {});
+            const isHome = g.home_team_id === id;
+            const teamPhase = isHome ? g.phase : (g.away_phase || g.phase);
+            const teamPhaseId = teamPhase?.id || (isHome ? g.phase_id : (g.away_phase_id || g.phase_id));
+
+            const isPlayoff = g.is_playoff || isPlayoffPhase(teamPhase || {});
             if (isPlayoff) return;
             if (g.status?.toLowerCase() !== 'completed' && g.status?.toLowerCase() !== 'awarded') return;
 
-            const current = statsByPhase.get(g.phase_id);
+            const current = statsByPhase.get(teamPhaseId);
             if (current?.hasManual) return; // Prioritize manual stats
 
-            const isHome = g.home_team_id === id;
             const teamScore = isHome ? g.home_score : g.away_score;
             const oppScore = isHome ? g.away_score : g.home_score;
             const multiplier = g.is_double_header ? 2 : 1;
@@ -57,7 +60,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
             else if (teamScore < oppScore) phaseStats.losses += multiplier;
             else phaseStats.ties += multiplier;
 
-            statsByPhase.set(g.phase_id, phaseStats);
+            statsByPhase.set(teamPhaseId, phaseStats);
         });
 
         // 3. Sum everything
@@ -91,14 +94,17 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
 
         // 2. Aggregate from games for phases that DON'T have manual stats
         team.games?.forEach((g: any) => {
-            const isPlayoff = g.is_playoff || isPlayoffPhase(g.phase || {});
+            const isHome = g.home_team_id === id;
+            const teamPhase = isHome ? g.phase : (g.away_phase || g.phase);
+            const teamPhaseId = teamPhase?.id || (isHome ? g.phase_id : (g.away_phase_id || g.phase_id));
+
+            const isPlayoff = g.is_playoff || isPlayoffPhase(teamPhase || {});
             if (!isPlayoff) return;
             if (g.status?.toLowerCase() !== 'completed' && g.status?.toLowerCase() !== 'awarded') return;
 
-            const current = statsByPhase.get(g.phase_id);
+            const current = statsByPhase.get(teamPhaseId);
             if (current?.hasManual) return; // Prioritize manual stats
 
-            const isHome = g.home_team_id === id;
             const teamScore = isHome ? g.home_score : g.away_score;
             const oppScore = isHome ? g.away_score : g.home_score;
             const multiplier = g.is_double_header ? 2 : 1;
@@ -114,7 +120,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
             else if (teamScore < oppScore) phaseStats.losses += multiplier;
             else phaseStats.ties += multiplier;
 
-            statsByPhase.set(g.phase_id, phaseStats);
+            statsByPhase.set(teamPhaseId, phaseStats);
         });
 
         // 3. Sum everything
