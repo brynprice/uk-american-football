@@ -90,23 +90,29 @@ export default function DivisionalChampionsAdminPage() {
     const fetchPhaseParticipations = async () => {
         setIsLoadingPhaseData(true);
         try {
-            const { data } = await supabase
-                .from("participations")
-                .select("*, team:teams(*)")
-                .eq("phase_id", selectedPhase);
+            const [partRes, noteRes] = await Promise.all([
+                supabase.from("participations").select("*, team:teams(*)").eq("phase_id", selectedPhase),
+                supabase.from("notes").select("content").eq("entity_type", "divisional_champion").eq("entity_id", selectedPhase)
+            ]);
 
-            if (data) {
-                // Sort by wins desc, then team name
-                const sorted = data.sort((a, b) => {
-                    if (a.is_champion && !b.is_champion) return -1;
-                    if (!a.is_champion && b.is_champion) return 1;
-                    const wA = a.wins || 0;
-                    const wB = b.wins || 0;
-                    if (wB !== wA) return wB - wA;
-                    return (a.team?.name || "").localeCompare(b.team?.name || "");
-                });
-                setParticipations(sorted);
-            }
+            const championTeamId = noteRes.data?.[0]?.content;
+            const data = partRes.data || [];
+
+            const combined = data.map((p: any) => ({
+                ...p,
+                is_champion: p.is_champion || (championTeamId ? p.team_id === championTeamId : false)
+            }));
+
+            // Sort by is_champion first, then wins desc, then team name
+            const sorted = combined.sort((a: any, b: any) => {
+                if (a.is_champion && !b.is_champion) return -1;
+                if (!a.is_champion && b.is_champion) return 1;
+                const wA = a.wins || 0;
+                const wB = b.wins || 0;
+                if (wB !== wA) return wB - wA;
+                return (a.team?.name || "").localeCompare(b.team?.name || "");
+            });
+            setParticipations(sorted);
         } catch (err: any) {
             setMessage({ text: err.message, type: "error" });
         } finally {

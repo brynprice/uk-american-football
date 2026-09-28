@@ -164,38 +164,52 @@ export const ArchiveService = {
 
 
     async getTeamHistory(teamId: string): Promise<any> {
-        const { data, error } = await supabase
-            .from("teams")
-            .select(`
-                *, 
-                team_aliases (id, name, start_year, end_year, logo_url), 
-                participations (*, phase:phases (*, season:seasons (*, competition:competitions (*)))),
-                hall_of_fame (*, person:people (*)),
-                retired_jerseys (*, person:people (*))
-            `)
-            .eq("id", teamId)
-            .single();
-        if (error) throw error;
-        if (!data) throw new Error("Team not found");
+        const [teamRes, gamesRes, champNotesRes] = await Promise.all([
+            supabase
+                .from("teams")
+                .select(`
+                    *, 
+                    team_aliases (id, name, start_year, end_year, logo_url), 
+                    participations (*, phase:phases (*, season:seasons (*, competition:competitions (*)))),
+                    hall_of_fame (*, person:people (*)),
+                    retired_jerseys (*, person:people (*))
+                `)
+                .eq("id", teamId)
+                .single(),
+            supabase
+                .from("games")
+                .select(`
+                    *,
+                    phase:phases!games_phase_id_fkey (*, season:seasons (year, id, competition:competitions (*))),
+                    away_phase:phases!away_phase_id (*, season:seasons (year, id, competition:competitions (*))),
+                    home_team:teams!home_team_id (*, team_aliases (*)),
+                    away_team:teams!away_team_id (*, team_aliases (*))
+                `)
+                .or(`home_team_id.eq.${teamId},away_team_id.eq.${teamId}`)
+                .neq("status", "anomaly")
+                .order("date", { ascending: false }),
+            supabase
+                .from("notes")
+                .select("entity_id")
+                .eq("entity_type", "divisional_champion")
+                .eq("content", teamId)
+        ]);
 
-        const { data: games, error: gamesError } = await supabase
-            .from("games")
-            .select(`
-                *,
-                phase:phases!games_phase_id_fkey (*, season:seasons (year, id, competition:competitions (*))),
-                away_phase:phases!away_phase_id (*, season:seasons (year, id, competition:competitions (*))),
-                home_team:teams!home_team_id (*, team_aliases (*)),
-                away_team:teams!away_team_id (*, team_aliases (*))
-            `)
-            .or(`home_team_id.eq.${teamId},away_team_id.eq.${teamId}`)
-            .neq("status", "anomaly")
-            .order("date", { ascending: false });
+        if (teamRes.error) throw teamRes.error;
+        if (!teamRes.data) throw new Error("Team not found");
 
-        if (gamesError) throw gamesError;
+        const champPhaseIds = new Set(((champNotesRes as any).data || []).map((n: any) => n.entity_id));
+        const data = (teamRes as any).data;
+
+        const updatedParticipations = (data.participations || []).map((p: any) => ({
+            ...p,
+            is_champion: p.is_champion || champPhaseIds.has(p.phase_id || p.phase?.id)
+        }));
 
         return {
-            ...(data as any),
-            games: games || []
+            ...data,
+            participations: updatedParticipations,
+            games: gamesRes.data || []
         };
     },
 

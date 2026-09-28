@@ -9,49 +9,73 @@ export async function setDivisionalChampion(
     isChampion: boolean
 ) {
     const supabase = await createClient();
-    const participationsTable = supabase.from("participations") as any;
 
     if (isChampion) {
-        // Enforce 1 champion per phase: unset is_champion for all teams in this phase first
-        const { error: resetError } = await participationsTable
-            .update({ is_champion: false })
-            .eq("phase_id", phaseId);
+        // 1. Storage in notes table (guaranteed compatibility)
+        // Enforce 1 champion per phase: delete any existing champion note for this phase first
+        await (supabase.from("notes") as any)
+            .delete()
+            .eq("entity_type", "divisional_champion")
+            .eq("entity_id", phaseId);
 
-        if (resetError) {
-            throw new Error(`Failed to reset phase champions: ${resetError.message}`);
+        // Insert new champion note
+        const { error: noteError } = await (supabase.from("notes") as any)
+            .insert({
+                entity_type: "divisional_champion",
+                entity_id: phaseId,
+                content: teamId
+            });
+
+        if (noteError) {
+            throw new Error(`Failed to save champion record: ${noteError.message}`);
         }
 
-        // Check if participation row already exists for this team in this phase
-        const { data: existing } = await participationsTable
-            .select("id")
-            .eq("phase_id", phaseId)
-            .eq("team_id", teamId)
-            .maybeSingle();
+        // 2. Try updating participations table if is_champion column exists (graceful fallback)
+        try {
+            const participationsTable = supabase.from("participations") as any;
+            await participationsTable
+                .update({ is_champion: false })
+                .eq("phase_id", phaseId);
 
-        if (existing) {
-            const { error: updateError } = await participationsTable
-                .update({ is_champion: true })
-                .eq("id", existing.id);
+            const { data: existing } = await participationsTable
+                .select("id")
+                .eq("phase_id", phaseId)
+                .eq("team_id", teamId)
+                .maybeSingle();
 
-            if (updateError) throw new Error(updateError.message);
-        } else {
-            const { error: insertError } = await participationsTable
-                .insert({
-                    phase_id: phaseId,
-                    team_id: teamId,
-                    is_champion: true
-                });
-
-            if (insertError) throw new Error(insertError.message);
+            if (existing) {
+                await participationsTable
+                    .update({ is_champion: true })
+                    .eq("id", existing.id);
+            } else {
+                await participationsTable
+                    .insert({
+                        phase_id: phaseId,
+                        team_id: teamId,
+                        is_champion: true
+                    });
+            }
+        } catch {
+            // Ignore if is_champion column does not exist on participations table yet
         }
     } else {
-        // Unset champion for this team in this phase
-        const { error: updateError } = await participationsTable
-            .update({ is_champion: false })
-            .eq("phase_id", phaseId)
-            .eq("team_id", teamId);
+        // Remove champion note
+        await (supabase.from("notes") as any)
+            .delete()
+            .eq("entity_type", "divisional_champion")
+            .eq("entity_id", phaseId)
+            .eq("content", teamId);
 
-        if (updateError) throw new Error(updateError.message);
+        // Try unsetting participations is_champion flag if present
+        try {
+            const participationsTable = supabase.from("participations") as any;
+            await participationsTable
+                .update({ is_champion: false })
+                .eq("phase_id", phaseId)
+                .eq("team_id", teamId);
+        } catch {
+            // Ignore if column missing
+        }
     }
 
     revalidatePath(`/teams/${teamId}`);
