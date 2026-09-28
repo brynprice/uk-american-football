@@ -37,8 +37,8 @@ export default function StandingsTable({ participations, games, phaseName, seaso
                 const multiplier = g.is_double_header ? 2 : 1;
 
                 if (score !== null && oppScore !== null) {
-                    pf += score * multiplier;
-                    pa += oppScore * multiplier;
+                    pf += score;
+                    pa += oppScore;
                     if (score > oppScore) wins += multiplier;
                     else if (score < oppScore) losses += multiplier;
                     else ties += multiplier;

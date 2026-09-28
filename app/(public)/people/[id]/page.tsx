@@ -50,8 +50,8 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
         const pa = isHome ? g.away_score : g.home_score;
 
         if (pf !== null && pa !== null) {
-            pointsFor += pf * multiplier;
-            pointsAgainst += pa * multiplier;
+            pointsFor += pf;
+            pointsAgainst += pa;
 
             if (pf > pa) wins += multiplier;
             else if (pf < pa) losses += multiplier;

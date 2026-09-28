@@ -53,8 +53,8 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
 
             const phaseStats = current || { wins: 0, losses: 0, ties: 0, pf: 0, pa: 0 };
 
-            phaseStats.pf += (teamScore * multiplier);
-            phaseStats.pa += (oppScore * multiplier);
+            phaseStats.pf += teamScore;
+            phaseStats.pa += oppScore;
 
             if (teamScore > oppScore) phaseStats.wins += multiplier;
             else if (teamScore < oppScore) phaseStats.losses += multiplier;
@@ -113,8 +113,8 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
 
             const phaseStats = current || { wins: 0, losses: 0, ties: 0, pf: 0, pa: 0 };
 
-            phaseStats.pf += (teamScore * multiplier);
-            phaseStats.pa += (oppScore * multiplier);
+            phaseStats.pf += teamScore;
+            phaseStats.pa += oppScore;
 
             if (teamScore > oppScore) phaseStats.wins += multiplier;
             else if (teamScore < oppScore) phaseStats.losses += multiplier;
