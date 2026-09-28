@@ -457,30 +457,26 @@ export const ArchiveService = {
             const homeScore = game.home_score ?? 0;
             const awayScore = game.away_score ?? 0;
 
-            const isHomeWinner = homeScore >= awayScore;
-            const winner = isHomeWinner ? {
+            const isTie = game.home_score !== null && game.away_score !== null && homeScore === awayScore;
+
+            const homeTeamObj = {
                 ...game.home_team,
                 displayName: homeIdentity.name,
                 displayLogo: homeIdentity.logo_url || game.home_team?.logo_url,
                 score: homeScore
-            } : {
+            };
+
+            const awayTeamObj = {
                 ...game.away_team,
                 displayName: awayIdentity.name,
                 displayLogo: awayIdentity.logo_url || game.away_team?.logo_url,
                 score: awayScore
             };
 
-            const runnerUp = isHomeWinner ? {
-                ...game.away_team,
-                displayName: awayIdentity.name,
-                displayLogo: awayIdentity.logo_url || game.away_team?.logo_url,
-                score: awayScore
-            } : {
-                ...game.home_team,
-                displayName: homeIdentity.name,
-                displayLogo: homeIdentity.logo_url || game.home_team?.logo_url,
-                score: homeScore
-            };
+            const isHomeWinner = homeScore > awayScore;
+            const winner = isTie ? homeTeamObj : (isHomeWinner ? homeTeamObj : awayTeamObj);
+            const runnerUp = isTie ? awayTeamObj : (isHomeWinner ? awayTeamObj : homeTeamObj);
+            const coChampions = isTie ? [homeTeamObj, awayTeamObj] : [];
 
             const hostCompetition = game.phase?.season?.competition || null;
 
@@ -494,6 +490,8 @@ export const ArchiveService = {
                 phaseName: game.phase?.name,
                 venue: game.venue,
                 competition: hostCompetition,
+                isTie,
+                coChampions,
                 winner,
                 runnerUp
             };
@@ -508,21 +506,25 @@ export const ArchiveService = {
         // Leaderboard
         const leaderMap = new Map<string, { teamId: string; name: string; logoUrl: string | null; titlesCount: number; bowlsCount: number }>();
         processedChampions.forEach((item) => {
-            const teamId = item.winner.id;
-            const existing = leaderMap.get(teamId) || {
-                teamId,
-                name: item.winner.name,
-                logoUrl: item.winner.displayLogo || item.winner.logo_url,
-                titlesCount: 0,
-                bowlsCount: 0
-            };
+            const teamsToCredit = item.isTie && item.coChampions.length > 0 ? item.coChampions : [item.winner];
+            teamsToCredit.forEach((team: any) => {
+                if (!team || !team.id) return;
+                const teamId = team.id;
+                const existing = leaderMap.get(teamId) || {
+                    teamId,
+                    name: team.displayName || team.name,
+                    logoUrl: team.displayLogo || team.logo_url,
+                    titlesCount: 0,
+                    bowlsCount: 0
+                };
 
-            if (item.finalType === 'title') {
-                existing.titlesCount += 1;
-            } else {
-                existing.bowlsCount += 1;
-            }
-            leaderMap.set(teamId, existing);
+                if (item.finalType === 'title') {
+                    existing.titlesCount += 1;
+                } else {
+                    existing.bowlsCount += 1;
+                }
+                leaderMap.set(teamId, existing);
+            });
         });
 
         const leaderboard = Array.from(leaderMap.values()).sort((a, b) => {

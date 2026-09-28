@@ -285,65 +285,99 @@ export default function ChampionsView({
                                 </div>
 
                                 {/* Matchup Cards */}
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    {/* Winner */}
-                                    <div className="bg-amber-50/60 border border-amber-200 p-4 rounded-lg flex items-center gap-4 relative overflow-hidden">
-                                        <div className="w-12 h-12 bg-white border border-amber-200 rounded p-1 flex items-center justify-center shrink-0 shadow-sm">
-                                            {item.winner.displayLogo ? (
-                                                <img
-                                                    src={item.winner.displayLogo}
-                                                    alt={`${item.winner.displayName} Logo`}
-                                                    className="max-w-full max-h-full object-contain"
-                                                />
-                                            ) : (
-                                                <span className="text-[9px] font-black text-slate-300">NO LOGO</span>
-                                            )}
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <div className="text-[10px] font-black uppercase text-amber-700 tracking-wider font-sans flex items-center gap-1">
-                                                <span>🏆 CHAMPION</span>
+                                {item.isTie ? (
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        {(item.coChampions && item.coChampions.length > 0 ? item.coChampions : [item.winner, item.runnerUp]).map((team: any, tIdx: number) => (
+                                            <div key={tIdx} className="bg-amber-50/60 border border-amber-200 p-4 rounded-lg flex items-center gap-4 relative overflow-hidden">
+                                                <div className="w-12 h-12 bg-white border border-amber-200 rounded p-1 flex items-center justify-center shrink-0 shadow-sm">
+                                                    {team.displayLogo ? (
+                                                        <img
+                                                            src={team.displayLogo}
+                                                            alt={`${team.displayName} Logo`}
+                                                            className="max-w-full max-h-full object-contain"
+                                                        />
+                                                    ) : (
+                                                        <span className="text-[9px] font-black text-slate-300">NO LOGO</span>
+                                                    )}
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="text-[10px] font-black uppercase text-amber-700 tracking-wider font-sans flex items-center gap-1">
+                                                        <span>🏆 CO-CHAMPION</span>
+                                                    </div>
+                                                    <Link
+                                                        href={`/teams/${team.id}`}
+                                                        className="font-black text-slate-900 hover:text-blue-700 truncate block text-base leading-tight"
+                                                    >
+                                                        {team.displayName}
+                                                    </Link>
+                                                </div>
+                                                <div className="text-2xl font-black font-mono text-slate-900 shrink-0">
+                                                    {team.score}
+                                                </div>
                                             </div>
-                                            <Link
-                                                href={`/teams/${item.winner.id}`}
-                                                className="font-black text-slate-900 hover:text-blue-700 truncate block text-base leading-tight"
-                                            >
-                                                {item.winner.displayName}
-                                            </Link>
-                                        </div>
-                                        <div className="text-2xl font-black font-mono text-slate-900 shrink-0">
-                                            {item.winner.score}
-                                        </div>
+                                        ))}
                                     </div>
+                                ) : (
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        {/* Winner */}
+                                        <div className="bg-amber-50/60 border border-amber-200 p-4 rounded-lg flex items-center gap-4 relative overflow-hidden">
+                                            <div className="w-12 h-12 bg-white border border-amber-200 rounded p-1 flex items-center justify-center shrink-0 shadow-sm">
+                                                {item.winner.displayLogo ? (
+                                                    <img
+                                                        src={item.winner.displayLogo}
+                                                        alt={`${item.winner.displayName} Logo`}
+                                                        className="max-w-full max-h-full object-contain"
+                                                    />
+                                                ) : (
+                                                    <span className="text-[9px] font-black text-slate-300">NO LOGO</span>
+                                                )}
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <div className="text-[10px] font-black uppercase text-amber-700 tracking-wider font-sans flex items-center gap-1">
+                                                    <span>🏆 CHAMPION</span>
+                                                </div>
+                                                <Link
+                                                    href={`/teams/${item.winner.id}`}
+                                                    className="font-black text-slate-900 hover:text-blue-700 truncate block text-base leading-tight"
+                                                >
+                                                    {item.winner.displayName}
+                                                </Link>
+                                            </div>
+                                            <div className="text-2xl font-black font-mono text-slate-900 shrink-0">
+                                                {item.winner.score}
+                                            </div>
+                                        </div>
 
-                                    {/* Runner Up */}
-                                    <div className="bg-slate-50 border border-slate-200 p-4 rounded-lg flex items-center gap-4 relative overflow-hidden">
-                                        <div className="w-12 h-12 bg-white border border-slate-200 rounded p-1 flex items-center justify-center shrink-0 shadow-sm">
-                                            {item.runnerUp.displayLogo ? (
-                                                <img
-                                                    src={item.runnerUp.displayLogo}
-                                                    alt={`${item.runnerUp.displayName} Logo`}
-                                                    className="max-w-full max-h-full object-contain"
-                                                />
-                                            ) : (
-                                                <span className="text-[9px] font-black text-slate-300">NO LOGO</span>
-                                            )}
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <div className="text-[10px] font-black uppercase text-slate-400 tracking-wider font-sans">
-                                                RUNNER UP
+                                        {/* Runner Up */}
+                                        <div className="bg-slate-50 border border-slate-200 p-4 rounded-lg flex items-center gap-4 relative overflow-hidden">
+                                            <div className="w-12 h-12 bg-white border border-slate-200 rounded p-1 flex items-center justify-center shrink-0 shadow-sm">
+                                                {item.runnerUp.displayLogo ? (
+                                                    <img
+                                                        src={item.runnerUp.displayLogo}
+                                                        alt={`${item.runnerUp.displayName} Logo`}
+                                                        className="max-w-full max-h-full object-contain"
+                                                    />
+                                                ) : (
+                                                    <span className="text-[9px] font-black text-slate-300">NO LOGO</span>
+                                                )}
                                             </div>
-                                            <Link
-                                                href={`/teams/${item.runnerUp.id}`}
-                                                className="font-bold text-slate-700 hover:text-blue-700 truncate block text-base leading-tight"
-                                            >
-                                                {item.runnerUp.displayName}
-                                            </Link>
-                                        </div>
-                                        <div className="text-2xl font-black font-mono text-slate-500 shrink-0">
-                                            {item.runnerUp.score}
+                                            <div className="flex-1 min-w-0">
+                                                <div className="text-[10px] font-black uppercase text-slate-400 tracking-wider font-sans">
+                                                    RUNNER UP
+                                                </div>
+                                                <Link
+                                                    href={`/teams/${item.runnerUp.id}`}
+                                                    className="font-bold text-slate-700 hover:text-blue-700 truncate block text-base leading-tight"
+                                                >
+                                                    {item.runnerUp.displayName}
+                                                </Link>
+                                            </div>
+                                            <div className="text-2xl font-black font-mono text-slate-500 shrink-0">
+                                                {item.runnerUp.score}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                )}
 
                                 <div className="mt-3 pt-2 text-right">
                                     <Link
