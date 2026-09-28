@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
+import { isPlayoffPhase } from '@/lib/utils/phase-utils';
 
 interface TeamSeasonHistoryProps {
     teamId: string;
@@ -110,15 +111,11 @@ export default function TeamSeasonHistory({
 
                 // Separate Playoff and Regular Season phases
                 const playoffParts = seasonParts.filter((p: any) => {
-                    const type = p.phase?.type?.toLowerCase() || '';
-                    const name = p.phase?.name?.toLowerCase() || '';
-                    return type === 'playoffs' || name.includes('playoff');
+                    return isPlayoffPhase(p.phase || {});
                 }).sort((a: any, b: any) => (a.phase?.ordinal || 0) - (b.phase?.ordinal || 0));
 
                 const regParts = seasonParts.filter((p: any) => {
-                    const type = p.phase?.type?.toLowerCase() || '';
-                    const name = p.phase?.name?.toLowerCase() || '';
-                    return type !== 'playoffs' && !name.includes('playoff');
+                    return !isPlayoffPhase(p.phase || {});
                 }).sort((a: any, b: any) => (a.phase?.ordinal || 0) - (b.phase?.ordinal || 0));
 
                 // Process details for each phase

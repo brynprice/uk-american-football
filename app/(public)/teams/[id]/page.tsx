@@ -3,6 +3,7 @@ import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import H2HSelector from '@/components/archive/H2HSelector';
 import TeamSeasonHistory from '@/components/archive/TeamSeasonHistory';
+import { isPlayoffPhase } from '@/lib/utils/phase-utils';
 export const revalidate = 0;
 
 export default async function TeamPage({ params }: { params: Promise<{ id: string }> }) {
@@ -18,7 +19,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
 
         // 1. Initialize stats from participations (Regular Season only)
         team.participations?.forEach((p: any) => {
-            const isPlayoff = p.phase?.type?.toLowerCase() === 'playoffs' || p.phase?.name?.toLowerCase().includes('playoff');
+            const isPlayoff = isPlayoffPhase(p.phase || {});
             if (isPlayoff) return;
 
             statsByPhase.set(p.phase_id, {
@@ -33,7 +34,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
 
         // 2. Aggregate from games for phases that DON'T have manual stats
         team.games?.forEach((g: any) => {
-            const isPlayoff = g.is_playoff || g.phase?.type === 'playoffs' || g.phase?.name.toLowerCase().includes('playoff');
+            const isPlayoff = g.is_playoff || isPlayoffPhase(g.phase || {});
             if (isPlayoff) return;
             if (g.status?.toLowerCase() !== 'completed' && g.status?.toLowerCase() !== 'awarded') return;
 
@@ -75,7 +76,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
 
         // 1. Initialize stats from participations (Playoffs only)
         team.participations?.forEach((p: any) => {
-            const isPlayoff = p.phase?.type?.toLowerCase() === 'playoffs' || p.phase?.name?.toLowerCase().includes('playoff');
+            const isPlayoff = isPlayoffPhase(p.phase || {});
             if (!isPlayoff) return;
 
             statsByPhase.set(p.phase_id, {
@@ -90,7 +91,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
 
         // 2. Aggregate from games for phases that DON'T have manual stats
         team.games?.forEach((g: any) => {
-            const isPlayoff = g.is_playoff || g.phase?.type === 'playoffs' || g.phase?.name.toLowerCase().includes('playoff');
+            const isPlayoff = g.is_playoff || isPlayoffPhase(g.phase || {});
             if (!isPlayoff) return;
             if (g.status?.toLowerCase() !== 'completed' && g.status?.toLowerCase() !== 'awarded') return;
 

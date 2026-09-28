@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { createClient } from '@supabase/supabase-js';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
-import { sortPhasesInTreeOrder } from '@/lib/utils/phase-utils';
+import { sortPhasesInTreeOrder, isPlayoffPhase } from '@/lib/utils/phase-utils';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -92,11 +92,7 @@ export default function SetGameCountsPage() {
         // Apply to all non-playoff leaf phases (phases with no children)
         const parentIds = new Set(phases.map(p => p.parent_phase_id).filter(Boolean));
         const leafPhases = phases.filter(p => !parentIds.has(p.id));
-        const regularLeafs = leafPhases.filter(p => {
-            const name = p.name.toLowerCase();
-            const type = (p.type || '').toLowerCase();
-            return !name.includes('playoff') && type !== 'playoffs';
-        });
+        const regularLeafs = leafPhases.filter(p => !isPlayoffPhase(p));
 
         if (regularLeafs.length === 0) {
             setMessage('No regular season leaf phases found.');
@@ -146,11 +142,7 @@ export default function SetGameCountsPage() {
         setSaving(false);
     }
 
-    const isPlayoff = (p: PhaseRow) => {
-        const name = p.name.toLowerCase();
-        const type = (p.type || '').toLowerCase();
-        return name.includes('playoff') || type === 'playoffs';
-    };
+    const isPlayoff = (p: PhaseRow) => isPlayoffPhase(p);
 
     function renderPhaseTree(parentId: string | null, depth: number): React.ReactNode {
         const children = phases
