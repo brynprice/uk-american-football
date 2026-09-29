@@ -1,4 +1,4 @@
-﻿competition_name,parent_phase,phase,year,team,wins,losses,ties,points_for,points_against
+competition_name,parent_phase,phase,year,team,wins,losses,ties,points_for,points_against
 bcafl,,Northern Conference,1989,Teesside Demons,4,0,2,137,40
 bcafl,,Northern Conference,1989,Hull Sharks,4,0,2,88,50
 bcafl,,Northern Conference,1989,Sheffield Pirates,2,4,0,14,103
@@ -6,7 +6,7 @@ bcafl,,Northern Conference,1989,Newcastle Scholars,0,6,0,14,60
 bcafl,,Scottish Conference,1989,Strathclyde Hawks,6,0,0,118,28
 bcafl,,Scottish Conference,1989,Stirling Clansmen,4,2,0,111,27
 bcafl,,Scottish Conference,1989,Glasgow Tigers,1,4,1,34,60
-bcafl,,Southern Conference,1989,Paisley Panthers,0,5,1,0,148
+bcafl,,Scottish Conference,1989,Paisley Panthers,0,5,1,0,148
 bcafl,,Eastern Division,1989,Warwick Wolves,7,0,1,154,32
 bcafl,,Eastern Division,1989,UEA Pirates,4,4,0,79,62
 bcafl,,Eastern Division,1989,Leicester Lemmings,3,4,1,89,105
