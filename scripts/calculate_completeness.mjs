@@ -58,7 +58,7 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
     // Get participations for these phases
     const { data: participations } = await supabase
         .from('participations')
-        .select('id, head_coach_id, wins, team_id')
+        .select('id, head_coach_id, wins, losses, ties, team_id')
         .in('phase_id', phaseIds);
 
     if (participations && participations.length > 0) {
@@ -83,15 +83,45 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
         score += Math.round(coachPercentage * 15);
     }
 
+    // Calculate expected regular season games from standings
+    let totalStandingsGames = 0;
+    for (const p of (participations || [])) {
+        if (p.wins !== null && p.losses !== null) {
+            totalStandingsGames += (p.wins + p.losses + (p.ties || 0));
+        }
+    }
+    const expectedRegGames = Math.floor(totalStandingsGames / 2);
+
     // 2. Games Presence & Quality
     const { data: games } = await supabase
         .from('games')
         .select('id, phase_id, home_team_id, away_team_id, home_score, away_score, date, date_precision, venue_id, final_type, status, is_playoff')
         .in('phase_id', phaseIds);
 
+    const nonAnomalyGames = (games || []).filter(g => g.status !== 'anomaly');
+    const regGames = nonAnomalyGames.filter(g => !g.is_playoff);
+    const playoffGames = nonAnomalyGames.filter(g => g.is_playoff);
+
+    const expectedPlayoffs = playoffGames.length > 0 ? playoffGames.length : 1;
+    const expectedTotalGames = expectedRegGames > 0 ? (expectedRegGames + expectedPlayoffs) : nonAnomalyGames.length;
+
     if (games && games.length > 0) {
-        score += 30; // Game presence
-        details.missing_games = false;
+        // If regular season games are expected from standings, scale game presence by actual coverage
+        if (expectedRegGames > 0) {
+            const regCoverage = Math.min(1.0, regGames.length / expectedRegGames);
+            score += Math.round(regCoverage * 25);
+            if (playoffGames.length > 0) {
+                score += 5;
+            }
+            if (regGames.length === 0) {
+                details.missing_games = true;
+            } else {
+                details.missing_games = false;
+            }
+        } else {
+            score += 30;
+            details.missing_games = false;
+        }
 
         const totalGames = games.length;
         let scoreCount = 0;
@@ -161,13 +191,11 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
             }
         });
 
-        const scorePercent = scoreCount / Math.max(1, totalGames - details.anomaly_count);
-        const datePercent = dateCount / totalGames;
-        const venuePercent = venueCount / totalGames;
-
-        score += Math.round(scorePercent * 15);
-        score += Math.round(datePercent * 10);
-        score += Math.round(venuePercent * 5);
+        // Quality points scaled by schedule completeness so a few playoff games don't award 100% quality
+        const denom = Math.max(1, expectedTotalGames);
+        score += Math.round((scoreCount / denom) * 15);
+        score += Math.round((dateCount / denom) * 10);
+        score += Math.round((venueCount / denom) * 5);
 
         if (hasPlayoffs || isInterrupted) {
             details.missing_playoffs = false;

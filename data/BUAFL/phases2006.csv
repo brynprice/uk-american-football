@@ -1,11 +1,13 @@
-﻿competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal
-bcafl,2006,Northern Conference,Conference,,medium,0
-bcafl,2006,Southern Conference,Conference,,medium,1
-bcafl,2006,Scottish Division,Division,Northern Conference,medium,0
-bcafl,2006,Eastern Division,Division,Northern Conference,medium,1
-bcafl,2006,Western Division,Division,Northern Conference,medium,2
-bcafl,2006,Central Division,Division,Northern Conference,medium,3
-bcafl,2006,Central Division,Division,Southern Conference,medium,0
-bcafl,2006,Eastern Division,Division,Southern Conference,medium,1
-bcafl,2006,Western Division,Division,Southern Conference,medium,2
-bcafl,2006,Southern Division,Division,Southern Conference,medium,3
+competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal,max_games_per_team
+bcafl,2006,Playoffs,Playoffs,,high,1,
+bcafl,2006,National Championship,Playoffs,Playoffs,high,2,
+bcafl,2006,Northern Conference,Conference,,high,3,
+bcafl,2006,Scottish Division,Division,Northern Conference,high,4,8
+bcafl,2006,Eastern Division,Division,Northern Conference,high,5,8
+bcafl,2006,Western Division,Division,Northern Conference,high,6,8
+bcafl,2006,Central Division,Division,Northern Conference,high,7,8
+bcafl,2006,Southern Conference,Conference,,high,8,
+bcafl,2006,Central Division,Division,Southern Conference,high,9,8
+bcafl,2006,Eastern Division,Division,Southern Conference,high,10,8
+bcafl,2006,Western Division,Division,Southern Conference,high,11,8
+bcafl,2006,Southern Division,Division,Southern Conference,high,12,8
