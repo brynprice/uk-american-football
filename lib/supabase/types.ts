@@ -222,6 +222,10 @@ export interface Database {
           status: string
           is_playoff: boolean
           is_double_header: boolean
+          final_type: string | null
+          title_name: string | null
+          nickname: string | null
+          playoff_round: string | null
           notes: string | null
           confidence_level: string
           created_at: string
@@ -229,7 +233,7 @@ export interface Database {
         }
         Insert: {
           id?: string
-          phase_id: string
+          phase_id?: string | null
           home_team_id: string
           away_team_id: string
           home_score?: number | null
@@ -244,6 +248,10 @@ export interface Database {
           status?: string
           is_playoff?: boolean
           is_double_header?: boolean
+          final_type?: string | null
+          title_name?: string | null
+          nickname?: string | null
+          playoff_round?: string | null
           notes?: string | null
           confidence_level?: string
           created_at?: string
@@ -251,7 +259,7 @@ export interface Database {
         }
         Update: {
           id?: string
-          phase_id?: string
+          phase_id?: string | null
           home_team_id?: string
           away_team_id?: string
           home_score?: number | null
@@ -266,6 +274,10 @@ export interface Database {
           status?: string
           is_playoff?: boolean
           is_double_header?: boolean
+          final_type?: string | null
+          title_name?: string | null
+          nickname?: string | null
+          playoff_round?: string | null
           notes?: string | null
           confidence_level?: string
           created_at?: string

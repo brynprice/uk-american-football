@@ -1,8 +1,6 @@
 import Link from 'next/link';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 
-export const revalidate = 0;
-
 export default async function HomePage() {
   return (
     <ArchiveLayout>

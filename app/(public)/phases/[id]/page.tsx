@@ -4,19 +4,13 @@ import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
 import StandingsTable from '@/components/archive/StandingsTable';
 import DeleteGameButton from '@/components/archive/DeleteGameButton';
-import { createClient } from '@/lib/supabase/server';
-
 import { isPlayoffPhase } from '@/lib/utils/phase-utils';
 
-export const revalidate = 0;
+export const revalidate = 3600;
 
 export default async function PhasePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const phase = await ArchiveService.getPhaseData(id);
-
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    const isAdmin = !!user;
 
     // Determine if this is a playoff phase
     const isPlayoff = isPlayoffPhase(phase);
@@ -115,6 +109,11 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                                             🏈 {game.title_name}
                                         </span>
                                     )}
+                                    {game.nickname && (
+                                        <span className="text-[10px] font-black bg-slate-800 text-amber-300 border border-slate-700 px-2 py-0.5 rounded italic shadow-sm">
+                                            "{game.nickname}"
+                                        </span>
+                                    )}
                                     {(game.is_playoff || game.playoff_round) && game.final_type !== 'title' && game.final_type !== 'bowl' && (
                                         <span className="text-[10px] font-black bg-slate-900 text-white px-2 py-0.5 rounded uppercase">
                                             {game.playoff_round || "Postseason"}
@@ -150,11 +149,7 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                                         )}
                                         <span className="font-black text-lg">{resolveTeamIdentity(game.home_team, phase.season.year).name}</span>
                                     </div>
-                                    {isAdmin && (
-                                        <div className="pl-4 border-l border-slate-200 ml-4 flex items-center justify-center shrink-0">
-                                            <DeleteGameButton gameId={game.id} variant="small" />
-                                        </div>
-                                    )}
+                                    <DeleteGameButton gameId={game.id} variant="small" />
                                 </div>
                             </Link>
                         ))}

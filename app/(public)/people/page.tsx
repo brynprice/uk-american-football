@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
-export const revalidate = 0;
+export const revalidate = 86400; // 24 hours
 
 export default async function PeopleListPage() {
     const people = await ArchiveService.getPeople();

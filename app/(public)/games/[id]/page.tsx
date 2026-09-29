@@ -4,16 +4,11 @@ import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import { resolveHeadCoach } from '@/lib/utils/coach-resolver';
 import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
 import DeleteGameButton from '@/components/archive/DeleteGameButton';
-import { createClient } from '@/lib/supabase/server';
-export const revalidate = 0;
+export const revalidate = 3600;
 
 export default async function GamePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const game = await ArchiveService.getGameDetails(id);
-
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    const isAdmin = !!user;
 
     const homeCoach = resolveHeadCoach(
         game.id,
@@ -30,6 +25,8 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
         game.game_staff.filter((s: any) => s.team_id === game.away_team_id),
         game.participations
     );
+
+    const mvpStaff = (game.game_staff || []).filter((s: any) => s.role !== 'head_coach' && s.person);
 
     const season = game.phase?.season || game.season;
     const year = season?.year;
@@ -48,9 +45,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                     ) : (
                         <div></div>
                     )}
-                    {isAdmin && (
-                        <DeleteGameButton gameId={game.id} redirectUrl={game.phase_id ? `/phases/${game.phase_id}` : '/'} />
-                    )}
+                    <DeleteGameButton gameId={game.id} redirectUrl={game.phase_id ? `/phases/${game.phase_id}` : '/'} />
                 </div>
 
                 <div className="bg-white border-2 border-slate-900 shadow-xl overflow-hidden rounded">
@@ -64,6 +59,11 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                             {game.title_name && (
                                 <span className="bg-amber-500 text-white px-2 py-0.5 rounded text-[10px] font-black normal-case tracking-normal">
                                     🏆 {game.title_name}
+                                </span>
+                            )}
+                            {game.nickname && (
+                                <span className="bg-slate-800 text-amber-300 border border-slate-700 px-2 py-0.5 rounded text-[10px] font-black italic normal-case tracking-normal">
+                                    "{game.nickname}"
                                 </span>
                             )}
                             {game.phase?.name && <span className="font-black">{game.phase.name}</span>}
@@ -132,6 +132,23 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                                     <span className="font-bold">{awayCoach?.display_name || "Unknown"}</span>
                                 </div>
                             </div>
+                            {mvpStaff.length > 0 && (
+                                <div className="mt-4 pt-3 border-t border-slate-200">
+                                    <h4 className="font-black uppercase text-amber-600 mb-2 text-[10px] tracking-tighter flex items-center gap-1">
+                                        ⭐ Game MVPs & Honours
+                                    </h4>
+                                    <div className="space-y-1 font-sans">
+                                        {mvpStaff.map((s: any) => (
+                                            <div key={s.id} className="flex justify-between text-xs">
+                                                <span className="text-slate-500 uppercase">{s.role.replace(/_/g, ' ')}:</span>
+                                                <Link href={`/people/${s.person.id}`} className="font-bold text-slate-900 hover:text-blue-600">
+                                                    {s.person.display_name}
+                                                </Link>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                         <div>
                             {game.venue?.coordinates ? (

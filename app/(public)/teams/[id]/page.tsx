@@ -4,14 +4,21 @@ import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import H2HSelector from '@/components/archive/H2HSelector';
 import TeamSeasonHistory from '@/components/archive/TeamSeasonHistory';
 import { isPlayoffPhase } from '@/lib/utils/phase-utils';
-export const revalidate = 0;
+export const revalidate = 3600; // 1 hour
 
 export default async function TeamPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const [team, opponents] = await Promise.all([
-        ArchiveService.getTeamHistory(id),
-        ArchiveService.getTeamOpponents(id)
-    ]);
+    const team = await ArchiveService.getTeamHistory(id);
+
+    // Derive opponents directly from already-fetched games to avoid 3 redundant DB round-trips
+    const oppMap = new Map<string, { id: string; name: string }>();
+    (team.games || []).forEach((g: any) => {
+        const opp = g.home_team_id === id ? g.away_team : g.home_team;
+        if (opp && opp.id && !oppMap.has(opp.id)) {
+            oppMap.set(opp.id, { id: opp.id, name: opp.name });
+        }
+    });
+    const opponents = Array.from(oppMap.values()).sort((a, b) => a.name.localeCompare(b.name));
 
     // Calculate Regular Season Statistics
     const calculateRegularSeasonStats = () => {

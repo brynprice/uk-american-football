@@ -148,10 +148,13 @@ export const ArchiveService = {
         const gameData = data as any;
 
         // Fetch polymorphic relations separately to avoid PostgREST relationship errors
+        const teamIds = [gameData.home_team_id, gameData.away_team_id].filter(Boolean);
         const [sources, archivalNotes, participations] = await Promise.all([
             supabase.from("sources").select("*").eq("entity_id", gameId).eq("entity_type", "games"),
             supabase.from("notes").select("*").eq("entity_id", gameId).eq("entity_type", "games"),
-            supabase.from("participations").select("*, person:people (*)").eq("phase_id", gameData.phase_id)
+            gameData.phase_id && teamIds.length > 0
+                ? supabase.from("participations").select("*, person:people (*)").eq("phase_id", gameData.phase_id).in("team_id", teamIds)
+                : Promise.resolve({ data: [] } as { data: any[] | null })
         ]);
 
         return {
@@ -251,32 +254,19 @@ export const ArchiveService = {
             .select('team_id, phase_id')
             .eq('head_coach_id', personId) as { data: any[] | null };
 
-        // 2. Get all game_staff overrides where they are the head coach OR someone else is
-        // We will fetch all game_staff for head coaches, then process it in memory
-        const { data: allOverrides } = await supabase
-            .from('game_staff')
-            .select('game_id, team_id, person_id')
-            .eq('role', 'head_coach') as { data: any[] | null };
-
-        const overrideMap = new Map(); // gameId_teamId -> personId
-        if (allOverrides) {
-            allOverrides.forEach(o => overrideMap.set(`${o.game_id}_${o.team_id}`, o.person_id));
-        }
-
-        // 3. Fetch all games for the phases the coach was active in, PLUS the games they were explicitly staff for
-        const phaseIds = participations?.map(p => p.phase_id) || [];
-
+        // 2. Fetch explicit game_staff where they were assigned as head coach
         const { data: staffGames } = await supabase
             .from('game_staff')
             .select('game_id, team_id')
             .eq('person_id', personId)
             .eq('role', 'head_coach') as { data: any[] | null };
 
+        const phaseIds = participations?.map(p => p.phase_id) || [];
         const explicitGameIds = staffGames?.map(s => s.game_id) || [];
 
         let queryRows: any[] = [];
 
-        // Fetch all games in those phases (checking both phase_id and away_phase_id)
+        // 3. Fetch all games for the phases the coach was active in, PLUS the games they were explicitly staff for
         if (phaseIds.length > 0 || explicitGameIds.length > 0) {
             let q = supabase.from('games').select('*, phase:phases!games_phase_id_fkey(*)');
 
@@ -290,6 +280,21 @@ export const ArchiveService = {
 
             const { data: games } = await q as { data: any[] | null };
             if (games) queryRows = games;
+        }
+
+        // 4. Fetch head coach overrides ONLY for these candidate games
+        const candidateGameIds = queryRows.map(g => g.id);
+        const overrideMap = new Map(); // gameId_teamId -> personId
+        if (candidateGameIds.length > 0) {
+            const { data: relevantOverrides } = await supabase
+                .from('game_staff')
+                .select('game_id, team_id, person_id')
+                .in('game_id', candidateGameIds)
+                .eq('role', 'head_coach') as { data: any[] | null };
+
+            if (relevantOverrides) {
+                relevantOverrides.forEach(o => overrideMap.set(`${o.game_id}_${o.team_id}`, o.person_id));
+            }
         }
 
         // 4. Filter games where this person was ACTUALLY the head coach

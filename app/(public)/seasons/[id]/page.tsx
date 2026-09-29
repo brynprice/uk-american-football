@@ -3,7 +3,7 @@ import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import PhaseView from '@/components/archive/PhaseView';
 import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
-export const revalidate = 0;
+export const revalidate = 3600; // 1 hour
 
 export default async function SeasonPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -116,6 +116,11 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                                             {game.title_name && (
                                                 <span className="text-[10px] font-black bg-amber-500 text-white px-2 py-0.5 rounded uppercase shadow-sm flex items-center gap-1">
                                                     🏆 {game.title_name}
+                                                </span>
+                                            )}
+                                            {game.nickname && (
+                                                <span className="text-[10px] font-black bg-slate-800 text-amber-300 border border-slate-700 px-2 py-0.5 rounded italic shadow-sm flex items-center gap-1">
+                                                    "{game.nickname}"
                                                 </span>
                                             )}
                                         </div>

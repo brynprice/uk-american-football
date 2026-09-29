@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { deleteGame } from '@/app/(public)/games/[id]/actions';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase/client';
 
 interface Props {
     gameId: string;
@@ -11,8 +12,17 @@ interface Props {
 }
 
 export default function DeleteGameButton({ gameId, redirectUrl, variant = 'large' }: Props) {
+    const [isAdmin, setIsAdmin] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const router = useRouter();
+
+    useEffect(() => {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session?.user) {
+                setIsAdmin(true);
+            }
+        });
+    }, []);
 
     const handleDelete = async (e: React.MouseEvent) => {
         e.preventDefault(); // Prevent link navigation if inside a Link
@@ -43,6 +53,10 @@ export default function DeleteGameButton({ gameId, redirectUrl, variant = 'large
         }
     };
 
+    if (!isAdmin) {
+        return null;
+    }
+
     if (variant === 'icon') {
         return (
             <button 
@@ -62,14 +76,16 @@ export default function DeleteGameButton({ gameId, redirectUrl, variant = 'large
 
     if (variant === 'small') {
          return (
-             <button 
-                 onClick={handleDelete}
-                 disabled={isDeleting}
-                 className="bg-red-100 text-red-700 hover:bg-red-600 hover:text-white px-2 py-1 text-[10px] font-black uppercase rounded border border-red-200 hover:border-red-700 transition-colors disabled:opacity-50"
-                 title="Delete Game"
-             >
-                 {isDeleting ? "Deleting..." : "Delete"}
-             </button>
+             <div className="pl-4 border-l border-slate-200 ml-4 flex items-center justify-center shrink-0">
+                 <button 
+                     onClick={handleDelete}
+                     disabled={isDeleting}
+                     className="bg-red-100 text-red-700 hover:bg-red-600 hover:text-white px-2 py-1 text-[10px] font-black uppercase rounded border border-red-200 hover:border-red-700 transition-colors disabled:opacity-50"
+                     title="Delete Game"
+                 >
+                     {isDeleting ? "Deleting..." : "Delete"}
+                 </button>
+             </div>
          );
     }
 

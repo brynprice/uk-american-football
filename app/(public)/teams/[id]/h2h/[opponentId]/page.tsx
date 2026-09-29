@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import H2HStats from '@/components/archive/H2HStats';
-export const revalidate = 0;
+export const revalidate = 3600; // 1 hour
 
 interface H2HPageProps {
     params: Promise<{

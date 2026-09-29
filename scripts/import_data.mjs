@@ -404,6 +404,8 @@ async function importData(filePath) {
                 is_title_game,
                 final_type,
                 title_name,
+                nickname,
+                game_nickname,
                 playoff_round,
                 parent_phase,
                 away_phase,

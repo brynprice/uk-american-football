@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
-export const revalidate = 0;
+export const revalidate = 86400; // 24 hours
 
 export default async function ScorigamiPage({ searchParams }: { searchParams: Promise<{ scoreA?: string, scoreB?: string }> }) {
     const params = await searchParams;

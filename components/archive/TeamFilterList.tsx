@@ -108,6 +108,8 @@ export default function TeamFilterList({ teams }: TeamFilterListProps) {
                                 <img
                                     src={team.logo_url}
                                     alt={`${team.name} Logo`}
+                                    loading="lazy"
+                                    decoding="async"
                                     className="max-w-full max-h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
                                 />
                             ) : (

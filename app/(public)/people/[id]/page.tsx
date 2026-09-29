@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
-export const revalidate = 0;
+export const revalidate = 3600; // 1 hour
 
 export default async function PersonPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;

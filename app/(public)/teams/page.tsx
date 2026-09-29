@@ -2,7 +2,7 @@ import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import TeamFilterList from '@/components/archive/TeamFilterList';
 
-export const revalidate = 0;
+export const revalidate = 86400; // 24 hours
 
 export default async function TeamsListPage() {
     const teams = await ArchiveService.getTeams();
