@@ -1,32 +1,61 @@
 import Link from 'next/link';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
+import { ArchiveService } from '@/services/archive-service';
+
+export const revalidate = 3600; // Re-fetch stats every hour
 
 export default async function HomePage() {
+  const stats = await ArchiveService.getArchiveStats();
+
   return (
     <ArchiveLayout>
-      <section className="py-20 mb-12 border-b-8 border-slate-900">
+      <section className="py-10 mb-8 border-b-8 border-slate-900">
         <div className="max-w-3xl">
-          <h1 className="text-6xl md:text-8xl font-black uppercase italic tracking-tighter leading-none mb-8">
+          <h1 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter leading-none mb-4">
             The Historical Record of Britball
           </h1>
-          <p className="text-xl md:text-2xl text-slate-600 font-sans leading-relaxed mb-10">
+          <p className="text-base md:text-lg text-slate-600 font-sans leading-relaxed mb-6">
             Welcome to the <strong>Britball Archive</strong>, the home for British American Football history. 
             We are documenting every league, team, and score from the 1980s pioneers to the modern national stage.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-3">
             <Link 
               href="/competitions" 
-              className="bg-slate-900 text-white text-center px-10 py-5 font-black uppercase tracking-widest hover:bg-blue-700 transition-colors shadow-[8px_8px_0px_0px_rgba(255,255,255,1),8px_8px_0px_1px_rgba(15,23,42,1)]"
+              className="bg-slate-900 text-white text-center px-7 py-3 font-black uppercase tracking-widest hover:bg-blue-700 transition-colors shadow-[6px_6px_0px_0px_rgba(255,255,255,1),6px_6px_0px_1px_rgba(15,23,42,1)]"
             >
               Browse the Vault &rarr;
             </Link>
             <Link 
               href="/teams" 
-              className="bg-white border-2 border-slate-900 text-slate-900 text-center px-10 py-5 font-black uppercase tracking-widest hover:bg-slate-50 transition-colors shadow-[8px_8px_0px_0px_rgba(15,23,42,1)]"
+              className="bg-white border-2 border-slate-900 text-slate-900 text-center px-7 py-3 font-black uppercase tracking-widest hover:bg-slate-50 transition-colors shadow-[6px_6px_0px_0px_rgba(15,23,42,1)]"
             >
               Search Teams
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* Key Metrics Strip */}
+      <section className="mb-12 grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="col-span-2 md:col-span-1 p-6 bg-slate-900 text-white border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(255,255,255,0.15)] hover:shadow-[6px_6px_0px_0px_rgba(59,130,246,1)] transition-shadow duration-200 flex flex-col cursor-default">
+          <span className="text-5xl font-black tabular-nums leading-none mb-2">{stats.totalGames.toLocaleString()}</span>
+          <span className="text-xs font-black uppercase tracking-widest text-slate-400 mt-auto">Games Recorded</span>
+        </div>
+        <div className="p-6 bg-white border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] hover:shadow-[6px_6px_0px_0px_rgba(59,130,246,1)] transition-shadow duration-200 flex flex-col cursor-default">
+          <span className="text-5xl font-black tabular-nums leading-none mb-2">{stats.totalSeasons.toLocaleString()}</span>
+          <span className="text-xs font-black uppercase tracking-widest text-slate-500 mt-auto">Seasons</span>
+        </div>
+        <div className="p-6 bg-white border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] hover:shadow-[6px_6px_0px_0px_rgba(59,130,246,1)] transition-shadow duration-200 flex flex-col cursor-default">
+          <span className="text-5xl font-black tabular-nums leading-none mb-2">{stats.totalTeams.toLocaleString()}</span>
+          <span className="text-xs font-black uppercase tracking-widest text-slate-500 mt-auto">Teams Documented</span>
+        </div>
+        <div className="p-6 bg-white border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] hover:shadow-[6px_6px_0px_0px_rgba(59,130,246,1)] transition-shadow duration-200 flex flex-col cursor-default">
+          <span className="text-5xl font-black tabular-nums leading-none mb-2">{stats.titleGames.toLocaleString()}</span>
+          <span className="text-xs font-black uppercase tracking-widest text-slate-500 mt-auto">Title Games</span>
+        </div>
+        <div className="p-6 bg-white border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] hover:shadow-[6px_6px_0px_0px_rgba(59,130,246,1)] transition-shadow duration-200 flex flex-col cursor-default">
+          <span className="text-5xl font-black tabular-nums leading-none mb-2">{stats.avgCompleteness}<span className="text-2xl">%</span></span>
+          <span className="text-xs font-black uppercase tracking-widest text-slate-500 mt-auto">Avg. Completeness</span>
         </div>
       </section>
 
@@ -76,7 +105,9 @@ export default async function HomePage() {
       <section className="bg-blue-600 text-white p-12 rounded-sm shadow-xl flex flex-col md:flex-row items-center justify-between gap-8">
         <div>
           <h3 className="text-2xl font-black mb-2 uppercase tracking-tight">Archive Status</h3>
-          <p className="text-lg opacity-90 font-sans">Britball Archive database connected. Actively expanding historical records.</p>
+          <p className="text-lg opacity-90 font-sans">
+            {stats.totalGames.toLocaleString()} games across {stats.totalSeasons} seasons — actively expanding historical records.
+          </p>
         </div>
         <div className="flex gap-4 text-xs font-black uppercase tracking-[0.2em]">
           <div className="bg-blue-800 px-4 py-2 rounded">API: Online</div>
@@ -86,3 +117,4 @@ export default async function HomePage() {
     </ArchiveLayout>
   );
 }
+

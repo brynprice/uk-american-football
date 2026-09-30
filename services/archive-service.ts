@@ -562,5 +562,43 @@ export const ArchiveService = {
 
     async getCompetitionChampions(competitionId: string): Promise<any> {
         return this.getChampions({ competitionId });
-    }
+    },
+
+    async getArchiveStats(): Promise<{
+        totalGames: number;
+        totalSeasons: number;
+        totalTeams: number;
+        titleGames: number;
+        avgCompleteness: number;
+    }> {
+        const [
+            gamesResult,
+            seasonsResult,
+            teamsResult,
+            titleGamesResult,
+        ] = await Promise.all([
+            supabase.from('games').select('*', { count: 'exact', head: true }).neq('status', 'anomaly'),
+            supabase.from('seasons').select('*', { count: 'exact', head: true }),
+            supabase.from('teams').select('*', { count: 'exact', head: true }),
+            supabase.from('games').select('*', { count: 'exact', head: true }).not('title_name', 'is', null),
+        ]);
+
+        const { data: seasonScores } = await supabase
+            .from('seasons')
+            .select('completeness_score')
+            .not('completeness_score', 'is', null);
+
+        const scores = (seasonScores || []).map((s: any) => s.completeness_score as number).filter((n: number) => n > 0);
+        const avgCompleteness = scores.length > 0
+            ? Math.round(scores.reduce((a: number, b: number) => a + b, 0) / scores.length)
+            : 0;
+
+        return {
+            totalGames: gamesResult.count ?? 0,
+            totalSeasons: seasonsResult.count ?? 0,
+            totalTeams: teamsResult.count ?? 0,
+            titleGames: titleGamesResult.count ?? 0,
+            avgCompleteness,
+        };
+    },
 };

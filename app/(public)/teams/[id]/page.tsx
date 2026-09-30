@@ -422,7 +422,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                     <section className="bg-white p-6 border border-slate-200 shadow-sm">
                         <h4 className="text-xs font-black uppercase text-slate-400 mb-4 tracking-tighter">Known Aliases</h4>
                         <div className="space-y-3">
-                            {team.team_aliases?.map((alias: any) => (
+                            {([...(team.team_aliases || [])]).sort((a: any, b: any) => (b.start_year || 0) - (a.start_year || 0)).map((alias: any) => (
                                 <div key={alias.id} className="text-sm border-l-2 border-slate-100 pl-3 flex items-center gap-4 py-2">
                                     {alias.logo_url && (
                                         <div className="w-8 h-8 bg-white border border-slate-200 p-1 flex items-center justify-center shrink-0 overflow-hidden rounded shadow-sm">
