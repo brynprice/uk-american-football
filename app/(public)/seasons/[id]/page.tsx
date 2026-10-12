@@ -27,7 +27,7 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                     <h2 className="text-2xl font-bold text-slate-500 mt-2">{season.name || "Season Archive"}</h2>
                 </div>
 
-                <div className="flex gap-4 mt-4">
+                <div className="flex flex-wrap gap-4 mt-4">
                     <span className={`px-3 py-1 rounded text-xs font-black uppercase shadow-sm ${season.confidence_level === 'high' ? 'bg-green-100 text-green-700' :
                         season.confidence_level === 'medium' ? 'bg-yellow-100 text-yellow-700' :
                             'bg-red-100 text-red-700'
@@ -40,6 +40,11 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                                 'bg-rose-50 text-rose-700 border-rose-200'
                             }`}>
                             Data Quality: {season.completeness_score}%
+                        </span>
+                    )}
+                    {season.team_count !== undefined && season.team_count !== null && (
+                        <span className="px-3 py-1 rounded text-xs font-black uppercase shadow-sm border bg-blue-50 text-blue-700 border-blue-200">
+                            {season.team_count} {season.team_count === 1 ? 'Team' : 'Teams'}
                         </span>
                     )}
                     {season.start_date && (
@@ -79,6 +84,11 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                 <section>
                     <div className="flex justify-between items-end mb-6 border-b-2 border-slate-900 pb-2">
                         <h3 className="text-xl font-black uppercase tracking-widest font-sans">League Structure</h3>
+                        {season.team_count > 0 && (
+                            <span className="text-sm font-sans font-bold text-slate-500 uppercase tracking-wider">
+                                {season.team_count} {season.team_count === 1 ? 'Team' : 'Teams'}
+                            </span>
+                        )}
                     </div>
                     <PhaseView phases={season.phases} seasonId={season.id} />
 

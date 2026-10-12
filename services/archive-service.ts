@@ -29,30 +29,57 @@ export const ArchiveService = {
         if (error) throw error;
         if (!seasonData) throw new Error("Season not found");
 
-        // Fetch archival notes for this season
-        const { data: notes } = await supabase.from("notes").select("*").eq("entity_id", seasonId).eq("entity_type", "seasons");
+        const phaseIds = ((seasonData as any).phases || []).map((p: any) => p.id);
 
-        // Fetch unphased games (friendlies) for this season
-        const { data: unphasedGames, error: gamesError } = await supabase
-            .from("games")
-            .select(`
-                *, 
-                home_team:teams!home_team_id (*, team_aliases (*)), 
-                away_team:teams!away_team_id (*, team_aliases (*)),
-                venue:venues (*)
-            `)
-            .eq("season_id", seasonId)
-            .is("phase_id", null)
-            .neq("status", "anomaly")
-            .order("date", { ascending: false });
+        // Fetch archival notes, unphased games (friendlies), and participations in parallel
+        const [notesResult, unphasedGamesResult, participationsResult] = await Promise.all([
+            supabase.from("notes").select("*").eq("entity_id", seasonId).eq("entity_type", "seasons"),
+            supabase
+                .from("games")
+                .select(`
+                    *, 
+                    home_team:teams!home_team_id (*, team_aliases (*)), 
+                    away_team:teams!away_team_id (*, team_aliases (*)),
+                    venue:venues (*)
+                `)
+                .eq("season_id", seasonId)
+                .is("phase_id", null)
+                .neq("status", "anomaly")
+                .order("date", { ascending: false }),
+            phaseIds.length > 0
+                ? supabase.from("participations").select("team_id").in("phase_id", phaseIds)
+                : Promise.resolve({ data: [], error: null })
+        ]);
 
-        if (gamesError) throw gamesError;
+        if (unphasedGamesResult.error) throw unphasedGamesResult.error;
+
+        const participatingTeamIds = new Set<string>(
+            (participationsResult.data || []).map((p: any) => p.team_id).filter(Boolean)
+        );
+
+        let teamCount = participatingTeamIds.size;
+        if (teamCount === 0) {
+            // Fallback for seasons with games recorded before participations
+            const { data: seasonGames } = await supabase
+                .from("games")
+                .select("home_team_id, away_team_id")
+                .eq("season_id", seasonId)
+                .neq("status", "anomaly");
+
+            const gameTeamIds = new Set<string>();
+            seasonGames?.forEach((g: any) => {
+                if (g.home_team_id) gameTeamIds.add(g.home_team_id);
+                if (g.away_team_id) gameTeamIds.add(g.away_team_id);
+            });
+            teamCount = gameTeamIds.size;
+        }
 
         return {
             ...(seasonData as any),
+            team_count: teamCount,
             phases: sortPhasesInTreeOrder((seasonData as any).phases || []),
-            archival_notes: notes || [],
-            unphased_games: unphasedGames || []
+            archival_notes: notesResult.data || [],
+            unphased_games: unphasedGamesResult.data || []
         };
     },
 
