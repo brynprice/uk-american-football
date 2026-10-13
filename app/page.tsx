@@ -20,10 +20,16 @@ export default async function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
             <Link 
+              href="/timeline" 
+              className="bg-blue-700 text-white text-center px-7 py-3 font-black uppercase tracking-widest hover:bg-slate-900 transition-colors shadow-[6px_6px_0px_0px_rgba(255,255,255,1),6px_6px_0px_1px_rgba(15,23,42,1)]"
+            >
+              Explore Uniball Timeline &rarr;
+            </Link>
+            <Link 
               href="/competitions" 
               className="bg-slate-900 text-white text-center px-7 py-3 font-black uppercase tracking-widest hover:bg-blue-700 transition-colors shadow-[6px_6px_0px_0px_rgba(255,255,255,1),6px_6px_0px_1px_rgba(15,23,42,1)]"
             >
-              Browse the Vault &rarr;
+              Browse All Leagues
             </Link>
             <Link 
               href="/teams" 
@@ -57,6 +63,27 @@ export default async function HomePage() {
           <span className="text-5xl font-black tabular-nums leading-none mb-2">{stats.avgCompleteness}<span className="text-2xl">%</span></span>
           <span className="text-xs font-black uppercase tracking-widest text-slate-500 mt-auto">Avg. Completeness</span>
         </div>
+      </section>
+
+      {/* Featured Showcase: Uniball Interactive Timeline */}
+      <section className="mb-14 p-6 sm:p-8 bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white border-2 border-slate-900 shadow-[8px_8px_0px_0px_rgba(59,130,246,1)] rounded-lg flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="max-w-2xl">
+          <span className="bg-amber-400 text-slate-950 font-mono text-[10px] font-black px-2 py-0.5 uppercase tracking-widest rounded mb-3 inline-block">
+            FEATURED ARCHIVAL EXHIBIT
+          </span>
+          <h2 className="text-2xl sm:text-4xl font-black uppercase italic tracking-tight text-white mb-2">
+            The Uniball Timeline: 1985 &rarr; Present
+          </h2>
+          <p className="text-sm sm:text-base text-slate-300 font-sans leading-relaxed">
+            Trace four decades of British university football across all 41 seasons. Featuring College Bowls I through XXXVIII, national dynasties, conference crowns, and searchable records for over 80 university programs.
+          </p>
+        </div>
+        <Link
+          href="/timeline"
+          className="self-start md:self-center px-6 py-3.5 bg-amber-400 text-slate-950 font-black uppercase text-xs tracking-widest hover:bg-white transition-colors rounded shadow-md shrink-0"
+        >
+          Launch Interactive Timeline &rarr;
+        </Link>
       </section>
 
       <section className="mb-20 grid grid-cols-1 md:grid-cols-2 gap-12">
