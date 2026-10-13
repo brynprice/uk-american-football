@@ -1,19 +1,38 @@
-﻿competition_name,parent_phase,phase,year,team,wins,losses,ties,points_for,points_against
-bcafl,,Scottish Division,2005,Glasgow Tigers,7,1,0,225,81
-bcafl,,Scottish Division,2005,Stirling Clansmen,4,3,1,92,52
-bcafl,,Scottish Division,2005,Edinburgh Timberwolves,4,4,0,94,75
-bcafl,,Scottish Division,2005,Caledonian Roughriders,2,6,0,88,139
-bcafl,,Scottish Division,2005,Paisley Pyros,1,7,0,88,300
-bcafl,Northern Conference,Eastern Division,2005,Teesside Cougars,7,1,0,238,92
-bcafl,Northern Conference,Eastern Division,2005,Leeds Celtics,5,3,0,132,88
-bcafl,Northern Conference,Eastern Division,2005,Newcastle Raiders,4,3,1,103,74
-bcafl,Northern Conference,Eastern Division,2005,Sunderland Kings,2,5,1,80,157
-bcafl,Northern Conference,Eastern Division,2005,Hull Sharks,1,6,1,41,148
-bcafl,Northern Conference,Western Division,2005,Staffordshire Stallions,5,2,1,231,181
-bcafl,Northern Conference,Western Division,2005,Sheffield Sabres,5,3,0,222,98
-bcafl,Northern Conference,Western Division,2005,Lancaster Bombers,4,4,0,112,174
-bcafl,Northern Conference,Western Division,2005,Sheffield Hallam Warriors,1,7,0,55,184
-bcafl,Northern Conference,Central Division,2005,Loughborough Aces,8,0,0,195,35
-bcafl,Northern Conference,Central Division,2005,Nottingham Outlaws,4,4,0,110,114
-bcafl,Northern Conference,Central Division,2005,Derby Braves,4,4,0,159,114
-bcafl,Northern Conference,Central Division,2005,Leicester Lightning,0,8,0,12,253
+competition_name,parent_phase,phase,year,team,position,games_played,wins,losses,ties,points_for,points_against,streak,is_champion,notes,head_coach
+bcafl,Northern Conference,Scottish Division,2005,Glasgow Tigers,1,8,7,1,0,225,81,,TRUE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Northern Conference,Scottish Division,2005,Stirling Clansmen,2,8,4,3,1,92,52,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Northern Conference,Scottish Division,2005,Edinburgh Timberwolves,3,8,4,4,0,94,75,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Northern Conference,Scottish Division,2005,Caledonian Roughriders,4,8,2,6,0,88,139,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Northern Conference,Scottish Division,2005,UWS Pyros,5,8,1,7,0,88,300,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Northern Conference,Eastern Division,2005,Teesside Cougars,1,8,7,1,0,238,92,,TRUE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Northern Conference,Eastern Division,2005,Leeds Celtics,2,8,5,3,0,132,88,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Northern Conference,Eastern Division,2005,Newcastle Raiders,3,8,4,3,1,103,74,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Northern Conference,Eastern Division,2005,Sunderland Kings,4,8,2,5,1,80,157,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Northern Conference,Eastern Division,2005,Hull Sharks,5,8,1,6,1,41,148,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Northern Conference,Western Division,2005,Staffordshire Stallions,1,8,5,2,1,231,181,,TRUE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Northern Conference,Western Division,2005,Sheffield Sabres,2,8,5,3,0,222,98,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Northern Conference,Western Division,2005,Lancaster Bombers,3,8,4,4,0,112,174,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Northern Conference,Western Division,2005,Sheffield Hallam Warriors,4,8,1,7,0,55,184,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Northern Conference,Central Division,2005,Loughborough Aces,1,8,8,0,0,195,35,,TRUE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Northern Conference,Central Division,2005,Nottingham Outlaws,2,8,4,4,0,110,114,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,Justin Smith
+bcafl,Northern Conference,Central Division,2005,Derby Braves,3,8,4,4,0,159,114,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Northern Conference,Central Division,2005,Leicester Longhorns,4,8,0,8,0,12,253,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Southern Conference,Central Division,2005,Birmingham Lions,1,8,8,0,0,371,92,,TRUE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Southern Conference,Central Division,2005,Tarannau Aberystwyth,2,8,4,3,1,158,157,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Southern Conference,Central Division,2005,Warwick Wolves,3,8,3,5,0,118,171,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Southern Conference,Central Division,2005,Oxford Cavaliers,4,8,2,6,0,67,230,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Southern Conference,Eastern Division,2005,Greenwich Mariners,1,8,6,2,0,148,61,,TRUE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Southern Conference,Eastern Division,2005,Hertfordshire Hurricanes,2,8,5,3,0,199,119,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Southern Conference,Eastern Division,2005,Essex Blades,3,8,4,3,1,116,101,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Southern Conference,Eastern Division,2005,UEA Pirates,4,8,3,5,0,151,178,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Southern Conference,Eastern Division,2005,Anglia Ruskin Rhinos,5,8,1,7,0,36,207,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Southern Conference,Western Division,2005,Cardiff Cobras,1,8,6,1,1,181,57,,TRUE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Southern Conference,Western Division,2005,UWE Bullets,2,8,6,2,0,254,104,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Southern Conference,Western Division,2005,Bath Killer Bees,3,8,5,2,1,187,107,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Southern Conference,Western Division,2005,Plymouth Blitz,4,8,2,6,0,78,221,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Southern Conference,Southern Division,2005,Surrey Stingers,1,8,6,1,1,186,88,,TRUE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Southern Conference,Southern Division,2005,Southampton Stags,2,8,6,2,0,423,108,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Southern Conference,Southern Division,2005,Kent Falcons,3,8,3,5,0,83,181,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Southern Conference,Southern Division,2005,Brighton Tsunami,4,8,2,6,0,68,191,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Southern Conference,Southern Division,2005,Royal Holloway Bears,5,8,2,6,0,116,303,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,
+bcafl,Southern Conference,Southern Division,2005,Reading Knights,6,8,1,7,0,80,262,,FALSE,https://en.wikipedia.org/wiki/2005%E2%80%9306_British_Collegiate_American_Football_League,

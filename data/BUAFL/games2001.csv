@@ -1,10 +1,18 @@
-competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase
-,,,,Plymouth Blitz,Bath Killer Bees,0,29,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Cardiff Cobras,Bath Killer Bees,6,6,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bath Killer Bees,Plymouth Blitz,42,12,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bath Killer Bees,Tarannau Aberystwyth,3,28,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bath Killer Bees,Southampton Stags,29,8,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bristol Bullets,Bath Killer Bees,0,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Southampton Stags,Bath Killer Bees,14,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bath Killer Bees,Bristol Bullets,18,22,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Tarannau Aberystwyth,Bath Killer Bees,0,8,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase,away_phase,away_parent_phase
+,,Western Division,,Plymouth Blitz,Bath Killer Bees,0,29,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Western Division,,Cardiff Cobras,Bath Killer Bees,6,6,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Western Division,,Bath Killer Bees,Plymouth Blitz,42,12,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Central Division,,Bath Killer Bees,Tarannau Aberystwyth,3,28,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Western Division,,Bath Killer Bees,Southampton Stags,29,8,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Western Division,,Bristol Bullets,Bath Killer Bees,0,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,,
+,,Western Division,,Southampton Stags,Bath Killer Bees,14,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,,,Bath Killer Bees,Bristol Bullets,18,22,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Western Division,Southern Conference
+,,Western Division,,Tarannau Aberystwyth,Bath Killer Bees,0,8,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Central Division,Southern Conference
+bcafl,2001,Eastern Division,,Nottingham Outlaws,Kent Falcons,12,6,,https://nottinghamunioutlaws.wordpress.com/01-02-season/,Justin Smith,,FALSE,season,,,completed,high,FALSE,FALSE,,,,Southern Conference,Central Division,Northern Conference
+bcafl,2001,Central Division,,Leicester Lemmings,Nottingham Outlaws,26,0,,https://nottinghamunioutlaws.wordpress.com/01-02-season/,,Justin Smith,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,2001,Central Division,,Nottingham Outlaws,Loughborough Aces,6,40,,https://nottinghamunioutlaws.wordpress.com/01-02-season/,Justin Smith,,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,2001,Central Division,,Derby Braves,Nottingham Outlaws,24,14,,https://nottinghamunioutlaws.wordpress.com/01-02-season/,,Justin Smith,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,2001,Central Division,,Staffordshire Stallions,Nottingham Outlaws,33,0,,https://nottinghamunioutlaws.wordpress.com/01-02-season/,,Justin Smith,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,2001,Central Division,,Sheffield Sabres,Nottingham Outlaws,7,20,,https://nottinghamunioutlaws.wordpress.com/01-02-season/,,Justin Smith,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Eastern Division,Northern Conference
+bcafl,2001,Central Division,,Nottingham Outlaws,Birmingham Lions,0,14,,https://nottinghamunioutlaws.wordpress.com/01-02-season/,Justin Smith,,FALSE,season,,,completed,high,FALSE,FALSE,,,,Southern Conference,Central Division,Northern Conference
+bcafl,2001,Central Division,,Nottingham Outlaws,Derby Braves,12,0,,https://nottinghamunioutlaws.wordpress.com/01-02-season/,Justin Smith,,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference

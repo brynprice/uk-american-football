@@ -1,24 +1,29 @@
-competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase
-,,,,Loughborough Aces,Stirling Clansmen,30,7,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Glasgow Tigers,Newcastle Raiders,12,22,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,UT Cougars,Sheffield Sabres,46,12,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Staffordshire Stallions,Leeds Celtics,6,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Birmingham Lions,Hertfordshire Hurricanes,21,14,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Cardiff Cobras,Bath Killer Bees,25,12,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Surrey Stingers,Southampton Stags,14,63,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Greenwich Mariners,Bristol Bullets,6,22,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Loughborough Aces,Newcastle Raiders,34,2,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,UT Cougars,Staffordshire Stallions,26,6,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Birmingham Lions,Southampton Stags,14,19,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Cardiff Cobras,Bristol Bullets,14,6,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Loughborough Aces,UT Cougars,14,21,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Cardiff Cobras,Southampton Stags,6,19,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,UT Cougars,Southampton Stags,8,79,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Birmingham Lions,Bath Killer Bees,34,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bath Killer Bees,Plymouth Blitz,32,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bath Killer Bees,Bristol Bullets,21,24,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bath Killer Bees,Staffordshire Stallions,60,27,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Plymouth Blitz,Bath Killer Bees,8,15,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Warwick Wolves,Bath Killer Bees,0,39,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bath Killer Bees,Cardiff Cobras,20,14,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bath Killer Bees,Cardiff Cobras,0,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase,away_phase,away_parent_phase
+,,Scottish Division,,Loughborough Aces,Stirling Clansmen,30,7,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Northern Conference,Central Division,Northern Conference
+,,Eastern Division,,Glasgow Tigers,Newcastle Raiders,12,22,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Northern Conference,Scottish Division,Northern Conference
+,,Western Division,,UT Cougars,Sheffield Sabres,46,12,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Northern Conference,Eastern Division,Northern Conference
+,,Eastern Division,,Staffordshire Stallions,Leeds Celtics,6,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Northern Conference,Western Division,Northern Conference
+,,Eastern Division,,Birmingham Lions,Hertfordshire Hurricanes,21,14,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Central Division,Southern Conference
+,,Western Division,,Cardiff Cobras,Bath Killer Bees,25,12,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Southern Division,,Surrey Stingers,Southampton Stags,14,63,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Southern Division,Southern Conference
+,,,,Greenwich Mariners,Bristol Bullets,6,22,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Eastern Division,Southern Conference
+,,Eastern Division,,Loughborough Aces,Newcastle Raiders,34,2,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Northern Conference,Central Division,Northern Conference
+,,Western Division,,UT Cougars,Staffordshire Stallions,26,6,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Northern Conference,Eastern Division,Northern Conference
+,,Southern Division,,Birmingham Lions,Southampton Stags,14,19,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Central Division,Southern Conference
+,,,,Cardiff Cobras,Bristol Bullets,14,6,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Western Division,Southern Conference
+,,Eastern Division,,Loughborough Aces,UT Cougars,14,21,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Northern Conference,Central Division,Northern Conference
+,,Southern Division,,Cardiff Cobras,Southampton Stags,6,19,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Southern Division,,UT Cougars,Southampton Stags,8,79,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Eastern Division,Northern Conference
+,,Western Division,,Birmingham Lions,Bath Killer Bees,34,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Central Division,Southern Conference
+,,Western Division,,Bath Killer Bees,Plymouth Blitz,32,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,,,Bath Killer Bees,Bristol Bullets,21,24,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Western Division,Southern Conference
+,,Western Division,,Bath Killer Bees,Staffordshire Stallions,60,27,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Northern Conference,Western Division,Southern Conference
+,,Western Division,,Plymouth Blitz,Bath Killer Bees,8,15,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Western Division,,Warwick Wolves,Bath Killer Bees,0,39,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Central Division,Southern Conference
+,,Western Division,,Bath Killer Bees,Cardiff Cobras,20,14,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Western Division,,Bath Killer Bees,Cardiff Cobras,0,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+bcafl,2005,Central Division,,Derby Braves,Nottingham Outlaws,13,6,,https://nottinghamunioutlaws.wordpress.com/05-06-season/,,Justin Smith,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,2005,Central Division,,Loughborough Aces,Nottingham Outlaws,45,7,,https://nottinghamunioutlaws.wordpress.com/05-06-season/,,Justin Smith,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,2005,Central Division,,Leicester Lightning,Nottingham Outlaws,0,25,,https://nottinghamunioutlaws.wordpress.com/05-06-season/,,Justin Smith,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,,
+bcafl,2005,Central Division,,Essex Blades,Nottingham Outlaws,3,7,,https://nottinghamunioutlaws.wordpress.com/05-06-season/,,Justin Smith,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Eastern Division,Southern Conference
+bcafl,2005,Central Division,,Leeds Celtics,Nottingham Outlaws,13,8,,https://nottinghamunioutlaws.wordpress.com/05-06-season/,,Justin Smith,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Eastern Division,Northern Conference

@@ -16,7 +16,6 @@ export default function ArchiveLayout({
                         <Link href="/competitions" className="hover:text-blue-700">Competitions</Link>
                         <Link href="/teams" className="hover:text-blue-700">Teams</Link>
                         <Link href="/people" className="hover:text-blue-700">People</Link>
-                        <Link href="/venues" className="hover:text-blue-700">Venues</Link>
                         <Link href="/scorigami" className="hover:text-blue-700">Scorigami</Link>
                         <Link href="/propose-game" className="px-3 py-1 bg-slate-900 text-white rounded hover:bg-blue-700 transition-colors">Contribute</Link>
                     </nav>

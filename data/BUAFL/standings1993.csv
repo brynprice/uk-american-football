@@ -1,0 +1,27 @@
+competition_name,phase,year,team,position,games_played,wins,losses,ties,points_for,points_against,streak,is_champion,notes
+bcafl,Northern Conference,1993,Glasgow Tigers,1,8,7,0,1,232,40,,TRUE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1993,Leeds Celtics,2,8,6,0,2,107,24,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1993,Paisley Panthers,3,8,6,2,0,73,65,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1993,Sheffield Zulus,4,8,4,2,2,129,74,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1993,Teesside Demons,5,8,3,3,2,100,61,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1993,Hull Sharks,6,8,3,4,1,75,73,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1993,Lancaster Bombers,7,8,2,3,3,72,69,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1993,Newcastle Mariners,8,8,2,4,2,72,133,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1993,Strathclyde Hawks,9,8,2,5,1,58,81,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1993,Stirling Clansmen,10,8,0,5,3,33,126,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1993,Sunderland Wearwolves,11,8,0,7,1,14,219,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1993,Cardiff Cobras,1,8,8,0,0,156,40,,TRUE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1993,Loughborough Aces,2,8,7,1,0,155,40,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1993,Staffordshire Stallions,3,8,6,1,1,173,32,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1993,Leicester Lemmings,4,8,6,1,1,106,59,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1993,Cambridge Pythons,5,8,6,2,0,98,69,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1993,Oxford Cavaliers,6,8,5,3,0,131,69,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1993,Bristol Bullets,7,8,4,3,1,120,96,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1993,Southampton Stags,8,8,3,4,1,74,88,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1993,Bath Killer Bees,9,8,3,5,0,75,106,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1993,Warwick Wolves,10,8,3,5,0,38,124,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1993,Aston Rhinos,11,8,2,6,0,54,115,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1993,Birmingham Lions,12,8,2,6,0,93,143,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1993,UEA Pirates,13,8,1,7,0,36,142,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1993,Tarannau Aberystwyth,14,8,1,7,0,8,87,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1993,Reading Knights,15,8,1,7,0,1,107,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League

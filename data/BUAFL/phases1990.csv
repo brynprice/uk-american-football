@@ -1,0 +1,4 @@
+competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal,max_games_per_team
+bcafl,1990,Northern Conference,Conference,,high,1,8
+bcafl,1990,Southern Conference,Conference,,high,2,8
+bcafl,1990,Playoffs,Playoffs,,high,0,

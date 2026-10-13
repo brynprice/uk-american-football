@@ -1,0 +1,11 @@
+competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal,max_games_per_team
+bcafl,2002,Playoffs,Playoffs,,high,1,
+bcafl,2002,National Championship,Playoffs,Playoffs,high,2,
+bcafl,2002,Northern Conference,Conference,,high,3,
+bcafl,2002,Borders Division,Division,Northern Conference,high,4,8
+bcafl,2002,Eastern Division,Division,Northern Conference,high,5,8
+bcafl,2002,Central Division,Division,Northern Conference,high,6,8
+bcafl,2002,Southern Conference,Conference,,high,7,
+bcafl,2002,Eastern Division,Division,Southern Conference,high,8,8
+bcafl,2002,Central Division,Division,Southern Conference,high,9,8
+bcafl,2002,Western Division,Division,Southern Conference,high,10,8

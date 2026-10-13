@@ -1,0 +1,72 @@
+competition_name,parent_phase,phase,year,team,position,games_played,wins,losses,ties,points_for,points_against,streak,is_champion,notes,head_coach
+BUAFL,,Midlands,2011,Birmingham Lions,1,6,6,0,0,306,29,,TRUE,Source: BAFRA contemporary records,Wayne Hill
+BUAFL,,Midlands,2011,Loughborough Aces,2,8,7,1,0,299,55,,FALSE,Source: BAFRA contemporary records,Paul Sherratt
+BUAFL,,Midlands,2011,Northampton Nemesis,3,5,4,1,0,86,72,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,Midlands,2011,Nottingham Trent Renegades,4,6,4,2,0,159,56,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,Midlands,2011,Lincoln Colonials,5,3,2,1,0,82,57,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,Midlands,2011,Nottingham Gold,5,8,5,3,0,85,127,,FALSE,Source: BAFRA contemporary records & https://nottinghamunioutlaws.wordpress.com/11-12-season/,Justin Smith
+BUAFL,,Midlands,2011,Leicester Longhorns,7,6,3,3,0,122,85,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,Midlands,2011,Warwick Wolves,8,7,2,5,0,71,226,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,Midlands,2011,Coventry University Jets,9,7,1,6,0,48,189,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,Midlands,2011,DMU Lions,10,6,0,6,0,41,194,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,North Eastern,2011,Newcastle Raiders,1,7,7,0,0,262,31,,TRUE,Source: BAFRA contemporary records,
+BUAFL,,North Eastern,2011,Leeds Gryphons,2,7,6,1,0,99,51,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,North Eastern,2011,Hull Sharks,3,7,5,2,0,126,81,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,North Eastern,2011,Northumbria Mustangs,4,6,4,2,0,176,110,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,North Eastern,2011,Bradford Bears,5,7,4,2,1,115,53,,FALSE,Source: BAFRA contemporary records,Richard Handby
+BUAFL,,North Eastern,2011,York Centurions,6,7,4,3,0,57,141,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,North Eastern,2011,Leeds Beckett Carnegie,7,8,4,3,1,168,86,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,North Eastern,2011,Sunderland Spartans,8,7,3,4,0,62,160,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,North Eastern,2011,Teesside Cougars,9,7,1,6,0,96,186,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,North Eastern,2011,Durham Saints,10,7,1,6,0,48,232,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,North Western,2011,Sheffield Hallam Warriors,1,7,7,0,0,440,61,,TRUE,Source: BAFRA contemporary records,Richard Batty
+BUAFL,,North Western,2011,Sheffield Sabres,2,7,5,2,0,220,101,,FALSE,Source: BAFRA contemporary records,Tim Mullinar
+BUAFL,,North Western,2011,Bangor MudDogs,3,7,4,3,0,116,125,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,North Western,2011,Derby Braves,4,6,2,4,0,103,106,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,North Western,2011,Staffordshire Stallions,5,6,2,4,0,65,169,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,North Western,2011,Lancaster Bombers,6,7,2,5,0,47,267,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,North Western,2011,Manchester Tyrants,7,6,1,5,0,52,153,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,North Western,2011,Huddersfield Hawks,8,6,1,5,0,33,168,,FALSE,Source: BAFRA contemporary records,Greg Boyland
+BUAFL,,North Western,2011,LJMU Fury,9,3,0,3,0,6,52,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,North Western,2011,MMU Eagles,10,6,0,6,0,43,140,,FALSE,Source: BAFRA contemporary records,Jim Blinkhorn
+BUAFL,,North Western,2011,UCLan Rams,11,1,1,0,0,1,0,,FALSE,Source: BAFRA contemporary records & BUCS contemporary records,
+BUAFL,,Scottish,2011,Stirling Clansmen,1,7,6,1,0,270,42,,TRUE,Source: BAFRA contemporary records,
+BUAFL,,Scottish,2011,Edinburgh Predators,2,8,5,3,0,116,84,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,Scottish,2011,Glasgow Tigers,3,7,4,3,0,68,61,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,Scottish,2011,Edinburgh Napier Knights,4,7,3,4,0,89,170,,FALSE,Source: BAFRA contemporary records,Pete Laird
+BUAFL,,Scottish,2011,UWS Pyros,5,7,1,6,0,69,180,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Eastern 1A,2011,Hertfordshire Hurricanes,1,6,6,0,0,330,34,,TRUE,Source: BAFRA contemporary records,Jim Messenger
+BUAFL,,South Eastern 1A,2011,Essex Blades,2,6,4,2,0,106,98,,FALSE,Source: BAFRA contemporary records,Adam Burrows
+BUAFL,,South Eastern 1A,2011,Kent Falcons,3,5,3,2,0,147,87,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Eastern 1A,2011,KCL Regents,4,5,3,2,0,104,64,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Eastern 1A,2011,UEA Pirates,5,7,4,3,0,220,166,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Eastern 1A,2011,Greenwich Mariners,6,7,4,3,0,147,199,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Eastern 1A,2011,Brighton Tsunami,7,8,4,4,0,115,122,,FALSE,Source: Brighton Tsunami historical records,James Ormrod
+BUAFL,,South Eastern 1A,2011,Canterbury CC Chargers,8,6,3,3,0,156,142,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Eastern 1A,2011,LSBU Spartans,9,7,3,4,0,137,152,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Eastern 1A,2011,Cambridge Pythons,10,7,3,4,0,102,173,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Eastern 1A,2011,Westminster Dragons,11,6,2,4,0,63,133,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Eastern 1A,2011,Anglia Ruskin Siege,12,5,0,5,0,38,186,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Eastern 1B,2011,Southampton Stags,1,6,6,0,0,205,32,,TRUE,Source: BAFRA contemporary records,
+BUAFL,,South Eastern 1B,2011,Kingston Cougars,2,1,1,0,0,32,20,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Eastern 1B,2011,Oxford Brookes University,3,7,6,1,0,148,26,,FALSE,Source: BAFRA contemporary records,Nick Wykes
+BUAFL,,South Eastern 1B,2011,Solent Redhawks,4,7,5,2,0,131,119,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Eastern 1B,2011,BNU Buccaneers,5,8,4,4,0,291,111,,FALSE,Source: BAFRA contemporary records,Luke Plastow
+BUAFL,,South Eastern 1B,2011,Portsmouth Destroyers,6,6,3,3,0,86,70,,FALSE,Source: BAFRA contemporary records,Russ Hewitt
+BUAFL,,South Eastern 1B,2011,Reading Knights,7,7,3,4,0,94,124,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Eastern 1B,2011,Imperial Immortals,8,7,3,4,0,74,106,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Eastern 1B,2011,Brunel Burners,9,6,1,5,0,83,160,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Eastern 1B,2011,Royal Holloway Bears,10,7,1,6,0,33,205,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Eastern 1B,2011,Surrey Stingers,11,5,0,5,0,7,203,,FALSE,Source: BAFRA contemporary records,Shariff Omar
+BUAFL,,South Eastern 1B,2011,Oxford Lancers,12,1,0,1,0,6,40,,FALSE,Source: BAFRA contemporary records & BUCS contemporary records,
+BUAFL,,South Western,2011,Cardiff Cobras,1,8,7,1,0,180,61,,TRUE,Source: BAFRA contemporary records,
+BUAFL,,South Western,2011,Plymouth Blitz,2,7,5,2,0,192,53,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Western,2011,UWE Bullets,3,7,5,2,0,152,58,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Western,2011,Bath Killer Bees,4,7,4,3,0,125,71,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Western,2011,Bristol Barracuda,5,8,4,4,0,121,173,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Western,2011,Exeter Demons,6,8,4,4,0,123,187,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Western,2011,Swansea Titans,7,6,2,4,0,88,61,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Western,2011,Gloucestershire Gladiators,8,6,2,4,0,61,161,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Western,2011,Bath Spa Bulldogs,9,7,2,5,0,90,198,,FALSE,Source: BAFRA contemporary records,
+BUAFL,,South Western,2011,Tarannau Aberystwyth,10,6,0,6,0,26,153,,FALSE,Source: BAFRA contemporary records,Phil Dayus
+BUAFL,,South Western,2011,Worcester Royals,11,6,0,6,0,25,262,,FALSE,Source: BAFRA contemporary records,

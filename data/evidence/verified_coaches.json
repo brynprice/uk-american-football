@@ -1,0 +1,814 @@
+[
+  {
+    "team": "Brighton Tsunami",
+    "year": 2003,
+    "head_coach": "Chris Emery",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Documented as head coach on all 2003/04 game records in data/gamesbrighton.csv"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2004,
+    "head_coach": "Chris Emery",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Documented as head coach on all 2004/05 game records in data/gamesbrighton.csv"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2005,
+    "head_coach": "Chris Emery",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Documented as head coach on all 2005/06 game records in data/gamesbrighton.csv"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2006,
+    "head_coach": "Eber Kington",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Documented as head coach on all 2006/07 game records in data/gamesbrighton.csv"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2007,
+    "head_coach": "Eber Kington",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Documented as head coach on all 2007/08 game records in data/gamesbrighton.csv"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2008,
+    "head_coach": "Tony Bainbridge",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Documented as head coach on all 2008/09 game records in data/gamesbrighton.csv"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2009,
+    "head_coach": "Jim Roberson",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Head Coach for Game 1 (2009-11-08 vs Solent Redhawks); HC seat was vacant for Game 2 (vs Royal Holloway Bears) before Tony Bainbridge returned for Games 3-8"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2009,
+    "head_coach": "Tony Bainbridge",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Returned as Head Coach from Game 3 (2009-11-22 vs Southampton Stags) through end of season after Jim Roberson departed after Game 1 and HC seat was vacant for Game 2"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2010,
+    "head_coach": "Martin Harrison",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Documented as head coach on all 2010/11 game records in data/gamesbrighton.csv"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2011,
+    "head_coach": "James Ormrod",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Documented as head coach on all 2011/12 game records in data/gamesbrighton.csv"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2012,
+    "head_coach": "James Ormrod",
+    "source": "https://dblcoverage.blogspot.com/2013/04/three-head-coaches-resign-in-tvc.html",
+    "source_details": "Documented as Brighton Tsunami Head Coach stepping down in April 2013; confirmed in Brighton Tsunami historical records"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2013,
+    "head_coach": "Chris Denny",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Documented as head coach on all 2013/14 game records in data/gamesbrighton.csv"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2014,
+    "head_coach": "Chris Denny",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Documented as head coach on all 2014/15 game records in data/gamesbrighton.csv"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2015,
+    "head_coach": "Chris Denny",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Documented as head coach on all 2015/16 game records in data/gamesbrighton.csv"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2016,
+    "head_coach": "Richard Cooling",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Documented as head coach on all 2016/17 game records in data/gamesbrighton.csv"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2017,
+    "head_coach": "Richard Cooling",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Documented as head coach on all 2017/18 game records in data/gamesbrighton.csv"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2018,
+    "head_coach": "Chris Denny",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Documented as head coach on all 2018/19 game records in data/gamesbrighton.csv"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2019,
+    "head_coach": "Chris Denny",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Documented as head coach on all 2019/20 game records in data/gamesbrighton.csv"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2021,
+    "head_coach": "Ollie Kent",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Documented as head coach on all 2021/22 game records in data/gamesbrighton.csv"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2022,
+    "head_coach": "Ollie Kent",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Documented as head coach on all 2022/23 game records in data/gamesbrighton.csv"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2023,
+    "head_coach": "Georgia Teague",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Documented as head coach on all 2023/24 game records in data/gamesbrighton.csv"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2024,
+    "head_coach": "Georgia Teague",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Documented as head coach on all 2024/25 game records in data/gamesbrighton.csv"
+  },
+  {
+    "team": "Brighton Tsunami",
+    "year": 2025,
+    "head_coach": "Ethan Butcher",
+    "source": "Brighton Tsunami historical records",
+    "source_details": "Documented as head coach on all 2025/26 game records in data/gamesbrighton.csv"
+  },
+  {
+    "team": "Birmingham Lions",
+    "year": 2008,
+    "head_coach": "Tony Athersmith",
+    "source": "Britball Wiki",
+    "source_details": "Confirmed on Britball Wiki Birmingham Lions and 2008-09 BUAFL Season pages"
+  },
+  {
+    "team": "Birmingham Lions",
+    "year": 2009,
+    "head_coach": "Tony Athersmith",
+    "source": "Britball Wiki",
+    "source_details": "Confirmed on Britball Wiki Birmingham Lions and 2009-10 BUAFL Season pages"
+  },
+  {
+    "team": "Birmingham Lions",
+    "year": 2011,
+    "head_coach": "Wayne Hill",
+    "source": "Sky Sports",
+    "source_details": "Contemporary Sky Sports report (April 2012) documenting Wayne Hill as Head Coach of Birmingham Lions with 90-man roster"
+  },
+  {
+    "team": "Hertfordshire Hurricanes",
+    "year": 2011,
+    "head_coach": "Jim Messenger",
+    "source": "Sky Sports",
+    "source_details": "Contemporary Sky Sports report (April 2012) and BAFRA newsflashes documenting Jim Messenger as Head Coach of Hertfordshire Hurricanes"
+  },
+  {
+    "team": "Nottingham Gold",
+    "year": 2011,
+    "head_coach": "Justin Smith",
+    "source": "Nottingham Outlaws contemporary records",
+    "source_details": "Official Nottingham Outlaws website (nottinghamunioutlaws.wordpress.com/staff/ & 11-12-season/) documenting Justin Smith as Head Coach prior to his March 2013 resignation"
+  },
+  {
+    "team": "Essex Blades",
+    "year": 2011,
+    "head_coach": "Adam Burrows",
+    "source": "Britball Wiki",
+    "source_details": "Britball Wiki Essex Blades history documenting Adam Burrows coaching the team to a 6-2 record and playoff appearance in 2011-12 before stepping down"
+  },
+  {
+    "team": "Edinburgh Napier Knights",
+    "year": 2011,
+    "head_coach": "Pete Laird",
+    "source": "Double Coverage contemporary report",
+    "source_details": "Explicitly cited as Edinburgh Napier Knights Head Coach in Double Coverage match reports (https://dblcoverage.blogspot.com/2012/02/buafl-match-report-en-knights-vs.html)"
+  },
+  {
+    "team": "Sheffield Hallam Warriors",
+    "year": 2011,
+    "head_coach": "Richard Batty",
+    "source": "Double Coverage contemporary report",
+    "source_details": "Explicitly cited as Sheffield Hallam Warriors Head Coach in Double Coverage Steel Bowl report (https://dblcoverage.blogspot.com/2012/02/buafl-match-report-steelbowl.html)"
+  },
+  {
+    "team": "Surrey Stingers",
+    "year": 2011,
+    "head_coach": "Shariff Omar",
+    "source": "Double Coverage contemporary report",
+    "source_details": "Explicitly cited as Surrey Stingers Head Coach with post-match quote in Double Coverage report (https://dblcoverage.blogspot.com/2012/02/buafl-match-report-stingers-stung-by.html)"
+  },
+  {
+    "team": "BNU Buccaneers",
+    "year": 2011,
+    "head_coach": "Luke Plastow",
+    "source": "Double Coverage contemporary report",
+    "source_details": "Explicitly cited as BNU Buccaneers Head Coach in Double Coverage match reports (https://dblcoverage.blogspot.com/2012/02/buafl-match-report-stingers-stung-by.html)"
+  },
+  {
+    "team": "Oxford Brookes University",
+    "year": 2011,
+    "head_coach": "Nick Wykes",
+    "source": "Double Coverage contemporary report",
+    "source_details": "Explicitly cited as Oxford Brookes University (OBU Panthers) Head Coach in Double Coverage preview (https://dblcoverage.blogspot.com/2012/03/week-12-buafl-predictions-tvc.html)"
+  },
+  {
+    "team": "Loughborough Aces",
+    "year": 2011,
+    "head_coach": "Paul Sherratt",
+    "source": "Double Coverage contemporary report",
+    "source_details": "Explicitly cited as Loughborough Aces Head Coach in Double Coverage FAUK Bowl interview (https://dblcoverage.blogspot.com/2012/02/fauk-bowl-buildup-interview-with-paul.html)"
+  },
+  {
+    "team": "Portsmouth Destroyers",
+    "year": 2011,
+    "head_coach": "Russ Hewitt",
+    "source": "Double Coverage contemporary report",
+    "source_details": "Explicitly cited as Portsmouth Destroyers Head Coach in Double Coverage match report and feature (https://dblcoverage.blogspot.com/2011/12/portsmouth-destroyers-20-vs-3-obu.html)"
+  },
+  {
+    "team": "Sheffield Sabres",
+    "year": 2011,
+    "head_coach": "Tim Mullinar",
+    "source": "Double Coverage contemporary report",
+    "source_details": "Explicitly cited as Sheffield Sabres Head Coach in Double Coverage preview and Steel Bowl coverage (https://dblcoverage.blogspot.com/2012/02/buafl-week-11-predictions-northern.html)"
+  },
+  {
+    "team": "Bradford Bears",
+    "year": 2011,
+    "head_coach": "Richard Handby",
+    "source": "Double Coverage contemporary report",
+    "source_details": "Explicitly cited as Bradford Bears Head Coach in Double Coverage preview (https://dblcoverage.blogspot.com/2012/02/buafl-week-11-predictions-northern.html)"
+  },
+  {
+    "team": "Huddersfield Hawks",
+    "year": 2011,
+    "head_coach": "Greg Boyland",
+    "source": "Double Coverage contemporary report",
+    "source_details": "Explicitly cited as Huddersfield Hawks Head Coach in Double Coverage preview (https://dblcoverage.blogspot.com/2012/02/buafl-week-11-predictions-northern.html)"
+  },
+  {
+    "team": "Tarannau Aberystwyth",
+    "year": 2011,
+    "head_coach": "Phil Dayus",
+    "source": "Double Coverage contemporary report",
+    "source_details": "Explicitly cited as Tarannau Aberystwyth Head Coach in Double Coverage preview (https://dblcoverage.blogspot.com/2012/02/buafl-week-11-predictions-northern.html)"
+  },
+  {
+    "team": "MMU Eagles",
+    "year": 2011,
+    "head_coach": "Jim Blinkhorn",
+    "source": "Double Coverage contemporary report",
+    "source_details": "Explicitly cited as MMU Eagles Head Coach in club official statement (https://dblcoverage.blogspot.com/2012/02/mmu-eagles-statement-on-head-coach-jim.html)"
+  },
+  {
+    "team": "Birmingham Lions",
+    "year": 2012,
+    "head_coach": "Wayne Hill",
+    "source": "https://dblcoverage.blogspot.com/2013/04/birmingham-lions-vs-hertfordshire.html",
+    "source_details": "Interview with winning head coach Wayne Hill following College Bowl XXVII championship victory"
+  },
+  {
+    "team": "Nottingham Trent Renegades",
+    "year": 2012,
+    "head_coach": "Adrian Giles",
+    "source": "https://dblcoverage.blogspot.com/2013/04/ntu-renegades-vs-southampton-stags-video.html",
+    "source_details": "Interview with winning head coach Adrian Giles following National Trophy final victory"
+  },
+  {
+    "team": "Southampton Stags",
+    "year": 2012,
+    "head_coach": "Gareth Thomas",
+    "source": "https://dblcoverage.blogspot.com/2012/11/coaches-interviews.html",
+    "source_details": "Identified as Head Coach of Southampton Stags in interview; resignation confirmed on 2013-04-22 following National Trophy final"
+  },
+  {
+    "team": "BNU Buccaneers",
+    "year": 2012,
+    "head_coach": "Luke Plastow",
+    "source": "https://dblcoverage.blogspot.com/2013/04/luke-plastow-resigns-as-bnu-buccaneers.html",
+    "source_details": "Documented as BNU Head Coach; released resignation statement on 2013-04-17"
+  },
+  {
+    "team": "Lincoln Colonials",
+    "year": 2012,
+    "head_coach": "Alex Robson",
+    "source": "https://dblcoverage.blogspot.com/2012/12/lincoln-coaching-staff-steps-down.html",
+    "source_details": "Official resignation statement: It is official that as of yesterday (01/12/2012) I have resigned my position as Lincoln Colonials HC/OC"
+  },
+  {
+    "team": "Manchester Tyrants",
+    "year": 2012,
+    "head_coach": "Hugh English",
+    "source": "https://dblcoverage.blogspot.com/2012/11/tyrants-part-with-head-coach-hugh.html",
+    "source_details": "Documented as Head Coach since 2011 until stepping down on 2012-11-25"
+  },
+  {
+    "team": "Leeds Met Carnegie",
+    "year": 2012,
+    "head_coach": "Paul Wake",
+    "source": "https://dblcoverage.blogspot.com/2012/11/game-of-week-coach-wake-interview.html",
+    "source_details": "Interviewed as Leeds Carnegie Head Coach Paul Wake ahead of Game of the Week fixture"
+  },
+  {
+    "team": "Hull Sharks",
+    "year": 2012,
+    "head_coach": "Martin Gardham",
+    "source": "https://dblcoverage.blogspot.com/2012/11/game-of-week-coach-wake-interview.html",
+    "source_details": "Identified as Hull Sharks Head Coach Martin Gardham in Game of the Week interview"
+  },
+  {
+    "team": "Sheffield Sabres",
+    "year": 2012,
+    "head_coach": "Tim Mullinar",
+    "source": "https://dblcoverage.blogspot.com/2013/01/bucs-predictions-week.html",
+    "source_details": "Quoted as Sabres Head Coach Tim Mullinar regarding player injuries and game day preparations"
+  },
+  {
+    "team": "Brunel Burners",
+    "year": 2012,
+    "head_coach": "Jon Goddard",
+    "source": "https://dblcoverage.blogspot.com/2013/01/double-coverage-meet-team.html",
+    "source_details": "Confirmed as Head Coach of the Brunel Burners BUAFL team"
+  },
+  {
+    "team": "UCLan Rams",
+    "year": 2012,
+    "head_coach": "Chris Bradley",
+    "source": "https://dblcoverage.blogspot.com/2012/11/week-3-bafa-uni-predictions.html",
+    "source_details": "Identified as Rams Head Coach Chris Bradley ahead of Week 3 match"
+  },
+  {
+    "team": "MMU Eagles",
+    "year": 2012,
+    "head_coach": "Dave Booker",
+    "source": "https://dblcoverage.blogspot.com/2012/11/week-3-bafa-uni-predictions.html",
+    "source_details": "Identified as new Eagles Head Coach Dave Booker in Week 3 previews"
+  },
+  {
+    "team": "Lancaster Bombers",
+    "year": 2012,
+    "head_coach": "Darren Carr",
+    "source": "https://dblcoverage.blogspot.com/2012/11/bafa-uni-week-five-predictions.html",
+    "source_details": "Identified as Bombers Head Coach Darren Carr in Week 5 predictions and Mid-Season Review"
+  },
+  {
+    "team": "Reading Knights",
+    "year": 2012,
+    "head_coach": "Andy Hollands",
+    "source": "https://dblcoverage.blogspot.com/2012/11/week-3-bafa-uni-predictions.html",
+    "source_details": "Identified as new Knights Head Coach Andy Hollands in Week 3 match analysis"
+  },
+  {
+    "team": "Huddersfield Hawks",
+    "year": 2012,
+    "head_coach": "Greg Boyland",
+    "source": "https://dblcoverage.blogspot.com/2012/11/week-3-bafa-uni-predictions.html",
+    "source_details": "Identified as second-year Hawks Head Coach Greg Boyland in Week 3 predictions and Mid-Season Review"
+  },
+  {
+    "team": "Stirling Clansmen",
+    "year": 2012,
+    "head_coach": "Rob Orr",
+    "source": "https://dblcoverage.blogspot.com/2013/01/mid-season-reviews-saltire.html",
+    "source_details": "Identified as Clansmen Head Coach Rob Orr in Saltire Conference Mid-Season Review"
+  },
+  {
+    "team": "Newcastle Raiders",
+    "year": 2012,
+    "head_coach": "Jonathan Rooney",
+    "source": "https://dblcoverage.blogspot.com/2012/11/willy-tee-week-3-predictions.html",
+    "source_details": "Identified as Newcastle Raiders Head Coach Rooney in Week 3 predictions and Double Coverage founder profiles"
+  },
+  {
+    "team": "UWE Bullets",
+    "year": 2022,
+    "head_coach": "Daniel Maher",
+    "source": "https://www.thestudentsunion.co.uk/community/sports/clubs/americanfootball/",
+    "source_details": "Documented as Head Coach of UWE Bullets leading the team to back-to-back BUCS National Championships in 2022 and 2023 (College Bowl XXXIV & XXXV)"
+  },
+  {
+    "team": "Nottingham Gold",
+    "year": 2022,
+    "head_coach": "Jason Scott",
+    "source": "https://nottinghamsport.com/2023/03/21/american-football-university-of-nottingham-seek-glory-in-national-final/",
+    "source_details": "Identified as Head Coach of University of Nottingham American Football leading the program to the Premier North title and National Championship final (College Bowl XXXV)"
+  },
+  {
+    "team": "Bournemouth University Bobcats",
+    "year": 2022,
+    "head_coach": "Steve Rains",
+    "source": "https://buzz.bournemouth.ac.uk/2023/05/building-champions-the-legacy-of-steve-rains-and-the-bobcats/",
+    "source_details": "Documented as Head Coach of Bournemouth University Bobcats leading the team to the 2022/23 Division 1 South Western championship"
+  },
+  {
+    "team": "Bath Killer Bees",
+    "year": 2022,
+    "head_coach": "Pat Snooks",
+    "source": "https://www.thesubath.com/americanfootball/",
+    "source_details": "Documented as Head Coach of the University of Bath Killer Bees in his 30th consecutive season, leading the team to the 2022/23 Division 2 South Western title and Southern Conference Cup"
+  },
+  {
+    "team": "KCL Regents",
+    "year": 2022,
+    "head_coach": "Junior Hayden",
+    "source": "https://kentexiles.co.uk/kent-exiles-appoint-junior-hayden-as-adult-contact-head-coach/",
+    "source_details": "Documented as Head Coach of KCL Regents leading them to the 2022/23 Division 2 South Eastern title and promotion to Division 1"
+  },
+  {
+    "team": "Stirling Clansmen",
+    "year": 2022,
+    "head_coach": "Danny Smith",
+    "source": "https://brignews.com/2023/09/20/stirling-clansmen-aiming-high-following-offseason-rebuild/",
+    "source_details": "Documented as Head Coach of Stirling Clansmen having taken over the program in 2022 ahead of the 2022/23 season"
+  },
+  {
+    "team": "Sheffield Hallam Warriors",
+    "year": 2022,
+    "head_coach": "Kieran Dunn",
+    "source": "https://www.britishamericanfootball.org/",
+    "source_details": "Documented as Head Coach of Sheffield Hallam Warriors and selected as Head Coach of the North All-Stars in April 2023 after winning the Division 1 Northern title"
+  },
+  {
+    "team": "UWE Bullets",
+    "year": 2023,
+    "head_coach": "Daniel Maher",
+    "source": "https://www.bristol247.com/sport/other-sport/three-peat-uwe-bullets-win-third-national-championship-trophy-row/",
+    "source_details": "Documented as Head Coach Dan Maher leading UWE Bullets to their third consecutive National Championship without conceding a point all season (College Bowl XXXVI)"
+  },
+  {
+    "team": "Nottingham Gold",
+    "year": 2023,
+    "head_coach": "Jason Scott",
+    "source": "https://www.britishamericanfootball.org/",
+    "source_details": "Documented Head Coach of University of Nottingham Gold leading the program to an 8-0-0 Premier North regular season title"
+  },
+  {
+    "team": "Bournemouth University Bobcats",
+    "year": 2023,
+    "head_coach": "Steve Rains",
+    "source": "https://www.bournemouthbobcats.com/",
+    "source_details": "Documented Head Coach of Bournemouth University Bobcats and BAFA Rules Committee representative during 2023/24"
+  },
+  {
+    "team": "Bath Killer Bees",
+    "year": 2023,
+    "head_coach": "Pat Snooks",
+    "source": "https://www.thesubath.com/americanfootball/",
+    "source_details": "Documented as Head Coach of Bath Killer Bees in his 31st consecutive season (tenure since 1992)"
+  },
+  {
+    "team": "Lincoln Colonials",
+    "year": 2023,
+    "head_coach": "George Lees",
+    "source": "https://thelinc.co.uk/2024/02/lincoln-colonials-could-make-play-offs-despite-loss-to-nottingham-green/",
+    "source_details": "Explicitly documented in contemporary student newspaper match report: 'Head-Coach George Lees must have given an inspiring half-time team talk, as the Colonials came out much more positive'"
+  },
+  {
+    "team": "UWE Bullets",
+    "year": 2024,
+    "head_coach": "Daniel Maher",
+    "source": "https://www.thestudentsunion.co.uk/opportunities/societies/societies-list/american-football/",
+    "source_details": "Head Coach of UWE Bullets First Team; led team to National Championship (College Bowl XXXVII) and undefeated season in 2024/25"
+  },
+  {
+    "team": "Nottingham Gold",
+    "year": 2024,
+    "head_coach": "Jason Scott",
+    "source": "https://nottinghamsport.com/",
+    "source_details": "Head Coach of University of Nottingham American football programme; led Nottingham Gold to 2024/25 National Championship final"
+  },
+  {
+    "team": "Brunel Burners",
+    "year": 2024,
+    "head_coach": "James Kelvin",
+    "source": "https://www.bucs.org.uk/",
+    "source_details": "Head Coach of Brunel Burners; named Coach of the Year at the 2025/26 BUCS Awards for undefeated 2024/25 campaign and National Trophy title"
+  },
+  {
+    "team": "Oxford Brookes University",
+    "year": 2024,
+    "head_coach": "Calvin Stitt",
+    "source": "https://www.brookes.ac.uk/about-brookes/news/teambrookes-sports-awards-2025/",
+    "source_details": "Named Coach of the Year at the 2025 TEAMBrookes Sports Awards for leading team to undefeated regular season and Southern Conference Cup victory"
+  },
+  {
+    "team": "Bournemouth University Bobcats",
+    "year": 2024,
+    "head_coach": "Steve Rains",
+    "source": "https://bournemouthbobcats.com/",
+    "source_details": "Announced as Head Coach on October 9, 2024; led team through undefeated 2024/25 Division 1 SW regular season"
+  },
+  {
+    "team": "Bath Killer Bees",
+    "year": 2024,
+    "head_coach": "Pat Snooks",
+    "source": "https://www.britishamericanfootball.org/",
+    "source_details": "Long-serving Head Coach of Bath Killer Bees (32nd season); nominated for BAFCA Coach of the Year in 2024 and 2025"
+  },
+  {
+    "team": "Lincoln Colonials",
+    "year": 2024,
+    "head_coach": "George Lees",
+    "source": "https://thelinc.co.uk/",
+    "source_details": "Documented as Lincoln Colonials Head Coach in student sports coverage and 2024 recruitment announcements"
+  },
+  {
+    "team": "Durham Saints",
+    "year": 2025,
+    "head_coach": "Jonathan Rooney",
+    "source": "https://www.durham.ac.uk/",
+    "source_details": "Head Coach of Durham Saints; led Durham to National Championship victory (College Bowl XXXVIII) in 2025/26"
+  },
+  {
+    "team": "UWE Bullets",
+    "year": 2025,
+    "head_coach": "Daniel Maher",
+    "source": "https://www.thestudentsunion.co.uk/opportunities/societies/societies-list/american-football/",
+    "source_details": "Head Coach of UWE Bullets First Team; led team to 2025/26 National Championship Game"
+  },
+  {
+    "team": "SGS Pride",
+    "year": 2025,
+    "head_coach": "Ben Herod",
+    "source": "https://www.sgscol.ac.uk/",
+    "source_details": "Director of American Football and Head Coach of SGS Pride program; led team to National Vase final"
+  },
+  {
+    "team": "Brunel Burners",
+    "year": 2025,
+    "head_coach": "James Kelvin",
+    "source": "https://www.bucs.org.uk/",
+    "source_details": "Head Coach of Brunel Burners; led team to undefeated regular season and National Vase title in 2025/26"
+  },
+  {
+    "team": "Oxford Brookes University",
+    "year": 2025,
+    "head_coach": "Calvin Stitt",
+    "source": "https://www.brookes.ac.uk/about-brookes/news/teambrookes-sports-awards-2025/",
+    "source_details": "Head Coach of Oxford Brookes University American football program in 2025/26"
+  },
+  {
+    "team": "Bournemouth University Bobcats",
+    "year": 2025,
+    "head_coach": "Steve Rains",
+    "source": "https://bournemouthbobcats.com/",
+    "source_details": "Head Coach of Bournemouth University Bobcats; led team to undefeated regular season and National Trophy title in 2025/26"
+  },
+  {
+    "team": "Bath Killer Bees",
+    "year": 2025,
+    "head_coach": "Pat Snooks",
+    "source": "https://www.thesubath.com/americanfootball/",
+    "source_details": "Long-serving Head Coach of Bath Killer Bees (33rd season in 2025/26)"
+  },
+  {
+    "team": "Nottingham Gold",
+    "year": 2025,
+    "head_coach": "Jason Scott",
+    "source": "https://nottinghamsport.com/",
+    "source_details": "Head Coach of University of Nottingham American football programme in 2025/26"
+  },
+  {
+    "team": "Nottingham Gold",
+    "year": 1996,
+    "head_coach": "Justin Smith",
+    "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 1996–1997 in official club history"
+  },
+  {
+    "team": "Nottingham Gold",
+    "year": 1997,
+    "head_coach": "Grahame Clamp",
+    "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 1997–2001 in official club history"
+  },
+  {
+    "team": "Nottingham Gold",
+    "year": 1998,
+    "head_coach": "Grahame Clamp",
+    "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 1997–2001 in official club history"
+  },
+  {
+    "team": "Nottingham Gold",
+    "year": 1999,
+    "head_coach": "Grahame Clamp",
+    "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 1997–2001 in official club history"
+  },
+  {
+    "team": "Nottingham Gold",
+    "year": 2000,
+    "head_coach": "Grahame Clamp",
+    "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 1997–2001 in official club history"
+  },
+  {
+    "team": "Nottingham Gold",
+    "year": 2001,
+    "head_coach": "Justin Smith",
+    "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 2001–2002 in official club history"
+  },
+  {
+    "team": "Nottingham Gold",
+    "year": 2002,
+    "head_coach": "Paul Sherratt",
+    "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 2002–2005 in official club history"
+  },
+  {
+    "team": "Nottingham Gold",
+    "year": 2003,
+    "head_coach": "Paul Sherratt",
+    "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 2002–2005 in official club history"
+  },
+  {
+    "team": "Nottingham Gold",
+    "year": 2004,
+    "head_coach": "Paul Sherratt",
+    "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 2002–2005 in official club history"
+  },
+  {
+    "team": "Nottingham Gold",
+    "year": 2005,
+    "head_coach": "Justin Smith",
+    "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
+    "source_details": "Documented as Interim Head Coach of Nottingham Outlaws 2005–2006 in official club history"
+  },
+  {
+    "team": "Nottingham Gold",
+    "year": 2006,
+    "head_coach": "Jeremy Wood",
+    "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 2006–2007 in official club history"
+  },
+  {
+    "team": "Nottingham Gold",
+    "year": 2007,
+    "head_coach": "Simon Dale",
+    "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 2007–2009 in official club history"
+  },
+  {
+    "team": "Nottingham Gold",
+    "year": 2008,
+    "head_coach": "Simon Dale",
+    "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 2007–2009 in official club history"
+  },
+  {
+    "team": "Nottingham Gold",
+    "year": 2009,
+    "head_coach": "Chris Davies",
+    "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 2009–2011 in official club history"
+  },
+  {
+    "team": "Nottingham Gold",
+    "year": 2010,
+    "head_coach": "Chris Davies",
+    "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 2009–2011 in official club history"
+  },
+  {
+    "team": "Loughborough Students",
+    "year": 2004,
+    "head_coach": "Jason Scott",
+    "source": "https://britball.fandom.com/wiki/Loughborough_Aces",
+    "source_details": "Documented as Head Coach of Loughborough Aces 2004–2010 on Britball Wiki and BUAFL archives"
+  },
+  {
+    "team": "Loughborough Students",
+    "year": 2005,
+    "head_coach": "Jason Scott",
+    "source": "https://britball.fandom.com/wiki/Loughborough_Aces",
+    "source_details": "Documented as Head Coach of Loughborough Aces; College Bowl XIX Champions"
+  },
+  {
+    "team": "Loughborough Students",
+    "year": 2006,
+    "head_coach": "Jason Scott",
+    "source": "https://britball.fandom.com/wiki/Loughborough_Aces",
+    "source_details": "Documented as Head Coach of Loughborough Aces; College Bowl XX Finalists"
+  },
+  {
+    "team": "Loughborough Students",
+    "year": 2007,
+    "head_coach": "Jason Scott",
+    "source": "https://britball.fandom.com/wiki/Loughborough_Aces",
+    "source_details": "Documented as Head Coach of Loughborough Aces; College Bowl XXI Finalists"
+  },
+  {
+    "team": "Loughborough Students",
+    "year": 2008,
+    "head_coach": "Jason Scott",
+    "source": "https://britball.fandom.com/wiki/Loughborough_Aces",
+    "source_details": "Documented as Head Coach of Loughborough Aces; College Bowl XXII Finalists"
+  },
+  {
+    "team": "Loughborough Students",
+    "year": 2009,
+    "head_coach": "Jason Scott",
+    "source": "https://britball.fandom.com/wiki/Loughborough_Aces",
+    "source_details": "Documented as Head Coach of Loughborough Aces; College Bowl XXIII Champions"
+  },
+  {
+    "team": "Birmingham Lions",
+    "year": 2004,
+    "head_coach": "Wayne Hill",
+    "source": "https://britball.fandom.com/wiki/Birmingham_Lions",
+    "source_details": "Documented as Head Coach of Birmingham Lions; College Bowl XIX Finalists"
+  },
+  {
+    "team": "Birmingham Lions",
+    "year": 2007,
+    "head_coach": "Tony Athersmith",
+    "source": "https://britball.fandom.com/wiki/Birmingham_Lions",
+    "source_details": "Documented as Head Coach of Birmingham Lions; College Bowl XXI Finalists"
+  },
+  {
+    "team": "Birmingham Lions",
+    "year": 2010,
+    "head_coach": "Tony Athersmith",
+    "source": "https://britball.fandom.com/wiki/Birmingham_Lions",
+    "source_details": "Documented as Head Coach of Birmingham Lions; College Bowl XXV Champions"
+  },
+  {
+    "team": "Southampton Stags",
+    "year": 2004,
+    "head_coach": "Graham Thorpe",
+    "source": "https://britball.fandom.com/wiki/Southampton_Stags",
+    "source_details": "Documented as long-serving Head Coach of Southampton Stags 2002–2009 on Britball Wiki"
+  },
+  {
+    "team": "Edinburgh Predators",
+    "year": 2015,
+    "head_coach": "Martin Harrison",
+    "source": "https://www.instagram.com/p/CCrWvHqH8nj/",
+    "source_details": "Official Edinburgh Wildcats / Predators farewell tribute announcing Coach Martin Harrison stepping down after 5 years as Head Coach (2015/16 - 2019/20)"
+  },
+  {
+    "team": "Edinburgh Predators",
+    "year": 2016,
+    "head_coach": "Martin Harrison",
+    "source": "https://www.instagram.com/p/CCrWvHqH8nj/",
+    "source_details": "Official Edinburgh Wildcats / Predators farewell tribute announcing Coach Martin Harrison stepping down after 5 years as Head Coach (2015/16 - 2019/20)"
+  },
+  {
+    "team": "Edinburgh Predators",
+    "year": 2017,
+    "head_coach": "Martin Harrison",
+    "source": "https://www.instagram.com/p/CCrWvHqH8nj/",
+    "source_details": "Official Edinburgh Wildcats / Predators farewell tribute announcing Coach Martin Harrison stepping down after 5 years as Head Coach (2015/16 - 2019/20)"
+  },
+  {
+    "team": "Edinburgh Predators",
+    "year": 2018,
+    "head_coach": "Martin Harrison",
+    "source": "https://www.instagram.com/p/CCrWvHqH8nj/",
+    "source_details": "Official Edinburgh Wildcats / Predators farewell tribute announcing Coach Martin Harrison stepping down after 5 years as Head Coach (2015/16 - 2019/20)"
+  },
+  {
+    "team": "Edinburgh Predators",
+    "year": 2019,
+    "head_coach": "Martin Harrison",
+    "source": "https://www.instagram.com/p/CCrWvHqH8nj/",
+    "source_details": "Official Edinburgh Wildcats / Predators farewell tribute announcing Coach Martin Harrison stepping down after 5 years as Head Coach (2015/16 - 2019/20)"
+  },
+  {
+    "team": "Edinburgh Mavericks",
+    "year": 2019,
+    "head_coach": "Martin Harrison",
+    "source": "https://www.instagram.com/p/CCrWvHqH8nj/",
+    "source_details": "Official Edinburgh Wildcats / Mavericks / Predators farewell tribute announcing Coach Martin Harrison stepping down after 5 years as Head Coach (2015/16 - 2019/20)"
+  }
+]

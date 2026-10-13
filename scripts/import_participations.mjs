@@ -162,7 +162,7 @@ async function importParticipations(filePath) {
     let count = 0;
     for (const record of records) {
         count++;
-        const { competition_name, year, phase, team, head_coach } = record;
+        const { competition_name, year, phase, parent_phase, team, head_coach } = record;
 
         if (!competition_name || !year || !team) {
             console.warn(`[Warning] Skipping record with missing competition_name, year, or team:`, record);
@@ -206,18 +206,51 @@ async function importParticipations(filePath) {
         }
 
         // 3. Find phase
-        const { data: phaseRecord } = await supabase
+        const { data: phaseRecords } = await supabase
             .from('phases')
-            .select('id')
+            .select('id, parent_phase_id')
             .eq('season_id', season.id)
-            .eq('name', phaseName)
-            .maybeSingle();
+            .eq('name', phaseName);
 
-        if (!phaseRecord) {
+        if (!phaseRecords || phaseRecords.length === 0) {
             console.warn(`  [Skip] Phase "${phaseName}" not found in ${cleanYear} ${cleanName}.`);
             skipped++;
             continue;
         }
+
+        let finalPhaseId = phaseRecords[0].id;
+
+        if (phaseRecords.length > 1) {
+            if (!parent_phase) {
+                console.warn(`  [Skip] Ambiguous phase "${phaseName}". Multiple found, but no 'parent_phase' provided in CSV to disambiguate.`);
+                skipped++;
+                continue;
+            }
+
+            const { data: parentRecord } = await supabase
+                .from('phases')
+                .select('id')
+                .eq('season_id', season.id)
+                .eq('name', parent_phase.trim())
+                .maybeSingle();
+
+            if (!parentRecord) {
+                console.warn(`  [Skip] Ambiguous phase "${phaseName}". 'parent_phase' "${parent_phase}" not found in DB.`);
+                skipped++;
+                continue;
+            }
+
+            const matchedPhases = phaseRecords.filter(p => p.parent_phase_id === parentRecord.id);
+            if (matchedPhases.length === 1) {
+                finalPhaseId = matchedPhases[0].id;
+            } else {
+                console.warn(`  [Skip] Ambiguous phase "${phaseName}". Even with parent "${parent_phase}", found ${matchedPhases.length} matches.`);
+                skipped++;
+                continue;
+            }
+        }
+
+        const phaseRecord = { id: finalPhaseId };
 
         // 4. Find team
         const teamId = await getTeam(teamName, cleanYear);

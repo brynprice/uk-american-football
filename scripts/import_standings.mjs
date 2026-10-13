@@ -125,7 +125,7 @@ async function importStandings(filePath) {
     let count = 0;
     for (const record of records) {
         count++;
-        const { competition_name, year, phase, parent_phase, team, wins, losses, ties, points_for, points_against } = record;
+        const { competition_name, year, phase, parent_phase, team, wins, losses, ties, points_for, points_against, is_champion } = record;
 
         if (!competition_name || !year || !team) {
             console.warn(`[Warning] Skipping record with missing competition, year, or team:`, record);
@@ -223,12 +223,15 @@ async function importStandings(filePath) {
         }
 
         // 5. Update or Create participation record
+        const hasChampField = is_champion !== undefined && is_champion !== "";
+        const isChamp = is_champion === 'TRUE' || is_champion === 'true' || is_champion === true;
         const stats = {
             wins: wins !== undefined && wins !== "" ? parseInt(wins) : null,
             losses: losses !== undefined && losses !== "" ? parseInt(losses) : null,
             ties: ties !== undefined && ties !== "" ? parseInt(ties) : null,
             points_for: points_for !== undefined && points_for !== "" ? parseInt(points_for) : null,
-            points_against: points_against !== undefined && points_against !== "" ? parseInt(points_against) : null
+            points_against: points_against !== undefined && points_against !== "" ? parseInt(points_against) : null,
+            ...(hasChampField && { is_champion: isChamp })
         };
 
         const { data: existing } = await supabase
@@ -272,6 +275,23 @@ async function importStandings(filePath) {
                 console.log(`  [Created] ${teamName} participation and standings created.`);
                 updated++;
             }
+        }
+
+        if (isChamp) {
+            await supabase
+                .from('notes')
+                .delete()
+                .eq('entity_type', 'divisional_champion')
+                .eq('entity_id', finalPhaseId);
+
+            await supabase
+                .from('notes')
+                .insert({
+                    entity_type: 'divisional_champion',
+                    entity_id: finalPhaseId,
+                    content: teamId
+                });
+            console.log(`  [Champion] Set ${teamName} as Divisional Champion for ${phaseName}.`);
         }
     }
 

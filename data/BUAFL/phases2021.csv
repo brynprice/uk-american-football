@@ -1,0 +1,26 @@
+ordinal,phase,phase_type,parent_phase
+1,Premier North/South,Tier,
+2,National Championship,Playoffs,Premier North/South
+3,Premier North,Division,Premier North/South
+4,Premier South,Division,Premier North/South
+5,Division 1,Tier,
+6,National Trophy,Playoffs,Division 1
+7,Division 1 North,Conference,Division 1
+8,Division 1 Borders,Division,Division 1 North
+9,Division 1 Northern,Division,Division 1 North
+10,Division 1 Midlands,Division,Division 1 North
+11,Division 1 South,Conference,Division 1
+12,Division 1 Southern,Division,Division 1 South
+13,Division 1 South Western,Division,Division 1 South
+14,Division 1 South Eastern,Division,Division 1 South
+15,Division 2,Tier,
+16,Division 2 North,Conference,Division 2
+17,Northern Conference Cup,Playoffs,Division 2 North
+18,Division 2 Borders,Division,Division 2 North
+19,Division 2 Northern,Division,Division 2 North
+20,Division 2 Midlands,Division,Division 2 North
+21,Division 2 South,Conference,Division 2
+22,Southern Conference Cup,Playoffs,Division 2 South
+23,Division 2 Southern,Division,Division 2 South
+24,Division 2 South Western,Division,Division 2 South
+25,Division 2 South Eastern,Division,Division 2 South

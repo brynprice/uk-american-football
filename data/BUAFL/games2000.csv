@@ -1,8 +1,16 @@
-competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase
-,,,,Bath Killer Bees,Cardiff Cobras,0,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bath Killer Bees,Leicester Lemmings,3,14,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Southampton Stags,Bath Killer Bees,6,6,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Tarannau Aberystwyth,Bath Killer Bees,0,35,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Hertfordshire Hurricanes,Bath Killer Bees,12,6,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bath Killer Bees,Bristol Bullets,19,21,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bath Killer Bees,Reading Knights,42,12,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase,away_phase,away_parent_phase
+,,Western Division,,Bath Killer Bees,Cardiff Cobras,0,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Central Division,,Bath Killer Bees,Leicester Lemmings,3,14,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Northern Conference,Western Division,Southern Conference
+,,Western Division,,Southampton Stags,Bath Killer Bees,6,6,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Western Division,,Tarannau Aberystwyth,Bath Killer Bees,0,35,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Central Division,Southern Conference
+,,Western Division,,Hertfordshire Hurricanes,Bath Killer Bees,12,6,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Eastern Division,Southern Conference
+,,Western Division,,Bath Killer Bees,Bristol Bullets,19,21,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Western Division,,Bath Killer Bees,Reading Knights,42,12,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+bcafl,2000,Central Division,,Staffordshire Stallions,Nottingham Outlaws,7,6,,https://nottinghamunioutlaws.wordpress.com/00-01-season/,,Grahame Clamp,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,2000,Central Division,,Nottingham Outlaws,Leicester Lemmings,0,16,,https://nottinghamunioutlaws.wordpress.com/00-01-season/,Grahame Clamp,,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,2000,Central Division,,Nottingham Outlaws,Loughborough Aces,6,34,,https://nottinghamunioutlaws.wordpress.com/00-01-season/,Grahame Clamp,,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,2000,Central Division,,Derby Braves,Nottingham Outlaws,12,6,,https://nottinghamunioutlaws.wordpress.com/00-01-season/,,Grahame Clamp,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,2000,Central Division,,Newcastle Mariners,Nottingham Outlaws,6,54,,https://nottinghamunioutlaws.wordpress.com/00-01-season/,,Grahame Clamp,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Eastern Division,Northern Conference
+bcafl,2000,Central Division,,Birmingham Lions,Nottingham Outlaws,26,13,,https://nottinghamunioutlaws.wordpress.com/00-01-season/,,Grahame Clamp,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Southern Conference
+bcafl,2000,Central Division,,Nottingham Outlaws,Staffordshire Stallions,3,12,,https://nottinghamunioutlaws.wordpress.com/00-01-season/,Grahame Clamp,,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,2000,Central Division,,Derby Braves,Nottingham Outlaws,6,7,,https://nottinghamunioutlaws.wordpress.com/00-01-season/,,Grahame Clamp,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference

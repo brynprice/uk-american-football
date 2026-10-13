@@ -1,9 +1,9 @@
-﻿competition_name,parent_phase,phase,year,team,wins,losses,ties,points_for,points_against
-bcafl,,Northern Conference,1986,Hull Sharks,6,0,0,138,21
-bcafl,,Northern Conference,1986,Teesside Demons,4,2,0,25,34
-bcafl,,Northern Conference,1986,Leicester Lemmings,1,5,0,33,63
-bcafl,,Northern Conference,1986,Manchester MPs,1,5,0,19,97
-bcafl,,Scottish Conference,1986,Newcastle Scholars,4,1,1,4,1
-bcafl,,Scottish Conference,1986,Stirling Clansmen,4,2,0,27,23
-bcafl,,Scottish Conference,1986,Strathclyde Hawks,3,2,1,24,25
-bcafl,,Scottish Conference,1986,Glasgow Tigers,0,6,0,0,6
+competition_name,parent_phase,phase,year,team,position,games_played,wins,losses,ties,points_for,points_against,streak,is_champion,notes,head_coach
+bcafl,,Northern Conference,1986,Hull Sharks,1,6,6,0,0,138,21,,TRUE,https://en.wikipedia.org/wiki/1986%E2%80%9387_British_Collegiate_American_Football_League,
+bcafl,,Northern Conference,1986,Teesside Demons,2,6,4,2,0,25,34,,FALSE,https://en.wikipedia.org/wiki/1986%E2%80%9387_British_Collegiate_American_Football_League,
+bcafl,,Northern Conference,1986,Leicester Lemmings,3,6,1,5,0,33,63,,FALSE,https://en.wikipedia.org/wiki/1986%E2%80%9387_British_Collegiate_American_Football_League,
+bcafl,,Northern Conference,1986,Manchester MPs,4,6,1,5,0,19,97,,FALSE,https://en.wikipedia.org/wiki/1986%E2%80%9387_British_Collegiate_American_Football_League,
+bcafl,,Scottish Conference,1986,Newcastle Scholars,1,6,4,1,1,4,1,,TRUE,https://en.wikipedia.org/wiki/1986%E2%80%9387_British_Collegiate_American_Football_League,
+bcafl,,Scottish Conference,1986,Stirling Clansmen,2,6,4,2,0,27,23,,FALSE,https://en.wikipedia.org/wiki/1986%E2%80%9387_British_Collegiate_American_Football_League,
+bcafl,,Scottish Conference,1986,Strathclyde Hawks,3,6,3,2,1,24,25,,FALSE,https://en.wikipedia.org/wiki/1986%E2%80%9387_British_Collegiate_American_Football_League,
+bcafl,,Scottish Conference,1986,Glasgow Tigers,4,6,0,6,0,0,6,,FALSE,https://en.wikipedia.org/wiki/1986%E2%80%9387_British_Collegiate_American_Football_League,

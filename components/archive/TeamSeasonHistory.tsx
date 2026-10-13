@@ -6,15 +6,19 @@ import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
 import { isPlayoffPhase } from '@/lib/utils/phase-utils';
 
 interface TeamSeasonHistoryProps {
-    teamId: string;
+    teamId?: string;
+    personId?: string;
     participations: any[];
     games: any[];
+    emptyMessage?: string;
 }
 
 export default function TeamSeasonHistory({
     teamId,
+    personId,
     participations,
-    games
+    games,
+    emptyMessage
 }: TeamSeasonHistoryProps) {
     const [expandedSeasons, setExpandedSeasons] = useState<Record<string, boolean>>({});
 
@@ -27,20 +31,30 @@ export default function TeamSeasonHistory({
 
     // Pre-calculate and memoize all seasonal statistics and games to avoid heavy recalculations on accordion toggle
     const processedSeasons = useMemo(() => {
+        const isPersonMode = !teamId;
+
         const getPhaseDetails = (p: any) => {
             const phaseId = p.phase_id || p.phase?.id;
+            const currentTeamId = teamId || p.team_id || p.team?.id;
             const phaseGames = (games || [])
-                .filter((g: any) =>
-                    (g.phase_id === phaseId || g.away_phase_id === phaseId) &&
-                    (g.home_team_id === teamId || g.away_team_id === teamId) &&
-                    g.status?.toLowerCase() !== 'anomaly'
-                )
+                .filter((g: any) => {
+                    const matchesPhase = (g.phase_id === phaseId || g.away_phase_id === phaseId);
+                    if (!matchesPhase) return false;
+                    if (currentTeamId) {
+                        return (g.home_team_id === currentTeamId || g.away_team_id === currentTeamId);
+                    }
+                    return true;
+                })
                 .sort((a: any, b: any) => (b.date || '').localeCompare(a.date || ''));
 
             let wins = p.wins;
             let losses = p.losses;
             let ties = p.ties || 0;
-            let isManual = (wins !== null && losses !== null && wins !== undefined && losses !== undefined);
+
+            // For team pages: prioritize manual/official standings on p when present.
+            // For coach pages (isPersonMode): if we have game logs for this coach in this phase, calculate directly from their games (handling mid-season splits!).
+            // Only if phaseGames is empty do we fall back to p.wins/losses (e.g. historical season where only league tables exist).
+            let isManual = !isPersonMode && (wins !== null && losses !== null && wins !== undefined && losses !== undefined);
 
             if (!isManual) {
                 wins = 0;
@@ -50,7 +64,7 @@ export default function TeamSeasonHistory({
                 phaseGames.forEach((g: any) => {
                     const status = g.status?.toLowerCase();
                     if (status !== 'completed' && status !== 'awarded') return;
-                    const isHome = g.home_team_id === teamId;
+                    const isHome = currentTeamId ? (g.home_team_id === currentTeamId) : (g.coach_team_id === g.home_team_id);
                     const teamScore = isHome ? g.home_score : g.away_score;
                     const oppScore = isHome ? g.away_score : g.home_score;
                     const mult = g.is_double_header ? 2 : 1;
@@ -62,8 +76,17 @@ export default function TeamSeasonHistory({
                         else ties += mult;
                     }
                 });
-                if (count === 0 && (p.wins === null || p.wins === undefined)) {
-                    isManual = false;
+
+                if (count === 0) {
+                    if (p.wins !== null && p.wins !== undefined) {
+                        // Historical season fallback when no individual game logs exist
+                        wins = p.wins;
+                        losses = p.losses || 0;
+                        ties = p.ties || 0;
+                        isManual = true;
+                    } else {
+                        isManual = false;
+                    }
                 } else {
                     isManual = true;
                 }
@@ -71,6 +94,7 @@ export default function TeamSeasonHistory({
 
             return {
                 phaseId,
+                teamId: currentTeamId,
                 phaseGames,
                 wins: wins || 0,
                 losses: losses || 0,
@@ -91,6 +115,37 @@ export default function TeamSeasonHistory({
                 });
             }
             seasonMap.get(seasonId)!.participations.push(p);
+        });
+
+        // Phase discovery for game overrides (e.g. coach who coached games via game_staff without a participations row)
+        (games || []).forEach((g: any) => {
+            const gSeason = g.phase?.season || g.away_phase?.season;
+            if (!gSeason) return;
+            const seasonId = gSeason.id || `year-${gSeason.year}`;
+            if (!seasonMap.has(seasonId)) {
+                seasonMap.set(seasonId, {
+                    season: gSeason,
+                    participations: []
+                });
+            }
+            const existingParts = seasonMap.get(seasonId)!.participations;
+            const gPhase = g.phase || g.away_phase;
+            const gPhaseId = gPhase?.id || g.phase_id || g.away_phase_id;
+            const hasPhase = existingParts.some((p: any) => (p.phase_id || p.phase?.id) === gPhaseId);
+            if (!hasPhase && gPhase) {
+                const coachTeamId = g.coach_team_id || (teamId || (g.home_team_id === teamId ? g.home_team_id : g.away_team_id));
+                const coachTeam = coachTeamId === g.home_team_id ? g.home_team : g.away_team;
+                existingParts.push({
+                    id: `game-phase-${gPhase.id}`,
+                    phase_id: gPhase.id,
+                    phase: gPhase,
+                    team_id: coachTeamId,
+                    team: coachTeam,
+                    wins: null,
+                    losses: null,
+                    ties: null
+                });
+            }
         });
 
         const sorted = Array.from(seasonMap.entries()).sort((a, b) => {
@@ -133,10 +188,24 @@ export default function TeamSeasonHistory({
             const uniqueSeasonGames = Array.from(new Map(allSeasonGames.map(g => [g.id, g])).values());
             const seasonName = season?.name || (season?.year ? `${season.year} Season` : 'Season');
 
+            // Unique teams coached or participated in this season
+            const seasonTeams = Array.from(
+                new Map(
+                    seasonParts
+                        .filter((p: any) => p.team)
+                        .map((p: any) => {
+                            const pTeamId = p.team_id || p.team?.id;
+                            const identity = resolveTeamIdentity(p.team, season?.year);
+                            return [pTeamId, { id: pTeamId, ...identity }];
+                        })
+                ).values()
+            );
+
             return {
                 seasonKey,
                 season,
                 seasonName,
+                seasonTeams,
                 regParts,
                 playoffParts,
                 regDetails,
@@ -152,10 +221,14 @@ export default function TeamSeasonHistory({
                 uniqueSeasonGames
             };
         });
-    }, [participations, games, teamId]);
+    }, [participations, games, teamId, personId]);
 
     if (processedSeasons.length === 0) {
-        return <p className="text-slate-400 italic font-sans py-4">No seasonal records found for this team.</p>;
+        return (
+            <p className="text-slate-400 italic font-sans py-4">
+                {emptyMessage || (teamId ? 'No seasonal records found for this team.' : 'No career records found for this person.')}
+            </p>
+        );
     }
 
     return (
@@ -164,6 +237,7 @@ export default function TeamSeasonHistory({
                 seasonKey,
                 season,
                 seasonName,
+                seasonTeams,
                 regParts,
                 playoffParts,
                 regDetails,
@@ -197,6 +271,19 @@ export default function TeamSeasonHistory({
                                         {season.competition.name}
                                     </Link>
                                 )}
+                                {/* Display team badge(s) if in coach view (no fixed teamId) */}
+                                {!teamId && seasonTeams.map(t => (
+                                    <Link
+                                        key={t.id}
+                                        href={`/teams/${t.id}`}
+                                        className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-white border border-slate-300 text-xs font-bold text-slate-800 hover:text-blue-600 hover:border-blue-400 transition-colors shadow-2xs"
+                                    >
+                                        {t.logo_url && (
+                                            <img src={t.logo_url} alt="" className="w-4 h-4 object-contain rounded-xs" />
+                                        )}
+                                        <span>{t.name}</span>
+                                    </Link>
+                                ))}
                             </div>
 
                             {/* Stats Summary & Expand Toggle */}
@@ -247,76 +334,104 @@ export default function TeamSeasonHistory({
                         {isExpanded && (
                             <div className="p-4 space-y-6 bg-slate-50/50">
                                 {/* Playoff Phases */}
-                                {playoffDetails.map(({ p, details }) => (
-                                    <div key={p.id} className="bg-indigo-50/40 p-4 border border-indigo-200 border-l-4 border-l-indigo-600 rounded-r shadow-xs">
-                                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
-                                            <div>
-                                                <span className="text-[9px] font-black uppercase tracking-wider bg-indigo-600 text-white px-2 py-0.5 rounded font-sans">
-                                                    Playoff Phase
-                                                </span>
-                                                {p.phase?.id && p.phase?.name && (
-                                                    <h4 className="text-sm font-bold text-indigo-950 hover:underline mt-1">
-                                                        <Link href={`/phases/${p.phase.id}`}>{p.phase.name}</Link>
-                                                    </h4>
+                                {playoffDetails.map(({ p, details }) => {
+                                    const currentTeamId = details.teamId;
+                                    const teamIdentity = p.team ? resolveTeamIdentity(p.team, season?.year) : null;
+                                    return (
+                                        <div key={p.id} className="bg-indigo-50/40 p-4 border border-indigo-200 border-l-4 border-l-indigo-600 rounded-r shadow-xs">
+                                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
+                                                <div>
+                                                    <div className="flex items-center gap-2 flex-wrap">
+                                                        <span className="text-[9px] font-black uppercase tracking-wider bg-indigo-600 text-white px-2 py-0.5 rounded font-sans">
+                                                            Playoff Phase
+                                                        </span>
+                                                        {!teamId && teamIdentity && (
+                                                            <Link
+                                                                href={`/teams/${p.team_id || p.team?.id}`}
+                                                                className="text-xs font-bold text-indigo-900 hover:underline"
+                                                            >
+                                                                {teamIdentity.name}
+                                                            </Link>
+                                                        )}
+                                                    </div>
+                                                    {p.phase?.id && p.phase?.name && (
+                                                        <h4 className="text-sm font-bold text-indigo-950 hover:underline mt-1">
+                                                            <Link href={`/phases/${p.phase.id}`}>{p.phase.name}</Link>
+                                                        </h4>
+                                                    )}
+                                                </div>
+                                                {details.hasStats && (
+                                                    <span className="text-xs font-mono font-bold bg-white px-2 py-0.5 border border-indigo-200 rounded text-indigo-900">
+                                                        {details.wins}-{details.losses}{details.ties > 0 ? `-${details.ties}` : ''}
+                                                    </span>
                                                 )}
                                             </div>
-                                            {details.hasStats && (
-                                                <span className="text-xs font-mono font-bold bg-white px-2 py-0.5 border border-indigo-200 rounded text-indigo-900">
-                                                    {details.wins}-{details.losses}{details.ties > 0 ? `-${details.ties}` : ''}
-                                                </span>
+
+                                            {p.notes && <p className="text-xs text-indigo-800/80 mb-3 italic font-serif">{p.notes}</p>}
+
+                                            {/* Playoff Game Log */}
+                                            {details.phaseGames.length > 0 ? (
+                                                <div className="space-y-2">
+                                                    {details.phaseGames.map((game: any) => (
+                                                        <GameRow key={game.id} game={game} teamId={currentTeamId} seasonYear={season?.year} />
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <p className="text-xs text-indigo-500 italic font-sans">No detailed game logs recorded for this playoff phase.</p>
                                             )}
                                         </div>
-
-                                        {p.notes && <p className="text-xs text-indigo-800/80 mb-3 italic font-serif">{p.notes}</p>}
-
-                                        {/* Playoff Game Log */}
-                                        {details.phaseGames.length > 0 ? (
-                                            <div className="space-y-2">
-                                                {details.phaseGames.map((game: any) => (
-                                                    <GameRow key={game.id} game={game} teamId={teamId} seasonYear={season?.year} />
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <p className="text-xs text-indigo-500 italic font-sans">No detailed game logs recorded for this playoff phase.</p>
-                                        )}
-                                    </div>
-                                ))}
+                                    );
+                                })}
 
                                 {/* Regular Season Phases */}
-                                {regDetails.map(({ p, details }) => (
-                                    <div key={p.id} className="bg-white p-4 border border-slate-200 border-l-4 border-l-slate-800 rounded-r shadow-xs">
-                                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
-                                            <div>
-                                                <span className="text-[9px] font-black uppercase tracking-wider bg-slate-800 text-white px-2 py-0.5 rounded font-sans">
-                                                    Regular Season Phase
-                                                </span>
-                                                {p.phase?.id && p.phase?.name && (
-                                                    <h4 className="text-sm font-bold text-slate-900 hover:underline mt-1">
-                                                        <Link href={`/phases/${p.phase.id}`}>{p.phase.name}</Link>
-                                                    </h4>
+                                {regDetails.map(({ p, details }) => {
+                                    const currentTeamId = details.teamId;
+                                    const teamIdentity = p.team ? resolveTeamIdentity(p.team, season?.year) : null;
+                                    return (
+                                        <div key={p.id} className="bg-white p-4 border border-slate-200 border-l-4 border-l-slate-800 rounded-r shadow-xs">
+                                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
+                                                <div>
+                                                    <div className="flex items-center gap-2 flex-wrap">
+                                                        <span className="text-[9px] font-black uppercase tracking-wider bg-slate-800 text-white px-2 py-0.5 rounded font-sans">
+                                                            Regular Season Phase
+                                                        </span>
+                                                        {!teamId && teamIdentity && (
+                                                            <Link
+                                                                href={`/teams/${p.team_id || p.team?.id}`}
+                                                                className="text-xs font-bold text-slate-800 hover:underline"
+                                                            >
+                                                                {teamIdentity.name}
+                                                            </Link>
+                                                        )}
+                                                    </div>
+                                                    {p.phase?.id && p.phase?.name && (
+                                                        <h4 className="text-sm font-bold text-slate-900 hover:underline mt-1">
+                                                            <Link href={`/phases/${p.phase.id}`}>{p.phase.name}</Link>
+                                                        </h4>
+                                                    )}
+                                                </div>
+                                                {details.hasStats && (
+                                                    <span className="text-xs font-mono font-bold bg-slate-100 px-2 py-0.5 border border-slate-200 rounded text-slate-800">
+                                                        {details.wins}-{details.losses}{details.ties > 0 ? `-${details.ties}` : ''}
+                                                    </span>
                                                 )}
                                             </div>
-                                            {details.hasStats && (
-                                                <span className="text-xs font-mono font-bold bg-slate-100 px-2 py-0.5 border border-slate-200 rounded text-slate-800">
-                                                    {details.wins}-{details.losses}{details.ties > 0 ? `-${details.ties}` : ''}
-                                                </span>
+
+                                            {p.notes && <p className="text-xs text-slate-500 mb-3 italic font-serif">{p.notes}</p>}
+
+                                            {/* Regular Season Game Log */}
+                                            {details.phaseGames.length > 0 ? (
+                                                <div className="space-y-2">
+                                                    {details.phaseGames.map((game: any) => (
+                                                        <GameRow key={game.id} game={game} teamId={currentTeamId} seasonYear={season?.year} />
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <p className="text-xs text-slate-400 italic font-sans">No detailed game logs recorded for this phase.</p>
                                             )}
                                         </div>
-
-                                        {p.notes && <p className="text-xs text-slate-500 mb-3 italic font-serif">{p.notes}</p>}
-
-                                        {/* Regular Season Game Log */}
-                                        {details.phaseGames.length > 0 ? (
-                                            <div className="space-y-2">
-                                                {details.phaseGames.map((game: any) => (
-                                                    <GameRow key={game.id} game={game} teamId={teamId} seasonYear={season?.year} />
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <p className="text-xs text-slate-400 italic font-sans">No detailed game logs recorded for this phase.</p>
-                                        )}
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         )}
                     </div>
@@ -327,8 +442,8 @@ export default function TeamSeasonHistory({
 }
 
 // Sub-component for individual game row
-function GameRow({ game, teamId, seasonYear }: { game: any; teamId: string; seasonYear?: number }) {
-    const isHome = game.home_team_id === teamId;
+function GameRow({ game, teamId, seasonYear }: { game: any; teamId?: string; seasonYear?: number }) {
+    const isHome = teamId ? game.home_team_id === teamId : (game.coach_team_id ? game.coach_team_id === game.home_team_id : true);
     const opponent = isHome ? game.away_team : game.home_team;
     const year = seasonYear || (game.date ? new Date(game.date).getFullYear() : 0);
     const oppIdentity = opponent ? resolveTeamIdentity(opponent, year) : { name: 'Unknown', logo_url: null };

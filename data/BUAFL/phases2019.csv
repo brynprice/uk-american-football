@@ -1,0 +1,26 @@
+competition_name,year,phase_name,parent_phase,type,ordinal
+BUAFL,2019,Premier North/South,,Tier,1
+BUAFL,2019,National Championship,Premier North/South,Playoffs,2
+BUAFL,2019,Premier North,Premier North/South,Division,3
+BUAFL,2019,Premier South,Premier North/South,Division,4
+BUAFL,2019,Division 1,,Tier,5
+BUAFL,2019,National Trophy,Division 1,Playoffs,6
+BUAFL,2019,Division 1 North,Division 1,Conference,7
+BUAFL,2019,Division 1 Northern,Division 1 North,Division,8
+BUAFL,2019,Division 1 Yorkshire,Division 1 North,Division,9
+BUAFL,2019,Division 1 Midlands,Division 1 North,Division,10
+BUAFL,2019,Division 1 South,Division 1,Conference,11
+BUAFL,2019,Division 1 Southern,Division 1 South,Division,12
+BUAFL,2019,Division 1 South Western,Division 1 South,Division,13
+BUAFL,2019,Division 1 South Eastern,Division 1 South,Division,14
+BUAFL,2019,Division 2,,Tier,15
+BUAFL,2019,Division 2 North,Division 2,Conference,16
+BUAFL,2019,Northern Conference Cup,Division 2 North,Playoffs,17
+BUAFL,2019,Division 2 Borders,Division 2 North,Division,18
+BUAFL,2019,Division 2 Northern,Division 2 North,Division,19
+BUAFL,2019,Division 2 Midlands,Division 2 North,Division,20
+BUAFL,2019,Division 2 South,Division 2,Conference,21
+BUAFL,2019,Southern Conference Cup,Division 2 South,Playoffs,22
+BUAFL,2019,Division 2 Southern,Division 2 South,Division,23
+BUAFL,2019,Division 2 South Western,Division 2 South,Division,24
+BUAFL,2019,Division 2 South Eastern,Division 2 South,Division,25

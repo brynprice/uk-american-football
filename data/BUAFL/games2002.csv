@@ -1,9 +1,18 @@
-competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase
-,,,,Bath Killer Bees,Southampton Stags,18,31,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Cardiff Cobras,Bath Killer Bees,21,12,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bristol Bullets,Bath Killer Bees,6,8,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Leicester Lightning,Bath Killer Bees,0,1,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bath Killer Bees,Staffordshire Stallions,8,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bath Killer Bees,Tarannau Aberystwyth,35,14,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Plymouth Blitz,Bath Killer Bees,7,26,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bath Killer Bees,Plymouth Blitz,21,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase,away_phase,away_parent_phase
+,,Western Division,,Bath Killer Bees,Southampton Stags,18,31,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Western Division,,Cardiff Cobras,Bath Killer Bees,21,12,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Western Division,,Bristol Bullets,Bath Killer Bees,6,8,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Western Division,,Leicester Lightning,Bath Killer Bees,0,1,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Central Division,Northern Conference
+,,Central Division,,Bath Killer Bees,Staffordshire Stallions,8,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Northern Conference,Western Division,Southern Conference
+,,Central Division,,Bath Killer Bees,Tarannau Aberystwyth,35,14,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Western Division,,Plymouth Blitz,Bath Killer Bees,7,26,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Western Division,,Bath Killer Bees,Plymouth Blitz,21,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+bcafl,2002,Eastern Division,,Nottingham Outlaws,Hertfordshire Hurricanes,0,13,,https://nottinghamunioutlaws.wordpress.com/02-03-season/,Paul Sherratt,,FALSE,season,,,completed,high,FALSE,FALSE,,,,Southern Conference,Central Division,Northern Conference
+bcafl,2002,Central Division,,Leicester Lightning,Nottingham Outlaws,0,42,,https://nottinghamunioutlaws.wordpress.com/02-03-season/,,Paul Sherratt,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,2002,Borders Division,,Nottingham Outlaws,Newcastle Raiders,0,25,,https://nottinghamunioutlaws.wordpress.com/02-03-season/,Paul Sherratt,,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,2002,Central Division,,Sunderland Kings,Nottingham Outlaws,0,1,,https://nottinghamunioutlaws.wordpress.com/02-03-season/,,Paul Sherratt,FALSE,season,,,awarded,high,FALSE,FALSE,,,,Northern Conference,Borders Division,Northern Conference
+bcafl,2002,Central Division,,Nottingham Outlaws,Loughborough Aces,14,0,,https://nottinghamunioutlaws.wordpress.com/02-03-season/,Paul Sherratt,,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,2002,Central Division,,Staffordshire Stallions,Nottingham Outlaws,0,22,,https://nottinghamunioutlaws.wordpress.com/02-03-season/,,Paul Sherratt,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,2002,Central Division,,Derby Braves,Nottingham Outlaws,0,20,,https://nottinghamunioutlaws.wordpress.com/02-03-season/,,Paul Sherratt,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,2002,National Championship,,Hull Sharks,Nottingham Outlaws,8,15,,https://nottinghamunioutlaws.wordpress.com/02-03-season/,,Paul Sherratt,FALSE,season,,,completed,high,TRUE,FALSE,,,,Playoffs,Playoffs,
+bcafl,2002,National Championship,,Nottingham Outlaws,Stirling Clansmen,0,42,,https://nottinghamunioutlaws.wordpress.com/02-03-season/,Paul Sherratt,,FALSE,season,,,completed,high,TRUE,FALSE,,,,Playoffs,Playoffs,

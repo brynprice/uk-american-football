@@ -1,0 +1,17 @@
+competition_name,year,phase_name,parent_phase,type,ordinal
+BUAFL,2014,Premier North/South,,Tier,1
+BUAFL,2014,National Championship,Premier North/South,Playoffs,2
+BUAFL,2014,Premier North,Premier North/South,Division,3
+BUAFL,2014,Premier South,Premier North/South,Division,4
+BUAFL,2014,Division 1,,Tier,5
+BUAFL,2014,Playoffs,Division 1,Playoffs,6
+BUAFL,2014,National Trophy (North),Playoffs,Playoffs,7
+BUAFL,2014,National Trophy (South),Playoffs,Playoffs,8
+BUAFL,2014,Borders Division,Division 1,Division,9
+BUAFL,2014,Yorkshire Division,Division 1,Division,10
+BUAFL,2014,North West Division,Division 1,Division,11
+BUAFL,2014,Midlands Division,Division 1,Division,12
+BUAFL,2014,London Division,Division 1,Division,13
+BUAFL,2014,East Division,Division 1,Division,14
+BUAFL,2014,South West Division,Division 1,Division,15
+BUAFL,2014,South East Division,Division 1,Division,16

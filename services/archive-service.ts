@@ -295,7 +295,13 @@ export const ArchiveService = {
 
         // 3. Fetch all games for the phases the coach was active in, PLUS the games they were explicitly staff for
         if (phaseIds.length > 0 || explicitGameIds.length > 0) {
-            let q = supabase.from('games').select('*, phase:phases!games_phase_id_fkey(*)');
+            let q = supabase.from('games').select(`
+                *,
+                phase:phases!games_phase_id_fkey (*, season:seasons (year, id, competition:competitions (*))),
+                away_phase:phases!away_phase_id (*, season:seasons (year, id, competition:competitions (*))),
+                home_team:teams!home_team_id (*, team_aliases (*)),
+                away_team:teams!away_team_id (*, team_aliases (*))
+            `);
 
             if (phaseIds.length > 0 && explicitGameIds.length > 0) {
                 q = q.or(`phase_id.in.(${phaseIds.join(',')}),away_phase_id.in.(${phaseIds.join(',')}),id.in.(${explicitGameIds.join(',')})`);

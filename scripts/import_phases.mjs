@@ -60,8 +60,18 @@ async function importPhases(filePath) {
 
     const slugify = (text) => text.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
 
+    const fileYearMatch = filePath.match(/(\d{4})/);
+    const defaultYear = fileYearMatch ? fileYearMatch[1] : null;
+
     for (const record of records) {
-        const { competition_name, year, phase_name, type, parent_phase, confidence_level, ordinal, max_games_per_team } = record;
+        const competition_name = record.competition_name || record.competition || 'BUAFL';
+        const year = record.year || defaultYear;
+        const phase_name = record.phase_name || record.phase;
+        const type = record.type || record.phase_type;
+        const parent_phase = record.parent_phase || record.parent;
+        const confidence_level = record.confidence_level || 'high';
+        const ordinal = record.ordinal;
+        const max_games_per_team = record.max_games_per_team;
 
         if (!competition_name || !year || !phase_name) {
             console.warn(`[Warning] Skipping record with missing required fields:`, record);

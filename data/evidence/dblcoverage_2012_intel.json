@@ -1,0 +1,208 @@
+{
+  "season_year": 2012,
+  "source_archive": "https://dblcoverage.blogspot.com",
+  "verified_head_coaches": [
+    {
+      "team": "Brighton Tsunami",
+      "head_coach": "James Ormrod",
+      "url": "https://dblcoverage.blogspot.com/2013/04/three-head-coaches-resign-in-tvc.html"
+    },
+    {
+      "team": "Birmingham Lions",
+      "head_coach": "Wayne Hill",
+      "url": "https://dblcoverage.blogspot.com/2013/04/birmingham-lions-vs-hertfordshire.html"
+    },
+    {
+      "team": "Nottingham Trent Renegades",
+      "head_coach": "Adrian Giles",
+      "url": "https://dblcoverage.blogspot.com/2013/04/ntu-renegades-vs-southampton-stags-video.html"
+    },
+    {
+      "team": "Southampton Stags",
+      "head_coach": "Gareth Thomas",
+      "url": "https://dblcoverage.blogspot.com/2012/11/coaches-interviews.html"
+    },
+    {
+      "team": "BNU Buccaneers",
+      "head_coach": "Luke Plastow",
+      "url": "https://dblcoverage.blogspot.com/2013/04/luke-plastow-resigns-as-bnu-buccaneers.html"
+    },
+    {
+      "team": "Lincoln Colonials",
+      "head_coach": "Alex Robson",
+      "url": "https://dblcoverage.blogspot.com/2012/12/lincoln-coaching-staff-steps-down.html"
+    },
+    {
+      "team": "Manchester Tyrants",
+      "head_coach": "Hugh English",
+      "url": "https://dblcoverage.blogspot.com/2012/11/tyrants-part-with-head-coach-hugh.html"
+    },
+    {
+      "team": "Leeds Met Carnegie",
+      "head_coach": "Paul Wake",
+      "url": "https://dblcoverage.blogspot.com/2012/11/game-of-week-coach-wake-interview.html"
+    },
+    {
+      "team": "Hull Sharks",
+      "head_coach": "Martin Gardham",
+      "url": "https://dblcoverage.blogspot.com/2012/11/game-of-week-coach-wake-interview.html"
+    },
+    {
+      "team": "Sheffield Sabres",
+      "head_coach": "Tim Mullinar",
+      "url": "https://dblcoverage.blogspot.com/2013/01/bucs-predictions-week.html"
+    },
+    {
+      "team": "Brunel Burners",
+      "head_coach": "Jon Goddard",
+      "url": "https://dblcoverage.blogspot.com/2013/01/double-coverage-meet-team.html"
+    },
+    {
+      "team": "UCLan Rams",
+      "head_coach": "Chris Bradley",
+      "url": "https://dblcoverage.blogspot.com/2012/11/week-3-bafa-uni-predictions.html"
+    },
+    {
+      "team": "MMU Eagles",
+      "head_coach": "Dave Booker",
+      "url": "https://dblcoverage.blogspot.com/2012/11/week-3-bafa-uni-predictions.html"
+    },
+    {
+      "team": "Lancaster Bombers",
+      "head_coach": "Darren Carr",
+      "url": "https://dblcoverage.blogspot.com/2012/11/bafa-uni-week-five-predictions.html"
+    },
+    {
+      "team": "Reading Knights",
+      "head_coach": "Andy Hollands",
+      "url": "https://dblcoverage.blogspot.com/2012/11/week-3-bafa-uni-predictions.html"
+    },
+    {
+      "team": "Huddersfield Hawks",
+      "head_coach": "Greg Boyland",
+      "url": "https://dblcoverage.blogspot.com/2012/11/week-3-bafa-uni-predictions.html"
+    },
+    {
+      "team": "Stirling Clansmen",
+      "head_coach": "Rob Orr",
+      "url": "https://dblcoverage.blogspot.com/2013/01/mid-season-reviews-saltire.html"
+    },
+    {
+      "team": "Newcastle Raiders",
+      "head_coach": "Jonathan Rooney",
+      "url": "https://dblcoverage.blogspot.com/2012/11/willy-tee-week-3-predictions.html"
+    }
+  ],
+  "game_corrections_and_recaps": [
+    {
+      "matchup": "Leeds Celtics vs Durham Saints",
+      "date": "2013-02-24",
+      "home_team": "Leeds Celtics",
+      "away_team": "Durham Saints",
+      "home_score": 33,
+      "away_score": 8,
+      "url": "https://dblcoverage.blogspot.com/2013/02/celtics-bury-saints.html",
+      "notes": "Source: https://dblcoverage.blogspot.com/2013/02/celtics-bury-saints.html"
+    },
+    {
+      "matchup": "Leeds Met Carnegie vs Leeds Celtics",
+      "date": "2013-02-02",
+      "home_team": "Leeds Met Carnegie",
+      "away_team": "Leeds Celtics",
+      "home_score": 12,
+      "away_score": 8,
+      "url": "https://dblcoverage.blogspot.com/2013/02/rivalry-report-leeds-carnegie-conquer.html",
+      "notes": "Leeds Varsity. Source: https://dblcoverage.blogspot.com/2013/02/rivalry-report-leeds-carnegie-conquer.html"
+    },
+    {
+      "matchup": "Sheffield Sabres vs Hallam Warriors",
+      "date": "2013-02-02",
+      "home_team": "Hallam Warriors",
+      "away_team": "Sheffield Sabres",
+      "home_score": 20,
+      "away_score": 40,
+      "url": "https://dblcoverage.blogspot.com/2013/02/steelbowl-match-report.html",
+      "notes": "Steelbowl / Sheffield Varsity. Source: https://dblcoverage.blogspot.com/2013/02/steelbowl-match-report.html"
+    },
+    {
+      "matchup": "Edinburgh Predators vs Edinburgh Napier Knights",
+      "date": "2013-02-03",
+      "home_team": "Edinburgh Predators",
+      "away_team": "Edinburgh Napier Knights",
+      "home_score": 30,
+      "away_score": 0,
+      "url": "https://dblcoverage.blogspot.com/2013/02/edinburgh-varsity-american-football.html",
+      "notes": "Edinburgh Varsity at Meggetland Stadium. Source: https://dblcoverage.blogspot.com/2013/02/edinburgh-varsity-american-football.html"
+    },
+    {
+      "matchup": "Southampton Stags vs BNU Buccaneers",
+      "date": "2012-11-25",
+      "home_team": "Southampton Stags",
+      "away_team": "BNU Buccaneers",
+      "home_score": 27,
+      "away_score": 0,
+      "url": "https://dblcoverage.blogspot.com/2012/11/game-of-week-bnu-vs-southampton-stags.html",
+      "notes": "Game of the Week. Source: https://dblcoverage.blogspot.com/2012/11/game-of-week-bnu-vs-southampton-stags.html"
+    },
+    {
+      "matchup": "Stirling Clansmen vs Edinburgh Napier Knights (Forfeit)",
+      "date": "2013-02-20",
+      "home_team": "Stirling Clansmen",
+      "away_team": "Edinburgh Napier Knights",
+      "home_score": 55,
+      "away_score": 0,
+      "url": "https://dblcoverage.blogspot.com/2013/02/edinburgh-napier-knights-vs-glasgow.html",
+      "notes": "Napier officially forfeited rescheduled away match set for 2013-02-20. Awarded walkover to Stirling."
+    },
+    {
+      "matchup": "Stirling Clansmen vs UWS Pyros (Double-Header Game 1)",
+      "date": "2013-02-17",
+      "home_team": "UWS Pyros",
+      "away_team": "Stirling Clansmen",
+      "home_score": 0,
+      "away_score": 48,
+      "url": "https://dblcoverage.blogspot.com/2013/02/clansmen-overpower-pyros-in-double.html",
+      "notes": "Double-header fixture 1 of 2. Source: https://dblcoverage.blogspot.com/2013/02/clansmen-overpower-pyros-in-double.html"
+    },
+    {
+      "matchup": "Stirling Clansmen vs UWS Pyros (Double-Header Game 2)",
+      "date": "2013-02-17",
+      "home_team": "UWS Pyros",
+      "away_team": "Stirling Clansmen",
+      "home_score": 0,
+      "away_score": 32,
+      "url": "https://dblcoverage.blogspot.com/2013/02/clansmen-overpower-pyros-in-double.html",
+      "notes": "Double-header fixture 2 of 2. Source: https://dblcoverage.blogspot.com/2013/02/clansmen-overpower-pyros-in-double.html"
+    }
+  ],
+  "postseason_structure": {
+    "championship_seeds": {
+      "1": "Hertfordshire Hurricanes",
+      "2": "Derby Braves",
+      "3": "Hull Sharks",
+      "4": "Stirling Clansmen",
+      "5": "Birmingham Lions",
+      "6": "Bath Killer Bees",
+      "7": "Portsmouth Destroyers",
+      "8": "UWE Bullets",
+      "9": "Sheffield Sabres",
+      "10": "Kingston Cougars",
+      "11": "Loughborough Aces",
+      "12": "Leeds Met Carnegie"
+    },
+    "trophy_seeds": {
+      "13": "Glasgow Tigers",
+      "14": "Cambridge Pythons",
+      "15": "Warwick Wolves",
+      "16": "Southampton Stags",
+      "17": "Manchester Tyrants",
+      "18": "Gloucester Gladiators",
+      "19": "UEA Pirates",
+      "20": "Leeds Celtics",
+      "21": "Edinburgh Predators",
+      "22": "Nottingham Trent Renegades",
+      "23": "BNU Buccaneers",
+      "24": "Kent Falcons"
+    }
+  }
+}

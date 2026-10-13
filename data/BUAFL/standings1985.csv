@@ -1,5 +1,5 @@
-﻿competition_name,parent_phase,phase,year,team,wins,losses,ties,points_for,points_against
-bcafl,,BCAFL 1985 Season,1985,Hull Sharks,5,0,0,,
-bcafl,,BCAFL 1985 Season,1985,Teesside Demons,3,2,0,,
-bcafl,,BCAFL 1985 Season,1985,Newcastle Scholars,1,2,0,,
-bcafl,,BCAFL 1985 Season,1985,Manchester MPs,0,5,0,,
+competition_name,parent_phase,phase,year,team,position,games_played,wins,losses,ties,points_for,points_against,streak,is_champion,notes,head_coach
+bcafl,,BCAFL 1985 Season,1985,Hull Sharks,1,5,5,0,0,,,,TRUE,https://en.wikipedia.org/wiki/1985%E2%80%9386_British_Collegiate_American_Football_League,
+bcafl,,BCAFL 1985 Season,1985,Teesside Demons,2,5,3,2,0,,,,FALSE,https://en.wikipedia.org/wiki/1985%E2%80%9386_British_Collegiate_American_Football_League,
+bcafl,,BCAFL 1985 Season,1985,Newcastle Scholars,3,3,1,2,0,,,,FALSE,https://en.wikipedia.org/wiki/1985%E2%80%9386_British_Collegiate_American_Football_League,
+bcafl,,BCAFL 1985 Season,1985,Manchester MPs,4,5,0,5,0,,,,FALSE,https://en.wikipedia.org/wiki/1985%E2%80%9386_British_Collegiate_American_Football_League,

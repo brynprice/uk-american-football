@@ -1,10 +1,18 @@
-competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase
-,,,,Bath Killer Bees,Surrey Stingers,12,7,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Southampton Stags,Bath Killer Bees,0,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bath Killer Bees,Cardiff Cobras,18,20,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Reading Knights,Bath Killer Bees,0,47,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bath Killer Bees,Bristol Bullets,44,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Tarannau Aberystwyth,Bath Killer Bees,18,11,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bath Killer Bees,Southampton Stags,12,13,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Bristol Bullets,Bath Killer Bees,0,61,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
-,,,,Cardiff Cobras,Bath Killer Bees,6,28,,,,,FALSE,day,,,completed,high,False,FALSE,,,,
+competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase,away_phase,away_parent_phase
+,,Eastern Division,,Bath Killer Bees,Surrey Stingers,12,7,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Western Division,,Southampton Stags,Bath Killer Bees,0,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Western Division,,Bath Killer Bees,Cardiff Cobras,18,20,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Western Division,,Reading Knights,Bath Killer Bees,0,47,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Western Division,,Bath Killer Bees,Bristol Bullets,44,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Western Division,,Tarannau Aberystwyth,Bath Killer Bees,18,11,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Central Division,Southern Conference
+,,Western Division,,Bath Killer Bees,Southampton Stags,12,13,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Western Division,,Bristol Bullets,Bath Killer Bees,0,61,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+,,Western Division,,Cardiff Cobras,Bath Killer Bees,6,28,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Western Division,Southern Conference
+bcafl,1997,Central Division,,Nottingham Outlaws,Loughborough Aces,26,21,,https://nottinghamunioutlaws.wordpress.com/97-98-season/,Grahame Clamp,,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,1997,Central Division,,Staffordshire Stallions,Nottingham Outlaws,0,18,,https://nottinghamunioutlaws.wordpress.com/97-98-season/,,Grahame Clamp,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,1997,Central Division,,Nottingham Outlaws,Derby Braves,6,24,,https://nottinghamunioutlaws.wordpress.com/97-98-season/,Grahame Clamp,,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,1997,Eastern Division,,Nottingham Outlaws,Lancaster Bombers,6,12,,https://nottinghamunioutlaws.wordpress.com/97-98-season/,Grahame Clamp,,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,1997,Central Division,,Leicester Lemmings,Nottingham Outlaws,0,40,,https://nottinghamunioutlaws.wordpress.com/97-98-season/,,Grahame Clamp,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,1997,Central Division,,Derby Braves,Nottingham Outlaws,12,0,,https://nottinghamunioutlaws.wordpress.com/97-98-season/,,Grahame Clamp,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference
+bcafl,1997,Central Division,,UEA Pirates,Nottingham Outlaws,12,8,,https://nottinghamunioutlaws.wordpress.com/97-98-season/,,Grahame Clamp,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Eastern Division,Southern Conference
+bcafl,1997,Central Division,,Nottingham Outlaws,Staffordshire Stallions,34,0,,https://nottinghamunioutlaws.wordpress.com/97-98-season/,Grahame Clamp,,FALSE,season,,,completed,high,FALSE,FALSE,,,,Northern Conference,Central Division,Northern Conference

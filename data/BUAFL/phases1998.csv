@@ -1,0 +1,11 @@
+competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal,max_games_per_team
+bcafl,1998,Playoffs,Playoffs,,high,1,
+bcafl,1998,National Championship,Playoffs,Playoffs,high,2,
+bcafl,1998,Northern Conference,Conference,,high,3,
+bcafl,1998,Scottish Division,Division,Northern Conference,high,4,8
+bcafl,1998,Eastern Division,Division,Northern Conference,high,5,8
+bcafl,1998,Central Division,Division,Northern Conference,high,6,8
+bcafl,1998,Southern Conference,Conference,,high,7,
+bcafl,1998,Eastern Division,Division,Southern Conference,high,8,8
+bcafl,1998,Central Division,Division,Southern Conference,high,9,8
+bcafl,1998,Western Division,Division,Southern Conference,high,10,8

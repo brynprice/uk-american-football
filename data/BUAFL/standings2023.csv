@@ -1,0 +1,80 @@
+competition_name,year,phase,parent_phase,team,wins,losses,ties,points_for,points_against,streak,head_coach,offensive_coordinator,defensive_coordinator,notes,is_champion
+BUAFL,2023,Division 1 Midlands,Division 1 North,Nottingham Trent Renegades,8,0,0,300,52,,,,,Source: https://sportank.com/gameday/,TRUE
+BUAFL,2023,Division 1 Midlands,Division 1 North,Warwick Wolves,5,3,0,202,77,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 Midlands,Division 1 North,Sheffield Hallam Warriors,5,3,0,178,156,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 Midlands,Division 1 North,Leicester Longhorns,2,6,0,97,217,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 Midlands,Division 1 North,Coventry University Jets,0,8,0,27,302,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 Northern,Division 1 North,Leeds Gryphons,7,1,0,266,31,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 Northern,Division 1 North,Manchester Tyrants,7,1,0,181,104,,,,,Source: https://sportank.com/gameday/,TRUE
+BUAFL,2023,Division 1 Northern,Division 1 North,Liverpool Raptors,3,5,0,74,152,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 Northern,Division 1 North,LJMU Fury,3,5,0,77,159,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 Northern,Division 1 North,Hull Sharks,3,5,0,63,148,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 Northern,Division 1 North,MMU Eagles,1,7,0,90,157,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 Scottish,Division 1 North,Glasgow Tigers,6,1,0,125,42,,,,,Source: https://sportank.com/gameday/,TRUE
+BUAFL,2023,Division 1 Scottish,Division 1 North,Edinburgh Mavericks,5,2,0,83,43,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 Scottish,Division 1 North,Edinburgh Napier Knights,3,3,0,82,46,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 Scottish,Division 1 North,Stirling Clansmen,3,2,0,96,69,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 Scottish,Division 1 North,HWU Wolverines,1,6,0,67,105,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 Scottish,Division 1 North,Aberdeen Bulls,1,5,0,9,157,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 South Eastern,Division 1 South,UEA Pirates,6,1,0,164,68,,,,,Source: https://sportank.com/gameday/,TRUE
+BUAFL,2023,Division 1 South Eastern,Division 1 South,Kent Falcons,6,2,0,163,106,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 South Eastern,Division 1 South,KCL Regents,3,4,1,161,129,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 South Eastern,Division 1 South,Essex Blades,2,5,0,97,145,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 South Eastern,Division 1 South,QMBL Vipers,1,6,1,27,164,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 South Western,Division 1 South,Exeter Demons,8,0,0,316,52,,,,,Source: https://sportank.com/gameday/,TRUE
+BUAFL,2023,Division 1 South Western,Division 1 South,Bournemouth University Bobcats,6,2,0,169,108,,Steve Rains,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 South Western,Division 1 South,Bath Killer Bees,2,5,1,114,149,,Pat Snooks,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 South Western,Division 1 South,Southampton Stags,2,6,0,57,240,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 South Western,Division 1 South,Bristol Barracuda,1,6,1,50,157,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 Southern,Division 1 South,Brunel Burners,6,2,0,210,75,,,,,Source: https://sportank.com/gameday/,TRUE
+BUAFL,2023,Division 1 Southern,Division 1 South,Oxford Lancers,5,2,1,110,86,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 Southern,Division 1 South,Hertfordshire Hurricanes,5,3,0,186,141,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 Southern,Division 1 South,Reading Knights,2,5,0,64,91,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 1 Southern,Division 1 South,Royal Holloway Bears,0,6,1,40,217,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 Midlands,Division 2 North,Nottingham Jade,6,0,0,186,46,,,,,Source: https://sportank.com/gameday/,TRUE
+BUAFL,2023,Division 2 Midlands,Division 2 North,Derby Braves,5,1,0,239,33,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 Midlands,Division 2 North,Lincoln Colonials,3,3,0,98,103,,George Lees,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 Midlands,Division 2 North,Anglia Ruskin Siege,2,3,1,81,91,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 Midlands,Division 2 North,Cambridge Pythons,1,4,1,37,157,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 Midlands,Division 2 North,DMU Lions,0,6,0,12,223,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 Northern A,Division 2 North,UCLan Rams,5,0,0,107,0,,,,,Source: https://sportank.com/gameday/,TRUE
+BUAFL,2023,Division 2 Northern A,Division 2 North,Lancaster Bombers,4,1,0,71,35,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 Northern A,Division 2 North,Edge Hill Vikings,3,2,0,43,59,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 Northern A,Division 2 North,Staffordshire Stallions,2,3,0,86,70,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 Northern A,Division 2 North,Keele Crusaders,1,4,0,19,110,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 Northern A,Division 2 North,Bangor Llewod,0,5,0,0,52,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 Northern B,Division 2 North,Northumbria Mustangs,6,0,0,257,17,,,,,Source: https://sportank.com/gameday/,TRUE
+BUAFL,2023,Division 2 Northern B,Division 2 North,Sheffield Sabres,5,1,0,177,54,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 Northern B,Division 2 North,York Centurions,3,2,0,86,165,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 Northern B,Division 2 North,Bradford Bears,2,4,0,84,132,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 Northern B,Division 2 North,YSJ Jaguars,1,4,0,22,197,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 Northern B,Division 2 North,Sunderland Spartans,0,6,0,56,117,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 South Eastern,Division 2 South,UCL Emperors,4,1,0,113,28,,,,,Source: https://sportank.com/gameday/,TRUE
+BUAFL,2023,Division 2 South Eastern,Division 2 South,Imperial Immortals,4,1,0,134,71,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 South Eastern,Division 2 South,City Wolfpack,3,2,0,97,84,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 South Eastern,Division 2 South,Kingston Cougars,2,3,0,36,41,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 South Eastern,Division 2 South,Greenwich Mariners,2,3,0,13,42,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 South Eastern,Division 2 South,Canterbury CC Chargers,0,5,0,20,147,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 South Western,Division 2 South,Swansea Titans,6,0,0,211,19,,,,,Source: https://sportank.com/gameday/,TRUE
+BUAFL,2023,Division 2 South Western,Division 2 South,Tarannau Aberystwyth,4,2,0,182,73,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 South Western,Division 2 South,Plymouth Blitz,4,2,0,93,62,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 South Western,Division 2 South,Gloucestershire Gladiators,4,2,0,98,68,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 South Western,Division 2 South,UWE Bullets 2s,2,4,0,40,87,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 South Western,Division 2 South,Bath Spa Bulldogs,1,5,0,48,194,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 South Western,Division 2 South,Worcester Royals,0,6,0,2,171,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 Southern,Division 2 South,Brighton Tsunami,5,0,0,144,32,,Georgia Teague,,,Source: https://sportank.com/gameday/,TRUE
+BUAFL,2023,Division 2 Southern,Division 2 South,Sussex Saxons,4,1,0,42,26,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 Southern,Division 2 South,Surrey Stingers,2,2,1,82,74,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 Southern,Division 2 South,Solent Redhawks,2,2,1,69,94,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 Southern,Division 2 South,Oxford Brookes University,1,4,0,42,76,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Division 2 Southern,Division 2 South,Chichester Spitfires,0,5,0,19,96,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Premier North,Premier North/South,Nottingham Gold,8,0,0,246,54,,Jason Scott,,,Source: https://sportank.com/gameday/,TRUE
+BUAFL,2023,Premier North,Premier North/South,Leeds Beckett Carnegie,5,2,0,198,43,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Premier North,Premier North/South,Durham Saints,4,3,0,133,78,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Premier North,Premier North/South,Loughborough Students,2,6,0,94,193,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Premier North,Premier North/South,Newcastle Raiders,0,8,0,39,342,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Premier South,Premier North/South,UWE Bullets,8,0,0,487,0,,Daniel Maher,,,Source: https://sportank.com/gameday/,TRUE
+BUAFL,2023,Premier South,Premier North/South,SGS Pride,6,2,0,237,67,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Premier South,Premier North/South,Cardiff Cobras,2,6,0,100,300,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Premier South,Premier North/South,Portsmouth Destroyers,2,6,0,73,279,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2023,Premier South,Premier North/South,Birmingham Lions,2,6,0,68,319,,,,,Source: https://sportank.com/gameday/,FALSE

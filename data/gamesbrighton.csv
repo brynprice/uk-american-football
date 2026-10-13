@@ -46,6 +46,9 @@ competition,year,phase,date,away_team,home_team,away_score,home_score,venue,note
 ,2018,Division 1 Southern,25/11/2018,Kingston Cougars,Brighton Panthers,2,12,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
 ,2018,Division 1 Southern,18/11/2018,Brunel Burners,Brighton Panthers,6,0,Falmer Campus,,,Chris Denny,FALSE,day,,,completed,high,FALSE,FALSE,,,,
 ,2018,Division 1 Southern,11/11/2018,Brighton Panthers,Brunel Burners,3,40,,,Chris Denny,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2017,Southern Conference Cup,25/03/2018,Southampton Stags,Brighton Panthers,14,24,,,,Richard Cooling,FALSE,day,,,completed,high,TRUE,TRUE,Bowl,Southern Conference Cup,Final
+,2017,Southern Conference Cup,18/03/2018,KCL Regents,Brighton Panthers,0,20,,,,Richard Cooling,FALSE,day,,,completed,high,TRUE,FALSE,,,Semi-Final,Playoffs
+,2017,Southern Conference Cup,04/03/2018,Royal Holloway Bears,Brighton Panthers,0,14,,,,Richard Cooling,FALSE,day,,,completed,high,TRUE,FALSE,,,Quarter Finals,Playoffs
 ,2017,Division 2 Southern,25/02/2018,City Wolfpack,Brighton Panthers,0,36,Falmer Campus,,,Richard Cooling,FALSE,day,,,completed,high,FALSE,FALSE,,,,
 ,2017,Division 2 Southern,04/02/2018,BNU Buccaneers,Brighton Panthers,0,1,Falmer Campus,,,Richard Cooling,FALSE,day,,,awarded,high,FALSE,FALSE,,,,
 ,2017,Division 2 Southern,10/12/2017,Chichester Spitfires,Brighton Panthers,2,28,Falmer Campus,,,Richard Cooling,FALSE,day,,,completed,high,FALSE,FALSE,,,,
@@ -99,7 +102,8 @@ competition,year,phase,date,away_team,home_team,away_score,home_score,venue,note
 ,2011,,11/12/2011,Greenwich Mariners,Brighton Panthers,19,0,Falmer Campus,,,James Ormrod,FALSE,day,,,completed,high,FALSE,FALSE,,,,
 ,2011,,20/11/2011,Kent Falcons,Brighton Panthers,13,8,Falmer Campus,,,James Ormrod,FALSE,day,,,completed,high,FALSE,FALSE,,,,
 ,2011,,13/11/2011,Canterbury CC Chargers,Brighton Panthers,12,21,Falmer Campus,,,James Ormrod,FALSE,day,,,completed,high,FALSE,FALSE,,,,
-,2011,,06/11/2011,Brighton Panthers,UEA Pirates,18,24,,Quadruple Overtime. 6-6 at the end of regulation.,James Ormrod,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2010,Challenge Trophy,27/03/2011,Brighton Panthers,Solent Redhawks,14,21,,,Martin Harrison,,FALSE,day,,,completed,high,TRUE,FALSE,,,Quarter Final,Playoffs
+,2010,Challenge Trophy,13/03/2011,Brighton Panthers,UEA Pirates,19,8,,,Martin Harrison,,FALSE,day,,,completed,high,TRUE,FALSE,,,Round 1,Playoffs
 ,2010,South Eastern Division,06/03/2011,Canterbury CC Chargers,Brighton Panthers,14,26,Falmer Campus,,,Martin Harrison,FALSE,day,,,completed,high,FALSE,FALSE,,,,
 ,2010,South Eastern Division,27/02/2011,KCL Regents,Brighton Panthers,22,28,Falmer Campus,,,Martin Harrison,FALSE,day,,,completed,high,FALSE,FALSE,,,,
 ,2010,South Eastern Division,13/02/2011,Brighton Panthers,Kent Falcons,0,6,,,Martin Harrison,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
@@ -108,7 +112,7 @@ competition,year,phase,date,away_team,home_team,away_score,home_score,venue,note
 ,2010,South Eastern Division,29/11/2010,Brighton Panthers,Greenwich Mariners,27,6,,,Martin Harrison,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
 ,2010,South Eastern Division,14/11/2010,Brighton Panthers,Southampton Stags,13,27,,,Martin Harrison,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
 ,2010,South Eastern Division,07/11/2010,Portsmouth Destroyers,Brighton Panthers,32,0,Falmer Campus,,,Martin Harrison,FALSE,day,,,completed,high,FALSE,FALSE,,,,
-,2009,,28/02/2010,Greenwich Mariners,Brighton Panthers,26,9,Falmer Campus,,,Tony Bainbridge,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2009,Challenge Trophy,14/03/2010,Brighton Panthers,Greenwich Mariners,6,26,,,Tony Bainbridge,,FALSE,day,,,completed,high,TRUE,FALSE,,,Round 1,Playoffs
 ,2009,,21/02/2010,Anglia Ruskin Phantoms,Brighton Panthers,14,27,Falmer Campus,,,Tony Bainbridge,FALSE,day,,,completed,high,FALSE,FALSE,,,,
 ,2009,,31/01/2010,Brighton Panthers,Portsmouth Destroyers,20,30,,,Tony Bainbridge,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
 ,2009,,13/12/2009,Brighton Panthers,UEA Pirates,10,8,,,Tony Bainbridge,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
@@ -140,6 +144,7 @@ competition,year,phase,date,away_team,home_team,away_score,home_score,venue,note
 ,2006,Southern Division,,Brighton Panthers,Surrey Stingers,2,16,,,Eber Kington,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
 ,2006,Southern Division,,Brighton Panthers,Oxford Cavaliers,12,7,,,Eber Kington,,FALSE,day,,,completed,high,FALSE,FALSE,,,,
 ,2006,Southern Division,,Anglia Ruskin Phantoms,Brighton Panthers,8,18,,,,Eber Kington,FALSE,day,,,completed,high,FALSE,FALSE,,,,
+,2006,National Championship,,Brighton Panthers,Essex Blades,6,21,,,Eber Kington,,FALSE,season,,,completed,high,TRUE,FALSE,,,Wildcard,Playoffs
 ,2005,Southern Division,,Greenwich Mariners,Brighton Panthers,30,2,,,,Chris Emery,FALSE,day,,,completed,high,FALSE,FALSE,,,,
 ,2005,Southern Division,,Southampton Stags,Brighton Panthers,85,0,,,,Chris Emery,FALSE,day,,,completed,high,FALSE,FALSE,,,,
 ,2005,Southern Division,,Brighton Panthers,Oxford Cavaliers,6,12,,,Chris Emery,,FALSE,day,,,completed,high,FALSE,FALSE,,,,

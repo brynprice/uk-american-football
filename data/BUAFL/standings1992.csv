@@ -1,0 +1,27 @@
+competition_name,phase,year,team,position,games_played,wins,losses,ties,points_for,points_against,streak,is_champion,notes
+bcafl,Northern Conference,1992,Glasgow Tigers,1,8,8,0,0,174,28,,TRUE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1992,Leeds Celtics,2,8,7,1,0,150,22,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1992,Sheffield Zulus,3,8,5,2,1,107,59,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1992,Strathclyde Hawks,4,8,5,3,0,108,71,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1992,Lancaster Bombers,5,8,4,3,1,95,80,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1992,Hull Sharks,6,8,4,4,0,77,97,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1992,Paisley Panthers,7,8,3,4,1,46,67,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1992,Teesside Demons,8,8,3,4,1,62,105,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1992,Sunderland Wearwolves,9,8,1,6,1,38,126,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1992,Newcastle Mariners,10,8,1,7,0,31,196,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1992,Staffordshire Stallions,11,8,0,7,1,6,69,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1992,Southampton Stags,1,8,7,0,1,367,0,,TRUE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1992,Cardiff Cobras,2,8,6,1,1,116,44,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1992,Cambridge Pythons,3,8,6,2,0,108,47,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1992,Loughborough Aces,4,8,5,2,1,156,37,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1992,Oxford Cavaliers,5,8,5,3,0,122,118,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1992,UEA Pirates,6,8,4,3,1,148,100,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1992,Bath Killer Bees,7,8,3,4,1,61,128,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1992,Tarannau Aberystwyth,8,8,3,5,0,32,100,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1992,Warwick Wolves,9,8,2,4,2,38,137,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1992,Birmingham Lions,10,8,2,5,1,38,64,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1992,Aston Rhinos,11,8,2,5,1,40,144,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1992,Reading Knights,12,8,2,6,0,48,155,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1992,Leicester Lemmings,13,8,2,6,0,44,169,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1992,Bristol Bullets,14,8,2,6,0,30,167,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Southern Conference,1992,Kent Falcons,15,8,1,7,0,36,198,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League

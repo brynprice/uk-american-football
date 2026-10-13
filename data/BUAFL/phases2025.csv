@@ -1,0 +1,28 @@
+competition_name,year,phase_name,parent_phase,type,ordinal
+BUAFL,2025,Premier,,Tier,1
+BUAFL,2025,National Championship,Premier,Playoffs,2
+BUAFL,2025,National Vase,Premier,Playoffs,3
+BUAFL,2025,Premier (National),Premier,Division,4
+BUAFL,2025,Premier North,Premier,Division,5
+BUAFL,2025,Premier South,Premier,Division,6
+BUAFL,2025,Division 1,,Tier,7
+BUAFL,2025,National Trophy,Division 1,Playoffs,8
+BUAFL,2025,Division 1 North,Division 1,Conference,9
+BUAFL,2025,Division 1 Scottish,Division 1 North,Division,10
+BUAFL,2025,Division 1 Northern,Division 1 North,Division,11
+BUAFL,2025,Division 1 Mid & Yorks,Division 1 North,Division,12
+BUAFL,2025,Division 1 South,Division 1,Conference,13
+BUAFL,2025,Division 1 Southern,Division 1 South,Division,14
+BUAFL,2025,Division 1 South Western,Division 1 South,Division,15
+BUAFL,2025,Division 1 South Eastern,Division 1 South,Division,16
+BUAFL,2025,Division 2,,Tier,17
+BUAFL,2025,Division 2 North,Division 2,Conference,18
+BUAFL,2025,Northern Conference Cup,Division 2 North,Playoffs,19
+BUAFL,2025,Division 2 North Eastern,Division 2 North,Division,20
+BUAFL,2025,Division 2 North Western,Division 2 North,Division,21
+BUAFL,2025,Division 2 Midlands,Division 2 North,Division,22
+BUAFL,2025,Division 2 South,Division 2,Conference,23
+BUAFL,2025,Southern Conference Cup,Division 2 South,Playoffs,24
+BUAFL,2025,Division 2 Southern,Division 2 South,Division,25
+BUAFL,2025,Division 2 South Western,Division 2 South,Division,26
+BUAFL,2025,Division 2 South Eastern,Division 2 South,Division,27

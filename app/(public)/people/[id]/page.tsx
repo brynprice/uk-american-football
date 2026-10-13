@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
+import TeamSeasonHistory from '@/components/archive/TeamSeasonHistory';
+import { isPlayoffPhase } from '@/lib/utils/phase-utils';
 export const revalidate = 3600; // 1 hour
 
 export default async function PersonPage({ params }: { params: Promise<{ id: string }> }) {
@@ -10,57 +12,76 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
 
     const gamesCoached = await ArchiveService.getPersonGamesAsCoach(id);
 
-    const seasonEvents = person.participations.map((p: any) => ({
-        type: 'season',
-        year: p.phase.season.year,
-        competition: p.phase.season.competition.name,
-        team: p.team ? resolveTeamIdentity({ ...p.team, team_aliases: p.team.team_aliases || [] }, p.phase.season.year).name : 'Unknown Team',
-        role: 'Head Coach',
-        phase: p.phase.name,
-        id: p.id
-    }));
+    // Calculate Regular Season Coaching Record
+    const calculateCoachingStats = () => {
+        const statsByPhase = new Map<string, { wins: number; losses: number; ties: number; pf: number; pa: number; hasGames: boolean }>();
 
-    // Only include game overrides if the coach is not already the season-defined coach for that team/phase
-    const gameEvents = person.game_staff
-        .filter((s: any) => !person.participations.some((p: any) => p.phase_id === s.game.phase_id && p.team_id === s.team_id))
-        .map((s: any) => ({
-            type: 'game',
-            year: s.game.date ? new Date(s.game.date).getFullYear() : s.game.phase.season.year,
-            competition: s.game.phase.season.competition.name,
-            team: 'Game Override',
-            role: s.role.replace('_', ' '),
-            game: s.game,
-            id: s.id
-        }));
+        // 1. Process regular season games coached by this person
+        (gamesCoached || []).forEach((g: any) => {
+            const phase = g.phase || g.away_phase;
+            const isPlayoff = g.is_playoff || isPlayoffPhase(phase || {});
+            if (isPlayoff) return;
+            if (g.status?.toLowerCase() !== 'completed' && g.status?.toLowerCase() !== 'awarded') return;
 
-    const careerEvents = [...seasonEvents, ...gameEvents].sort((a, b) => b.year - a.year);
+            const phaseId = g.phase_id || phase?.id;
+            if (!phaseId) return;
 
-    // Calculate Coaching Record (Regular Season)
-    const regularSeasonGames = gamesCoached.filter(g => g.is_playoff === false);
-    let wins = 0;
-    let losses = 0;
-    let ties = 0;
-    let pointsFor = 0;
-    let pointsAgainst = 0;
+            const coachTeamId = g.coach_team_id || (g.home_team_id === g.coach_team_id ? g.home_team_id : g.away_team_id);
+            const isHome = coachTeamId === g.home_team_id;
+            const teamScore = isHome ? g.home_score : g.away_score;
+            const oppScore = isHome ? g.away_score : g.home_score;
+            const multiplier = g.is_double_header ? 2 : 1;
 
-    regularSeasonGames.forEach(g => {
-        const multiplier = g.is_double_header ? 2 : 1;
-        const isHome = g.coach_team_id === g.home_team_id;
-        const pf = isHome ? g.home_score : g.away_score;
-        const pa = isHome ? g.away_score : g.home_score;
+            if (teamScore === null || oppScore === null) return;
 
-        if (pf !== null && pa !== null) {
-            pointsFor += pf;
-            pointsAgainst += pa;
+            const current = statsByPhase.get(phaseId) || { wins: 0, losses: 0, ties: 0, pf: 0, pa: 0, hasGames: true };
+            current.hasGames = true;
+            current.pf += teamScore;
+            current.pa += oppScore;
+            if (teamScore > oppScore) current.wins += multiplier;
+            else if (teamScore < oppScore) current.losses += multiplier;
+            else current.ties += multiplier;
 
-            if (pf > pa) wins += multiplier;
-            else if (pf < pa) losses += multiplier;
-            else ties += multiplier;
-        }
-    });
+            statsByPhase.set(phaseId, current);
+        });
 
-    const totalGames = wins + losses + ties;
-    const winPercent = totalGames > 0 ? ((wins + (ties / 2)) / totalGames * 100).toFixed(1) : "0.0";
+        // 2. For phases without game logs, fall back to official participation standings if this person was the head coach
+        (person.participations || []).forEach((p: any) => {
+            const isPlayoff = isPlayoffPhase(p.phase || {});
+            if (isPlayoff) return;
+
+            const phaseId = p.phase_id || p.phase?.id;
+            if (!phaseId) return;
+
+            // If we already counted individual game logs for this phase, do not overwrite/double-count
+            if (statsByPhase.has(phaseId) && statsByPhase.get(phaseId)!.hasGames) return;
+
+            if (p.wins !== null && p.losses !== null && p.wins !== undefined && p.losses !== undefined) {
+                statsByPhase.set(phaseId, {
+                    wins: p.wins || 0,
+                    losses: p.losses || 0,
+                    ties: p.ties || 0,
+                    pf: p.points_for || 0,
+                    pa: p.points_against || 0,
+                    hasGames: false
+                });
+            }
+        });
+
+        return Array.from(statsByPhase.values()).reduce((acc, curr) => ({
+            wins: acc.wins + curr.wins,
+            losses: acc.losses + curr.losses,
+            ties: acc.ties + curr.ties,
+            pf: acc.pf + curr.pf,
+            pa: acc.pa + curr.pa,
+            totalGames: acc.totalGames + (curr.wins + curr.losses + curr.ties)
+        }), { wins: 0, losses: 0, ties: 0, pf: 0, pa: 0, totalGames: 0 });
+    };
+
+    const coachingStats = calculateCoachingStats();
+    const winPercent = coachingStats.totalGames > 0
+        ? ((coachingStats.wins + (coachingStats.ties / 2)) / coachingStats.totalGames * 100).toFixed(1)
+        : "0.0";
 
     return (
         <ArchiveLayout>
@@ -76,48 +97,23 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
                 <div className="md:col-span-2">
                     <section>
                         <h3 className="text-xl font-black uppercase border-b-2 border-slate-900 pb-2 mb-6 font-sans">Career Timeline</h3>
-                        <div className="relative border-l-2 border-slate-200 ml-3 pl-8 space-y-12">
-                            {careerEvents.map((event: any, idx) => (
-                                <div key={idx} className="relative">
-                                    {/* Timeline node */}
-                                    <div className="absolute -left-[41px] top-1 w-4 h-4 rounded-full bg-white border-4 border-slate-900"></div>
-
-                                    <div className="font-black text-2xl text-slate-300 -mt-1 mb-2">{event.year}</div>
-                                    <div className="bg-white p-6 border border-slate-200 shadow-sm hover:border-blue-500 transition-colors">
-                                        <div className="flex justify-between items-start mb-2">
-                                            <span className="text-[10px] font-black uppercase bg-slate-100 px-2 py-0.5 rounded text-slate-500 font-sans">
-                                                {event.role}
-                                            </span>
-                                            {event.type === 'game' && (
-                                                <span className="text-[10px] font-black uppercase bg-red-50 text-red-600 px-2 py-0.5 rounded italic">
-                                                    Game-Specific Override
-                                                </span>
-                                            )}
-                                        </div>
-                                        <h4 className="text-xl font-bold mb-1">{event.competition}</h4>
-                                        <div className="text-sm font-bold text-slate-700 mb-1">{event.team}</div>
-                                        <p className="text-slate-600 font-serif">
-                                            {event.type === 'season' ? `Led team in ${event.phase}` : `Staff role for specific game record`}
-                                        </p>
-                                    </div>
-                                </div>
-                            ))}
-
-                            {careerEvents.length === 0 && (
-                                <div className="ml-[-2rem] text-slate-400 italic">No career records found for this person.</div>
-                            )}
-                        </div>
+                        <TeamSeasonHistory
+                            personId={id}
+                            participations={person.participations}
+                            games={gamesCoached}
+                            emptyMessage="No career records found for this person."
+                        />
                     </section>
                 </div>
 
                 <div className="space-y-6">
-                    {totalGames > 0 && (
+                    {coachingStats.totalGames > 0 && (
                         <div className="bg-slate-900 text-white p-6 shadow-sm">
                             <h4 className="text-[10px] font-black uppercase text-slate-400 mb-4 tracking-widest">Coaching Record (Regular Season)</h4>
                             <div className="flex flex-col gap-4">
                                 <div>
                                     <div className="text-xs text-slate-400 uppercase tracking-widest mb-1">W - L - T</div>
-                                    <div className="text-3xl font-black">{wins} - {losses} - {ties}</div>
+                                    <div className="text-3xl font-black">{coachingStats.wins} - {coachingStats.losses} - {coachingStats.ties}</div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-4 border-t border-slate-800 pt-4">
                                     <div>
@@ -126,7 +122,7 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
                                     </div>
                                     <div>
                                         <div className="text-[10px] text-slate-400 uppercase tracking-widest mb-1">PF / PA</div>
-                                        <div className="text-xl font-bold text-slate-200">{pointsFor} / {pointsAgainst}</div>
+                                        <div className="text-xl font-bold text-slate-200">{coachingStats.pf} / {coachingStats.pa}</div>
                                     </div>
                                 </div>
                             </div>

@@ -8,11 +8,13 @@ import fs from 'fs';
 dotenv.config({ path: '.env.local' });
 dotenv.config({ path: '.env' });
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+const supabaseKey = (process.env.SUPABASE_SERVICE_ROLE_KEY?.trim()) || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
 
 if (!supabaseUrl || !supabaseKey) {
-  console.error('Error: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (or anon key) must be set.');
+  console.error('Error: Missing required environment variables for benchmark:');
+  if (!supabaseUrl) console.error('  - NEXT_PUBLIC_SUPABASE_URL is missing or empty');
+  if (!supabaseKey) console.error('  - NEXT_PUBLIC_SUPABASE_ANON_KEY (or SUPABASE_SERVICE_ROLE_KEY) is missing or empty');
   process.exit(1);
 }
 

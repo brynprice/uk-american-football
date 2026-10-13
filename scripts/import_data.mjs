@@ -486,23 +486,40 @@ async function importData(filePath) {
 
             // 5. Resolve or Create Game
             let gameId;
-            let { data: existingGame } = await supabase
+            let gameQuery = supabase
                 .from('games')
                 .select('id, status')
                 .eq('season_id', seasonId)
                 .eq('home_team_id', homeTeamId)
-                .eq('away_team_id', awayTeamId)
-                .eq('date', date)
-                .maybeSingle();
+                .eq('away_team_id', awayTeamId);
+
+            if (date && date.trim()) {
+                gameQuery = gameQuery.eq('date', date.trim());
+            } else {
+                gameQuery = gameQuery.is('date', null);
+            }
+
+            const isDH = ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase());
+            if (isDH) {
+                if (home_score !== undefined && home_score !== '') {
+                    gameQuery = gameQuery.eq('home_score', parseInt(home_score));
+                }
+                if (away_score !== undefined && away_score !== '') {
+                    gameQuery = gameQuery.eq('away_score', parseInt(away_score));
+                }
+            }
+
+            let { data: existingGame } = await gameQuery.maybeSingle();
 
             // Fallback: Check for legacy game with same date & teams if season_id was unlinked
-            if (!existingGame && date) {
+            if (!existingGame && date && date.trim() && !isDH) {
                 const { data: legacyGame } = await supabase
                     .from('games')
                     .select('id, status')
                     .eq('home_team_id', homeTeamId)
                     .eq('away_team_id', awayTeamId)
-                    .eq('date', date)
+                    .eq('date', date.trim())
+                    .is('season_id', null)
                     .maybeSingle();
                 if (legacyGame) {
                     existingGame = legacyGame;
