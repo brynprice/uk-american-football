@@ -21,7 +21,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
     const awayCoach = resolveHeadCoach(
         game.id,
         game.away_team_id,
-        game.phase_id,
+        game.away_phase_id || game.phase_id,
         game.game_staff.filter((s: any) => s.team_id === game.away_team_id),
         game.participations
     );
@@ -66,7 +66,11 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                                     "{game.nickname}"
                                 </span>
                             )}
-                            {game.phase?.name && <span className="font-black">{game.phase.name}</span>}
+                            {game.away_phase_id && game.away_phase_id !== game.phase_id && game.away_phase?.name ? (
+                                <span className="font-black">{game.phase?.name} vs {game.away_phase.name}</span>
+                            ) : (
+                                game.phase?.name && <span className="font-black">{game.phase.name}</span>
+                            )}
                             {game.is_double_header && (
                                 <span className="bg-amber-400 text-slate-900 px-2 py-0.5 rounded text-[10px] font-black normal-case tracking-normal">Double Header</span>
                             )}

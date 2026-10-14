@@ -64,15 +64,17 @@ Checks performed:
   2. Standings games strictly fewer than recorded games (STANDINGS_FEWER_THAN_RECORDED)
   3. Standings mathematical asymmetry (Wins != Losses, odd ties, PF != PA)
   4. Negative standings values or records
-  5. Champions flagged with 0 games
+  5. Champions flagged with 0 games or insufficient games (CHAMPION_WITH_INSUFFICIENT_GAMES)
   6. Completed or awarded games missing scores
   7. Identical home and away teams on a single game
   8. Negative game scores
   9. Tied games in knockout playoff or bowl stages
- 10. Games with teams lacking participation records in that phase
+ 10. Games with teams lacking participation records in that phase (GAME_WITHOUT_PARTICIPATION)
  11. Games dated outside season year boundaries
  12. Cross-season phase leaks or orphan parent phases
  13. AGENTS.md Rule 6 coaching registry compliance
+ 14. Teams with games in unparticipated regular season phases (TEAM_PLAYED_IN_UNPARTICIPATED_PHASE)
+ 15. Partial standings asymmetry with unbalanced wins/losses (PARTIAL_STANDINGS_ALL_WINS)
 `);
   process.exit(0);
 }
@@ -254,11 +256,11 @@ async function runAudit() {
       continue;
     }
 
-    // 3. Fetch all participations in the audited phases
-    const { data: participations, error: partErr } = await supabase
+    // 3. Fetch all participations in the season
+    const { data: allSeasonParticipations, error: partErr } = await supabase
       .from('participations')
       .select('*, teams(id, name), people:head_coach_id(id, display_name)')
-      .in('phase_id', phaseIdsToAudit);
+      .in('phase_id', Array.from(seasonAllPhasesMap.keys()));
 
     if (partErr) {
       addIssue({
@@ -269,6 +271,14 @@ async function runAudit() {
       });
       continue;
     }
+
+    const teamParticipationsInSeason = new Set(
+      (allSeasonParticipations || []).map(p => `${p.phase_id}:${p.team_id}`)
+    );
+
+    const participations = (allSeasonParticipations || []).filter(p =>
+      phaseIdsToAudit.includes(p.phase_id)
+    );
 
     // 4. Fetch games for this season
     const { data: allSeasonGames, error: gamesErr } = await supabase
@@ -407,6 +417,10 @@ async function runAudit() {
 
       const awayPhase = g.away_phase_id || g.phase_id;
       if (awayPhase && phasesToAuditMap.has(awayPhase)) {
+        if (awayPhase !== g.phase_id) {
+          if (!allGamesInAuditedPhase.has(awayPhase)) allGamesInAuditedPhase.set(awayPhase, []);
+          allGamesInAuditedPhase.get(awayPhase).push(g);
+        }
         const awayKey = `${awayPhase}:${g.away_team_id}`;
         if (!gamesByPhaseAndTeam.has(awayKey)) gamesByPhaseAndTeam.set(awayKey, []);
         gamesByPhaseAndTeam.get(awayKey).push(g);
@@ -532,7 +546,7 @@ async function runAudit() {
       }
 
       // Champion with 0 games played
-      if (p.is_champion && totalStandingsGames === 0 && !isPlayoffOrBowl) {
+      if (p.is_champion && hasStandingsData && totalStandingsGames === 0 && !isPlayoffOrBowl) {
         addIssue({
           season,
           phase,
@@ -542,35 +556,87 @@ async function runAudit() {
           message: `Team "${team?.name}" is flagged as is_champion=TRUE in phase "${phase?.name}", but has 0 games recorded in standings.`
         });
       }
+
+      if (p.is_champion && !hasStandingsData && !isPlayoffOrBowl) {
+        addIssue({
+          season,
+          phase,
+          team,
+          category: 'CHAMPION_WITHOUT_STANDINGS_DATA',
+          severity: 'INFO',
+          message: `Team "${team?.name}" is flagged as is_champion=TRUE in phase "${phase?.name}", but standings table records are unrecorded/null.`
+        });
+      }
+
+      // Champion with suspiciously few games in a multi-team division
+      const partsInPhase = (participations || []).filter(x => x.phase_id === p.phase_id);
+      if (p.is_champion && totalStandingsGames > 0 && totalStandingsGames <= 1 && partsInPhase.length >= 4 && !isPlayoffOrBowl) {
+        addIssue({
+          season,
+          phase,
+          team,
+          category: 'CHAMPION_WITH_INSUFFICIENT_GAMES',
+          severity: 'WARNING',
+          message: `Team "${team?.name}" is flagged as is_champion=TRUE in phase "${phase?.name}", but only has ${totalStandingsGames} game(s) recorded in standings in a ${partsInPhase.length}-team division.`
+        });
+      }
     }
 
     // 6. Check for games involving teams with NO participation in that phase
     for (const [phaseId, phaseGames] of allGamesInAuditedPhase.entries()) {
       const phase = phasesToAuditMap.get(phaseId);
+      const isPlayoffOrBowl = ['playoffs', 'tournament', 'bowl'].includes((phase?.type || '').toLowerCase()) ||
+                              (phase?.name || '').toLowerCase().includes('playoff') ||
+                              (phase?.name || '').toLowerCase().includes('cup') ||
+                              (phase?.name || '').toLowerCase().includes('trophy') ||
+                              (phase?.name || '').toLowerCase().includes('vase') ||
+                              (phase?.name || '').toLowerCase().includes('championship');
+
       for (const g of phaseGames) {
-        const homeKey = `${phaseId}:${g.home_team_id}`;
-        if (!teamParticipationsInPhase.has(homeKey)) {
-          addIssue({
-            season,
-            phase,
-            team: g.home,
-            category: 'GAME_WITHOUT_PARTICIPATION',
-            severity: 'CRITICAL',
-            message: `Home team "${g.home?.name}" played on ${g.date} in phase "${phase?.name}", but has NO participation record in this phase.`,
-            details: { game_id: g.id }
-          });
-        }
-        const awayPhase = g.away_phase_id || phaseId;
-        if (phasesToAuditMap.has(awayPhase)) {
-          const awayKey = `${awayPhase}:${g.away_team_id}`;
-          if (!teamParticipationsInPhase.has(awayKey)) {
+        const isHomePhase = g.phase_id === phaseId;
+        const isAwayPhase = (g.away_phase_id || g.phase_id) === phaseId;
+
+        if (isHomePhase) {
+          const homeKey = `${phaseId}:${g.home_team_id}`;
+          if (!teamParticipationsInSeason.has(homeKey)) {
             addIssue({
               season,
-              phase: phasesToAuditMap.get(awayPhase) || phase,
+              phase,
+              team: g.home,
+              category: 'GAME_WITHOUT_PARTICIPATION',
+              severity: 'CRITICAL',
+              message: `Home team "${g.home?.name}" played on ${g.date} in phase "${phase?.name}", but has NO participation record in this phase.`,
+              details: { game_id: g.id }
+            });
+          }
+        }
+
+        if (isAwayPhase) {
+          const awayKey = `${phaseId}:${g.away_team_id}`;
+          if (!teamParticipationsInSeason.has(awayKey)) {
+            addIssue({
+              season,
+              phase,
               team: g.away,
               category: 'GAME_WITHOUT_PARTICIPATION',
               severity: 'CRITICAL',
-              message: `Away team "${g.away?.name}" played on ${g.date} in phase "${phasesToAuditMap.get(awayPhase)?.name || phase?.name}", but has NO participation record in this phase.`,
+              message: `Away team "${g.away?.name}" played on ${g.date} in phase "${phase?.name}", but has NO participation record in this phase.`,
+              details: { game_id: g.id }
+            });
+          }
+        }
+
+        // In a regular season division game, if away_phase_id is NOT set, the away team MUST participate in phaseId!
+        if (!isPlayoffOrBowl && !g.away_phase_id && isHomePhase) {
+          const awayInHomePhaseKey = `${phaseId}:${g.away_team_id}`;
+          if (!teamParticipationsInSeason.has(awayInHomePhaseKey)) {
+            addIssue({
+              season,
+              phase,
+              team: g.away,
+              category: 'TEAM_IN_UNPARTICIPATED_PHASE_GAME',
+              severity: 'CRITICAL',
+              message: `Away team "${g.away?.name}" played in regular season phase "${phase?.name}" on ${g.date}, but has NO participation record in "${phase?.name}" (and away_phase_id is not set).`,
               details: { game_id: g.id }
             });
           }
@@ -578,12 +644,40 @@ async function runAudit() {
       }
     }
 
-    // 7. Check Division/Conference mathematical symmetry
+    // 7. Check if any team has games attributed to a regular season phase where they have NO participation
+    for (const [ptKey, teamGames] of gamesByPhaseAndTeam.entries()) {
+      const [pId, tId] = ptKey.split(':');
+      const phase = seasonAllPhasesMap.get(pId);
+      const isPlayoffOrBowl = ['playoffs', 'tournament', 'bowl'].includes((phase?.type || '').toLowerCase()) ||
+                              (phase?.name || '').toLowerCase().includes('playoff') ||
+                              (phase?.name || '').toLowerCase().includes('cup') ||
+                              (phase?.name || '').toLowerCase().includes('trophy') ||
+                              (phase?.name || '').toLowerCase().includes('vase') ||
+                              (phase?.name || '').toLowerCase().includes('championship');
+      if (!isPlayoffOrBowl && !teamParticipationsInSeason.has(ptKey)) {
+        const sampleGame = teamGames[0];
+        const teamName = sampleGame.home_team_id === tId ? sampleGame.home?.name : sampleGame.away?.name;
+        addIssue({
+          season,
+          phase,
+          team: { id: tId, name: teamName },
+          category: 'TEAM_PLAYED_IN_UNPARTICIPATED_PHASE',
+          severity: 'CRITICAL',
+          message: `Team "${teamName}" has ${teamGames.length} recorded regular season game(s) attributed to phase "${phase?.name}" (${season.year}), but has NO participation record in this phase.`,
+          details: { sample_game: sampleGame.id, games_count: teamGames.length }
+        });
+      }
+    }
+
+    // 8. Check Division/Conference mathematical symmetry
     for (const [phaseId, parts] of partByPhase.entries()) {
       const phase = phasesToAuditMap.get(phaseId);
       const isPlayoffOrBowl = ['playoffs', 'tournament', 'bowl'].includes((phase?.type || '').toLowerCase()) ||
                               (phase?.name || '').toLowerCase().includes('playoff') ||
-                              (phase?.name || '').toLowerCase().includes('cup');
+                              (phase?.name || '').toLowerCase().includes('cup') ||
+                              (phase?.name || '').toLowerCase().includes('trophy') ||
+                              (phase?.name || '').toLowerCase().includes('vase') ||
+                              (phase?.name || '').toLowerCase().includes('championship');
 
       if (isPlayoffOrBowl) continue;
 
@@ -622,6 +716,18 @@ async function runAudit() {
             category: 'STANDINGS_POINTS_ASYMMETRY',
             severity: 'WARNING',
             message: `Phase "${phase?.name}" (${season.year}) has unequal total Points For (${sumPF}) and Points Against (${sumPA}). Diff = ${sumPF - sumPA}.`
+          });
+        }
+      } else if (teamsWithStats.length > 0 && teamsWithStats.length < parts.length) {
+        const sumW = teamsWithStats.reduce((acc, p) => acc + (p.wins || 0), 0);
+        const sumL = teamsWithStats.reduce((acc, p) => acc + (p.losses || 0), 0);
+        if (sumW > 0 && sumL === 0) {
+          addIssue({
+            season,
+            phase,
+            category: 'PARTIAL_STANDINGS_ALL_WINS',
+            severity: 'WARNING',
+            message: `Phase "${phase?.name}" (${season.year}) has partial standings with ${sumW} win(s) and 0 losses across ${teamsWithStats.length}/${parts.length} teams. Recorded games may be missing opponents or misassigned cross-conference.`
           });
         }
       }

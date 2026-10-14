@@ -38,7 +38,9 @@ export default function TeamSeasonHistory({
             const currentTeamId = teamId || p.team_id || p.team?.id;
             const phaseGames = (games || [])
                 .filter((g: any) => {
-                    const matchesPhase = (g.phase_id === phaseId || g.away_phase_id === phaseId);
+                    const isHome = currentTeamId ? (g.home_team_id === currentTeamId) : (g.coach_team_id === g.home_team_id);
+                    const teamPhaseId = isHome ? g.phase_id : (g.away_phase_id || g.phase_id);
+                    const matchesPhase = teamPhaseId === phaseId;
                     if (!matchesPhase) return false;
                     if (currentTeamId) {
                         return (g.home_team_id === currentTeamId || g.away_team_id === currentTeamId);
@@ -119,7 +121,9 @@ export default function TeamSeasonHistory({
 
         // Phase discovery for game overrides (e.g. coach who coached games via game_staff without a participations row)
         (games || []).forEach((g: any) => {
-            const gSeason = g.phase?.season || g.away_phase?.season;
+            const isHome = teamId ? (g.home_team_id === teamId) : (g.coach_team_id ? g.coach_team_id === g.home_team_id : true);
+            const gPhase = isHome ? (g.phase || g.away_phase) : (g.away_phase || g.phase);
+            const gSeason = gPhase?.season || g.phase?.season || g.away_phase?.season;
             if (!gSeason) return;
             const seasonId = gSeason.id || `year-${gSeason.year}`;
             if (!seasonMap.has(seasonId)) {
@@ -129,8 +133,7 @@ export default function TeamSeasonHistory({
                 });
             }
             const existingParts = seasonMap.get(seasonId)!.participations;
-            const gPhase = g.phase || g.away_phase;
-            const gPhaseId = gPhase?.id || g.phase_id || g.away_phase_id;
+            const gPhaseId = gPhase?.id || (isHome ? g.phase_id : (g.away_phase_id || g.phase_id));
             const hasPhase = existingParts.some((p: any) => (p.phase_id || p.phase?.id) === gPhaseId);
             if (!hasPhase && gPhase) {
                 const coachTeamId = g.coach_team_id || (teamId || (g.home_team_id === teamId ? g.home_team_id : g.away_team_id));

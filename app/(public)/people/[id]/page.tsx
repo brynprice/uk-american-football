@@ -18,16 +18,16 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
 
         // 1. Process regular season games coached by this person
         (gamesCoached || []).forEach((g: any) => {
-            const phase = g.phase || g.away_phase;
+            const coachTeamId = g.coach_team_id || (g.home_team_id === g.coach_team_id ? g.home_team_id : g.away_team_id);
+            const isHome = coachTeamId === g.home_team_id;
+            const phase = isHome ? (g.phase || g.away_phase) : (g.away_phase || g.phase);
             const isPlayoff = g.is_playoff || isPlayoffPhase(phase || {});
             if (isPlayoff) return;
             if (g.status?.toLowerCase() !== 'completed' && g.status?.toLowerCase() !== 'awarded') return;
 
-            const phaseId = g.phase_id || phase?.id;
+            const phaseId = isHome ? g.phase_id : (g.away_phase_id || g.phase_id);
             if (!phaseId) return;
 
-            const coachTeamId = g.coach_team_id || (g.home_team_id === g.coach_team_id ? g.home_team_id : g.away_team_id);
-            const isHome = coachTeamId === g.home_team_id;
             const teamScore = isHome ? g.home_score : g.away_score;
             const oppScore = isHome ? g.away_score : g.home_score;
             const multiplier = g.is_double_header ? 2 : 1;
