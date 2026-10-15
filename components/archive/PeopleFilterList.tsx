@@ -20,17 +20,30 @@ function formatSeasonLabel(year: number): string {
 
 function formatAffiliationYears(years: number[]): string {
     if (years.length === 0) return '';
-    if (years.length === 1) return formatSeasonLabel(years[0]);
-    
-    // Check if consecutive
-    const isConsecutive = years.every((y, idx) => idx === 0 || y === years[idx - 1] + 1);
-    if (isConsecutive && years.length > 2) {
-        const first = years[0];
-        const last = years[years.length - 1];
-        const lastEndShort = String((last + 1) % 100).padStart(2, '0');
-        return `${first}–${lastEndShort}`;
+    const sortedYears = Array.from(new Set(years)).sort((a, b) => a - b);
+
+    // Group consecutive sequences
+    const groups: number[][] = [];
+    let currentGroup: number[] = [sortedYears[0]];
+    for (let i = 1; i < sortedYears.length; i++) {
+        const y = sortedYears[i];
+        if (y === currentGroup[currentGroup.length - 1] + 1) {
+            currentGroup.push(y);
+        } else {
+            groups.push(currentGroup);
+            currentGroup = [y];
+        }
     }
-    return years.map(formatSeasonLabel).join(', ');
+    groups.push(currentGroup);
+
+    return groups.map((g) => {
+        if (g.length === 1) {
+            return formatSeasonLabel(g[0]);
+        }
+        const start = g[0];
+        const end = g[g.length - 1] + 1;
+        return `${start}–${end}`;
+    }).join(', ');
 }
 
 export default function PeopleFilterList({ people }: PeopleFilterListProps) {
@@ -112,6 +125,7 @@ export default function PeopleFilterList({ people }: PeopleFilterListProps) {
 
             const teamMatch = person.affiliations.some((aff) =>
                 aff.teamName.toLowerCase().includes(q) ||
+                formatAffiliationYears(aff.years).toLowerCase().includes(q) ||
                 aff.years.some((y) => String(y).includes(q) || formatSeasonLabel(y).toLowerCase().includes(q))
             );
 
