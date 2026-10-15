@@ -9,6 +9,12 @@ export type Phase = Database["public"]["Tables"]["phases"]["Row"];
 export type Game = Database["public"]["Tables"]["games"]["Row"];
 export type Team = Database["public"]["Tables"]["teams"]["Row"];
 export type Person = Database["public"]["Tables"]["people"]["Row"];
+export type PersonWithRoles = Person & {
+    participations?: Array<{
+        teams?: { name: string } | null;
+        phases?: { seasons?: { year: number } | null } | null;
+    }> | null;
+};
 
 export const ArchiveService = {
     async getCompetitions(): Promise<Competition[]> {
@@ -379,10 +385,19 @@ export const ArchiveService = {
         return data || [];
     },
 
-    async getPeople(): Promise<Person[]> {
-        const { data, error } = await supabase.from("people").select("*").order("display_name");
+    async getPeople(): Promise<PersonWithRoles[]> {
+        const { data, error } = await supabase
+            .from("people")
+            .select(`
+                *,
+                participations (
+                    teams (name),
+                    phases (seasons (year))
+                )
+            `)
+            .order("display_name");
         if (error) throw error;
-        return data || [];
+        return (data || []) as PersonWithRoles[];
     },
 
     async getVenues(): Promise<any[]> {
