@@ -456,7 +456,15 @@ function GameRow({ game, teamId, seasonYear }: { game: any; teamId?: string; sea
     const isCompleted = game.status?.toLowerCase() === 'completed' || game.status?.toLowerCase() === 'awarded';
 
     let resultBadge = null;
-    if (isCompleted && teamScore !== null && oppScore !== null) {
+    const isCancelled = game.status?.toLowerCase() === 'cancelled';
+    if (isCancelled) {
+        const isVoid = (game.notes || '').toLowerCase().includes('void');
+        resultBadge = (
+            <span className="bg-slate-100 text-slate-500 text-[10px] font-black uppercase px-2 py-0.5 rounded border border-slate-200 font-sans">
+                {isVoid ? 'VOID' : 'CANCELLED'}
+            </span>
+        );
+    } else if (isCompleted && teamScore !== null && oppScore !== null) {
         if (teamScore > oppScore) {
             resultBadge = (
                 <span className="bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase px-2 py-0.5 rounded border border-emerald-200 font-sans">

@@ -304,7 +304,7 @@ for (const p of playoffBracket) {
     title_name: p.title || '',
     playoff_round: p.round,
     parent_phase: '',
-    away_phase: awayConf !== homeConf ? awayConf : ''
+    away_phase: ''
   });
 }
 
