@@ -1,13 +1,14 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import {
     UniballTimelineData,
     TimelineSeason,
     TimelineBowlGame,
     TimelineDivisionalChampion,
-    TimelineGameTeam
+    TimelineGameTeam,
+    TimelineSeasonTeam
 } from '@/services/archive-service';
 
 interface UniballTimelineViewProps {
@@ -34,6 +35,33 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
 
     const toggleTeams = (seasonId: string) => {
         setExpandedTeams(prev => ({ ...prev, [seasonId]: !prev[seasonId] }));
+    };
+
+    // Sync with URL query parameter ?team=...
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            const teamParam = params.get('team');
+            if (teamParam) {
+                const matched = allTeams.find(t => t.id === teamParam || t.displayName.toLowerCase() === teamParam.toLowerCase());
+                if (matched) {
+                    setSelectedTeamId(matched.id);
+                }
+            }
+        }
+    }, [allTeams]);
+
+    const handleSelectTeam = (teamId: string) => {
+        setSelectedTeamId(teamId);
+        if (typeof window !== 'undefined') {
+            const url = new URL(window.location.href);
+            if (teamId) {
+                url.searchParams.set('team', teamId);
+            } else {
+                url.searchParams.delete('team');
+            }
+            window.history.replaceState({}, '', url.toString());
+        }
     };
 
     const selectedTeam = useMemo(() => {
@@ -153,9 +181,10 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
 
     const resetFilters = () => {
         setSelectedEra('all');
-        setSelectedTeamId('');
+        handleSelectTeam('');
         setSearchQuery('');
         setTitleGamesOnly(false);
+        setSortOrder('desc');
     };
 
     return (
@@ -223,7 +252,7 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
                         </span>
                         {selectedTeamId && (
                             <button
-                                onClick={() => setSelectedTeamId('')}
+                                onClick={() => handleSelectTeam('')}
                                 className="text-xs text-blue-700 font-bold hover:underline self-start sm:self-auto font-sans"
                             >
                                 &times; Clear team filter
@@ -236,7 +265,7 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
                             return (
                                 <button
                                     key={`roll-${champ.teamId}`}
-                                    onClick={() => setSelectedTeamId(isSelected ? '' : champ.teamId)}
+                                    onClick={() => handleSelectTeam(isSelected ? '' : champ.teamId)}
                                     className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-2 border font-sans ${
                                         isSelected
                                             ? 'bg-blue-700 text-white border-blue-800 shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] scale-105'
@@ -255,45 +284,6 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
                     </div>
                 </div>
             </div>
-
-            {/* Selected Team Profile Spotlight (if filtered) */}
-            {selectedTeam && teamSummary && (
-                <div className="p-6 bg-blue-50 border-2 border-blue-900 rounded-lg shadow-[4px_4px_0px_0px_rgba(30,58,138,1)] flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div className="flex items-center gap-4">
-                        <div className="w-16 h-16 bg-white border-2 border-blue-900 rounded-full flex items-center justify-center font-black text-xl text-blue-900 shadow-sm shrink-0">
-                            {selectedTeam.displayName.slice(0, 2).toUpperCase()}
-                        </div>
-                        <div>
-                            <div className="flex items-center gap-2">
-                                <span className="text-xs font-black uppercase tracking-widest text-blue-700 font-sans">
-                                    Team Archive Spotlight
-                                </span>
-                            </div>
-                            <h2 className="text-2xl sm:text-3xl font-black uppercase italic tracking-tight text-slate-900">
-                                {selectedTeam.displayName}
-                            </h2>
-                            <p className="text-xs text-slate-600 font-sans mt-0.5">
-                                Active in Uniball {teamSummary.firstYear} &ndash; {teamSummary.lastYear} &bull; {teamSummary.totalSeasons} Seasons Documented
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-3 text-center shrink-0">
-                        <div className="bg-white p-3 border border-blue-200 rounded">
-                            <span className="text-2xl font-black text-blue-900 block leading-tight">{teamSummary.titlesWon}</span>
-                            <span className="text-[10px] uppercase font-bold text-slate-500 font-sans">College Bowls</span>
-                        </div>
-                        <div className="bg-white p-3 border border-blue-200 rounded">
-                            <span className="text-2xl font-black text-slate-900 block leading-tight">{teamSummary.runnerUpCount}</span>
-                            <span className="text-[10px] uppercase font-bold text-slate-500 font-sans">Runners-Up</span>
-                        </div>
-                        <div className="bg-white p-3 border border-blue-200 rounded">
-                            <span className="text-2xl font-black text-amber-600 block leading-tight">{teamSummary.divTitlesCount}</span>
-                            <span className="text-[10px] uppercase font-bold text-slate-500 font-sans">Div. Titles</span>
-                        </div>
-                    </div>
-                </div>
-            )}
 
             {/* Interactive Filter & Search Controls */}
             <div className="sticky top-16 z-40 bg-white/95 backdrop-blur-md p-4 sm:p-5 border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] rounded-lg space-y-4">
@@ -358,11 +348,11 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
                         </div>
 
                         {/* Team Dropdown Selector */}
-                        <div className="sm:w-64">
+                        <div className="relative sm:w-72 flex items-center">
                             <select
                                 value={selectedTeamId}
-                                onChange={(e) => setSelectedTeamId(e.target.value)}
-                                className="w-full py-2 px-3 text-xs font-sans border-2 border-slate-300 rounded bg-white focus:border-slate-900 focus:outline-none"
+                                onChange={(e) => handleSelectTeam(e.target.value)}
+                                className={`w-full py-2 pl-3 ${selectedTeamId ? 'pr-8 bg-blue-50 border-blue-600 font-bold text-blue-900 shadow-sm' : 'pr-3 bg-white border-slate-300'} text-xs font-sans border-2 rounded focus:border-slate-900 focus:outline-none transition-colors`}
                             >
                                 <option value="">Filter by University Program...</option>
                                 {allTeams.map(t => (
@@ -371,6 +361,16 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
                                     </option>
                                 ))}
                             </select>
+                            {selectedTeamId && (
+                                <button
+                                    type="button"
+                                    onClick={() => handleSelectTeam('')}
+                                    className="absolute right-2.5 top-2 text-slate-400 hover:text-slate-700 text-xs font-black"
+                                    title="Clear team filter"
+                                >
+                                    &times;
+                                </button>
+                            )}
                         </div>
                     </div>
 
@@ -407,14 +407,84 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
                 </div>
             </div>
 
+            {/* Selected Team Profile Spotlight (Directly below sticky controls) */}
+            {selectedTeam && teamSummary && (
+                <div className="p-5 sm:p-6 bg-blue-50 border-2 border-blue-900 rounded-lg shadow-[4px_4px_0px_0px_rgba(30,58,138,1)] flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div className="flex items-center gap-4">
+                        {selectedTeam.logoUrl ? (
+                            <div className="w-16 h-16 bg-white border-2 border-blue-900 rounded-full flex items-center justify-center p-1 shadow-sm shrink-0 overflow-hidden">
+                                <img
+                                    src={selectedTeam.logoUrl}
+                                    alt={selectedTeam.displayName}
+                                    className="max-w-full max-h-full object-contain"
+                                />
+                            </div>
+                        ) : (
+                            <div className="w-16 h-16 bg-white border-2 border-blue-900 rounded-full flex items-center justify-center font-black text-xl text-blue-900 shadow-sm shrink-0">
+                                {selectedTeam.displayName.slice(0, 2).toUpperCase()}
+                            </div>
+                        )}
+                        <div>
+                            <div className="flex items-center gap-2">
+                                <span className="text-xs font-black uppercase tracking-widest text-blue-700 font-sans">
+                                    Team Archive Spotlight
+                                </span>
+                            </div>
+                            <h2 className="text-2xl sm:text-3xl font-black uppercase italic tracking-tight text-slate-900">
+                                {selectedTeam.displayName}
+                            </h2>
+                            <p className="text-xs text-slate-600 font-sans mt-0.5">
+                                Active in Uniball {teamSummary.firstYear} &ndash; {teamSummary.lastYear} &bull; {teamSummary.totalSeasons} Seasons Documented
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row items-center gap-4">
+                        <div className="grid grid-cols-3 gap-3 text-center shrink-0 w-full sm:w-auto">
+                            <div className="bg-white p-3 border border-blue-200 rounded min-w-[70px]">
+                                <span className="text-2xl font-black text-blue-900 block leading-tight">{teamSummary.titlesWon}</span>
+                                <span className="text-[10px] uppercase font-bold text-slate-500 font-sans">Bowls Won</span>
+                            </div>
+                            <div className="bg-white p-3 border border-blue-200 rounded min-w-[70px]">
+                                <span className="text-2xl font-black text-slate-900 block leading-tight">{teamSummary.runnerUpCount}</span>
+                                <span className="text-[10px] uppercase font-bold text-slate-500 font-sans">Runners-Up</span>
+                            </div>
+                            <div className="bg-white p-3 border border-blue-200 rounded min-w-[70px]">
+                                <span className="text-2xl font-black text-amber-600 block leading-tight">{teamSummary.divTitlesCount}</span>
+                                <span className="text-[10px] uppercase font-bold text-slate-500 font-sans">Div. Titles</span>
+                            </div>
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={() => handleSelectTeam('')}
+                            className="w-full sm:w-auto px-4 py-2 bg-white hover:bg-slate-100 text-slate-800 border-2 border-blue-900 rounded font-black text-xs uppercase tracking-wider font-sans transition-colors"
+                        >
+                            &times; Clear Filter
+                        </button>
+                    </div>
+                </div>
+            )}
+
             {/* Timeline Filter Summary Counter */}
-            <div className="flex items-center justify-between text-xs font-sans text-slate-500 px-1">
-                <span>
-                    Showing <strong>{filteredSeasons.length}</strong> of {stats.totalSeasons} seasons
-                    {selectedEra !== 'all' && ` in ${activeEraObj?.name}`}
-                    {selectedTeam && ` for ${selectedTeam.displayName}`}
-                    {titleGamesOnly && ' (Championship seasons only)'}
-                </span>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-sans text-slate-500 px-1">
+                <div className="flex flex-wrap items-center gap-2">
+                    <span>
+                        Showing <strong>{filteredSeasons.length}</strong> of {stats.totalSeasons} seasons
+                        {selectedEra !== 'all' && ` in ${activeEraObj?.name}`}
+                        {selectedTeam && ` for ${selectedTeam.displayName}`}
+                        {titleGamesOnly && ' (Championship seasons only)'}
+                    </span>
+                    {selectedTeamId && (
+                        <button
+                            type="button"
+                            onClick={() => handleSelectTeam('')}
+                            className="text-xs text-blue-600 font-bold hover:underline font-sans"
+                        >
+                            &times; Clear team filter
+                        </button>
+                    )}
+                </div>
                 <span className="font-mono">
                     {filteredSeasons.length > 0 && `${filteredSeasons[0].year} &bull; ${filteredSeasons[filteredSeasons.length - 1].year}`}
                 </span>
@@ -442,14 +512,23 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
             {/* Timeline Spine & Season Cards */}
             <div className="relative pl-6 sm:pl-10 space-y-12 before:absolute before:left-2 sm:before:left-4 before:top-4 before:bottom-4 before:w-1 before:bg-slate-900">
                 {filteredSeasons.map((season) => {
-                    const isDivOpen = !!expandedDivisions[season.id];
-                    const isTeamsOpen = !!expandedTeams[season.id];
-
                     // Check if selected team has specific milestones in this season
-                    const isSelectedTeamWinner = season.nationalChampionship?.winner?.id === selectedTeamId ||
-                        season.nationalChampionship?.coChampions.some(c => c.id === selectedTeamId);
-                    const isSelectedTeamRunnerUp = season.nationalChampionship?.runnerUp?.id === selectedTeamId;
+                    const isSelectedTeamWinner = Boolean(
+                        selectedTeamId && (
+                            season.nationalChampionship?.winner?.id === selectedTeamId ||
+                            season.nationalChampionship?.coChampions?.some(c => c.id === selectedTeamId)
+                        )
+                    );
+                    const isSelectedTeamRunnerUp = Boolean(
+                        selectedTeamId && season.nationalChampionship?.runnerUp?.id === selectedTeamId
+                    );
                     const selectedTeamDivChamp = season.divisionalChampions.find(d => d.teamId === selectedTeamId);
+                    const selectedTeamSeasonInfo = selectedTeamId ? season.teams.find(t => t.id === selectedTeamId) : undefined;
+
+                    const isDivOpen = expandedDivisions[season.id] !== undefined
+                        ? expandedDivisions[season.id]
+                        : (selectedTeamId ? !!selectedTeamDivChamp : false);
+                    const isTeamsOpen = !!expandedTeams[season.id];
 
                     return (
                         <div key={`season-${season.id}`} className="relative group">
@@ -466,7 +545,7 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
                                 <div className="p-4 sm:p-5 border-b-2 border-slate-900 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                                     <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                                         <span className="text-2xl sm:text-3xl font-black italic tracking-tight font-sans text-slate-900">
-                                            {season.year}&ndash;{String((season.year + 1) % 100).padStart(2, '0')}
+                                             {season.year}&ndash;{String((season.year + 1) % 100).padStart(2, '0')}
                                         </span>
                                         <span className="px-2.5 py-0.5 rounded text-[11px] font-black uppercase tracking-wider bg-slate-900 text-white font-sans">
                                             {season.competitionSlug.toUpperCase()}
@@ -500,23 +579,16 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
                                 </div>
 
                                 <div className="p-4 sm:p-6 space-y-6">
-                                    {/* Selected Team Highlight Banner (if team filtered) */}
-                                    {selectedTeamId && (isSelectedTeamWinner || isSelectedTeamRunnerUp || selectedTeamDivChamp) && (
-                                        <div className={`p-3 rounded border text-xs font-sans flex items-center justify-between gap-3 ${
-                                            isSelectedTeamWinner
-                                                ? 'bg-amber-50 border-amber-400 text-amber-900'
-                                                : isSelectedTeamRunnerUp
-                                                ? 'bg-slate-100 border-slate-400 text-slate-900'
-                                                : 'bg-blue-50 border-blue-300 text-blue-900'
-                                        }`}>
-                                            <span className="font-bold flex items-center gap-1.5">
-                                                {isSelectedTeamWinner && '👑 National Champion:'}
-                                                {isSelectedTeamRunnerUp && '🥈 College Bowl Runner-up:'}
-                                                {!isSelectedTeamWinner && !isSelectedTeamRunnerUp && selectedTeamDivChamp && '🏆 Divisional Champion:'}
-                                                <span className="font-extrabold">{selectedTeam?.displayName}</span>
-                                                {selectedTeamDivChamp && ` (${selectedTeamDivChamp.phaseName})`}
-                                            </span>
-                                        </div>
+                                    {/* Selected Team Campaign Showcase Banner */}
+                                    {selectedTeam && (
+                                        <TeamCampaignBanner
+                                            team={selectedTeam}
+                                            season={season}
+                                            seasonTeam={selectedTeamSeasonInfo}
+                                            isWinner={isSelectedTeamWinner}
+                                            isRunnerUp={isSelectedTeamRunnerUp}
+                                            divChamp={selectedTeamDivChamp}
+                                        />
                                     )}
 
                                     {/* Historical Context Milestone Box */}
@@ -541,7 +613,15 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
 
                                     {/* National Championship Showcase Block */}
                                     {season.nationalChampionship && (
-                                        <ChampionshipCard game={season.nationalChampionship} />
+                                        <div className="space-y-2">
+                                            {selectedTeamId && !isSelectedTeamWinner && !isSelectedTeamRunnerUp && (
+                                                <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-slate-500 font-sans">
+                                                    <span>🏆</span>
+                                                    <span>League Title Game ({season.nationalChampionship.titleName}):</span>
+                                                </div>
+                                            )}
+                                            <ChampionshipCard game={season.nationalChampionship} highlightedTeamId={selectedTeamId} />
+                                        </div>
                                     )}
 
                                     {/* Secondary Bowl Games (e.g. Challenge Trophy, National Trophy) */}
@@ -552,7 +632,7 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
                                             </span>
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                 {season.secondaryBowls.map((bowl) => (
-                                                    <SecondaryBowlCard key={`bowl-${bowl.id}`} bowl={bowl} />
+                                                    <SecondaryBowlCard key={`bowl-${bowl.id}`} bowl={bowl} highlightedTeamId={selectedTeamId} />
                                                 ))}
                                             </div>
                                         </div>
@@ -654,10 +734,118 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
     );
 }
 
+// Subcomponent: Selected Team Campaign Banner
+function TeamCampaignBanner({
+    team,
+    season,
+    seasonTeam,
+    isWinner,
+    isRunnerUp,
+    divChamp
+}: {
+    team: { id: string; name: string; displayName: string; logoUrl?: string | null };
+    season: TimelineSeason;
+    seasonTeam?: TimelineSeasonTeam;
+    isWinner: boolean;
+    isRunnerUp: boolean;
+    divChamp?: TimelineDivisionalChampion;
+}) {
+    const hasRecord = seasonTeam && (seasonTeam.wins !== null || seasonTeam.losses !== null);
+    const divisionName = seasonTeam?.phaseName
+        ? `${seasonTeam.parentPhaseName ? `${seasonTeam.parentPhaseName} • ` : ''}${seasonTeam.phaseName}`
+        : divChamp
+            ? `${divChamp.parentPhaseName ? `${divChamp.parentPhaseName} • ` : ''}${divChamp.phaseName}`
+            : null;
+
+    let bannerBg = 'bg-blue-50/80 border-blue-300';
+    let badgeText = '🏈 Season Campaign';
+    let badgeStyle = 'bg-blue-100 text-blue-900 border border-blue-300';
+
+    if (isWinner) {
+        bannerBg = 'bg-gradient-to-r from-amber-500/15 via-amber-400/10 to-amber-500/5 border-amber-500';
+        badgeText = '👑 National Champions';
+        badgeStyle = 'bg-amber-400 text-slate-950 font-black shadow-sm';
+    } else if (isRunnerUp) {
+        bannerBg = 'bg-gradient-to-r from-slate-200 via-slate-100 to-slate-50 border-slate-400';
+        badgeText = '🥈 National Finalists';
+        badgeStyle = 'bg-slate-700 text-white font-black shadow-sm';
+    } else if (divChamp) {
+        bannerBg = 'bg-gradient-to-r from-blue-500/15 via-blue-400/10 to-transparent border-blue-500';
+        badgeText = '🏆 Division Champions';
+        badgeStyle = 'bg-blue-700 text-white font-black shadow-sm';
+    }
+
+    return (
+        <div className={`p-4 sm:p-5 rounded-lg border-2 shadow-sm ${bannerBg} flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all`}>
+            <div className="flex items-center gap-3.5 min-w-0">
+                {team.logoUrl ? (
+                    <div className="w-12 h-12 bg-white rounded-full border-2 border-slate-900 p-1 shrink-0 overflow-hidden flex items-center justify-center shadow-sm">
+                        <img src={team.logoUrl} alt={team.displayName} className="max-w-full max-h-full object-contain" />
+                    </div>
+                ) : (
+                    <div className="w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center font-black text-sm shrink-0 shadow-sm">
+                        {team.displayName.slice(0, 2).toUpperCase()}
+                    </div>
+                )}
+                <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-0.5">
+                        <span className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded font-sans ${badgeStyle}`}>
+                            {badgeText}
+                        </span>
+                        {divisionName && (
+                            <span className="text-[11px] font-bold text-slate-600 font-sans truncate">
+                                {divisionName}
+                            </span>
+                        )}
+                    </div>
+                    <div className="text-lg sm:text-xl font-black italic tracking-tight text-slate-950 truncate">
+                        {team.displayName}
+                    </div>
+                </div>
+            </div>
+
+            <div className="flex items-center justify-between sm:justify-end gap-5 shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-200/60">
+                {hasRecord ? (
+                    <div className="text-left sm:text-right">
+                        <div className="text-xl sm:text-2xl font-black font-mono tracking-tight text-slate-950">
+                            {seasonTeam.wins ?? 0}&ndash;{seasonTeam.losses ?? 0}{seasonTeam.ties ? `&ndash;${seasonTeam.ties}` : ''}
+                        </div>
+                        {(seasonTeam.pointsFor !== null && seasonTeam.pointsFor !== undefined) && (
+                            <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-sans">
+                                {seasonTeam.pointsFor} PF &bull; {seasonTeam.pointsAgainst ?? 0} PA
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-sans">
+                        Roster Documented
+                    </div>
+                )}
+
+                <Link
+                    href={`/seasons/${season.id}`}
+                    className="px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-900 border border-slate-300 rounded text-xs font-black uppercase tracking-wider font-sans transition-colors shadow-sm shrink-0"
+                >
+                    Standings &rarr;
+                </Link>
+            </div>
+        </div>
+    );
+}
+
 // Subcomponent: National Championship Card
-function ChampionshipCard({ game }: { game: TimelineBowlGame }) {
+function ChampionshipCard({
+    game,
+    highlightedTeamId
+}: {
+    game: TimelineBowlGame;
+    highlightedTeamId?: string;
+}) {
     const isTie = game.isTie;
     const isSpecial1985 = game.id === '1985-inaugural-champion';
+
+    const isWinnerHighlighted = highlightedTeamId ? game.winner?.id === highlightedTeamId : false;
+    const isRunnerUpHighlighted = highlightedTeamId ? game.runnerUp?.id === highlightedTeamId : false;
 
     return (
         <div className="p-5 sm:p-6 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-900 text-white rounded-lg border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(234,179,8,1)] relative overflow-hidden">
@@ -697,25 +885,37 @@ function ChampionshipCard({ game }: { game: TimelineBowlGame }) {
                         🤝 <strong>Co-Champions:</strong> Game concluded in a 0&ndash;0 double-overtime tie. Both universities were crowned joint National Champions.
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {game.coChampions.map((team, idx) => (
-                            <div key={`co-champ-${idx}`} className="p-4 bg-slate-800/80 rounded border border-amber-500/40 flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-amber-400 text-slate-950 rounded-full flex items-center justify-center font-black text-xs shrink-0">
-                                        🏆
+                        {game.coChampions.map((team, idx) => {
+                            const isCoChampHighlighted = highlightedTeamId === team.id;
+                            return (
+                                <div
+                                    key={`co-champ-${idx}`}
+                                    className={`p-4 bg-slate-800/80 rounded border flex items-center justify-between transition-all ${
+                                        isCoChampHighlighted
+                                            ? 'border-amber-400 ring-2 ring-amber-400 bg-slate-800 scale-[1.01]'
+                                            : 'border-amber-500/40'
+                                    }`}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 bg-amber-400 text-slate-950 rounded-full flex items-center justify-center font-black text-xs shrink-0">
+                                            🏆
+                                        </div>
+                                        <div>
+                                            <div className="text-xs font-bold text-amber-400 uppercase tracking-widest font-sans">Co-Champion</div>
+                                            <div className="text-lg font-black italic">{team.displayName}</div>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <div className="text-xs font-bold text-amber-400 uppercase tracking-widest font-sans">Co-Champion</div>
-                                        <div className="text-lg font-black italic">{team.displayName}</div>
-                                    </div>
+                                    <span className="text-2xl font-black font-mono text-amber-400">0</span>
                                 </div>
-                                <span className="text-2xl font-black font-mono text-amber-400">0</span>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             ) : isSpecial1985 ? (
                 // 1985 Inaugural Champion (No Bowl Game)
-                <div className="p-4 bg-slate-800/80 rounded border border-amber-400/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className={`p-4 bg-slate-800/80 rounded border flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${
+                    isWinnerHighlighted ? 'border-amber-400 ring-2 ring-amber-400' : 'border-amber-400/50'
+                }`}>
                     <div className="flex items-center gap-4">
                         <div className="w-12 h-12 bg-amber-400 text-slate-950 rounded-full flex items-center justify-center font-black text-lg shrink-0">
                             👑
@@ -734,7 +934,11 @@ function ChampionshipCard({ game }: { game: TimelineBowlGame }) {
                 // Standard Title Game Matchup
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
                     {/* Champion Winner Block */}
-                    <div className="p-4 bg-slate-800/90 rounded-lg border-2 border-amber-400/80 flex items-center justify-between shadow-inner">
+                    <div className={`p-4 rounded-lg flex items-center justify-between shadow-inner transition-all ${
+                        isWinnerHighlighted
+                            ? 'bg-slate-800 border-2 border-amber-300 ring-4 ring-amber-400/80 scale-[1.01]'
+                            : 'bg-slate-800/90 border-2 border-amber-400/80'
+                    }`}>
                         <div className="flex items-center gap-3.5 min-w-0">
                             <div className="w-12 h-12 bg-amber-400 text-slate-950 rounded-full flex items-center justify-center font-black text-lg shrink-0 shadow-sm">
                                 👑
@@ -754,7 +958,11 @@ function ChampionshipCard({ game }: { game: TimelineBowlGame }) {
                     </div>
 
                     {/* Runner-Up Block */}
-                    <div className="p-4 bg-slate-800/40 rounded-lg border border-slate-700 flex items-center justify-between">
+                    <div className={`p-4 rounded-lg border flex items-center justify-between transition-all ${
+                        isRunnerUpHighlighted
+                            ? 'bg-slate-800/90 border-blue-400 ring-4 ring-blue-400/80 scale-[1.01]'
+                            : 'bg-slate-800/40 border-slate-700'
+                    }`}>
                         <div className="flex items-center gap-3.5 min-w-0">
                             <div className="w-10 h-10 bg-slate-700 text-slate-300 rounded-full flex items-center justify-center font-black text-sm shrink-0">
                                 🥈
@@ -786,22 +994,37 @@ function ChampionshipCard({ game }: { game: TimelineBowlGame }) {
 }
 
 // Subcomponent: Secondary Bowl Game Card (e.g. Challenge Trophy)
-function SecondaryBowlCard({ bowl }: { bowl: TimelineBowlGame }) {
+function SecondaryBowlCard({
+    bowl,
+    highlightedTeamId
+}: {
+    bowl: TimelineBowlGame;
+    highlightedTeamId?: string;
+}) {
+    const isWinnerHighlighted = highlightedTeamId ? bowl.winner?.id === highlightedTeamId : false;
+    const isRunnerUpHighlighted = highlightedTeamId ? bowl.runnerUp?.id === highlightedTeamId : false;
+    const isCardHighlighted = isWinnerHighlighted || isRunnerUpHighlighted;
+
     return (
-        <div className="p-3 bg-slate-50 border border-slate-200 rounded text-xs font-sans space-y-1.5">
+        <div className={`p-3 rounded text-xs font-sans space-y-1.5 transition-all ${
+            isCardHighlighted
+                ? 'bg-blue-50 border-2 border-blue-600 ring-1 ring-blue-500 shadow-sm'
+                : 'bg-slate-50 border border-slate-200'
+        }`}>
             <div className="flex items-center justify-between text-[10px] text-slate-500 uppercase font-black tracking-wider">
                 <span>🛡️ {bowl.titleName}</span>
                 {bowl.date && <span>{new Date(bowl.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>}
             </div>
-            <div className="flex items-center justify-between font-bold text-slate-900">
+            <div className={`flex items-center justify-between font-bold ${isWinnerHighlighted ? 'text-blue-900 font-black' : 'text-slate-900'}`}>
                 <span className="flex items-center gap-1.5">
                     <span className="text-amber-600">🏆</span> {bowl.winner?.displayName}
                 </span>
                 <span className="font-mono font-black">{bowl.winner?.score} &ndash; {bowl.runnerUp?.score}</span>
             </div>
-            <div className="text-[10px] text-slate-500 pl-4">
+            <div className={`text-[10px] pl-4 ${isRunnerUpHighlighted ? 'text-blue-800 font-bold' : 'text-slate-500'}`}>
                 def. {bowl.runnerUp?.displayName}
             </div>
         </div>
     );
 }
+

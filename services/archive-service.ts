@@ -798,7 +798,7 @@ export const ArchiveService = {
         }
 
         // Global team accumulator
-        const allTeamsMap = new Map<string, { id: string; name: string; displayName: string }>();
+        const allTeamsMap = new Map<string, { id: string; name: string; displayName: string; logoUrl?: string | null }>();
 
         // Build enriched season records
         const enrichedSeasons: TimelineSeason[] = seasons.map(season => {
@@ -810,21 +810,43 @@ export const ArchiveService = {
             const sParts = uniballParts.filter(p => sPhaseIds.has(p.phase_id));
 
             // Teams participating in this season
-            const seasonTeamMap = new Map<string, { id: string; name: string; displayName: string; logoUrl: string | null }>();
+            const seasonTeamMap = new Map<string, TimelineSeasonTeam>();
             for (const p of sParts) {
-                if (p.team && !seasonTeamMap.has(p.team.id)) {
+                if (p.team) {
                     const idObj = resolveTeamIdentity(p.team, season.year);
-                    seasonTeamMap.set(p.team.id, {
-                        id: p.team.id,
-                        name: p.team.name,
-                        displayName: idObj.name,
-                        logoUrl: idObj.logo_url || p.team.logo_url || null
-                    });
+                    const ph = phaseMap.get(p.phase_id);
+                    const parentPhase = ph?.parent_phase_id ? phaseMap.get(ph.parent_phase_id) : null;
+                    const isChamp = p.is_champion || champNotesSet.has(`${p.phase_id}:${p.team_id}`);
+
+                    const existing = seasonTeamMap.get(p.team.id);
+                    const hasRecord = p.wins !== null || p.losses !== null;
+
+                    if (!existing || (!existing.wins && !existing.losses && hasRecord)) {
+                        seasonTeamMap.set(p.team.id, {
+                            id: p.team.id,
+                            name: p.team.name,
+                            displayName: idObj.name,
+                            logoUrl: idObj.logo_url || p.team.logo_url || null,
+                            phaseId: p.phase_id,
+                            phaseName: ph?.name || null,
+                            parentPhaseName: parentPhase?.name || null,
+                            wins: p.wins,
+                            losses: p.losses,
+                            ties: p.ties,
+                            pointsFor: p.points_for,
+                            pointsAgainst: p.points_against,
+                            isChampion: isChamp
+                        });
+                    } else if (isChamp && !existing.isChampion) {
+                        existing.isChampion = true;
+                    }
+
                     if (!allTeamsMap.has(p.team.id)) {
                         allTeamsMap.set(p.team.id, {
                             id: p.team.id,
                             name: p.team.name,
-                            displayName: idObj.name
+                            displayName: idObj.name,
+                            logoUrl: idObj.logo_url || p.team.logo_url || null
                         });
                     }
                 }
@@ -844,7 +866,8 @@ export const ArchiveService = {
                         allTeamsMap.set(g.home_team.id, {
                             id: g.home_team.id,
                             name: g.home_team.name,
-                            displayName: idObj.name
+                            displayName: idObj.name,
+                            logoUrl: idObj.logo_url || g.home_team.logo_url || null
                         });
                     }
                 }
@@ -860,7 +883,8 @@ export const ArchiveService = {
                         allTeamsMap.set(g.away_team.id, {
                             id: g.away_team.id,
                             name: g.away_team.name,
-                            displayName: idObj.name
+                            displayName: idObj.name,
+                            logoUrl: idObj.logo_url || g.away_team.logo_url || null
                         });
                     }
                 }
@@ -1056,6 +1080,22 @@ export interface TimelineDivisionalChampion {
     ties?: number | null;
 }
 
+export interface TimelineSeasonTeam {
+    id: string;
+    name: string;
+    displayName: string;
+    logoUrl: string | null;
+    phaseId?: string | null;
+    phaseName?: string | null;
+    parentPhaseName?: string | null;
+    wins?: number | null;
+    losses?: number | null;
+    ties?: number | null;
+    pointsFor?: number | null;
+    pointsAgainst?: number | null;
+    isChampion?: boolean;
+}
+
 export interface TimelineSeason {
     id: string;
     year: number;
@@ -1069,7 +1109,7 @@ export interface TimelineSeason {
     milestone: string | null;
     statusNote: string | null;
     teamCount: number;
-    teams: { id: string; name: string; displayName: string; logoUrl: string | null }[];
+    teams: TimelineSeasonTeam[];
     nationalChampionship: TimelineBowlGame | null;
     secondaryBowls: TimelineBowlGame[];
     divisionalChampions: TimelineDivisionalChampion[];
@@ -1103,7 +1143,7 @@ export interface TimelineStats {
 export interface UniballTimelineData {
     seasons: TimelineSeason[];
     stats: TimelineStats;
-    allTeams: { id: string; name: string; displayName: string }[];
+    allTeams: { id: string; name: string; displayName: string; logoUrl?: string | null }[];
 }
 
 export const UNIBALL_HISTORICAL_MILESTONES: Record<number, string> = {
