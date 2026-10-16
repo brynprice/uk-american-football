@@ -730,40 +730,155 @@ export const ArchiveService = {
             from += pageSize;
         }
 
-        // Fetch season level notes and divisional champion notes
-        const [seasonNotesRes, champNotesRes] = await Promise.all([
+        // Fetch season level notes, divisional champion notes, and all team definitions with aliases
+        const [seasonNotesRes, champNotesRes, teamsRes] = await Promise.all([
             supabase.from("notes").select("entity_id, content").eq("entity_type", "seasons"),
-            supabase.from("notes").select("entity_id, content").eq("entity_type", "divisional_champion")
+            supabase.from("notes").select("entity_id, content").eq("entity_type", "divisional_champion"),
+            supabase.from("teams").select("id, name, logo_url, team_aliases (*)")
         ]);
 
         const seasonNotesMap = new Map(((seasonNotesRes.data || []) as any[]).map(n => [n.entity_id, n.content]));
         const champNotesSet = new Set(((champNotesRes.data || []) as any[]).map(n => `${n.entity_id}:${n.content}`));
+        const dbTeams: any[] = (teamsRes.data || []) as any[];
+        const dbTeamMap = new Map<string, any>(dbTeams.map(t => [t.id, t]));
 
         // Filter participations belonging to Uniball phases
         const uniballPhaseIds = new Set(phases.map(p => p.id));
         const uniballParts = allParticipations.filter(p => uniballPhaseIds.has(p.phase_id));
 
+        // Global team accumulator using CURRENT canonical program identities
+        const allTeamsMap = new Map<string, TimelineTeamEntry>();
+
+        for (const p of uniballParts) {
+            if (p.team?.id) {
+                const t = dbTeamMap.get(p.team.id) || p.team;
+                if (!allTeamsMap.has(t.id)) {
+                    allTeamsMap.set(t.id, {
+                        id: t.id,
+                        name: t.name,
+                        displayName: t.name,
+                        logoUrl: t.logo_url || null,
+                        aliases: (t.team_aliases || []).map((a: any) => ({
+                            id: a.id,
+                            name: a.name,
+                            startYear: a.start_year,
+                            endYear: a.end_year,
+                            logoUrl: a.logo_url || null
+                        }))
+                    });
+                }
+            }
+        }
+
+        for (const g of games) {
+            for (const gTeam of [g.home_team, g.away_team]) {
+                if (gTeam?.id && !allTeamsMap.has(gTeam.id)) {
+                    const t = dbTeamMap.get(gTeam.id) || gTeam;
+                    allTeamsMap.set(t.id, {
+                        id: t.id,
+                        name: t.name,
+                        displayName: t.name,
+                        logoUrl: t.logo_url || null,
+                        aliases: (t.team_aliases || []).map((a: any) => ({
+                            id: a.id,
+                            name: a.name,
+                            startYear: a.start_year,
+                            endYear: a.end_year,
+                            logoUrl: a.logo_url || null
+                        }))
+                    });
+                }
+            }
+        }
+
+        // Precompute all program re-branding events across Uniball seasons
+        const rebrandEventsMap = new Map<number, TimelineRebrandEvent[]>();
+
+        for (const team of allTeamsMap.values()) {
+            if (!team.aliases || team.aliases.length === 0) continue;
+
+            const resolveNameForYear = (yr: number): string => {
+                const match = team.aliases.find(a => {
+                    const start = a.startYear || 0;
+                    const end = a.endYear || 9999;
+                    return yr >= start && yr <= end;
+                });
+                return match ? match.name : team.name;
+            };
+
+            for (const alias of team.aliases) {
+                // Event 1: Team transitions into this alias identity
+                if (alias.startYear && alias.startYear > 1985) {
+                    const prevName = resolveNameForYear(alias.startYear - 1);
+                    if (prevName !== alias.name) {
+                        const list = rebrandEventsMap.get(alias.startYear) || [];
+                        if (!list.some(e => e.teamId === team.id && e.toName === alias.name)) {
+                            list.push({
+                                teamId: team.id,
+                                currentName: team.name,
+                                fromName: prevName,
+                                toName: alias.name,
+                                year: alias.startYear,
+                                logoUrl: alias.logoUrl || team.logoUrl || null
+                            });
+                            rebrandEventsMap.set(alias.startYear, list);
+                        }
+                    }
+                }
+
+                // Event 2: Team concludes this alias period and transitions to next moniker / canonical name
+                if (alias.endYear && alias.endYear < 2026) {
+                    const nextYear = alias.endYear + 1;
+                    const nextName = resolveNameForYear(nextYear);
+                    if (nextName !== alias.name) {
+                        const list = rebrandEventsMap.get(nextYear) || [];
+                        if (!list.some(e => e.teamId === team.id && e.toName === nextName)) {
+                            list.push({
+                                teamId: team.id,
+                                currentName: team.name,
+                                fromName: alias.name,
+                                toName: nextName,
+                                year: nextYear,
+                                logoUrl: team.logoUrl || null
+                            });
+                            rebrandEventsMap.set(nextYear, list);
+                        }
+                    }
+                }
+            }
+        }
+
         function mapGame(game: any, seasonYear: number): TimelineBowlGame {
-            const homeIdentity = resolveTeamIdentity(game.home_team, seasonYear);
-            const awayIdentity = resolveTeamIdentity(game.away_team, seasonYear);
+            const homeDb = dbTeamMap.get(game.home_team?.id) || game.home_team;
+            const awayDb = dbTeamMap.get(game.away_team?.id) || game.away_team;
+
+            const homeIdentity = resolveTeamIdentity(homeDb, seasonYear);
+            const awayIdentity = resolveTeamIdentity(awayDb, seasonYear);
 
             const homeScore = game.home_score ?? null;
             const awayScore = game.away_score ?? null;
             const isTie = homeScore !== null && awayScore !== null && homeScore === awayScore;
 
+            const homeCanonical = homeDb?.name || game.home_team?.name || '';
+            const awayCanonical = awayDb?.name || game.away_team?.name || '';
+
             const homeTeamObj: TimelineGameTeam = {
                 id: game.home_team?.id || '',
-                name: game.home_team?.name || '',
+                name: homeCanonical,
                 displayName: homeIdentity.name,
-                logoUrl: homeIdentity.logo_url || game.home_team?.logo_url || null,
+                canonicalName: homeCanonical,
+                logoUrl: homeIdentity.logo_url || homeDb?.logo_url || null,
+                isRebranded: homeIdentity.name !== homeCanonical,
                 score: homeScore
             };
 
             const awayTeamObj: TimelineGameTeam = {
                 id: game.away_team?.id || '',
-                name: game.away_team?.name || '',
+                name: awayCanonical,
                 displayName: awayIdentity.name,
-                logoUrl: awayIdentity.logo_url || game.away_team?.logo_url || null,
+                canonicalName: awayCanonical,
+                logoUrl: awayIdentity.logo_url || awayDb?.logo_url || null,
+                isRebranded: awayIdentity.name !== awayCanonical,
                 score: awayScore
             };
 
@@ -797,9 +912,6 @@ export const ArchiveService = {
             };
         }
 
-        // Global team accumulator
-        const allTeamsMap = new Map<string, { id: string; name: string; displayName: string; logoUrl?: string | null }>();
-
         // Build enriched season records
         const enrichedSeasons: TimelineSeason[] = seasons.map(season => {
             const comp = compMap.get(season.competition_id);
@@ -813,20 +925,27 @@ export const ArchiveService = {
             const seasonTeamMap = new Map<string, TimelineSeasonTeam>();
             for (const p of sParts) {
                 if (p.team) {
-                    const idObj = resolveTeamIdentity(p.team, season.year);
+                    const dbTeam = dbTeamMap.get(p.team.id) || p.team;
+                    const idObj = resolveTeamIdentity(dbTeam, season.year);
                     const ph = phaseMap.get(p.phase_id);
                     const parentPhase = ph?.parent_phase_id ? phaseMap.get(ph.parent_phase_id) : null;
                     const isChamp = p.is_champion || champNotesSet.has(`${p.phase_id}:${p.team_id}`);
+                    const canonicalName = dbTeam.name;
+                    const isRebranded = idObj.name !== canonicalName;
 
-                    const existing = seasonTeamMap.get(p.team.id);
+                    const existing = seasonTeamMap.get(dbTeam.id);
                     const hasRecord = p.wins !== null || p.losses !== null;
 
                     if (!existing || (!existing.wins && !existing.losses && hasRecord)) {
-                        seasonTeamMap.set(p.team.id, {
-                            id: p.team.id,
-                            name: p.team.name,
+                        seasonTeamMap.set(dbTeam.id, {
+                            id: dbTeam.id,
+                            name: canonicalName,
                             displayName: idObj.name,
-                            logoUrl: idObj.logo_url || p.team.logo_url || null,
+                            canonicalName,
+                            canonicalLogoUrl: dbTeam.logo_url || null,
+                            isRebranded,
+                            historicalAlias: isRebranded ? idObj.name : null,
+                            logoUrl: idObj.logo_url || dbTeam.logo_url || null,
                             phaseId: p.phase_id,
                             phaseName: ph?.name || null,
                             parentPhaseName: parentPhase?.name || null,
@@ -840,53 +959,40 @@ export const ArchiveService = {
                     } else if (isChamp && !existing.isChampion) {
                         existing.isChampion = true;
                     }
-
-                    if (!allTeamsMap.has(p.team.id)) {
-                        allTeamsMap.set(p.team.id, {
-                            id: p.team.id,
-                            name: p.team.name,
-                            displayName: idObj.name,
-                            logoUrl: idObj.logo_url || p.team.logo_url || null
-                        });
-                    }
                 }
             }
 
             // Also check games for participating teams (in case friendly/unphased games exist)
             for (const g of sGames) {
                 if (g.home_team && !seasonTeamMap.has(g.home_team.id)) {
-                    const idObj = resolveTeamIdentity(g.home_team, season.year);
-                    seasonTeamMap.set(g.home_team.id, {
-                        id: g.home_team.id,
-                        name: g.home_team.name,
+                    const dbTeam = dbTeamMap.get(g.home_team.id) || g.home_team;
+                    const idObj = resolveTeamIdentity(dbTeam, season.year);
+                    const isRebranded = idObj.name !== dbTeam.name;
+                    seasonTeamMap.set(dbTeam.id, {
+                        id: dbTeam.id,
+                        name: dbTeam.name,
                         displayName: idObj.name,
-                        logoUrl: idObj.logo_url || g.home_team.logo_url || null
+                        canonicalName: dbTeam.name,
+                        canonicalLogoUrl: dbTeam.logo_url || null,
+                        isRebranded,
+                        historicalAlias: isRebranded ? idObj.name : null,
+                        logoUrl: idObj.logo_url || dbTeam.logo_url || null
                     });
-                    if (!allTeamsMap.has(g.home_team.id)) {
-                        allTeamsMap.set(g.home_team.id, {
-                            id: g.home_team.id,
-                            name: g.home_team.name,
-                            displayName: idObj.name,
-                            logoUrl: idObj.logo_url || g.home_team.logo_url || null
-                        });
-                    }
                 }
                 if (g.away_team && !seasonTeamMap.has(g.away_team.id)) {
-                    const idObj = resolveTeamIdentity(g.away_team, season.year);
-                    seasonTeamMap.set(g.away_team.id, {
-                        id: g.away_team.id,
-                        name: g.away_team.name,
+                    const dbTeam = dbTeamMap.get(g.away_team.id) || g.away_team;
+                    const idObj = resolveTeamIdentity(dbTeam, season.year);
+                    const isRebranded = idObj.name !== dbTeam.name;
+                    seasonTeamMap.set(dbTeam.id, {
+                        id: dbTeam.id,
+                        name: dbTeam.name,
                         displayName: idObj.name,
-                        logoUrl: idObj.logo_url || g.away_team.logo_url || null
+                        canonicalName: dbTeam.name,
+                        canonicalLogoUrl: dbTeam.logo_url || null,
+                        isRebranded,
+                        historicalAlias: isRebranded ? idObj.name : null,
+                        logoUrl: idObj.logo_url || dbTeam.logo_url || null
                     });
-                    if (!allTeamsMap.has(g.away_team.id)) {
-                        allTeamsMap.set(g.away_team.id, {
-                            id: g.away_team.id,
-                            name: g.away_team.name,
-                            displayName: idObj.name,
-                            logoUrl: idObj.logo_url || g.away_team.logo_url || null
-                        });
-                    }
                 }
             }
 
@@ -897,14 +1003,18 @@ export const ArchiveService = {
             for (const p of sParts) {
                 const isChamp = p.is_champion || champNotesSet.has(`${p.phase_id}:${p.team_id}`);
                 if (isChamp && p.team) {
+                    const dbTeam = dbTeamMap.get(p.team.id) || p.team;
                     const ph = phaseMap.get(p.phase_id);
                     const parentPhase = ph?.parent_phase_id ? phaseMap.get(ph.parent_phase_id) : null;
-                    const idObj = resolveTeamIdentity(p.team, season.year);
+                    const idObj = resolveTeamIdentity(dbTeam, season.year);
+                    const isRebranded = idObj.name !== dbTeam.name;
                     divisionalChampions.push({
-                        teamId: p.team.id,
-                        teamName: p.team.name,
+                        teamId: dbTeam.id,
+                        teamName: dbTeam.name,
                         displayName: idObj.name,
-                        logoUrl: idObj.logo_url || p.team.logo_url || null,
+                        canonicalName: dbTeam.name,
+                        isRebranded,
+                        logoUrl: idObj.logo_url || dbTeam.logo_url || null,
                         phaseId: p.phase_id,
                         phaseName: ph?.name || 'Conference',
                         parentPhaseName: parentPhase?.name || null,
@@ -951,9 +1061,11 @@ export const ArchiveService = {
                         coChampions: [],
                         winner: {
                             id: hullChamp.teamId,
-                            name: hullChamp.teamName,
+                            name: hullChamp.canonicalName || hullChamp.teamName,
                             displayName: hullChamp.displayName,
+                            canonicalName: hullChamp.canonicalName || hullChamp.teamName,
                             logoUrl: hullChamp.logoUrl,
+                            isRebranded: hullChamp.isRebranded,
                             score: null
                         },
                         runnerUp: null,
@@ -972,6 +1084,9 @@ export const ArchiveService = {
                 }
             }
 
+            const seasonRebrandEvents = (rebrandEventsMap.get(season.year) || [])
+                .sort((a, b) => a.currentName.localeCompare(b.currentName));
+
             return {
                 id: season.id,
                 year: season.year,
@@ -988,12 +1103,13 @@ export const ArchiveService = {
                 teams: seasonTeams,
                 nationalChampionship,
                 secondaryBowls,
-                divisionalChampions
+                divisionalChampions,
+                rebrandEvents: seasonRebrandEvents
             };
         });
 
-        // Calculate Roll of Honour (National Champions leaderboard)
-        const rollMap = new Map<string, { teamId: string; teamName: string; displayName: string; logoUrl: string | null; titlesCount: number; years: number[] }>();
+        // Calculate Roll of Honour (National Champions leaderboard) credited to current canonical program name
+        const rollMap = new Map<string, TimelineRollOfHonorEntry>();
 
         for (const season of enrichedSeasons) {
             if (season.nationalChampionship) {
@@ -1001,17 +1117,26 @@ export const ArchiveService = {
                 const teamsToCredit = nc.isTie && nc.coChampions.length > 0 ? nc.coChampions : (nc.winner ? [nc.winner] : []);
                 for (const t of teamsToCredit) {
                     if (!t || !t.id) continue;
+                    const teamInfo = allTeamsMap.get(t.id);
+                    const canonicalName = teamInfo?.name || t.canonicalName || t.name || t.displayName;
+                    const canonicalLogo = teamInfo?.logoUrl || t.logoUrl;
+
                     const existing = rollMap.get(t.id) || {
                         teamId: t.id,
-                        teamName: t.name,
-                        displayName: t.displayName,
-                        logoUrl: t.logoUrl,
+                        teamName: canonicalName,
+                        displayName: canonicalName,
+                        logoUrl: canonicalLogo,
                         titlesCount: 0,
-                        years: []
+                        years: [],
+                        historicalAliasesWonAs: []
                     };
                     existing.titlesCount += 1;
                     existing.years.push(season.year);
-                    if (t.logoUrl) existing.logoUrl = t.logoUrl;
+                    if (t.displayName && t.displayName !== canonicalName && !existing.historicalAliasesWonAs?.includes(t.displayName)) {
+                        existing.historicalAliasesWonAs = existing.historicalAliasesWonAs || [];
+                        existing.historicalAliasesWonAs.push(t.displayName);
+                    }
+                    if (canonicalLogo) existing.logoUrl = canonicalLogo;
                     rollMap.set(t.id, existing);
                 }
             }
@@ -1046,7 +1171,9 @@ export interface TimelineGameTeam {
     id: string;
     name: string;
     displayName: string;
+    canonicalName?: string;
     logoUrl: string | null;
+    isRebranded?: boolean;
     score: number | null;
 }
 
@@ -1071,6 +1198,8 @@ export interface TimelineDivisionalChampion {
     teamId: string;
     teamName: string;
     displayName: string;
+    canonicalName?: string;
+    isRebranded?: boolean;
     logoUrl: string | null;
     phaseId: string;
     phaseName: string;
@@ -1084,6 +1213,10 @@ export interface TimelineSeasonTeam {
     id: string;
     name: string;
     displayName: string;
+    canonicalName?: string;
+    canonicalLogoUrl?: string | null;
+    isRebranded?: boolean;
+    historicalAlias?: string | null;
     logoUrl: string | null;
     phaseId?: string | null;
     phaseName?: string | null;
@@ -1094,6 +1227,15 @@ export interface TimelineSeasonTeam {
     pointsFor?: number | null;
     pointsAgainst?: number | null;
     isChampion?: boolean;
+}
+
+export interface TimelineRebrandEvent {
+    teamId: string;
+    currentName: string;
+    fromName: string;
+    toName: string;
+    year: number;
+    logoUrl?: string | null;
 }
 
 export interface TimelineSeason {
@@ -1113,6 +1255,7 @@ export interface TimelineSeason {
     nationalChampionship: TimelineBowlGame | null;
     secondaryBowls: TimelineBowlGame[];
     divisionalChampions: TimelineDivisionalChampion[];
+    rebrandEvents: TimelineRebrandEvent[];
 }
 
 export interface TimelineRollOfHonorEntry {
@@ -1122,6 +1265,23 @@ export interface TimelineRollOfHonorEntry {
     logoUrl: string | null;
     titlesCount: number;
     years: number[];
+    historicalAliasesWonAs?: string[];
+}
+
+export interface TimelineTeamAliasEntry {
+    id: string;
+    name: string;
+    startYear: number | null;
+    endYear: number | null;
+    logoUrl: string | null;
+}
+
+export interface TimelineTeamEntry {
+    id: string;
+    name: string;
+    displayName: string;
+    logoUrl: string | null;
+    aliases: TimelineTeamAliasEntry[];
 }
 
 export interface TimelineStats {
@@ -1143,7 +1303,7 @@ export interface TimelineStats {
 export interface UniballTimelineData {
     seasons: TimelineSeason[];
     stats: TimelineStats;
-    allTeams: { id: string; name: string; displayName: string; logoUrl?: string | null }[];
+    allTeams: TimelineTeamEntry[];
 }
 
 export const UNIBALL_HISTORICAL_MILESTONES: Record<number, string> = {
