@@ -97,7 +97,7 @@ export default async function HomePage() {
             <h2 className="text-3xl font-black uppercase italic mb-5 tracking-tighter">The Mission & Origin</h2>
             <div className="space-y-4 text-slate-700 font-sans leading-relaxed text-base md:text-lg">
               <p>
-                The <strong>Britball Archive</strong> is the definitive historical record of American football in the United Kingdom, founded by <strong>Bryn Price</strong> (Head Coach, Brighton Tsunami).
+                The <strong>Britball Archive</strong> is the definitive historical record of American football in the United Kingdom, founded by <strong>Bryn Price</strong> (Head Coach, Brighton Panthers).
               </p>
               <blockquote className="border-l-4 border-blue-700 pl-4 py-1 italic text-slate-800 my-4 text-base bg-slate-50">
                 &ldquo;It began as an Excel sheet of Brighton fixtures dating back to our 2002 associate game against the Essex Blades. As I searched for records across the UK, I found fragments everywhere and realized decades of our game’s history were slipping away. We built this archive so that fans, players, and coaches will always have a one-stop home to find what happened on that day.&rdquo;

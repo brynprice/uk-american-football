@@ -42,7 +42,7 @@ export default function AboutPage() {
               This project didn’t start as a website or a grand database. It started in a simple Excel spreadsheet.
             </p>
             <p>
-              For years, I meticulously maintained a log of every game played by the <strong>Brighton Panthers</strong> (now the Brighton Tsunami), charting fixtures all the way back to the team’s very first associate game against the <strong>Essex Blades in 2002</strong>. Every score, every opponent, and every season was tracked row by row.
+              For years, I meticulously maintained a log of every game played by the <strong>Brighton Panthers</strong>, charting fixtures all the way back to the team’s very first associate game against the <strong>Essex Blades in 2002</strong>. Every score, every opponent, and every season was tracked row by row.
             </p>
             <p>
               Eventually, curiosity kicked in: <em>Did other teams have this level of data preserved? Could you look up what happened between two university rivals a decade ago?</em>
@@ -69,10 +69,10 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-4 text-slate-700 font-sans leading-relaxed text-base md:text-lg">
               <p>
-                My name is <strong>Bryn Price</strong>. My journey in British American football began in the autumn of <strong>2007</strong> when I stepped onto the field for the Brighton Tsunami.
+                My name is <strong>Bryn Price</strong>. My journey in British American football began in the autumn of <strong>2007</strong> when I stepped onto the field for Brighton (then playing as the Brighton Tsunami).
               </p>
               <p>
-                I suited up and played for four memorable seasons as a student-athlete. When my playing days concluded, my passion for the programme and the sport only grew. I transitioned directly onto the coaching staff and have coached at the club every single season since. Today, I am proud to serve as the <strong>Head Coach of Brighton Tsunami</strong>.
+                I suited up and played for four memorable seasons as a student-athlete for the Tsunami. When my playing days concluded, my passion for the programme and the sport only grew. I transitioned directly onto the coaching staff and have coached at the club every single season since. Today, I am proud to serve as the <strong>Head Coach of the Brighton Panthers</strong>.
               </p>
               <p>
                 Living through nearly two decades of British gridiron culture—from cold November mud pitches to national playoffs—instilled a deep respect for the sacrifices made by every player, coach, and volunteer who gives their weekends to this game. That lived experience is the driving force behind this archive.
@@ -94,7 +94,7 @@ export default function AboutPage() {
               </div>
               <div>
                 <span className="text-xs font-mono uppercase text-slate-400 block">Coaching Role</span>
-                <span className="font-bold text-white">Head Coach, Brighton Tsunami (2011–Present)</span>
+                <span className="font-bold text-white">Head Coach, Brighton Panthers (2011–Present)</span>
               </div>
               <div>
                 <span className="text-xs font-mono uppercase text-slate-400 block">Archive Inception</span>
