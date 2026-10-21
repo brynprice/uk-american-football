@@ -71,7 +71,7 @@ export default function AboutPage() {
               My name is <strong>Bryn Price</strong>. My journey in British American football began in the autumn of <strong>2007</strong> when I stepped onto the field for Brighton Tsunami.
             </p>
             <p>
-              I suited up and played for four memorable seasons as a student-athlete for the Tsunami. When my playing days concluded, my passion for the programme and the sport only grew. I transitioned directly onto the coaching staff and have coached at the club ever since. Today, I am proud to serve as the <strong>Head Coach of the Brighton Panthers</strong>.
+              I suited up and played for four memorable seasons as a Defensive Back for the Tsunami. When my playing days concluded, my passion for the programme and the sport only grew. I transitioned directly onto the coaching staff and have coached at the club ever since. Today, I am proud to serve as the <strong>Head Coach of the Brighton Panthers</strong>.
             </p>
             <p>
               Living through nearly two decades of British gridiron culture—from cold November mud pitches to national playoffs—instilled a deep respect for the sacrifices made by every player, coach, and volunteer who gives their weekends to this game. That lived experience is the driving force behind this archive.
