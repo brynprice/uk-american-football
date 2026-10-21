@@ -11,8 +11,20 @@ export type Team = Database["public"]["Tables"]["teams"]["Row"];
 export type Person = Database["public"]["Tables"]["people"]["Row"];
 export type PersonWithRoles = Person & {
     participations?: Array<{
-        teams?: { name: string } | null;
-        phases?: { seasons?: { year: number } | null } | null;
+        teams?: {
+            name: string;
+            team_type?: string | null;
+        } | null;
+        phases?: {
+            seasons?: {
+                year: number;
+                name?: string | null;
+                competitions?: {
+                    slug?: string | null;
+                    level?: string | null;
+                } | null;
+            } | null;
+        } | null;
     }> | null;
 };
 
@@ -391,8 +403,14 @@ export const ArchiveService = {
             .select(`
                 *,
                 participations (
-                    teams (name),
-                    phases (seasons (year))
+                    teams (name, team_type),
+                    phases (
+                        seasons (
+                            year,
+                            name,
+                            competitions (slug, level)
+                        )
+                    )
                 )
             `)
             .order("display_name");

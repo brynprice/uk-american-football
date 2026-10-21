@@ -10,24 +10,48 @@ interface PeopleFilterListProps {
 
 interface Affiliation {
     teamName: string;
+    isCrossYear: boolean;
     years: number[];
 }
 
-function formatSeasonLabel(year: number): string {
+function isParticipationCrossYear(p: NonNullable<PersonWithRoles['participations']>[number]): boolean {
+    const teamType = p.teams?.team_type;
+    const compLevel = p.phases?.seasons?.competitions?.level;
+    const compSlug = p.phases?.seasons?.competitions?.slug;
+    const seasonName = p.phases?.seasons?.name;
+
+    if (teamType === 'University') return true;
+    if (teamType === 'Adult' || teamType === 'Womens' || teamType === 'Flag' || teamType === 'U19s') return false;
+
+    if (compLevel?.toLowerCase() === 'uniball') return true;
+    if (compSlug === 'buafl' || compSlug === 'bcafl') return true;
+    if (compLevel?.toLowerCase() === 'adult contact') return false;
+    if (compSlug === 'bafanl') return false;
+
+    if (seasonName && seasonName.includes('/')) return true;
+
+    return false;
+}
+
+function formatSeasonLabel(year: number, isCrossYear: boolean = true): string {
+    if (!isCrossYear) {
+        return String(year);
+    }
     const nextYearShort = String((year + 1) % 100).padStart(2, '0');
     return `${year}/${nextYearShort}`;
 }
 
-function formatAffiliationYears(years: number[]): string {
+function formatAffiliationYears(years: number[], isCrossYear: boolean = true): string {
     if (years.length === 0) return '';
     const sortedYears = Array.from(new Set(years)).sort((a, b) => a - b);
 
-    // Group consecutive sequences
+    // Group consecutive sequences (bridging 2019 to 2021 due to 2020 COVID-19 cancellation)
     const groups: number[][] = [];
     let currentGroup: number[] = [sortedYears[0]];
     for (let i = 1; i < sortedYears.length; i++) {
         const y = sortedYears[i];
-        if (y === currentGroup[currentGroup.length - 1] + 1) {
+        const prev = currentGroup[currentGroup.length - 1];
+        if (y === prev + 1 || (prev === 2019 && y === 2021)) {
             currentGroup.push(y);
         } else {
             groups.push(currentGroup);
@@ -38,10 +62,10 @@ function formatAffiliationYears(years: number[]): string {
 
     return groups.map((g) => {
         if (g.length === 1) {
-            return formatSeasonLabel(g[0]);
+            return formatSeasonLabel(g[0], isCrossYear);
         }
         const start = g[0];
-        const end = g[g.length - 1] + 1;
+        const end = isCrossYear ? g[g.length - 1] + 1 : g[g.length - 1];
         return `${start}–${end}`;
     }).join(', ');
 }
@@ -54,20 +78,30 @@ export default function PeopleFilterList({ people }: PeopleFilterListProps) {
     // Extract affiliations for each person
     const peopleWithAffiliations = useMemo(() => {
         return people.map((person) => {
-            const map = new Map<string, Set<number>>();
+            const map = new Map<string, { isCrossYear: boolean; years: Set<number> }>();
             (person.participations || []).forEach((p) => {
                 const teamName = p.teams?.name;
                 const year = p.phases?.seasons?.year;
                 if (teamName) {
-                    if (!map.has(teamName)) map.set(teamName, new Set());
-                    if (year) map.get(teamName)!.add(year);
+                    const isCross = isParticipationCrossYear(p);
+                    if (!map.has(teamName)) {
+                        map.set(teamName, { isCrossYear: isCross, years: new Set() });
+                    }
+                    const entry = map.get(teamName)!;
+                    if (isCross) {
+                        entry.isCrossYear = true;
+                    }
+                    if (year) {
+                        entry.years.add(year);
+                    }
                 }
             });
 
             const affiliations: Affiliation[] = Array.from(map.entries())
-                .map(([teamName, yearsSet]) => ({
+                .map(([teamName, { isCrossYear, years }]) => ({
                     teamName,
-                    years: Array.from(yearsSet).sort((a, b) => a - b)
+                    isCrossYear,
+                    years: Array.from(years).sort((a, b) => a - b)
                 }))
                 .sort((a, b) => a.teamName.localeCompare(b.teamName));
 
@@ -123,11 +157,19 @@ export default function PeopleFilterList({ people }: PeopleFilterListProps) {
 
             if (nameMatch) return true;
 
-            const teamMatch = person.affiliations.some((aff) =>
-                aff.teamName.toLowerCase().includes(q) ||
-                formatAffiliationYears(aff.years).toLowerCase().includes(q) ||
-                aff.years.some((y) => String(y).includes(q) || formatSeasonLabel(y).toLowerCase().includes(q))
-            );
+            const normalizedQ = q.replace(/–/g, '-');
+            const teamMatch = person.affiliations.some((aff) => {
+                const formattedAffYears = formatAffiliationYears(aff.years, aff.isCrossYear).toLowerCase();
+                return (
+                    aff.teamName.toLowerCase().includes(q) ||
+                    formattedAffYears.includes(q) ||
+                    formattedAffYears.replace(/–/g, '-').includes(normalizedQ) ||
+                    aff.years.some((y) =>
+                        String(y).includes(q) ||
+                        formatSeasonLabel(y, aff.isCrossYear).toLowerCase().includes(q)
+                    )
+                );
+            });
 
             return teamMatch;
         });
@@ -305,7 +347,7 @@ export default function PeopleFilterList({ people }: PeopleFilterListProps) {
                                             <span className="font-semibold">{aff.teamName}</span>{' '}
                                             {aff.years.length > 0 && (
                                                 <span className="text-slate-500 font-mono">
-                                                    ({formatAffiliationYears(aff.years)})
+                                                    ({formatAffiliationYears(aff.years, aff.isCrossYear)})
                                                 </span>
                                             )}
                                         </span>
