@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { assertAdmin } from '@/lib/auth/admin-guard';
 
 const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -8,6 +9,8 @@ const supabase = createClient(
 
 export async function POST(request: NextRequest) {
     try {
+        await assertAdmin();
+
         const body = await request.json();
         const { phaseId, phaseIds, max_games_per_team, games_validated } = body;
 

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 import ArchiveLayout from "@/components/archive/ArchiveLayout";
 import Link from "next/link";
+import { recordPredictionAction } from "./actions";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -169,12 +170,12 @@ export default function PredictionsPage() {
         if (!prediction || !homeTeamId || !awayTeamId) return;
 
         try {
-            const { error } = await supabase.from("predictions").insert({
-                home_team_id: homeTeamId,
-                away_team_id: awayTeamId,
-                predicted_home_score: prediction.homeScore,
-                predicted_away_score: prediction.awayScore,
-                win_probability: prediction.winProbability,
+            const res = await recordPredictionAction({
+                homeTeamId,
+                awayTeamId,
+                predictedHomeScore: prediction.homeScore,
+                predictedAwayScore: prediction.awayScore,
+                winProbability: prediction.winProbability,
                 confidence: prediction.confidence,
                 weights: {
                     h2hWeight: 0.6,
@@ -184,11 +185,11 @@ export default function PredictionsPage() {
                 }
             });
 
-            if (error) throw error;
+            if (!res.success) throw new Error(res.error || "Failed to record prediction");
             alert("Prediction recorded successfully!");
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
-            alert("Failed to record prediction.");
+            alert(err.message || "Failed to record prediction.");
         }
     };
 
