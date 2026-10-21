@@ -274,6 +274,68 @@ async function runBenchmark() {
         if (error) throw error;
         return data;
       }
+    },
+    // Admin Operations
+    {
+      name: 'adminAuthPing',
+      budget: 250,
+      fn: async () => {
+        // Measure round-trip latency to Supabase Auth endpoint
+        const res = await fetch(`${supabaseUrl}/auth/v1/health`, {
+          headers: { apikey: supabaseKey }
+        });
+        if (!res.ok && res.status !== 404) {
+          // If /health isn't exposed, fallback to auth settings or head
+          const settingsRes = await fetch(`${supabaseUrl}/auth/v1/settings`, {
+            headers: { apikey: supabaseKey }
+          });
+          if (!settingsRes.ok) throw new Error(`Auth endpoint returned ${settingsRes.status}`);
+          return await settingsRes.json();
+        }
+        return res.status === 200 ? await res.json() : { status: 'ok' };
+      }
+    },
+    {
+      name: 'adminWalkovers',
+      budget: 250,
+      fn: async () => {
+        const { data, error } = await supabase
+          .from('games')
+          .select('id, date, home_score, away_score, status')
+          .eq('status', 'awarded')
+          .is('home_score', null)
+          .is('away_score', null)
+          .limit(50);
+        if (error) throw error;
+        return data;
+      }
+    },
+    {
+      name: 'adminAnomalies',
+      budget: 250,
+      fn: async () => {
+        const { data, error } = await supabase
+          .from('games')
+          .select('id, date, home_score, away_score, status')
+          .eq('status', 'anomaly')
+          .order('date', { ascending: false })
+          .limit(50);
+        if (error) throw error;
+        return data;
+      }
+    },
+    {
+      name: 'adminProposals',
+      budget: 200,
+      fn: async () => {
+        const { data, error } = await supabase
+          .from('game_proposals')
+          .select('id, game_id, status, created_at')
+          .eq('status', 'pending')
+          .limit(50);
+        if (error) throw error;
+        return data;
+      }
     }
   ];
 

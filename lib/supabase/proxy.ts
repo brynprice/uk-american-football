@@ -45,6 +45,19 @@ export async function updateSession(request: NextRequest) {
       url.searchParams.set('next', request.nextUrl.pathname)
       return NextResponse.redirect(url)
     }
+
+    // Forward authenticated user info in headers to avoid double auth round-trips
+    if (user?.email) {
+      const requestHeaders = new Headers(request.headers)
+      requestHeaders.set('x-user-email', user.email)
+      requestHeaders.set('x-user-id', user.id)
+
+      supabaseResponse = NextResponse.next({
+        request: {
+          headers: requestHeaders,
+        },
+      })
+    }
   }
 
   return supabaseResponse

@@ -1,11 +1,19 @@
 import Link from "next/link";
 import ArchiveLayout from "@/components/archive/ArchiveLayout";
+import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/app/login/actions";
 
 export default async function AdminDashboard() {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const headerList = await headers();
+    let userEmail = headerList.get("x-user-email");
+
+    if (!userEmail) {
+        // Fallback for direct SSR contexts without proxy header
+        const supabase = await createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        userEmail = user?.email || null;
+    }
 
     return (
         <ArchiveLayout>
@@ -15,11 +23,11 @@ export default async function AdminDashboard() {
                     <p className="text-slate-500 font-sans">Manage the historical archive and resolve data issues.</p>
                 </div>
                 
-                {user && (
+                {userEmail && (
                     <div className="flex items-center gap-4 bg-white border-2 border-slate-900 p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                         <div className="font-sans text-right">
                             <p className="text-[10px] uppercase font-black text-slate-400 leading-none mb-1">Logged in as</p>
-                            <p className="font-bold text-sm leading-none">{user.email}</p>
+                            <p className="font-bold text-sm leading-none">{userEmail}</p>
                         </div>
                         <form action={signOut}>
                             <button 
@@ -34,6 +42,16 @@ export default async function AdminDashboard() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <Link href="/admin/gameday" className="group bg-blue-600 text-white border-2 border-slate-900 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all">
+                    <div className="flex items-center gap-2 mb-2">
+                        <span className="bg-amber-400 text-slate-900 text-[10px] font-black uppercase px-2 py-0.5 rounded">Live Season</span>
+                    </div>
+                    <h2 className="text-2xl font-black mb-4 uppercase tracking-tight group-hover:text-amber-300">Gameday Scoreboard &rarr;</h2>
+                    <p className="text-blue-100 font-sans leading-relaxed">
+                        Fast bulk score entry, walkovers, and postponements for weekly match days with instant standings calculation.
+                    </p>
+                </Link>
+
                 <Link href="/admin/add-game" className="group bg-white border-2 border-slate-900 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all">
                     <h2 className="text-2xl font-black mb-4 uppercase tracking-tight group-hover:text-blue-700">Add Game Record &rarr;</h2>
                     <p className="text-slate-600 font-sans leading-relaxed">
