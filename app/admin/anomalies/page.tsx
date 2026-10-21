@@ -9,6 +9,8 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+import { resolveAnomaly, deleteAnomalyGame } from './actions';
+
 export default function AdminAnomaliesPage() {
     const [anomalies, setAnomalies] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -40,17 +42,9 @@ export default function AdminAnomaliesPage() {
     };
 
     const handleUpdate = async (gameId: string, homeScore: number, awayScore: number) => {
-        const { error } = await supabase
-            .from('games')
-            .update({
-                home_score: homeScore,
-                away_score: awayScore,
-                status: 'completed'
-            })
-            .eq('id', gameId);
-
-        if (error) {
-            setMessage(`Error updating game: ${error.message}`);
+        const result = await resolveAnomaly(gameId, homeScore, awayScore);
+        if (!result.success) {
+            setMessage(`Error updating game: ${result.error}`);
         } else {
             setMessage('Game updated and marked as completed.');
             fetchAnomalies();
@@ -60,13 +54,9 @@ export default function AdminAnomaliesPage() {
     const handleDelete = async (gameId: string) => {
         if (!confirm('Are you sure you want to delete this game?')) return;
 
-        const { error } = await supabase
-            .from('games')
-            .delete()
-            .eq('id', gameId);
-
-        if (error) {
-            setMessage(`Error deleting game: ${error.message}`);
+        const result = await deleteAnomalyGame(gameId);
+        if (!result.success) {
+            setMessage(`Error deleting game: ${result.error}`);
         } else {
             setMessage('Game deleted successfully.');
             fetchAnomalies();
