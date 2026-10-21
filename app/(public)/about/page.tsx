@@ -57,50 +57,25 @@ export default function AboutPage() {
         </section>
 
         {/* The Personal Connection */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-          <div className="md:col-span-8 p-8 md:p-12 bg-white border-2 border-slate-900 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)]">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="font-mono text-xs font-black uppercase tracking-wider text-blue-700">Part 02</span>
-              <span className="h-px bg-slate-200 flex-1"></span>
-              <span className="text-xs font-mono text-slate-400 uppercase">The Connection</span>
-            </div>
-            <h2 className="text-2xl md:text-4xl font-black uppercase italic mb-6 tracking-tight text-slate-900">
-              The Founder’s Story
-            </h2>
-            <div className="space-y-4 text-slate-700 font-sans leading-relaxed text-base md:text-lg">
-              <p>
-                My name is <strong>Bryn Price</strong>. My journey in British American football began in the autumn of <strong>2007</strong> when I stepped onto the field for Brighton (then playing as the Brighton Tsunami).
-              </p>
-              <p>
-                I suited up and played for four memorable seasons as a student-athlete for the Tsunami. When my playing days concluded, my passion for the programme and the sport only grew. I transitioned directly onto the coaching staff and have coached at the club every single season since. Today, I am proud to serve as the <strong>Head Coach of the Brighton Panthers</strong>.
-              </p>
-              <p>
-                Living through nearly two decades of British gridiron culture—from cold November mud pitches to national playoffs—instilled a deep respect for the sacrifices made by every player, coach, and volunteer who gives their weekends to this game. That lived experience is the driving force behind this archive.
-              </p>
-            </div>
+        <section className="p-8 md:p-12 bg-white border-2 border-slate-900 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)]">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="font-mono text-xs font-black uppercase tracking-wider text-blue-700">Part 02</span>
+            <span className="h-px bg-slate-200 flex-1"></span>
+            <span className="text-xs font-mono text-slate-400 uppercase">The Connection</span>
           </div>
-
-          <div className="md:col-span-4 p-6 sm:p-8 bg-slate-900 text-white border-2 border-slate-900 shadow-[8px_8px_0px_0px_rgba(59,130,246,1)]">
-            <span className="text-xs font-mono font-bold uppercase tracking-widest text-blue-400 block mb-2">
-              Profile
-            </span>
-            <h3 className="text-2xl font-black uppercase italic mb-1 text-white">Bryn Price</h3>
-            <p className="text-sm font-mono text-slate-400 mb-6">Founder & Lead Archivist</p>
-            
-            <div className="space-y-4 text-sm font-sans border-t border-slate-800 pt-4">
-              <div>
-                <span className="text-xs font-mono uppercase text-slate-400 block">Playing Career</span>
-                <span className="font-bold text-white">Brighton Tsunami (2007–2011)</span>
-              </div>
-              <div>
-                <span className="text-xs font-mono uppercase text-slate-400 block">Coaching Role</span>
-                <span className="font-bold text-white">Head Coach, Brighton Panthers (2011–Present)</span>
-              </div>
-              <div>
-                <span className="text-xs font-mono uppercase text-slate-400 block">Archive Inception</span>
-                <span className="font-bold text-white">2002–Present Tracking</span>
-              </div>
-            </div>
+          <h2 className="text-2xl md:text-4xl font-black uppercase italic mb-6 tracking-tight text-slate-900">
+            The Founder’s Story
+          </h2>
+          <div className="space-y-4 text-slate-700 font-sans leading-relaxed text-base md:text-lg">
+            <p>
+              My name is <strong>Bryn Price</strong>. My journey in British American football began in the autumn of <strong>2007</strong> when I stepped onto the field for Brighton Tsunami.
+            </p>
+            <p>
+              I suited up and played for four memorable seasons as a student-athlete for the Tsunami. When my playing days concluded, my passion for the programme and the sport only grew. I transitioned directly onto the coaching staff and have coached at the club ever since. Today, I am proud to serve as the <strong>Head Coach of the Brighton Panthers</strong>.
+            </p>
+            <p>
+              Living through nearly two decades of British gridiron culture—from cold November mud pitches to national playoffs—instilled a deep respect for the sacrifices made by every player, coach, and volunteer who gives their weekends to this game. That lived experience is the driving force behind this archive.
+            </p>
           </div>
         </section>
 
