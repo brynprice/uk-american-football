@@ -13,8 +13,28 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Britball Archive",
-  description: "The historical record of American football in the United Kingdom.",
+  metadataBase: new URL("https://britball.io"),
+  title: {
+    default: "Britball Archive | UK American Football History",
+    template: "%s | Britball Archive",
+  },
+  description:
+    "The historical record of American football in the United Kingdom. Scores, standings, playoffs, and team records from 1985 to present.",
+  openGraph: {
+    title: "Britball Archive | UK American Football History",
+    description:
+      "The definitive historical archive of British American football. Scores, standings, and historical records.",
+    url: "https://britball.io",
+    siteName: "Britball Archive",
+    locale: "en_GB",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Britball Archive",
+    description:
+      "The definitive historical archive of British American football.",
+  },
 };
 
 export default function RootLayout({

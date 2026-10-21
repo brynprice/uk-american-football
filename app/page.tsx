@@ -87,16 +87,34 @@ export default async function HomePage() {
       </section>
 
       <section className="mb-20 grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div className="p-8 md:p-12 bg-white border-2 border-slate-900 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)]">
-          <h2 className="text-3xl font-black uppercase italic mb-6 tracking-tighter">The Mission</h2>
-          <div className="space-y-4 text-slate-700 font-sans leading-relaxed text-lg">
-            <p>
-              The <strong>Britball Archive</strong> is the definitive historical record of American football in the United Kingdom. 
-              Our mission is to catalog every game ever played on British soil—from the pioneering regional leagues of the 1980s to the elite national championships of today.
-            </p>
-            <p>
-              British American football has a rich, multi-decade legacy that often lives in dusty programmes, old local newspapers, and the memories of those who played. We are digitising this history to ensure that every touchdown, rivalry, and championship is preserved for future generations of fans and players.
-            </p>
+        <div className="p-8 md:p-12 bg-white border-2 border-slate-900 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] flex flex-col justify-between">
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="bg-blue-100 text-blue-900 font-mono text-[10px] font-black px-2.5 py-0.5 uppercase tracking-widest border border-blue-900">
+                FROM THE FOUNDER
+              </span>
+            </div>
+            <h2 className="text-3xl font-black uppercase italic mb-5 tracking-tighter">The Mission & Origin</h2>
+            <div className="space-y-4 text-slate-700 font-sans leading-relaxed text-base md:text-lg">
+              <p>
+                The <strong>Britball Archive</strong> is the definitive historical record of American football in the United Kingdom, founded by <strong>Bryn Price</strong> (Head Coach, Brighton Tsunami).
+              </p>
+              <blockquote className="border-l-4 border-blue-700 pl-4 py-1 italic text-slate-800 my-4 text-base bg-slate-50">
+                &ldquo;It began as an Excel sheet of Brighton fixtures dating back to our 2002 associate game against the Essex Blades. As I searched for records across the UK, I found fragments everywhere and realized decades of our game’s history were slipping away. We built this archive so that fans, players, and coaches will always have a one-stop home to find what happened on that day.&rdquo;
+              </blockquote>
+              <p className="text-sm text-slate-600">
+                Every championship, rivalry, and score is digitised and verified using contemporary primary records.
+              </p>
+            </div>
+          </div>
+          <div className="pt-6 mt-6 border-t border-slate-200 flex items-center justify-between">
+            <Link
+              href="/about"
+              className="text-xs font-black uppercase tracking-widest text-blue-700 hover:text-slate-900 transition-colors inline-flex items-center gap-1"
+            >
+              Read the full story &rarr;
+            </Link>
+            <span className="text-xs font-mono text-slate-400">Est. 2002 Archive</span>
           </div>
         </div>
 
