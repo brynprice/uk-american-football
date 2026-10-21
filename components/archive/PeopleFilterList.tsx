@@ -103,7 +103,15 @@ export default function PeopleFilterList({ people }: PeopleFilterListProps) {
                     isCrossYear,
                     years: Array.from(years).sort((a, b) => a - b)
                 }))
-                .sort((a, b) => a.teamName.localeCompare(b.teamName));
+                .sort((a, b) => {
+                    const latestA = a.years[a.years.length - 1] ?? 0;
+                    const latestB = b.years[b.years.length - 1] ?? 0;
+                    if (latestB !== latestA) return latestB - latestA;
+                    const earliestA = a.years[0] ?? 0;
+                    const earliestB = b.years[0] ?? 0;
+                    if (earliestB !== earliestA) return earliestB - earliestA;
+                    return a.teamName.localeCompare(b.teamName);
+                });
 
             // Determine effective surname for sorting
             const surname = (person.last_name || person.display_name.trim().split(' ').pop() || '').trim();
