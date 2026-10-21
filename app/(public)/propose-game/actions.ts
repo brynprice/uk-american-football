@@ -15,6 +15,31 @@ export async function submitGameProposal(payload: {
     submittedByEmail?: string;
 }) {
     try {
+        // Basic payload validation to prevent abuse/spam
+        if (!payload || !payload.proposalType || !['add', 'update', 'delete'].includes(payload.proposalType)) {
+            return { success: false, error: "Invalid proposal type." };
+        }
+
+        if (!payload.reason || typeof payload.reason !== 'string' || payload.reason.trim().length === 0) {
+            return { success: false, error: "Please provide a reason for the proposal." };
+        }
+
+        if (payload.reason.length > 2000) {
+            return { success: false, error: "Reason must be under 2,000 characters." };
+        }
+
+        if (payload.submittedByName && payload.submittedByName.length > 100) {
+            return { success: false, error: "Name must be under 100 characters." };
+        }
+
+        if (payload.submittedByEmail && payload.submittedByEmail.length > 150) {
+            return { success: false, error: "Email must be under 150 characters." };
+        }
+
+        if (payload.sourceUrl && payload.sourceUrl.length > 500) {
+            return { success: false, error: "Source URL must be under 500 characters." };
+        }
+
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
         const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY;
 

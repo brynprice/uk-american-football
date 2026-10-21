@@ -2,9 +2,12 @@
 
 import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
+import { assertAdmin } from "@/lib/auth/admin-guard";
 
 export async function approveGameProposal(proposalId: string, adminNotes?: string) {
     try {
+        await assertAdmin();
+
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
         const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY;
 
@@ -206,14 +209,12 @@ export async function approveGameProposal(proposalId: string, adminNotes?: strin
 }
 
 export async function rejectGameProposal(proposalId: string, adminNotes?: string) {
-    const fs = require('fs');
-    const log = (msg: string) => fs.appendFileSync('/tmp/approval_debug.log', `${new Date().toISOString()}: [REJECT] ${msg}\n`);
-
     try {
+        await assertAdmin();
+
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
         const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY;
 
-        log(`Starting rejection for ${proposalId}`);
         const supabase = createClient(supabaseUrl!, supabaseKey!);
 
         const { error } = await supabase
@@ -226,15 +227,14 @@ export async function rejectGameProposal(proposalId: string, adminNotes?: string
             .eq("id", proposalId);
 
         if (error) {
-            log(`Rejection error: ${JSON.stringify(error)}`);
+            console.error("Rejection error:", error);
             throw error;
         }
 
-        log("Successfully rejected.");
         revalidatePath("/admin/proposals");
         return { success: true };
     } catch (err: any) {
-        log(`Caught error: ${err.message}`);
+        console.error("Caught rejection error:", err.message);
         return { success: false, error: err.message || "An unknown error occurred" };
     }
 }

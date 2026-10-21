@@ -2,11 +2,13 @@
 
 import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
+import { assertAdmin } from "@/lib/auth/admin-guard";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY!;
 
 export async function resolveAnomaly(gameId: string, homeScore: number, awayScore: number) {
+  await assertAdmin();
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   const { error } = await supabase
@@ -27,6 +29,7 @@ export async function resolveAnomaly(gameId: string, homeScore: number, awayScor
 }
 
 export async function deleteAnomalyGame(gameId: string) {
+  await assertAdmin();
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   await Promise.all([
