@@ -1,4 +1,4 @@
-﻿competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal
+competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal
 bafanl,2026,Premiership,Tier,,high,0
 bafanl,2026,Playoffs,Playoffs,Premiership,high,0
 bafanl,2026,Premiership North,Division,Premiership,high,1
@@ -29,7 +29,7 @@ bafanl,2025,Division One,Tier,,high,1
 bafanl,2025,Playoffs,Playoffs,Division One,high,0
 bafanl,2025,Northern Football Conference,Conference,Division One,high,1
 bafanl,2025,Southern Football Conference,Conference,Division One,high,2
-bafanl,2025,NFC 1 Scotland,Division,Northern Football Conference,high,0
+bafanl,2025,NFC 1 Scottish,Division,Northern Football Conference,high,0
 bafanl,2025,NFC 1 North,Division,Northern Football Conference,high,1
 bafanl,2025,NFC 1 Midlands,Division,Northern Football Conference,high,2
 bafanl,2025,SFC 1 West,Division,Southern Football Conference,high,0
@@ -43,3 +43,207 @@ bafanl,2025,NFC 2 North,Division,Northern Football Conference,high,0
 bafanl,2025,NFC 2 Midlands,Division,Northern Football Conference,high,1
 bafanl,2025,SFC 2 West,Division,Southern Football Conference,high,0
 bafanl,2025,SFC 2 East,Division,Southern Football Conference,high,1
+bafanl,2024,Premiership,Tier,,high,0
+bafanl,2024,Playoffs,Playoffs,Premiership,high,0
+bafanl,2024,Premiership North,Division,Premiership,high,1
+bafanl,2024,Premiership South,Division,Premiership,high,2
+bafanl,2024,Division One,Tier,,high,1
+bafanl,2024,Playoffs,Playoffs,Division One,high,0
+bafanl,2024,Northern Football Conference,Conference,Division One,high,1
+bafanl,2024,Southern Football Conference,Conference,Division One,high,2
+bafanl,2024,NFC 1 Scottish,Division,Northern Football Conference,high,0
+bafanl,2024,NFC 1 North,Division,Northern Football Conference,high,1
+bafanl,2024,NFC 1 Midlands,Division,Northern Football Conference,high,2
+bafanl,2024,SFC 1 West,Division,Southern Football Conference,high,0
+bafanl,2024,SFC 1 Central,Division,Southern Football Conference,high,1
+bafanl,2024,SFC 1 East,Division,Southern Football Conference,high,2
+bafanl,2024,Division Two,Tier,,high,2
+bafanl,2024,Playoffs,Playoffs,Division Two,high,0
+bafanl,2024,Northern Football Conference,Conference,Division Two,high,1
+bafanl,2024,Southern Football Conference,Conference,Division Two,high,2
+bafanl,2024,NFC 2 East,Division,Northern Football Conference,high,0
+bafanl,2024,NFC 2 West,Division,Northern Football Conference,high,1
+bafanl,2024,SFC 2 West,Division,Southern Football Conference,high,0
+bafanl,2024,SFC 2 East,Division,Southern Football Conference,high,1
+bafanl,2023,Premiership,Tier,,high,0
+bafanl,2023,Playoffs,Playoffs,Premiership,high,0
+bafanl,2023,Premiership North,Division,Premiership,high,1
+bafanl,2023,Premiership South,Division,Premiership,high,2
+bafanl,2023,Division One,Tier,,high,1
+bafanl,2023,Playoffs,Playoffs,Division One,high,0
+bafanl,2023,Northern Football Conference,Conference,Division One,high,1
+bafanl,2023,Southern Football Conference,Conference,Division One,high,2
+bafanl,2023,NFC 1 Scottish,Division,Northern Football Conference,high,0
+bafanl,2023,NFC 1 Central,Division,Northern Football Conference,high,1
+bafanl,2023,NFC 1 South,Division,Northern Football Conference,high,2
+bafanl,2023,SFC 1 Central,Division,Southern Football Conference,high,0
+bafanl,2023,SFC 1 West,Division,Southern Football Conference,high,1
+bafanl,2023,Division Two,Tier,,high,2
+bafanl,2023,Playoffs,Playoffs,Division Two,high,0
+bafanl,2023,Northern Football Conference,Conference,Division Two,high,1
+bafanl,2023,Southern Football Conference,Conference,Division Two,high,2
+bafanl,2023,NFC 2 East,Division,Northern Football Conference,high,0
+bafanl,2023,NFC 2 West,Division,Northern Football Conference,high,1
+bafanl,2023,SFC 2 Central,Division,Southern Football Conference,high,0
+bafanl,2023,SFC 2 East,Division,Southern Football Conference,high,1
+bafanl,2023,SFC 2 West,Division,Southern Football Conference,high,2
+bafanl,2022,Premiership,Tier,,high,0
+bafanl,2022,Playoffs,Playoffs,Premiership,high,0
+bafanl,2022,Premiership North,Division,Premiership,high,1
+bafanl,2022,Premiership South,Division,Premiership,high,2
+bafanl,2022,Division One,Tier,,high,1
+bafanl,2022,Playoffs,Playoffs,Division One,high,0
+bafanl,2022,Northern Football Conference,Conference,Division One,high,1
+bafanl,2022,Southern Football Conference,Conference,Division One,high,2
+bafanl,2022,NFC 1 North,Division,Northern Football Conference,high,0
+bafanl,2022,NFC 1 South,Division,Northern Football Conference,high,1
+bafanl,2022,SFC 1 East,Division,Southern Football Conference,high,0
+bafanl,2022,SFC 1 West,Division,Southern Football Conference,high,1
+bafanl,2022,Division Two,Tier,,high,2
+bafanl,2022,Playoffs,Playoffs,Division Two,high,0
+bafanl,2022,Northern Football Conference,Conference,Division Two,high,1
+bafanl,2022,Southern Football Conference,Conference,Division Two,high,2
+bafanl,2022,NFC 2 North,Division,Northern Football Conference,high,0
+bafanl,2022,NFC 2 South,Division,Northern Football Conference,high,1
+bafanl,2022,NFC 2 East,Division,Northern Football Conference,high,2
+bafanl,2022,NFC 2 West,Division,Northern Football Conference,high,3
+bafanl,2022,SFC 2 North,Division,Southern Football Conference,high,0
+bafanl,2022,SFC 2 South,Division,Southern Football Conference,high,1
+bafanl,2022,SFC 2 East,Division,Southern Football Conference,high,2
+bafanl,2022,SFC 2 West,Division,Southern Football Conference,high,3
+bafanl,2021,Caledonia,Division,,high,1
+bafanl,2021,Saltire,Division,,high,2
+bafanl,2021,Central East,Division,,high,3
+bafanl,2021,Mercia,Division,,high,4
+bafanl,2021,East Anglia,Division,,high,5
+bafanl,2021,London,Division,,high,6
+bafanl,2021,Hadrians,Division,,high,7
+bafanl,2021,White Rose,Division,,high,8
+bafanl,2021,Red Rose,Division,,high,9
+bafanl,2021,Wessex,Division,,high,10
+bafanl,2021,South East,Division,,high,11
+bafanl,2021,South West,Division,,high,12
+bafanl,2021,Thames Valley,Division,,high,13
+bafanl,2021,Severn,Division,,high,14
+bafanl,2019,Premiership,Tier,,high,0
+bafanl,2019,Playoffs,Playoffs,Premiership,high,0
+bafanl,2019,Premiership North,Division,Premiership,high,1
+bafanl,2019,Premiership South,Division,Premiership,high,2
+bafanl,2019,Division One,Tier,,high,1
+bafanl,2019,Playoffs,Playoffs,Division One,high,0
+bafanl,2019,Northern Football Conference,Conference,Division One,high,1
+bafanl,2019,Southern Football Conference,Conference,Division One,high,2
+bafanl,2019,NFC 1 North,Division,Northern Football Conference,high,0
+bafanl,2019,NFC 1 South,Division,Northern Football Conference,high,1
+bafanl,2019,SFC 1 East,Division,Southern Football Conference,high,0
+bafanl,2019,SFC 1 West,Division,Southern Football Conference,high,1
+bafanl,2019,Division Two,Tier,,high,2
+bafanl,2019,Playoffs,Playoffs,Division Two,high,0
+bafanl,2019,Northern Football Conference,Conference,Division Two,high,1
+bafanl,2019,Southern Football Conference,Conference,Division Two,high,2
+bafanl,2019,NFC 2 North,Division,Northern Football Conference,high,0
+bafanl,2019,NFC 2 South,Division,Northern Football Conference,high,1
+bafanl,2019,NFC 2 West,Division,Northern Football Conference,high,2
+bafanl,2019,SFC 2 North,Division,Southern Football Conference,high,0
+bafanl,2019,SFC 2 South,Division,Southern Football Conference,high,1
+bafanl,2019,SFC 2 West,Division,Southern Football Conference,high,2
+bafanl,2018,Premiership,Tier,,high,0
+bafanl,2018,Playoffs,Playoffs,Premiership,high,0
+bafanl,2018,Premiership North,Division,Premiership,high,1
+bafanl,2018,Premiership South,Division,Premiership,high,2
+bafanl,2018,Division One,Tier,,high,1
+bafanl,2018,Playoffs,Playoffs,Division One,high,0
+bafanl,2018,Northern Football Conference,Conference,Division One,high,1
+bafanl,2018,Southern Football Conference,Conference,Division One,high,2
+bafanl,2018,NFC 1 North,Division,Northern Football Conference,high,0
+bafanl,2018,NFC 1 South,Division,Northern Football Conference,high,1
+bafanl,2018,SFC 1 Central,Division,Southern Football Conference,high,0
+bafanl,2018,SFC 1 East,Division,Southern Football Conference,high,1
+bafanl,2018,Division Two,Tier,,high,2
+bafanl,2018,Playoffs,Playoffs,Division Two,high,0
+bafanl,2018,Northern Football Conference,Conference,Division Two,high,1
+bafanl,2018,Southern Football Conference,Conference,Division Two,high,2
+bafanl,2018,NFC 2 North,Division,Northern Football Conference,high,0
+bafanl,2018,NFC 2 Central,Division,Northern Football Conference,high,1
+bafanl,2018,NFC 2 South,Division,Northern Football Conference,high,2
+bafanl,2018,SFC 2 West,Division,Southern Football Conference,high,0
+bafanl,2018,SFC 2 East,Division,Southern Football Conference,high,1
+bafanl,2018,SFC 2 South,Division,Southern Football Conference,high,2
+bafanl,2017,Premiership,Tier,,high,0
+bafanl,2017,Playoffs,Playoffs,Premiership,high,0
+bafanl,2017,Premiership North,Division,Premiership,high,1
+bafanl,2017,Premiership South,Division,Premiership,high,2
+bafanl,2017,Division One,Tier,,high,1
+bafanl,2017,Playoffs,Playoffs,Division One,high,0
+bafanl,2017,Northern Football Conference,Conference,Division One,high,1
+bafanl,2017,Southern Football Conference,Conference,Division One,high,2
+bafanl,2017,NFC 1 North,Division,Northern Football Conference,high,0
+bafanl,2017,NFC 1 South,Division,Northern Football Conference,high,1
+bafanl,2017,SFC 1 Central,Division,Southern Football Conference,high,0
+bafanl,2017,SFC 1 East,Division,Southern Football Conference,high,1
+bafanl,2017,Division Two,Tier,,high,2
+bafanl,2017,Playoffs,Playoffs,Division Two,high,0
+bafanl,2017,Northern Football Conference,Conference,Division Two,high,1
+bafanl,2017,Southern Football Conference,Conference,Division Two,high,2
+bafanl,2017,NFC 2 North,Division,Northern Football Conference,high,0
+bafanl,2017,NFC 2 Central,Division,Northern Football Conference,high,1
+bafanl,2017,NFC 2 South,Division,Northern Football Conference,high,2
+bafanl,2017,SFC 2 West,Division,Southern Football Conference,high,0
+bafanl,2017,SFC 2 East,Division,Southern Football Conference,high,1
+bafanl,2017,SFC 2 South,Division,Southern Football Conference,high,2
+
+
+
+bafanl,2016,Premiership,Tier,,high,0
+bafanl,2016,Playoffs,Playoffs,Premiership,high,0
+bafanl,2016,Premiership North,Division,Premiership,high,1
+bafanl,2016,Premiership South,Division,Premiership,high,2
+bafanl,2016,Division One,Tier,,high,1
+bafanl,2016,Playoffs,Playoffs,Division One,high,0
+bafanl,2016,Northern Football Conference,Conference,Division One,high,1
+bafanl,2016,Midlands Football Conference,Conference,Division One,high,2
+bafanl,2016,Southern Football Conference,Conference,Division One,high,3
+bafanl,2016,NFC 1,Division,Northern Football Conference,high,0
+bafanl,2016,MFC 1,Division,Midlands Football Conference,high,0
+bafanl,2016,SFC 1,Division,Southern Football Conference,high,0
+bafanl,2016,Division Two,Tier,,high,2
+bafanl,2016,Playoffs,Playoffs,Division Two,high,0
+bafanl,2016,Northern Football Conference,Conference,Division Two,high,1
+bafanl,2016,Southern Football Conference,Conference,Division Two,high,2
+bafanl,2016,NFC 2 North,Division,Northern Football Conference,high,0
+bafanl,2016,NFC 2 West,Division,Northern Football Conference,high,1
+bafanl,2016,NFC 2 South,Division,Northern Football Conference,high,2
+bafanl,2016,SFC 2 West,Division,Southern Football Conference,high,0
+bafanl,2016,SFC 2 East,Division,Southern Football Conference,high,1
+bafanl,2016,SFC 2 South,Division,Southern Football Conference,high,2
+bafanl,2015,Premiership,Tier,,high,0
+bafanl,2015,Playoffs,Playoffs,Premiership,high,0
+bafanl,2015,Premiership North,Division,Premiership,high,1
+bafanl,2015,Premiership South,Division,Premiership,high,2
+bafanl,2015,Division One,Tier,,high,1
+bafanl,2015,Playoffs,Playoffs,Division One,high,0
+bafanl,2015,Northern Football Conference,Conference,Division One,high,1
+bafanl,2015,Southern Football Conference,Conference,Division One,high,2
+bafanl,2015,NFC 1,Division,Northern Football Conference,high,0
+bafanl,2015,SFC 1,Division,Southern Football Conference,high,0
+bafanl,2015,Division Two,Tier,,high,2
+bafanl,2015,Playoffs,Playoffs,Division Two,high,0
+bafanl,2015,Northern Football Conference,Conference,Division Two,high,1
+bafanl,2015,Southern Football Conference,Conference,Division Two,high,2
+bafanl,2015,NFC 2 North,Division,Northern Football Conference,high,0
+bafanl,2015,NFC 2 West,Division,Northern Football Conference,high,1
+bafanl,2015,NFC 2 South,Division,Northern Football Conference,high,2
+bafanl,2015,SFC 2 West,Division,Southern Football Conference,high,0
+bafanl,2015,SFC 2 East,Division,Southern Football Conference,high,1
+bafanl,2015,SFC 2 South,Division,Southern Football Conference,high,2
+bafanl,2014,Premiership,Tier,,high,0
+bafanl,2014,Playoffs,Playoffs,Premiership,high,0
+bafanl,2014,Premiership North,Division,Premiership,high,1
+bafanl,2014,Premiership South,Division,Premiership,high,2
+bafanl,2014,National Division,Tier,,high,1
+bafanl,2014,Playoffs,Playoffs,National Division,high,0
+bafanl,2014,National North,Division,National Division,high,1
+bafanl,2014,National North West,Division,National Division,high,2
+bafanl,2014,National Central,Division,National Division,high,3
+bafanl,2014,National South East,Division,National Division,high,4
+bafanl,2014,National South West,Division,National Division,high,5

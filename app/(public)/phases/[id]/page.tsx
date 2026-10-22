@@ -92,6 +92,7 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                                     <div className="flex items-center gap-2">
                                         <span className="text-xs font-sans text-slate-500 uppercase tracking-tighter">
                                             {game.date_display || (game.date ? new Date(game.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : "Unknown Date")}
+                                            {game.time && ` • ${game.time}`}
                                         </span>
                                         {!phase.isLeaf && (
                                             <span className="text-[10px] font-black bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded uppercase">
@@ -121,6 +122,21 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                                     )}
                                     {game.is_double_header && (
                                         <span className="text-[10px] font-black bg-amber-100 text-amber-700 px-2 py-0.5 rounded uppercase border border-amber-200">DH</span>
+                                    )}
+                                    {game.status?.toLowerCase() === 'cancelled' && (
+                                        <span className="text-[10px] font-black bg-slate-200 text-slate-700 px-2 py-0.5 rounded uppercase border border-slate-300">
+                                            Cancelled
+                                        </span>
+                                    )}
+                                    {game.status?.toLowerCase() === 'postponed' && (
+                                        <span className="text-[10px] font-black bg-amber-100 text-amber-800 px-2 py-0.5 rounded uppercase border border-amber-300">
+                                            Postponed
+                                        </span>
+                                    )}
+                                    {game.status?.toLowerCase() === 'awarded' && (
+                                        <span className="text-[10px] font-black bg-purple-100 text-purple-800 px-2 py-0.5 rounded uppercase border border-purple-300">
+                                            Awarded
+                                        </span>
                                     )}
                                 </div>
                                 <div className="flex justify-between items-center">

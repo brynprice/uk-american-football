@@ -92,9 +92,21 @@ async function getOrCreatePerson(displayName) {
     return newData.id;
 }
 
-async function getTeam(name, year = null) {
+async function getTeam(name, year = null, isUniversity = false) {
     if (!name) return null;
-    const cleanName = name.trim();
+    let cleanName = name.trim();
+    if (isUniversity && (
+        cleanName.toLowerCase() === 'aberdeen roughnecks' ||
+        cleanName.toLowerCase() === 'aberdeen bulls' ||
+        cleanName.toLowerCase() === 'aberdeen' ||
+        cleanName.toLowerCase() === 'aberdeen open 1' ||
+        cleanName.toLowerCase() === 'aberdeen mixed 1' ||
+        cleanName.toLowerCase() === 'aberdeen university' ||
+        cleanName.toLowerCase() === 'university of aberdeen' ||
+        cleanName.toLowerCase() === 'aberdeen university roughnecks'
+    )) {
+        cleanName = 'Aberdeen Roughnecks University Team';
+    }
     const numericYear = year ? parseInt(year, 10) : null;
 
     if (numericYear) {
@@ -253,7 +265,12 @@ async function importParticipations(filePath) {
         const phaseRecord = { id: finalPhaseId };
 
         // 4. Find team
-        const teamId = await getTeam(teamName, cleanYear);
+        const isUniversity = cleanName && (
+            cleanName.toLowerCase().includes('buafl') ||
+            cleanName.toLowerCase().includes('bucs') ||
+            cleanName.toLowerCase().includes('bcafl')
+        );
+        const teamId = await getTeam(teamName, cleanYear, isUniversity);
 
         if (!teamId) {
             console.warn(`  [Skip] Team "${teamName}" not found (checked primary and aliases).`);

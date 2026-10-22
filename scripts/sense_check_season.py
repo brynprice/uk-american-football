@@ -20,6 +20,7 @@ ALIAS_MAP = {
     'Napier Mavericks': 'Edinburgh Napier Knights',
     'GCU Roughriders': 'Caledonian Roughriders',
     'Bristol Bullets': 'Bristol Barracuda',
+    'Aberdeen Bulls': 'Aberdeen Roughnecks University Team',
 }
 
 def sense_check_season(csv_path):
@@ -42,13 +43,16 @@ def sense_check_season(csv_path):
     issues = []
     warnings = []
 
+    first_comp = (games[0].get('competition') or '').strip().upper() if games else ''
+    is_adult_contact = 'BAFA' in first_comp or 'ADULT' in first_comp or 'data/BAFANL' in csv_path.replace('\\', '/')
+
     # 1. Mandatory Schema & Non-Null Checks
     required_fields = ['competition', 'year', 'away_team', 'home_team', 'status', 'confidence_level']
     for idx, g in enumerate(games, 1):
         for rf in required_fields:
             if not g.get(rf):
                 issues.append(f"Row {idx}: Missing mandatory field '{rf}' for {g.get('away_team')} @ {g.get('home_team')}")
-        if g.get('status') != 'cancelled':
+        if g.get('status') not in ('cancelled', 'abandoned', 'postponed'):
             for rf in ['away_score', 'home_score']:
                 if not g.get(rf):
                     issues.append(f"Row {idx}: Missing mandatory field '{rf}' for {g.get('away_team')} @ {g.get('home_team')}")
@@ -67,6 +71,53 @@ def sense_check_season(csv_path):
             team = g.get(side, '')
             if team in ALIAS_MAP:
                 issues.append(f"Row {idx}: Non-canonical team alias '{team}' should be '{ALIAS_MAP[team]}'")
+
+    # 3b. Team Type vs Competition Level Classification Checks
+    teams_csv_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'teams.csv')
+    team_type_map = {}
+    if os.path.exists(teams_csv_path):
+        with open(teams_csv_path, 'r', encoding='utf-8') as tf:
+            for trow in csv.DictReader(tf):
+                tname = trow.get('name', '').strip()
+                ttype = trow.get('team_type', '').strip()
+                if tname and ttype:
+                    team_type_map[tname] = ttype
+
+    norm_path = csv_path.replace('\\', '/')
+    if any(kw in first_comp for kw in ['BAFA', 'ADULT', 'SENIOR']) or 'data/BAFANL' in norm_path or 'data/Seniors' in norm_path:
+        expected_team_type = 'Adult'
+    elif any(kw in first_comp for kw in ['BUAFL', 'BCAFL', 'BUCS', 'COLLEGIATE', 'UNIVERSIT']) or 'data/BUAFL' in norm_path:
+        expected_team_type = 'University'
+    elif any(kw in first_comp for kw in ['NWFL', 'WAFN', 'WOMEN']) or 'data/Womens' in norm_path:
+        expected_team_type = 'Womens'
+    elif any(kw in first_comp for kw in ['FLAG']) or 'data/Flag' in norm_path:
+        expected_team_type = 'Flag'
+    elif any(kw in first_comp for kw in ['U19', 'YOUTH']) or 'data/U19' in norm_path:
+        expected_team_type = 'U19s'
+    else:
+        expected_team_type = None
+
+    if expected_team_type and team_type_map:
+        for idx, g in enumerate(games, 1):
+            for side in ['away_team', 'home_team']:
+                raw_team = (g.get(side) or '').strip()
+                canonical_team = ALIAS_MAP.get(raw_team, raw_team)
+                if canonical_team in team_type_map:
+                    act_type = team_type_map[canonical_team]
+                    if act_type != expected_team_type:
+                        hint = ""
+                        if canonical_team == 'Glasgow Tigers' and expected_team_type == 'University':
+                            hint = " Did you mean 'Glasgow University Tigers'?"
+                        elif canonical_team == 'Glasgow University Tigers' and expected_team_type == 'Adult':
+                            hint = " Did you mean 'Glasgow Tigers'?"
+                        elif canonical_team == 'Aberdeen Roughnecks' and expected_team_type == 'University':
+                            hint = " Did you mean 'Aberdeen Roughnecks University Team'?"
+                        elif canonical_team == 'Aberdeen Roughnecks University Team' and expected_team_type == 'Adult':
+                            hint = " Did you mean 'Aberdeen Roughnecks'?"
+                        issues.append(
+                            f"Row {idx}: Team Type Mismatch - '{canonical_team}' is classified as a '{act_type}' team, "
+                            f"but this file is for a '{expected_team_type}' competition ({first_comp or norm_path})!{hint}"
+                        )
 
     # 4. Phase & Parent Phase Population Checks
     # Look up whether phases in this season have parent phases defined
@@ -170,7 +221,7 @@ def sense_check_season(csv_path):
                 f"Violates AGENTS.md Rule 6 (no evidence in data/evidence/verified_coaches.json)."
             )
 
-    # Check standings head coaches if standings file exists
+    # Check standings head coaches and team types if standings file exists
     if year_match and os.path.exists(standings_path):
         s_year = int(season_year)
         with open(standings_path, 'r', encoding='utf-8') as sf:
@@ -183,6 +234,22 @@ def sense_check_season(csv_path):
                         f"Standings Row {s_idx}: Unverified head coach '{coach}' for '{canonical_t}' ({s_year}). "
                         f"Violates AGENTS.md Rule 6 (no evidence in data/evidence/verified_coaches.json)."
                     )
+                if expected_team_type and team_type_map and canonical_t in team_type_map:
+                    act_type = team_type_map[canonical_t]
+                    if act_type != expected_team_type:
+                        hint = ""
+                        if canonical_t == 'Glasgow Tigers' and expected_team_type == 'University':
+                            hint = " Did you mean 'Glasgow University Tigers'?"
+                        elif canonical_t == 'Glasgow University Tigers' and expected_team_type == 'Adult':
+                            hint = " Did you mean 'Glasgow Tigers'?"
+                        elif canonical_t == 'Aberdeen Roughnecks' and expected_team_type == 'University':
+                            hint = " Did you mean 'Aberdeen Roughnecks University Team'?"
+                        elif canonical_t == 'Aberdeen Roughnecks University Team' and expected_team_type == 'Adult':
+                            hint = " Did you mean 'Aberdeen Roughnecks'?"
+                        issues.append(
+                            f"Standings Row {s_idx}: Team Type Mismatch - '{canonical_t}' is classified as a '{act_type}' team, "
+                            f"but this file is for a '{expected_team_type}' competition!{hint}"
+                        )
 
     # 5. Playoff Logic & Bracket Progression Checks
     playoff_games = [g for g in games if g.get('is_playoff', '').upper() == 'TRUE']
@@ -201,17 +268,25 @@ def sense_check_season(csv_path):
                     if not any(kw in notes.lower() for kw in ['advanced', 'overtime', 'tie', 'progressed', 'seed']):
                         issues.append(f"Row {idx}: Playoff game ended in a tie without advancement explanation in notes: {g.get('away_team')} {g.get('away_score')} - {g.get('home_score')} {g.get('home_team')}")
 
-        # Title game canonical styling check (College Bowl <Roman Numerals>)
+        # Title game canonical styling check
         is_title = g.get('is_title_game', '').upper() == 'TRUE'
         final_type = (g.get('final_type') or '').lower().strip()
         title_name = (g.get('title_name') or '').strip()
 
-        if final_type == 'title' or (is_title and ('college bowl' in title_name.lower() or 'national championship' in title_name.lower() or 'buafl' in title_name.lower() or 'bcafl' in title_name.lower())):
-            if not re.match(r'^College Bowl [IVXLCDM]+$', title_name):
-                issues.append(
-                    f"Row {idx}: Invalid National Championship Title Game name '{title_name}'. "
-                    f"Must be canonically styled as 'College Bowl <Roman Numerals>' (e.g. 'College Bowl XXIII')."
-                )
+        if is_adult_contact:
+            if final_type == 'title' or (is_title and 'britbowl' in title_name.lower()):
+                if not re.match(r'^Britbowl [IVXLCDM]+$', title_name):
+                    issues.append(
+                        f"Row {idx}: Invalid Adult National Championship Title Game name '{title_name}'. "
+                        f"Must be canonically styled as 'Britbowl <Roman Numerals>' (e.g. 'Britbowl XXXVIII')."
+                    )
+        else:
+            if final_type == 'title' or (is_title and ('college bowl' in title_name.lower() or 'national championship' in title_name.lower() or 'buafl' in title_name.lower() or 'bcafl' in title_name.lower())):
+                if not re.match(r'^College Bowl [IVXLCDM]+$', title_name):
+                    issues.append(
+                        f"Row {idx}: Invalid National Championship Title Game name '{title_name}'. "
+                        f"Must be canonically styled as 'College Bowl <Roman Numerals>' (e.g. 'College Bowl XXIII')."
+                    )
 
     # Check playoff bracket progression continuity
     if playoff_games:
@@ -267,7 +342,11 @@ def sense_check_season(csv_path):
     # 7. Score Sanity & Extremes
     for idx, g in enumerate(games, 1):
         if g.get('away_score') and g.get('home_score'):
-            as_num, hs_num = int(g['away_score']), int(g['home_score'])
+            try:
+                as_num, hs_num = int(g['away_score']), int(g['home_score'])
+            except ValueError:
+                issues.append(f"Row {idx}: Non-integer score detected: away='{g.get('away_score')}', home='{g.get('home_score')}'")
+                continue
             if as_num < 0 or hs_num < 0:
                 issues.append(f"Row {idx}: Negative score detected: {g.get('away_team')} {as_num} - {hs_num} {g.get('home_team')}")
             if as_num > 100 or hs_num > 100:
@@ -288,29 +367,39 @@ def sense_check_season(csv_path):
         month = dt.month
         is_playoff = g.get('is_playoff', '').upper() == 'TRUE'
 
-        # Rule 1: No regular games in May, and no games in June, July, August, or September (Critical)
-        if month in (6, 7, 8, 9) or (month == 5 and not is_playoff):
-            issues.append(
-                f"Row {idx}: Invalid game month ({month_names[month]} / {d_str}). "
-                f"Games should not be played in May, June, July, August, or September."
-            )
-        elif month == 5 and is_playoff:
-            warnings.append(
-                f"Row {idx}: Playoff game in May ({month_names[month]} / {d_str}). "
-                f"May is unusually late for university playoffs; verify weather/rescheduling."
-            )
-        # Rule 2: April should strictly only be playoffs (Critical)
-        elif month == 4 and not is_playoff:
-            issues.append(
-                f"Row {idx}: Invalid regular season game date ({month_names[month]} / {d_str}). "
-                f"April games must be playoff games."
-            )
-        # Rule 3: March regular season games flagged as a Warning (makeup/rescheduled games)
-        elif month == 3 and not is_playoff:
-            warnings.append(
-                f"Row {idx}: Regular season game in March ({month_names[month]} / {d_str}). "
-                f"March is typically reserved for playoffs; check if this was a weather makeup game."
-            )
+        if is_adult_contact:
+            # Adult contact season: April to September (October permitted for 2021 COVID delayed season)
+            allowed_months = (4, 5, 6, 7, 8, 9, 10) if season_year == '2021' else (4, 5, 6, 7, 8, 9)
+            if month not in allowed_months:
+                issues.append(
+                    f"Row {idx}: Invalid adult contact game month ({month_names[month]} / {d_str}). "
+                    f"Adult contact games must be played between April and September."
+                )
+        else:
+            # University football: October to April
+            # Rule 1: No regular games in May, and no games in June, July, August, or September (Critical)
+            if month in (6, 7, 8, 9) or (month == 5 and not is_playoff):
+                issues.append(
+                    f"Row {idx}: Invalid game month ({month_names[month]} / {d_str}). "
+                    f"Games should not be played in May, June, July, August, or September."
+                )
+            elif month == 5 and is_playoff:
+                warnings.append(
+                    f"Row {idx}: Playoff game in May ({month_names[month]} / {d_str}). "
+                    f"May is unusually late for university playoffs; verify weather/rescheduling."
+                )
+            # Rule 2: April should strictly only be playoffs (Critical)
+            elif month == 4 and not is_playoff:
+                issues.append(
+                    f"Row {idx}: Invalid regular season game date ({month_names[month]} / {d_str}). "
+                    f"April games must be playoff games."
+                )
+            # Rule 3: March regular season games flagged as a Warning (makeup/rescheduled games)
+            elif month == 3 and not is_playoff:
+                warnings.append(
+                    f"Row {idx}: Regular season game in March ({month_names[month]} / {d_str}). "
+                    f"March is typically reserved for playoffs; check if this was a weather makeup game."
+                )
 
     # Summary Output
     print("\n" + "-" * 65)

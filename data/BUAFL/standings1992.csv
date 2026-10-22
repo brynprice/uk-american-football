@@ -1,5 +1,5 @@
 competition_name,phase,year,team,position,games_played,wins,losses,ties,points_for,points_against,streak,is_champion,notes
-bcafl,Northern Conference,1992,Glasgow Tigers,1,8,8,0,0,174,28,,TRUE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1992,Glasgow University Tigers,1,8,8,0,0,174,28,,TRUE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
 bcafl,Northern Conference,1992,Leeds Celtics,2,8,7,1,0,150,22,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
 bcafl,Northern Conference,1992,Sheffield Zulus,3,8,5,2,1,107,59,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League
 bcafl,Northern Conference,1992,Strathclyde Hawks,4,8,5,3,0,108,71,,FALSE,https://en.wikipedia.org/wiki/1992%E2%80%9393_British_Collegiate_American_Football_League

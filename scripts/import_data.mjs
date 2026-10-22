@@ -175,9 +175,18 @@ async function getPhase(seasonId, name, parentPhaseName = null) {
     return null;
 }
 
-async function getTeam(name, year = null) {
+async function getTeam(name, year = null, isUniversity = false) {
     if (!name) return null;
-    const cleanName = name.trim();
+    let cleanName = name.trim();
+    if (isUniversity && (
+        cleanName.toLowerCase() === 'aberdeen roughnecks' ||
+        cleanName.toLowerCase() === 'aberdeen bulls' ||
+        cleanName.toLowerCase() === 'aberdeen' ||
+        cleanName.toLowerCase() === 'aberdeen open 1' ||
+        cleanName.toLowerCase() === 'aberdeen mixed 1'
+    )) {
+        cleanName = 'Aberdeen Roughnecks University Team';
+    }
     const numericYear = year ? parseInt(year, 10) : null;
 
     if (numericYear) {
@@ -457,13 +466,18 @@ async function importData(filePath) {
             }
 
             // 2. Resolve Teams
-            const homeTeamId = await getTeam(home_team, year);
+            const isUniversity = competition && (
+                competition.toLowerCase().includes('buafl') ||
+                competition.toLowerCase().includes('bucs') ||
+                competition.toLowerCase().includes('bcafl')
+            );
+            const homeTeamId = await getTeam(home_team, year, isUniversity);
             if (!homeTeamId) {
                 console.warn(`  [Skip] Home team "${home_team}" not found in teams or team_aliases. skipping record.`);
                 continue;
             }
 
-            const awayTeamId = await getTeam(away_team, year);
+            const awayTeamId = await getTeam(away_team, year, isUniversity);
             if (!awayTeamId) {
                 console.warn(`  [Skip] Away team "${away_team}" not found in teams or team_aliases. skipping record.`);
                 continue;

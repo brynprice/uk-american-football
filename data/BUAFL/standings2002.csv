@@ -1,7 +1,7 @@
 competition_name,parent_phase,phase,year,team,position,games_played,wins,losses,ties,points_for,points_against,streak,is_champion,notes,head_coach
 bcafl,Northern Conference,Borders Division,2002,Stirling Clansmen,1,8,8,0,0,262,82,,TRUE,https://en.wikipedia.org/wiki/2002%E2%80%9303_British_Collegiate_American_Football_League,
 bcafl,Northern Conference,Borders Division,2002,Newcastle Raiders,2,8,5,3,0,183,135,,FALSE,https://en.wikipedia.org/wiki/2002%E2%80%9303_British_Collegiate_American_Football_League,
-bcafl,Northern Conference,Borders Division,2002,Glasgow Tigers,3,8,4,4,0,241,143,,FALSE,https://en.wikipedia.org/wiki/2002%E2%80%9303_British_Collegiate_American_Football_League,
+bcafl,Northern Conference,Borders Division,2002,Glasgow University Tigers,3,8,4,4,0,241,143,,FALSE,https://en.wikipedia.org/wiki/2002%E2%80%9303_British_Collegiate_American_Football_League,
 bcafl,Northern Conference,Borders Division,2002,Sunderland Kings,4,8,0,8,0,12,328,,FALSE,https://en.wikipedia.org/wiki/2002%E2%80%9303_British_Collegiate_American_Football_League,
 bcafl,Northern Conference,Eastern Division,2002,Leeds Celtics,1,8,8,0,0,250,20,,TRUE,https://en.wikipedia.org/wiki/2002%E2%80%9303_British_Collegiate_American_Football_League,
 bcafl,Northern Conference,Eastern Division,2002,Hull Sharks,2,8,4,2,2,77,101,,FALSE,https://en.wikipedia.org/wiki/2002%E2%80%9303_British_Collegiate_American_Football_League,

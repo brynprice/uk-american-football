@@ -118,6 +118,13 @@ function excelFractionToTime(fraction) {
 function cleanTeamName(name) {
     if (!name) return "";
     let clean = name.trim();
+    if (teamMappings.hasOwnProperty(clean) && teamMappings[clean]) {
+        return teamMappings[clean];
+    }
+    // Explicit safeguard for Aberdeen in BUCS context
+    if (clean === "Aberdeen Roughnecks" || clean === "Aberdeen Bulls" || clean === "Aberdeen" || clean.startsWith("Aberdeen ")) {
+        return "Aberdeen Roughnecks University Team";
+    }
     if (teamMappings.hasOwnProperty(clean)) {
         if (teamMappings[clean]) return teamMappings[clean];
     } else {

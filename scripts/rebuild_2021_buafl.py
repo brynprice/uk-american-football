@@ -38,6 +38,14 @@ CANONICAL_TEAM_MAP = {
     'UCLAN Rams': 'UCLan Rams',
     'Canterbury Chargers': 'Canterbury CC Chargers',
     'NTU Renegades': 'Nottingham Trent Renegades',
+    'Aberdeen Roughnecks': 'Aberdeen Roughnecks University Team',
+    'Aberdeen Bulls': 'Aberdeen Roughnecks University Team',
+    'Aberdeen': 'Aberdeen Roughnecks University Team',
+    'Aberdeen Open 1': 'Aberdeen Roughnecks University Team',
+    'Aberdeen Mixed 1': 'Aberdeen Roughnecks University Team',
+    'University of Aberdeen': 'Aberdeen Roughnecks University Team',
+    'Aberdeen University': 'Aberdeen Roughnecks University Team',
+    'Aberdeen University Roughnecks': 'Aberdeen Roughnecks University Team',
 }
 
 # The 25 authentic phases for 2021/22

@@ -1,7 +1,7 @@
 competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase
 BUAFL,2025,National Vase,2026-03-01,Newcastle Raiders,Brunel Burners,12,54,Site 5,,,James Kelvin,FALSE,day,,13:00,completed,high,TRUE,FALSE,,,Quarter Finals,
 BUAFL,2025,National Vase,2026-03-01,Portsmouth Destroyers,Nottingham Trent Renegades,36,33,Clifton Sports Hub Grass Pitch 1,,,,FALSE,day,,13:00,completed,high,TRUE,FALSE,,,Quarter Finals,
-BUAFL,2025,National Trophy,2026-03-01,Glasgow Tigers,Edinburgh Napier Knights,0,1,Sighthill Sports Pitches,,,,FALSE,day,,13:00,awarded,high,TRUE,FALSE,,,Last 16,
+BUAFL,2025,National Trophy,2026-03-01,Glasgow University Tigers,Edinburgh Napier Knights,0,1,Sighthill Sports Pitches,,,,FALSE,day,,13:00,awarded,high,TRUE,FALSE,,,Last 16,
 BUAFL,2025,National Trophy,2026-03-01,Stirling Clansmen,Nottingham Green,23,35,,,,,FALSE,day,,13:00,completed,high,TRUE,FALSE,,,Last 16,
 BUAFL,2025,National Trophy,2026-03-01,Brighton Panthers,KCL Regents,0,7,Chiswick RFC,,Ethan Butcher,,FALSE,day,,13:00,completed,high,TRUE,FALSE,,,Last 16,
 BUAFL,2025,National Vase,2026-03-01,Northumbria Mustangs,SGS Pride,31,34,SGS College WISE Campus,,,,FALSE,day,,14:00,completed,high,TRUE,FALSE,,,Quarter Finals,

@@ -1,5 +1,5 @@
 competition_name,parent_phase,phase,year,team,position,games_played,wins,losses,ties,points_for,points_against,streak,is_champion,notes,head_coach
-bcafl,Northern Conference,Scottish Division,1997,Glasgow Tigers,1,8,5,2,1,274,125,,TRUE,https://en.wikipedia.org/wiki/1997%E2%80%9398_British_Collegiate_American_Football_League,
+bcafl,Northern Conference,Scottish Division,1997,Glasgow University Tigers,1,8,5,2,1,274,125,,TRUE,https://en.wikipedia.org/wiki/1997%E2%80%9398_British_Collegiate_American_Football_League,
 bcafl,Northern Conference,Scottish Division,1997,Strathclyde Hawks,2,8,3,4,1,108,212,,FALSE,https://en.wikipedia.org/wiki/1997%E2%80%9398_British_Collegiate_American_Football_League,
 bcafl,Northern Conference,Scottish Division,1997,Stirling Clansmen,3,8,1,5,2,100,241,,FALSE,https://en.wikipedia.org/wiki/1997%E2%80%9398_British_Collegiate_American_Football_League,
 bcafl,Northern Conference,Eastern Division,1997,Leeds Celtics,1,8,8,0,0,393,79,,TRUE,https://en.wikipedia.org/wiki/1997%E2%80%9398_British_Collegiate_American_Football_League,

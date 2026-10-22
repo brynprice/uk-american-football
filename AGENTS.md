@@ -7,7 +7,7 @@
 - For all other games, record the exact primary public URL (e.g., `https://britball.fandom.com/wiki/...`).
 
 ## 2. Canonical Team Naming
-- Always map historical team aliases to their canonical database team names (e.g. `Brighton Panthers` -> `Brighton Tsunami`, `Anglia Ruskin Phantoms` / `Anglia Ruskin Rhinos` -> `Anglia Ruskin Siege`, `Royal Holloway Vikings` -> `Royal Holloway Bears`, `Napier Mavericks` -> `Edinburgh Napier Knights`, `GCU Roughriders` -> `Caledonian Roughriders`, `Liverpool Fury` -> `LJMU Fury`).
+- Always map historical team aliases to their canonical database team names (e.g. `Brighton Panthers` -> `Brighton Tsunami`, `Anglia Ruskin Phantoms` / `Anglia Ruskin Rhinos` -> `Anglia Ruskin Siege`, `Royal Holloway Vikings` -> `Royal Holloway Bears`, `Napier Mavericks` -> `Edinburgh Napier Knights`, `GCU Roughriders` -> `Caledonian Roughriders`, `Liverpool Fury` -> `LJMU Fury`, `Aberdeen Bulls` -> `Aberdeen Roughnecks University Team`).
 
 ## 3. Title Game & Postseason Conventions
 - National Championship Title Games must **always** be styled as `College Bowl <Roman Numerals>` (e.g. `College Bowl XXII`, `College Bowl XXIII`) with `final_type = 'title'` and `is_title_game = TRUE`.

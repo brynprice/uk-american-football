@@ -457,11 +457,18 @@ function GameRow({ game, teamId, seasonYear }: { game: any; teamId?: string; sea
 
     let resultBadge = null;
     const isCancelled = game.status?.toLowerCase() === 'cancelled';
+    const isPostponed = game.status?.toLowerCase() === 'postponed';
     if (isCancelled) {
         const isVoid = (game.notes || '').toLowerCase().includes('void');
         resultBadge = (
             <span className="bg-slate-100 text-slate-500 text-[10px] font-black uppercase px-2 py-0.5 rounded border border-slate-200 font-sans">
                 {isVoid ? 'VOID' : 'CANCELLED'}
+            </span>
+        );
+    } else if (isPostponed) {
+        resultBadge = (
+            <span className="bg-amber-100 text-amber-800 text-[10px] font-black uppercase px-2 py-0.5 rounded border border-amber-200 font-sans">
+                POSTPONED
             </span>
         );
     } else if (isCompleted && teamScore !== null && oppScore !== null) {

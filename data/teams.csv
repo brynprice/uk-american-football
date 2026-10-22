@@ -1,35 +1,189 @@
-name,location,founded_year,folded_year,notes,team_type
-Anglia Ruskin Phantoms,Cambridge,,,,University
-Bath Killer Bees,Bath,,,,University
-Birmingham Lions,Birmingham,,,,University
-BNU Buccaneers,Wycombe,,,,University
-UWE Bullets,Bristol,,,,University
-Brunel Burners,London,,,,University
-Cambridge Pythons,Cambridge,,,,University
-Canterbury CC Chargers,Canterbury,,,,University
-Chichester Spitfires,Chichester,,,,University
-City Wolfpack,London,,,,University
-Essex Blades,Colchester,,,,University
-Greenwich Mariners,London,,,,University
-Hertfordshire Hurricanes,Hatfield,,,,University
-Imperial Immortals,London,,,,University
-Kent Falcons,Canterbury,,,,University
-KCL Regents,London,,,,University
-Kingston Cougars,London,,,,University
-LSBU Spartans,London,,,,University
-OBU Panthers,Oxford,,,,University
-Oxford Cavaliers,Oxford,,,,University
-Oxford Lancers,Oxford,,,,University
-Plymouth Blitz,Plymouth,,,,University
-Portsmouth Destroyers,Portsmouth,,,,University
-Reading Knights,Reading,,,,University
-Royal Holloway Bears,Egham,,,,University
-Solent Redhawks,Southampton,,,,University
-Southampton Stags,Southamptpon,,,,University
-Surrey Stingers,Guildford,,,,University
-Sussex Saxons,Brighton,,,,University
-UCL Emperors,London,,,,University
-UEA Pirates,Norwich,,,,University
-Warwick Wolves,Warwick,,,,University
-Westminster Dragons,London,,,,University
-Winchester Silverbacks,Winchester,,,,University
+name,location,team_type,founded_year,folded_year
+Aberdeen Roughnecks,Aberdeen,Adult,,
+Aberdeen Roughnecks University Team,Aberdeen,University,1994,
+Anglia Ruskin Siege,Cambridge,University,2003,
+Aston Rhinos,Birmingham,University,1989,1996
+Bangor Llewod,Bangor,University,2009,
+Bath Killer Bees,Bath,University,1992,
+Bath Spa Bulldogs,Bath,University,,
+Berkshire Renegades,Reading,Adult,,
+Birmingham Bulls,Birmingham,Adult,,
+Birmingham Lions,Birmingham,University,,
+Black Country Steelers,,Adult,,
+BNU Buccaneers,Wycombe,University,,
+Bournemouth Bobcats,Bournemouth,Adult,,
+Bournemouth University Bobcats,Bournemouth,University,,
+Bradford Bears,Bradford,University,2009,
+Brighton Panthers,Brighton,University,2002,
+Bristol Apache,,Adult,,
+Bristol Aztecs,Bristol,Adult,,
+Bristol Barracuda,Bristol,University,,
+Brunel Burners,London,University,,
+Bury Saints,Bury St Edmunds,Adult,2013,2020
+Caledonian Roughriders,Glasgow,University,2003,2008
+Cambridge Pythons,Cambridge,University,,
+Cambridgeshire Cats,,Adult,,
+Canterbury CC Chargers,Canterbury,University,,
+Cardiff Cobras,Cardiff,University,1987,
+Carlisle Kestrels,Carlisle,Adult,2020,2021
+Chester Legion,Chester,University,,
+Chester Romans,Chester,Adult,,
+Chichester Spitfires,Chichester,University,,
+City Wolfpack,London,University,,
+Clyde Valley Blackhawks,,Adult,,
+Colchester Gladiators,,Adult,,
+Cornwall Monarchs,,Adult,,
+Coventry Phoenix,,Adult,,
+Coventry Jets,Coventry,Adult,1985,2018
+Coventry University Jets,Coventry,University,,
+Crewe Railroaders,Crewe,Adult,1984,2023
+Darlington Steam,,Adult,,
+DC Presidents,Durham,Adult,2014,2023
+Derby Braves,Derby,University,1996,
+DMU Lions,Leicester,University,2011,
+Doncaster Mustangs,,Adult,,
+Dumfries Hunters,Dumfries,Adult,2017,2022
+Dundee Bluedevils,Dundee,University,1999,2000
+Dunfermline Kings,Dunfermline,Adult,2017,2023
+Durham Saints,Durham,University,,
+East Essex Sabres,Rayleigh,Adult,2016,2023
+East Kent Mavericks,,Adult,,
+East Kilbride Pirates,,Adult,,
+Edge Hill Vikings,Ormskirk,University,2014,
+Edinburgh Napier Knights,Edinburgh,University,,
+Edinburgh Timberwolves,Edinburgh,University,,
+Edinburgh Wildcats,Edinburgh,University,2010,
+Edinburgh Wolves,Edinburgh,Adult,2002,
+Essex Blades,Colchester,University,,
+Essex Spartans,Essex,Adult,1998,2023
+Essex Tridents,,Adult,,
+Exeter Demons,Exeter,University,,
+FXU Tridents,Falmouth,University,2011,2018
+Furness Phantoms,Barrow-in-Furness,Adult,2011,2020
+Gateshead Senators,,Adult,,
+Glasgow Tigers,Glasgow,Adult,1986,
+Glasgow University Tigers,Glasgow,University,1986,
+Gloucestershire Gladiators,Cheltenham,University,,
+Greenwich Mariners,London,University,,
+Halton Spartans,Widnes,Adult,2014,2023
+Hastings Conquerors,Hastings,Adult,2013,2021
+Hereford Stampede,,Adult,,
+Hertfordshire Cheetahs,,Adult,,
+Hertfordshire Hurricanes,Hatfield,University,,
+Highland Stags,Inverness,Adult,2014,
+Huddersfield Hawks,Huddersfield,University,,
+Hull Sharks,Hull,University,1985,
+Humber Warhawks,,Adult,,
+HWU Wolverines,Edinburgh,University,,
+Imperial Immortals,London,University,,
+Inverclyde Goliaths,,Adult,,
+Ipswich Cardinals,,Adult,,
+Jurassic Coast Raptors,Dorchester,Adult,2016,2021
+KCL Regents,London,University,,
+Keele Crusaders,Keele,University,,
+Kent Exiles,,Adult,,
+Kent Falcons,Canterbury,University,,
+Kingston Cougars,London,University,,
+Lancashire Buccaneers,,Adult,,
+Lancaster Bombers,Lancaster,University,1991,
+Leeds Beckett Carnegie,Leeds,University,2008,
+Leeds Bobcats,Leeds,Adult,2008,2021
+Leeds Gryphons,Leeds,University,1990,
+Leicester Longhorns,Leicester,University,1986,
+Leicester Panthers,,Adult,,
+Leigh Miners,,Adult,,
+Lincoln Colonials,Lincoln,University,2006,
+Lincolnshire Bombers,,Adult,,
+Liverpool Raptors,Liverpool,University,,
+LJMU Fury,Liverpool,University,,
+London Blitz,,Adult,,
+London Blitz B,,Adult,,
+London Hornets,London,Adult,2011,2024
+London Olympians,,Adult,,
+London Warriors,,Adult,,
+Loughborough Students,Loughborough,University,1988,
+LSBU Spartans,London,University,,
+Maidstone Pumas,Maidstone,Adult,1997,2020
+Manchester MPs,Manchester,University,1985,1988
+Manchester Titans,,Adult,,
+Manchester Tyrants,Manchester,University,,
+Merseyside Nighthawks,,Adult,,
+MMU Eagles,Manchester,University,,
+Morecambe Bay Storm,Morecambe,Adult,2016,2021
+Newcastle Raiders,Newcastle,University,1985,
+Newcastle Vikings,,Adult,,
+Northampton Nemesis,Northampton,University,,2018
+Northants Knights,,Adult,,
+Northumbria Mustangs,Newcastle,University,,
+Northumberland Lightning,Ashington,Adult,2012,2017
+Norwich Devils,,Adult,,
+Nottingham Caesars,,Adult,,
+Nottingham Gold,Nottingham,University,1995,
+Nottingham Green,Nottingham,University,2026,
+Nottingham Jade,Nottingham,University,2019,
+Nottingham Trent Renegades,Nottingham,University,2009,
+Ouse Valley Eagles,,Adult,,
+Oxford Brookes University,Oxford,University,2010,
+Oxford Cavaliers,Oxford,University,,2010
+Oxford Lancers,Oxford,University,2010,
+Oxford Saints,,Adult,,
+Plymouth Blitz,Plymouth,University,,
+Plymouth Vanguard,,Adult,,
+Portsmouth Destroyers,Portsmouth,University,,
+Portsmouth Dreadnoughts,,Adult,,
+QMBL Vipers,Queen Mary University, London,University,,
+Reading Knights,Reading,University,,
+Rossendale Bucks,,Adult,,
+Royal Holloway Bears,Egham,University,,
+Rushmoor Knights,,Adult,,
+Salford Storm,Salford,University,2018,
+Sandwell Steelers,,Adult,,
+Scunthorpe Alphas,,Adult,,
+SGS Pride,Bristol,University,,
+Sheffield Giants,,Adult,,
+Sheffield Hallam Warriors,Sheffield,University,2002,
+Sheffield Sabres,Sheffield,University,1989,
+Shropshire Revolution,,Adult,,
+Solent Redhawks,Southampton,University,,
+Solent Thrashers,,Adult,,
+Somerset Wyverns,,Adult,,
+South East Squadron,Maidstone,Adult,2020,2022
+South Lincolnshire Lightning,Bourne,Adult,2020,2022
+South Wales Warriors,,Adult,,
+Southampton Stags,Southampton,University,,
+Staffordshire Stallions,Stoke-on-Trent,University,1992,
+Staffordshire Surge,,Adult,,
+Stirling Clansmen,Stirling,University,1986,
+Strathclyde Hawks,Glasgow,University,1986,2001
+Sunderland Spartans,Sunderland,University,,
+Surrey Stingers,Guildford,University,,
+Sussex Saxons,Brighton,University,,
+Sussex Thunder,Haywards Heath,Adult,,
+Sussex Thunderbolts,Brighton,Adult,2020,2021
+Swansea Titans,Swansea,University,,
+Swindon Storm,,Adult,,
+Tarannau Aberystwyth,Aberystwyth,University,1991,
+Teesside Cougars,Middlesborough,University,1985,
+Torbay Trojans,Torbay,Adult,1983,2023
+UCL Emperors,London,University,,
+UCLan Rams,Preston,University,,
+UEA Pirates,Norwich,University,,
+UEL Phoenix,London,University,,
+UWE Bullets,Bristol,University,,
+UWE Bullets 2s,Bristol,University,,
+UWS Pyros,Paisley,University,1989,
+Wakefield District Raiders,,Adult,,
+Warwick Wolves,Warwick,University,,
+Wembley Stallions,,Adult,,
+West Coast Trojans,Irvine,Adult,2004,2018
+Westminster Dragons,London,University,,
+Winchester Silverbacks,Winchester,University,,
+Wolverhampton Wildcats,Wolverhampton,University,2012,2015
+Worcester Royals,Worcester,University,,
+Worcestershire Black Knights,Worcester,Adult,2017,2022
+York Centurions,York,University,,
+Yorkshire Rams,,Adult,,
+YSJ Jaguars,York,University,2016,
+Peterborough Saxons,Peterborough,Adult,2001,2016
+Dundee Hurricanes,Dundee,Adult,2002,2016
+Gloucester Centurions,Gloucester,Adult,2007,2015

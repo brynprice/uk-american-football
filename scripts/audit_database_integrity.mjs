@@ -75,6 +75,7 @@ Checks performed:
  13. AGENTS.md Rule 6 coaching registry compliance
  14. Teams with games in unparticipated regular season phases (TEAM_PLAYED_IN_UNPARTICIPATED_PHASE)
  15. Partial standings asymmetry with unbalanced wins/losses (PARTIAL_STANDINGS_ALL_WINS)
+ 16. Team type vs competition level compatibility (TEAM_TYPE_MISMATCH_IN_COMPETITION)
 `);
   process.exit(0);
 }
@@ -160,7 +161,7 @@ async function runAudit() {
   }
 
   // 1. Fetch seasons to inspect
-  let seasonsQuery = supabase.from('seasons').select('*, competitions(name, slug)').order('year', { ascending: true });
+  let seasonsQuery = supabase.from('seasons').select('*, competitions(name, slug, level)').order('year', { ascending: true });
   if (targetYear) {
     seasonsQuery = seasonsQuery.eq('year', targetYear);
   }
@@ -259,7 +260,7 @@ async function runAudit() {
     // 3. Fetch all participations in the season
     const { data: allSeasonParticipations, error: partErr } = await supabase
       .from('participations')
-      .select('*, teams(id, name), people:head_coach_id(id, display_name)')
+      .select('*, teams(id, name, team_type), people:head_coach_id(id, display_name)')
       .in('phase_id', Array.from(seasonAllPhasesMap.keys()));
 
     if (partErr) {
@@ -283,7 +284,7 @@ async function runAudit() {
     // 4. Fetch games for this season
     const { data: allSeasonGames, error: gamesErr } = await supabase
       .from('games')
-      .select('*, home:home_team_id(id, name), away:away_team_id(id, name)')
+      .select('*, home:home_team_id(id, name, team_type), away:away_team_id(id, name, team_type)')
       .eq('season_id', season.id);
 
     if (gamesErr) {
@@ -307,6 +308,38 @@ async function runAudit() {
 
     for (const g of games || []) {
       const gPhase = seasonAllPhasesMap.get(g.phase_id);
+
+      // Check competition level vs team_type
+      const compLevel = season.competitions?.level;
+      let expectedTeamType = null;
+      if (compLevel === 'Uniball') expectedTeamType = 'University';
+      else if (compLevel === 'Adult Contact') expectedTeamType = 'Adult';
+      else if (compLevel === 'Womens') expectedTeamType = 'Womens';
+
+      if (expectedTeamType) {
+        if (g.home?.team_type && g.home.team_type !== expectedTeamType) {
+          addIssue({
+            season,
+            phase: gPhase,
+            team: g.home,
+            category: 'TEAM_TYPE_MISMATCH_IN_COMPETITION',
+            severity: 'CRITICAL',
+            message: `Home team "${g.home?.name}" is classified as "${g.home?.team_type}", but is competing in a "${compLevel}" competition (${season.competitions?.name} ${season.year}) on ${g.date}.`,
+            details: { game_id: g.id }
+          });
+        }
+        if (g.away?.team_type && g.away.team_type !== expectedTeamType) {
+          addIssue({
+            season,
+            phase: gPhase,
+            team: g.away,
+            category: 'TEAM_TYPE_MISMATCH_IN_COMPETITION',
+            severity: 'CRITICAL',
+            message: `Away team "${g.away?.name}" is classified as "${g.away?.team_type}", but is competing in a "${compLevel}" competition (${season.competitions?.name} ${season.year}) on ${g.date}.`,
+            details: { game_id: g.id }
+          });
+        }
+      }
 
       // Game integrity check: same home & away team
       if (g.home_team_id && g.away_team_id && g.home_team_id === g.away_team_id) {
@@ -404,7 +437,9 @@ async function runAudit() {
       }
 
       // Only count active played/awarded games for standings validation
-      if (g.status === 'cancelled') continue;
+      if (['cancelled', 'abandoned', 'postponed', 'scheduled'].includes(g.status)) continue;
+      if (g.home_score === null || g.away_score === null) continue;
+      if (g.notes?.includes('Inter-divisional game')) continue;
 
       if (g.phase_id && phasesToAuditMap.has(g.phase_id)) {
         if (!allGamesInAuditedPhase.has(g.phase_id)) allGamesInAuditedPhase.set(g.phase_id, []);
@@ -450,6 +485,24 @@ async function runAudit() {
         });
       }
       teamParticipationsInPhase.add(ptKey);
+
+      // Check competition level vs team_type on participation
+      const compLevel = season.competitions?.level;
+      let expectedTeamType = null;
+      if (compLevel === 'Uniball') expectedTeamType = 'University';
+      else if (compLevel === 'Adult Contact') expectedTeamType = 'Adult';
+      else if (compLevel === 'Womens') expectedTeamType = 'Womens';
+
+      if (expectedTeamType && team?.team_type && team.team_type !== expectedTeamType) {
+        addIssue({
+          season,
+          phase,
+          team,
+          category: 'TEAM_TYPE_MISMATCH_IN_COMPETITION',
+          severity: 'CRITICAL',
+          message: `Team "${team?.name}" is classified as "${team?.team_type}", but holds a participation record in phase "${phase?.name}" of "${compLevel}" competition (${season.competitions?.name} ${season.year}).`
+        });
+      }
 
       // Check coaching integrity (AGENTS.md Rule 6)
       if (p.head_coach_id) {
@@ -680,6 +733,14 @@ async function runAudit() {
                               (phase?.name || '').toLowerCase().includes('championship');
 
       if (isPlayoffOrBowl) continue;
+
+      // If phase has inter-divisional/inter-phase games, wins/losses/points are not expected to be closed-loop within this single phase
+      const hasInterPhaseGames = (allSeasonGames || []).some(g =>
+        g.away_phase_id &&
+        (g.phase_id === phaseId || g.away_phase_id === phaseId) &&
+        g.phase_id !== g.away_phase_id
+      );
+      if (hasInterPhaseGames) continue;
 
       const teamsWithStats = parts.filter(p => p.wins !== null && p.losses !== null);
       if (teamsWithStats.length === parts.length && parts.length >= 3) {

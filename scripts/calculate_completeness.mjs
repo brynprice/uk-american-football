@@ -109,9 +109,13 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
         // If regular season games are expected from standings, scale game presence by actual coverage
         if (expectedRegGames > 0) {
             const regCoverage = Math.min(1.0, regGames.length / expectedRegGames);
-            score += Math.round(regCoverage * 25);
-            if (playoffGames.length > 0) {
-                score += 5;
+            if (isInterrupted) {
+                score += Math.round(regCoverage * 30);
+            } else {
+                score += Math.round(regCoverage * 25);
+                if (playoffGames.length > 0) {
+                    score += 5;
+                }
             }
             if (regGames.length === 0) {
                 details.missing_games = true;
@@ -253,12 +257,12 @@ export async function run(targetSeasonId = null) {
             score = 100;
             details = s.completeness_details;
         } else {
-            const isInterrupted = s.completeness_details?.status === 'interrupted';
+            const isInterrupted = s.completeness_details?.status === 'interrupted' || s.completeness_details?.status === 'return_to_play' || s.completeness_details?.waive_title_game === true;
             const result = await calculateForSeason(s.id, title, s.expected_participants, isInterrupted);
             score = result.score;
-            details = result.details;
+            details = { ...s.completeness_details, ...result.details };
 
-            if (isInterrupted) {
+            if (isInterrupted && !details.status) {
                 details.status = 'interrupted';
             }
         }

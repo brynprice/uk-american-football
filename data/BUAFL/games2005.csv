@@ -1,6 +1,6 @@
 competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase,away_phase,away_parent_phase
 ,,Scottish Division,,Loughborough Aces,Stirling Clansmen,30,7,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Northern Conference,Central Division,Northern Conference
-,,Eastern Division,,Glasgow Tigers,Newcastle Raiders,12,22,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Northern Conference,Scottish Division,Northern Conference
+,,Eastern Division,,Glasgow University Tigers,Newcastle Raiders,12,22,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Northern Conference,Scottish Division,Northern Conference
 ,,Western Division,,UT Cougars,Sheffield Sabres,46,12,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Northern Conference,Eastern Division,Northern Conference
 ,,Eastern Division,,Staffordshire Stallions,Leeds Celtics,6,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Northern Conference,Western Division,Northern Conference
 ,,Eastern Division,,Birmingham Lions,Hertfordshire Hurricanes,21,14,,,,,FALSE,day,,,completed,high,False,FALSE,,,,Southern Conference,Central Division,Southern Conference

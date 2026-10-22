@@ -1,5 +1,5 @@
 competition_name,phase,year,team,position,games_played,wins,losses,ties,points_for,points_against,streak,is_champion,notes
-bcafl,Northern Conference,1993,Glasgow Tigers,1,8,7,0,1,232,40,,TRUE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
+bcafl,Northern Conference,1993,Glasgow University Tigers,1,8,7,0,1,232,40,,TRUE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
 bcafl,Northern Conference,1993,Leeds Celtics,2,8,6,0,2,107,24,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
 bcafl,Northern Conference,1993,Paisley Panthers,3,8,6,2,0,73,65,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League
 bcafl,Northern Conference,1993,Sheffield Zulus,4,8,4,2,2,129,74,,FALSE,https://en.wikipedia.org/wiki/1993%E2%80%9394_British_Collegiate_American_Football_League

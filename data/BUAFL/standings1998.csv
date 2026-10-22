@@ -1,6 +1,6 @@
 competition_name,parent_phase,phase,year,team,position,games_played,wins,losses,ties,points_for,points_against,streak,is_champion,notes,head_coach
 bcafl,Northern Conference,Scottish Division,1998,Strathclyde Hawks,1,8,3,3,2,111,121,,TRUE,https://en.wikipedia.org/wiki/1998%E2%80%9399_British_Collegiate_American_Football_League,
-bcafl,Northern Conference,Scottish Division,1998,Glasgow Tigers,2,8,3,3,2,69,60,,FALSE,https://en.wikipedia.org/wiki/1998%E2%80%9399_British_Collegiate_American_Football_League,
+bcafl,Northern Conference,Scottish Division,1998,Glasgow University Tigers,2,8,3,3,2,69,60,,FALSE,https://en.wikipedia.org/wiki/1998%E2%80%9399_British_Collegiate_American_Football_League,
 bcafl,Northern Conference,Scottish Division,1998,Stirling Clansmen,3,8,3,4,1,104,138,,FALSE,https://en.wikipedia.org/wiki/1998%E2%80%9399_British_Collegiate_American_Football_League,
 bcafl,Northern Conference,Eastern Division,1998,Leeds Celtics,1,8,7,1,0,193,61,,TRUE,https://en.wikipedia.org/wiki/1998%E2%80%9399_British_Collegiate_American_Football_League,
 bcafl,Northern Conference,Eastern Division,1998,Lancaster Bombers,2,8,6,1,1,188,60,,FALSE,https://en.wikipedia.org/wiki/1998%E2%80%9399_British_Collegiate_American_Football_League,
