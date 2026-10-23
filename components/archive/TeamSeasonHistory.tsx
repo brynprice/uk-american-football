@@ -260,38 +260,31 @@ export default function TeamSeasonHistory({
                 return (
                     <div key={seasonKey} className="border border-slate-200 shadow-sm rounded-lg bg-white overflow-hidden transition-all">
                         {/* Season Details Card Header */}
-                        <div className="p-4 bg-slate-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-200">
-                            <div className="flex flex-wrap items-center gap-3">
-                                {/* Season Title */}
-                                <div className="text-base font-black text-slate-900 font-sans">
-                                    {seasonName}
+                        <div className="p-4 bg-slate-50 flex flex-col gap-2.5 border-b border-slate-200">
+                            {/* Row 1: Season Title (+ optional coach team badges) & Record Badges */}
+                            <div className="flex flex-wrap sm:flex-nowrap justify-between items-center gap-3">
+                                <div className="flex flex-wrap items-center gap-3">
+                                    {/* Season Title */}
+                                    <div className="text-base font-black text-slate-900 font-sans">
+                                        {seasonName}
+                                    </div>
+                                    {/* Display team badge(s) if in coach view (no fixed teamId) */}
+                                    {!teamId && seasonTeams.map(t => (
+                                        <Link
+                                            key={t.id}
+                                            href={`/teams/${t.id}`}
+                                            className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-white border border-slate-300 text-xs font-bold text-slate-800 hover:text-blue-600 hover:border-blue-400 transition-colors shadow-2xs"
+                                        >
+                                            {t.logo_url && (
+                                                <img src={t.logo_url} alt="" className="w-4 h-4 object-contain rounded-xs" />
+                                            )}
+                                            <span>{t.name}</span>
+                                        </Link>
+                                    ))}
                                 </div>
-                                {season?.id && season?.competition?.name && (
-                                    <Link
-                                        href={`/seasons/${season.id}`}
-                                        className="text-xs font-bold text-slate-600 hover:text-blue-700 hover:underline"
-                                    >
-                                        {season.competition.name}
-                                    </Link>
-                                )}
-                                {/* Display team badge(s) if in coach view (no fixed teamId) */}
-                                {!teamId && seasonTeams.map(t => (
-                                    <Link
-                                        key={t.id}
-                                        href={`/teams/${t.id}`}
-                                        className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-white border border-slate-300 text-xs font-bold text-slate-800 hover:text-blue-600 hover:border-blue-400 transition-colors shadow-2xs"
-                                    >
-                                        {t.logo_url && (
-                                            <img src={t.logo_url} alt="" className="w-4 h-4 object-contain rounded-xs" />
-                                        )}
-                                        <span>{t.name}</span>
-                                    </Link>
-                                ))}
-                            </div>
 
-                            {/* Stats Summary & Expand Toggle */}
-                            <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-between sm:justify-end mt-1 sm:mt-0">
-                                <div className="flex flex-wrap items-center gap-2">
+                                {/* Record Badges */}
+                                <div className="flex flex-wrap items-center gap-2 shrink-0">
                                     {/* Regular Season Record Badge */}
                                     {regHasStats ? (
                                         <div className="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded border border-slate-300 text-xs shadow-2xs">
@@ -317,8 +310,21 @@ export default function TeamSeasonHistory({
                                         </div>
                                     )}
                                 </div>
+                            </div>
 
-                                {/* Toggle Button */}
+                            {/* Row 2: Competition Name & Show Details Toggle */}
+                            <div className="flex justify-between items-center gap-3 pt-1">
+                                <div>
+                                    {season?.id && season?.competition?.name && (
+                                        <Link
+                                            href={`/seasons/${season.id}`}
+                                            className="text-xs font-bold text-slate-600 hover:text-blue-700 hover:underline"
+                                        >
+                                            {season.competition.name}
+                                        </Link>
+                                    )}
+                                </div>
+
                                 <button
                                     onClick={() => toggleSeason(seasonKey)}
                                     className={`text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded transition-colors font-sans flex items-center gap-1.5 shrink-0 ${

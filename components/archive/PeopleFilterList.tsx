@@ -26,7 +26,7 @@ function isParticipationCrossYear(p: NonNullable<PersonWithRoles['participations
     if (compLevel?.toLowerCase() === 'uniball') return true;
     if (compSlug === 'buafl' || compSlug === 'bcafl') return true;
     if (compLevel?.toLowerCase() === 'adult contact') return false;
-    if (compSlug === 'bafanl') return false;
+    if (compSlug === 'bafanl' || compSlug === 'bafl') return false;
 
     if (seasonName && seasonName.includes('/')) return true;
 
