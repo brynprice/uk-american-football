@@ -28,11 +28,20 @@ export type PersonWithRoles = Person & {
     }> | null;
 };
 
+const COMPETITION_ORDER = ['bafl', 'bafanl', 'bcafl', 'buafl'];
+
 export const ArchiveService = {
     async getCompetitions(): Promise<Competition[]> {
-        const { data, error } = await supabase.from("competitions").select("*").order("name");
+        const { data, error } = await supabase.from("competitions").select("*");
         if (error) throw error;
-        return data || [];
+        const comps: Competition[] = (data as Competition[]) || [];
+        return comps.sort((a, b) => {
+            const indexA = COMPETITION_ORDER.indexOf(a.slug);
+            const indexB = COMPETITION_ORDER.indexOf(b.slug);
+            const orderA = indexA === -1 ? 999 : indexA;
+            const orderB = indexB === -1 ? 999 : indexB;
+            return orderA - orderB || a.name.localeCompare(b.name);
+        });
     },
 
     async getCompetitionById(id: string): Promise<any> {
