@@ -3,7 +3,7 @@ import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import UniqueGamesList from '@/components/archive/UniqueGamesList';
 
-export const revalidate = 3600; // 1 hour
+export const revalidate = 0;
 
 export default async function UniqueScoresPage() {
     const games = await ArchiveService.getUniqueScoreGames();

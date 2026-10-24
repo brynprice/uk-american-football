@@ -3,7 +3,7 @@ import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import GameCard from '@/components/archive/GameCard';
 
-export const revalidate = 86400; // 24 hours
+export const revalidate = 0;
 
 export default async function ScorigamiPage({ searchParams }: { searchParams: Promise<{ scoreA?: string, scoreB?: string }> }) {
     const params = await searchParams;
