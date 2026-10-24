@@ -301,6 +301,109 @@ export const ArchiveService = {
         });
     },
 
+    async getUniqueScoreGames(): Promise<any[]> {
+        const { data, error } = await supabase
+            .from('games')
+            .select(`
+                *,
+                phase:phases!games_phase_id_fkey(*, season:seasons(*, competition:competitions(*))),
+                away_phase:phases!away_phase_id(name),
+                home_team:teams!home_team_id(*, team_aliases(*)),
+                away_team:teams!away_team_id(*, team_aliases(*)),
+                venue:venues(*)
+            `)
+            .eq('is_unique_score', true)
+            .neq('status', 'anomaly')
+            .neq('status', 'cancelled')
+            .order('date', { ascending: false, nullsFirst: false });
+
+        if (!error && data) {
+            const games: any[] = data;
+            return games.sort((a, b) => {
+                if (!a.date && !b.date) {
+                    const yearA = a.phase?.season?.year ?? 0;
+                    const yearB = b.phase?.season?.year ?? 0;
+                    return yearB - yearA;
+                }
+                if (!a.date) return 1;
+                if (!b.date) return -1;
+                return b.date.localeCompare(a.date);
+            });
+        }
+
+        // Fallback: If is_unique_score column is not yet present, compute in memory
+        console.warn('Falling back to in-memory unique score calculation (run migration 20261024_unique_scores.sql):', error?.message);
+        return await this.computeUniqueScoreGamesFallback();
+    },
+
+    async computeUniqueScoreGamesFallback(): Promise<any[]> {
+        let allGames: any[] = [];
+        let page = 0;
+        const pageSize = 1000;
+        while (true) {
+            const { data, error } = await supabase
+                .from('games')
+                .select(`
+                    *,
+                    phase:phases!games_phase_id_fkey(*, season:seasons(*, competition:competitions(*))),
+                    away_phase:phases!away_phase_id(name),
+                    home_team:teams!home_team_id(*, team_aliases(*)),
+                    away_team:teams!away_team_id(*, team_aliases(*)),
+                    venue:venues(*)
+                `)
+                .not('home_score', 'is', null)
+                .not('away_score', 'is', null)
+                .neq('status', 'anomaly')
+                .neq('status', 'cancelled')
+                .range(page * pageSize, (page + 1) * pageSize - 1);
+            if (error || !data) break;
+            const rows = data as any[];
+            allGames.push(...rows);
+            if (rows.length < pageSize) break;
+            page++;
+        }
+
+        const scoreCounts = new Map<string, number>();
+        for (const g of allGames) {
+            const high = Math.max(g.home_score, g.away_score);
+            const low = Math.min(g.home_score, g.away_score);
+            const key = `${high}-${low}`;
+            scoreCounts.set(key, (scoreCounts.get(key) || 0) + 1);
+        }
+
+        const uniqueGames = allGames.filter(g => {
+            const high = Math.max(g.home_score, g.away_score);
+            const low = Math.min(g.home_score, g.away_score);
+            return scoreCounts.get(`${high}-${low}`) === 1;
+        }).map(g => ({ ...g, is_unique_score: true }));
+
+        return uniqueGames.sort((a, b) => {
+            if (!a.date && !b.date) {
+                const yearA = a.phase?.season?.year ?? 0;
+                const yearB = b.phase?.season?.year ?? 0;
+                return yearB - yearA;
+            }
+            if (!a.date) return 1;
+            if (!b.date) return -1;
+            return b.date.localeCompare(a.date);
+        });
+    },
+
+    async getUniqueScoreCount(): Promise<number> {
+        const { count, error } = await supabase
+            .from('games')
+            .select('*', { count: 'exact', head: true })
+            .eq('is_unique_score', true)
+            .neq('status', 'anomaly')
+            .neq('status', 'cancelled');
+
+        if (!error && count !== null) {
+            return count;
+        }
+
+        return 0;
+    },
+
     async getPersonGamesAsCoach(personId: string): Promise<any[]> {
         // 1. Get all participations where they are the head coach
         const { data: participations } = await supabase

@@ -56,6 +56,15 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                             {game.time && ` @ ${game.time.substring(0, 5)}`}
                         </span>
                         <div className="flex items-center gap-3">
+                            {game.is_unique_score && (
+                                <Link
+                                    href="/scorigami/unique"
+                                    className="bg-purple-600 hover:bg-purple-700 text-white px-2 py-0.5 rounded text-[10px] font-black normal-case tracking-normal shadow-sm transition-colors"
+                                    title="This game produced a unique final score never repeated in British American football history"
+                                >
+                                    Unique Score
+                                </Link>
+                            )}
                             {game.title_name && (
                                 <span className="bg-amber-500 text-white px-2 py-0.5 rounded text-[10px] font-black normal-case tracking-normal">
                                     🏆 {game.title_name}

@@ -123,6 +123,7 @@ CREATE TABLE games (
   title_name TEXT,
   playoff_round TEXT,
   is_double_header BOOLEAN DEFAULT false,
+  is_unique_score BOOLEAN DEFAULT false,
   notes TEXT,
   confidence_level TEXT DEFAULT 'high',
   created_at TIMESTAMPTZ DEFAULT now(),

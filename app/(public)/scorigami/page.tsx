@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
-import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
+import GameCard from '@/components/archive/GameCard';
+
 export const revalidate = 86400; // 24 hours
 
 export default async function ScorigamiPage({ searchParams }: { searchParams: Promise<{ scoreA?: string, scoreB?: string }> }) {
@@ -12,19 +13,47 @@ export default async function ScorigamiPage({ searchParams }: { searchParams: Pr
     let games: any[] = [];
     let hasSearched = false;
 
+    const [uniqueCount, searchedGames] = await Promise.all([
+        ArchiveService.getUniqueScoreCount(),
+        scoreA !== undefined && scoreB !== undefined && !isNaN(scoreA) && !isNaN(scoreB)
+            ? ArchiveService.searchGamesByScore(scoreA, scoreB)
+            : Promise.resolve([])
+    ]);
+
     if (scoreA !== undefined && scoreB !== undefined && !isNaN(scoreA) && !isNaN(scoreB)) {
         hasSearched = true;
-        games = await ArchiveService.searchGamesByScore(scoreA, scoreB);
+        games = searchedGames;
     }
 
     return (
         <ArchiveLayout>
-            <div className="mb-12">
-                <h1 className="text-5xl font-black mb-2">Scorigami Search</h1>
+            <div className="mb-8">
+                <h1 className="text-5xl font-black mb-2">Scorigami Vault</h1>
                 <div className="text-slate-500 font-sans uppercase tracking-widest text-xs flex gap-4">
-                    <span>Find Games by Exact Final Score</span>
+                    <span>Final Score Distribution & Analysis</span>
                     <span className="font-black text-blue-600">Archival Tool</span>
                 </div>
+            </div>
+
+            {/* Sub-nav Tabs */}
+            <div className="flex items-center gap-2 border-b-2 border-slate-900 mb-8 pb-px">
+                <Link
+                    href="/scorigami"
+                    className="px-4 py-2 font-black uppercase text-xs tracking-wider border-b-2 border-blue-600 text-blue-600 -mb-[2px] transition-colors"
+                >
+                    Score Search
+                </Link>
+                <Link
+                    href="/scorigami/unique"
+                    className="px-4 py-2 font-bold uppercase text-xs tracking-wider text-slate-500 hover:text-slate-900 border-b-2 border-transparent transition-colors flex items-center gap-1.5"
+                >
+                    <span>Unique Scores</span>
+                    {uniqueCount > 0 && (
+                        <span className="bg-purple-100 text-purple-800 text-[10px] px-1.5 py-0.5 rounded font-black">
+                            {uniqueCount}
+                        </span>
+                    )}
+                </Link>
             </div>
 
             <div className="bg-white border-2 border-slate-900 p-8 mb-12 shadow-sm">
@@ -78,67 +107,9 @@ export default async function ScorigamiPage({ searchParams }: { searchParams: Pr
 
                     {games.length > 0 ? (
                         <div className="space-y-4">
-                            {games.map((game: any) => {
-                                const seasonYear = game.phase?.season?.year ?? (game.date ? new Date(game.date).getFullYear() : null);
-                                const awayIdentity = resolveTeamIdentity(game.away_team, seasonYear);
-                                const homeIdentity = resolveTeamIdentity(game.home_team, seasonYear);
-
-                                return (
-                                    <Link
-                                        key={game.id}
-                                        href={`/games/${game.id}`}
-                                        className="block bg-white border border-slate-200 p-4 hover:border-blue-500 transition-all shadow-sm"
-                                    >
-                                        <div className="flex justify-between items-center mb-2">
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-xs font-sans text-slate-500 uppercase tracking-tighter">
-                                                    {game.date_display || (game.date ? new Date(game.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : "Unknown Date")}
-                                                </span>
-                                                {game.phase?.season?.competition?.name && (
-                                                    <span className="text-[10px] font-black bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded uppercase">
-                                                        {game.phase.season.competition.name}
-                                                    </span>
-                                                )}
-                                                {game.phase?.name && (
-                                                    <span className="text-[10px] font-black bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded uppercase">
-                                                        {game.phase.name}
-                                                    </span>
-                                                )}
-                                            </div>
-                                            {game.is_playoff && (
-                                                <span className="text-[10px] font-black bg-slate-900 text-white px-2 py-0.5 rounded uppercase">Postseason</span>
-                                            )}
-                                        </div>
-                                        <div className="flex justify-between items-center">
-                                            <div className="flex-1 flex items-center justify-end gap-3 pr-4 text-right">
-                                                <span className="font-black text-lg">{awayIdentity.name}</span>
-                                                {awayIdentity.logo_url && (
-                                                    <div className="w-8 h-8 bg-slate-50 p-1 flex items-center justify-center shrink-0 border border-slate-100 rounded">
-                                                        <img src={awayIdentity.logo_url} alt="" className="max-w-full max-h-full object-contain" />
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <div className="flex items-center gap-4 bg-slate-50 px-4 py-1 rounded border border-slate-100 font-black">
-                                                <span className={game.away_score > game.home_score ? "text-blue-700" : ""}>
-                                                    {game.away_score ?? "-"}
-                                                </span>
-                                                <span className="text-slate-300 font-serif font-normal italic text-sm">at</span>
-                                                <span className={game.home_score > game.away_score ? "text-blue-700" : ""}>
-                                                    {game.home_score ?? "-"}
-                                                </span>
-                                            </div>
-                                            <div className="flex-1 flex items-center gap-3 pl-4">
-                                                {homeIdentity.logo_url && (
-                                                    <div className="w-8 h-8 bg-slate-50 p-1 flex items-center justify-center shrink-0 border border-slate-100 rounded">
-                                                        <img src={homeIdentity.logo_url} alt="" className="max-w-full max-h-full object-contain" />
-                                                    </div>
-                                                )}
-                                                <span className="font-black text-lg">{homeIdentity.name}</span>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                );
-                            })}
+                            {games.map((game: any) => (
+                                <GameCard key={game.id} game={game} />
+                            ))}
                         </div>
                     ) : (
                         <div className="bg-slate-50 border-2 border-dashed border-slate-200 p-12 text-center text-slate-500">

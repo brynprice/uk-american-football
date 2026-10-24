@@ -12,6 +12,7 @@ import WebSocket from 'ws';
 globalThis.WebSocket = WebSocket;
 import dotenv from 'dotenv';
 import { run as calculateCompleteness } from './calculate_completeness.mjs';
+import { syncUniqueScores } from './sync_unique_scores.mjs';
 
 // Load environment variables from .env.local
 dotenv.config({ path: '.env.local' });
@@ -741,6 +742,11 @@ async function importData(filePath) {
         console.log("------------------------");
     } else {
         await calculateCompleteness();
+        try {
+            await syncUniqueScores();
+        } catch (e) {
+            console.warn("Could not sync unique scores:", e.message);
+        }
     }
 }
 
