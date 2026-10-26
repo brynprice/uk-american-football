@@ -28,8 +28,8 @@ BEGIN
     END IF;
 
     -- Count eligible games with this symmetric score combination
-    SELECT COUNT(*), MIN(id)
-    INTO v_count, v_game_id
+    SELECT COUNT(*)
+    INTO v_count
     FROM games
     WHERE home_score IS NOT NULL 
       AND away_score IS NOT NULL 
@@ -38,7 +38,17 @@ BEGIN
       AND LEAST(home_score, away_score) = p_low;
 
     IF v_count = 1 THEN
-        -- Exactly 1 game has this score combination: mark it unique
+        -- Exactly 1 game has this score combination: find its id and mark it unique
+        SELECT id
+        INTO v_game_id
+        FROM games
+        WHERE home_score IS NOT NULL 
+          AND away_score IS NOT NULL 
+          AND status NOT IN ('anomaly', 'cancelled')
+          AND GREATEST(home_score, away_score) = p_high
+          AND LEAST(home_score, away_score) = p_low
+        LIMIT 1;
+
         UPDATE games 
         SET is_unique_score = TRUE 
         WHERE id = v_game_id AND is_unique_score IS DISTINCT FROM TRUE;

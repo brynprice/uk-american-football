@@ -103,7 +103,10 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
     const playoffGames = nonAnomalyGames.filter(g => g.is_playoff);
 
     const expectedPlayoffs = playoffGames.length > 0 ? playoffGames.length : 1;
-    const expectedTotalGames = expectedRegGames > 0 ? (expectedRegGames + expectedPlayoffs) : nonAnomalyGames.length;
+    const expectedTotalGames = Math.max(
+        expectedRegGames > 0 ? (expectedRegGames + expectedPlayoffs) : 0,
+        nonAnomalyGames.length
+    );
 
     if (games && games.length > 0) {
         // If regular season games are expected from standings, scale game presence by actual coverage
@@ -196,10 +199,10 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
         });
 
         // Quality points scaled by schedule completeness so a few playoff games don't award 100% quality
-        const denom = Math.max(1, expectedTotalGames);
-        score += Math.round((scoreCount / denom) * 15);
-        score += Math.round((dateCount / denom) * 10);
-        score += Math.round((venueCount / denom) * 5);
+        const denom = Math.max(1, expectedTotalGames, nonAnomalyGames.length);
+        score += Math.round(Math.min(1.0, scoreCount / denom) * 15);
+        score += Math.round(Math.min(1.0, dateCount / denom) * 10);
+        score += Math.round(Math.min(1.0, venueCount / denom) * 5);
 
         if (hasPlayoffs || isInterrupted) {
             details.missing_playoffs = false;
@@ -219,13 +222,14 @@ async function calculateForSeason(seasonId, seasonName, expectedParticipants = n
         const discrepancyPenalty = Math.min(details.phases_with_discrepancies * 5, 20);
         const missingPlayoffsPenalty = (!hasPlayoffs && !isInterrupted) ? 5 : 0;
 
-        score = Math.max(0, score - walkoverPenalty - anomalyPenalty - discrepancyPenalty - missingPlayoffsPenalty);
+        score = Math.min(100, Math.max(0, score - walkoverPenalty - anomalyPenalty - discrepancyPenalty - missingPlayoffsPenalty));
 
     } else if (participations && participations.some(p => p.wins !== null)) {
         // No individual games, but we have aggregated standings
         score += 15;
     }
 
+    score = Math.min(100, Math.max(0, score));
     return { score, details };
 }
 

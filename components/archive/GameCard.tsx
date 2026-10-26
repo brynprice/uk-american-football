@@ -42,11 +42,15 @@ export default function GameCard({ game, seasonYear }: GameCardProps) {
                     )}
                 </div>
                 <div className="flex flex-wrap items-center gap-1.5">
-                    {game.is_unique_score && (
-                        <span className="text-[10px] font-black bg-purple-100 text-purple-800 border border-purple-200 px-2 py-0.5 rounded uppercase tracking-wider shadow-xs">
-                            Unique
+                    {game.is_totally_unique ? (
+                        <span className="text-[10px] font-black bg-gradient-to-r from-amber-200 to-amber-100 text-amber-900 border border-amber-300 px-2 py-0.5 rounded uppercase tracking-wider shadow-xs flex items-center gap-1">
+                            ★ Totally Unique
                         </span>
-                    )}
+                    ) : game.is_unique_score ? (
+                        <span className="text-[10px] font-black bg-purple-100 text-purple-800 border border-purple-200 px-2 py-0.5 rounded uppercase tracking-wider shadow-xs">
+                            Unique ({game.game_level || (game.phase?.season?.competition?.level?.includes('Uni') ? 'University' : (game.home_team?.team_type || 'Adult'))})
+                        </span>
+                    ) : null}
                     {game.final_type === 'title' && game.title_name && (
                         <span className="text-[10px] font-black bg-amber-500 text-white px-2 py-0.5 rounded uppercase shadow-sm">
                             🏆 {game.title_name}

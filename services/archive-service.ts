@@ -30,6 +30,58 @@ export type PersonWithRoles = Person & {
 
 const COMPETITION_ORDER = ['bafl', 'bafanl', 'bcafl', 'buafl'];
 
+export function resolveGameLevel(g: any): string {
+    if (g.game_level) return g.game_level;
+    const compLevel = g.phase?.season?.competition?.level || g.season?.competition?.level;
+    if (compLevel === 'Adult Contact' || compLevel === 'Adult') return 'Adult';
+    if (compLevel === 'Uniball' || compLevel === 'University') return 'University';
+    if (compLevel === 'Womens' || compLevel === 'Women') return 'Womens';
+    if (g.home_team?.team_type === 'University' || g.away_team?.team_type === 'University') return 'University';
+    if (g.home_team?.team_type) return g.home_team.team_type;
+    if (g.away_team?.team_type) return g.away_team.team_type;
+    return 'Adult';
+}
+
+let totallyUniqueKeysCache: Set<string> | null = null;
+let lastCacheTime = 0;
+
+export async function getTotallyUniqueScoreKeys(): Promise<Set<string>> {
+    if (totallyUniqueKeysCache && (Date.now() - lastCacheTime < 60000)) {
+        return totallyUniqueKeysCache;
+    }
+    const scoreCounts = new Map<string, number>();
+    let page = 0;
+    const pageSize = 1000;
+    while (true) {
+        const { data, error } = await supabase
+            .from('games')
+            .select('home_score, away_score')
+            .not('home_score', 'is', null)
+            .not('away_score', 'is', null)
+            .neq('status', 'anomaly')
+            .neq('status', 'cancelled')
+            .range(page * pageSize, (page + 1) * pageSize - 1);
+        if (error || !data) break;
+        const rows = data as any[];
+        if (rows.length === 0) break;
+        for (const row of rows) {
+            const high = Math.max(row.home_score, row.away_score);
+            const low = Math.min(row.home_score, row.away_score);
+            const key = `${high}-${low}`;
+            scoreCounts.set(key, (scoreCounts.get(key) || 0) + 1);
+        }
+        if (rows.length < pageSize) break;
+        page++;
+    }
+    const uniqueKeys = new Set<string>();
+    for (const [key, count] of scoreCounts.entries()) {
+        if (count === 1) uniqueKeys.add(key);
+    }
+    totallyUniqueKeysCache = uniqueKeys;
+    lastCacheTime = Date.now();
+    return uniqueKeys;
+}
+
 export const ArchiveService = {
     async getCompetitions(): Promise<Competition[]> {
         const { data, error } = await supabase.from("competitions").select("*");
@@ -189,9 +241,9 @@ export const ArchiveService = {
                 home_team:teams!home_team_id (*, team_aliases (*)), 
                 away_team:teams!away_team_id (*, team_aliases (*)), 
                 venue:venues (*), 
-                phase:phases!games_phase_id_fkey (*, season:seasons (id, year, competition:competitions (name))), 
+                phase:phases!games_phase_id_fkey (*, season:seasons (id, year, competition:competitions (name, level))), 
                 away_phase:phases!away_phase_id (name),
-                season:seasons!games_season_id_fkey (id, year, competition:competitions (name)),
+                season:seasons!games_season_id_fkey (id, year, competition:competitions (name, level)),
                 game_staff (*, person:people (*))
             `)
             .eq("id", gameId)
@@ -200,6 +252,14 @@ export const ArchiveService = {
         if (!data) throw new Error("Game not found");
 
         const gameData = data as any;
+        gameData.game_level = gameData.game_level || resolveGameLevel(gameData);
+
+        if (gameData.is_unique_score && (gameData.is_totally_unique === undefined || gameData.is_totally_unique === null)) {
+            const totallyUniqueKeys = await getTotallyUniqueScoreKeys();
+            const high = Math.max(gameData.home_score ?? 0, gameData.away_score ?? 0);
+            const low = Math.min(gameData.home_score ?? 0, gameData.away_score ?? 0);
+            gameData.is_totally_unique = totallyUniqueKeys.has(`${high}-${low}`);
+        }
 
         // Fetch polymorphic relations separately to avoid PostgREST relationship errors
         const teamIds = [gameData.home_team_id, gameData.away_team_id].filter(Boolean);
@@ -288,7 +348,20 @@ export const ArchiveService = {
 
         if (error) throw error;
         
-        const games: any[] = data || [];
+        const totallyUniqueKeys = await getTotallyUniqueScoreKeys();
+        const games: any[] = (data || []).map((g: any) => {
+            const high = Math.max(g.home_score ?? 0, g.away_score ?? 0);
+            const low = Math.min(g.home_score ?? 0, g.away_score ?? 0);
+            const isTotallyUnique = g.is_totally_unique !== undefined && g.is_totally_unique !== null
+                ? g.is_totally_unique
+                : totallyUniqueKeys.has(`${high}-${low}`);
+            return {
+                ...g,
+                game_level: g.game_level || resolveGameLevel(g),
+                is_totally_unique: isTotallyUnique
+            };
+        });
+
         return games.sort((a, b) => {
             if (!a.date && !b.date) {
                 const yearA = a.phase?.season?.year ?? 0;
@@ -318,7 +391,19 @@ export const ArchiveService = {
             .order('date', { ascending: false, nullsFirst: false });
 
         if (!error && data) {
-            const games: any[] = data;
+            const totallyUniqueKeys = await getTotallyUniqueScoreKeys();
+            const games: any[] = data.map((g: any) => {
+                const high = Math.max(g.home_score ?? 0, g.away_score ?? 0);
+                const low = Math.min(g.home_score ?? 0, g.away_score ?? 0);
+                const isTotallyUnique = g.is_totally_unique !== undefined && g.is_totally_unique !== null
+                    ? g.is_totally_unique
+                    : totallyUniqueKeys.has(`${high}-${low}`);
+                return {
+                    ...g,
+                    game_level: g.game_level || resolveGameLevel(g),
+                    is_totally_unique: isTotallyUnique
+                };
+            });
             return games.sort((a, b) => {
                 if (!a.date && !b.date) {
                     const yearA = a.phase?.season?.year ?? 0;
@@ -332,7 +417,7 @@ export const ArchiveService = {
         }
 
         // Fallback: If is_unique_score column is not yet present, compute in memory
-        console.warn('Falling back to in-memory unique score calculation (run migration 20261024_unique_scores.sql):', error?.message);
+        console.warn('Falling back to in-memory unique score calculation (run migration 20261026_level_unique_scores.sql):', error?.message);
         return await this.computeUniqueScoreGamesFallback();
     },
 
@@ -363,19 +448,37 @@ export const ArchiveService = {
             page++;
         }
 
-        const scoreCounts = new Map<string, number>();
+        const overallCounts = new Map<string, number>();
+        const levelCounts = new Map<string, Map<string, number>>();
+
         for (const g of allGames) {
+            g.game_level = resolveGameLevel(g);
             const high = Math.max(g.home_score, g.away_score);
             const low = Math.min(g.home_score, g.away_score);
             const key = `${high}-${low}`;
-            scoreCounts.set(key, (scoreCounts.get(key) || 0) + 1);
+            overallCounts.set(key, (overallCounts.get(key) || 0) + 1);
+
+            if (!levelCounts.has(g.game_level)) levelCounts.set(g.game_level, new Map());
+            const lvlMap = levelCounts.get(g.game_level)!;
+            lvlMap.set(key, (lvlMap.get(key) || 0) + 1);
         }
 
         const uniqueGames = allGames.filter(g => {
             const high = Math.max(g.home_score, g.away_score);
             const low = Math.min(g.home_score, g.away_score);
-            return scoreCounts.get(`${high}-${low}`) === 1;
-        }).map(g => ({ ...g, is_unique_score: true }));
+            const key = `${high}-${low}`;
+            const isLevelUnique = levelCounts.get(g.game_level)?.get(key) === 1;
+            return isLevelUnique;
+        }).map(g => {
+            const high = Math.max(g.home_score, g.away_score);
+            const low = Math.min(g.home_score, g.away_score);
+            const key = `${high}-${low}`;
+            return {
+                ...g,
+                is_unique_score: true,
+                is_totally_unique: overallCounts.get(key) === 1
+            };
+        });
 
         return uniqueGames.sort((a, b) => {
             if (!a.date && !b.date) {
@@ -389,14 +492,19 @@ export const ArchiveService = {
         });
     },
 
-    async getUniqueScoreCount(): Promise<number> {
-        const { count, error } = await supabase
+    async getUniqueScoreCount(level?: string): Promise<number> {
+        let query = supabase
             .from('games')
             .select('*', { count: 'exact', head: true })
             .eq('is_unique_score', true)
             .neq('status', 'anomaly')
             .neq('status', 'cancelled');
 
+        if (level && level.toLowerCase() !== 'all') {
+            query = query.eq('game_level', level);
+        }
+
+        const { count, error } = await query;
         if (!error && count !== null) {
             return count;
         }

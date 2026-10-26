@@ -56,15 +56,23 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                             {game.time && ` @ ${game.time.substring(0, 5)}`}
                         </span>
                         <div className="flex items-center gap-3">
-                            {game.is_unique_score && (
+                            {game.is_totally_unique ? (
+                                <Link
+                                    href="/scorigami/unique"
+                                    className="bg-amber-400 hover:bg-amber-500 text-slate-950 px-2.5 py-0.5 rounded text-[10px] font-black normal-case tracking-normal shadow-sm transition-colors flex items-center gap-1"
+                                    title="This game produced a totally unique final score never repeated in British American football history across all levels"
+                                >
+                                    ★ Totally Unique Score
+                                </Link>
+                            ) : game.is_unique_score ? (
                                 <Link
                                     href="/scorigami/unique"
                                     className="bg-purple-600 hover:bg-purple-700 text-white px-2 py-0.5 rounded text-[10px] font-black normal-case tracking-normal shadow-sm transition-colors"
-                                    title="This game produced a unique final score never repeated in British American football history"
+                                    title={`This game produced a unique final score never repeated in ${game.game_level || 'this level of'} British American football history`}
                                 >
-                                    Unique Score
+                                    Unique ({game.game_level || 'Level'}) Score
                                 </Link>
-                            )}
+                            ) : null}
                             {game.title_name && (
                                 <span className="bg-amber-500 text-white px-2 py-0.5 rounded text-[10px] font-black normal-case tracking-normal">
                                     🏆 {game.title_name}
