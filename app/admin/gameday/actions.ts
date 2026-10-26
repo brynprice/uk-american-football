@@ -15,6 +15,59 @@ export interface GamedayUpdatePayload {
     notes?: string | null;
     date?: string | null;
     time?: string | null;
+    venue_name?: string | null;
+    home_coach?: string | null;
+    away_coach?: string | null;
+}
+
+async function findOrCreateVenue(supabase: any, name: string): Promise<string | null> {
+    const trimmed = name.trim();
+    if (!trimmed) return null;
+
+    const { data: exists } = await supabase
+        .from("venues")
+        .select("id")
+        .ilike("name", trimmed)
+        .maybeSingle();
+
+    if (exists) return exists.id;
+
+    const { data, error } = await supabase
+        .from("venues")
+        .insert({ name: trimmed })
+        .select("id")
+        .single();
+
+    if (error) {
+        console.error("Error creating venue:", error);
+        return null;
+    }
+    return data.id;
+}
+
+async function findOrCreatePerson(supabase: any, name: string): Promise<string | null> {
+    const trimmed = name.trim();
+    if (!trimmed) return null;
+
+    const { data: exists } = await supabase
+        .from("people")
+        .select("id")
+        .ilike("display_name", trimmed)
+        .maybeSingle();
+
+    if (exists) return exists.id;
+
+    const { data, error } = await supabase
+        .from("people")
+        .insert({ display_name: trimmed })
+        .select("id")
+        .single();
+
+    if (error) {
+        console.error("Error creating person:", error);
+        return null;
+    }
+    return data.id;
 }
 
 export async function fetchGamedayData(seasonId?: string, phaseId?: string, dateFilter?: string) {
@@ -78,10 +131,50 @@ export async function fetchGamedayData(seasonId?: string, phaseId?: string, date
         throw new Error(`Failed to load fixtures: ${gamesErr.message}`);
     }
 
+    // Fetch venues for autocomplete
+    const { data: venues } = await supabase
+        .from("venues")
+        .select("id, name")
+        .order("name", { ascending: true });
+
+    // Fetch people for coach autocomplete
+    const { data: people } = await supabase
+        .from("people")
+        .select("id, display_name")
+        .order("display_name", { ascending: true });
+
+    // Fetch game_staff overrides for these games
+    const gameIds = (games || []).map(g => g.id);
+    let gameStaff: any[] = [];
+    if (gameIds.length > 0) {
+        const { data: staffData } = await supabase
+            .from("game_staff")
+            .select("game_id, team_id, person_id, role, person:people(display_name)")
+            .in("game_id", gameIds)
+            .eq("role", "head_coach");
+        gameStaff = staffData || [];
+    }
+
+    // Fetch default head coaches from participations for the active season's phases
+    let defaultCoaches: any[] = [];
+    const phaseIds = phases.map(p => p.id);
+    if (phaseIds.length > 0) {
+        const { data: partData } = await supabase
+            .from("participations")
+            .select("phase_id, team_id, person:people(display_name)")
+            .in("phase_id", phaseIds)
+            .not("head_coach_id", "is", null);
+        defaultCoaches = partData || [];
+    }
+
     return {
         seasons: seasons || [],
         phases,
-        games: games || []
+        games: games || [],
+        venues: venues || [],
+        people: people || [],
+        gameStaff,
+        defaultCoaches
     };
 }
 
@@ -96,11 +189,13 @@ export async function saveGamedayScores(updates: GamedayUpdatePayload[]) {
     const affectedPhaseIds = new Set<string>();
     const affectedGameIds = updates.map(u => u.id);
 
-    // 1. Fetch game details to know their phase_id
+    // 1. Fetch game details to know their phase_id, season_id, and team IDs
     const { data: gameDetails } = await supabase
         .from("games")
-        .select("id, phase_id, season_id")
+        .select("id, phase_id, season_id, home_team_id, away_team_id")
         .in("id", affectedGameIds);
+
+    const gameDetailsMap = new Map((gameDetails || []).map(g => [g.id, g]));
 
     for (const g of (gameDetails || [])) {
         if (g.phase_id) affectedPhaseIds.add(g.phase_id);
@@ -117,6 +212,14 @@ export async function saveGamedayScores(updates: GamedayUpdatePayload[]) {
         if (item.date !== undefined) payload.date = item.date;
         if (item.time !== undefined) payload.time = item.time;
 
+        if (item.venue_name !== undefined) {
+            if (item.venue_name && item.venue_name.trim()) {
+                payload.venue_id = await findOrCreateVenue(supabase, item.venue_name);
+            } else {
+                payload.venue_id = null;
+            }
+        }
+
         const { error } = await supabase
             .from("games")
             .update(payload)
@@ -125,6 +228,88 @@ export async function saveGamedayScores(updates: GamedayUpdatePayload[]) {
         if (error) {
             console.error(`Error updating game ${item.id}:`, error.message);
             throw new Error(`Failed to update game ${item.id}: ${error.message}`);
+        }
+
+        // Handle head coach overrides (stored in game_staff)
+        const gameInfo = gameDetailsMap.get(item.id);
+        if (gameInfo) {
+            if (item.home_coach !== undefined) {
+                const homeName = item.home_coach?.trim();
+                if (homeName) {
+                    const personId = await findOrCreatePerson(supabase, homeName);
+                    if (personId) {
+                        const { data: existingStaff } = await supabase
+                            .from("game_staff")
+                            .select("id")
+                            .eq("game_id", item.id)
+                            .eq("team_id", gameInfo.home_team_id)
+                            .eq("role", "head_coach")
+                            .maybeSingle();
+
+                        if (existingStaff) {
+                            await supabase
+                                .from("game_staff")
+                                .update({ person_id: personId })
+                                .eq("id", existingStaff.id);
+                        } else {
+                            await supabase
+                                .from("game_staff")
+                                .insert({
+                                    game_id: item.id,
+                                    team_id: gameInfo.home_team_id,
+                                    person_id: personId,
+                                    role: "head_coach"
+                                });
+                        }
+                    }
+                } else {
+                    await supabase
+                        .from("game_staff")
+                        .delete()
+                        .eq("game_id", item.id)
+                        .eq("team_id", gameInfo.home_team_id)
+                        .eq("role", "head_coach");
+                }
+            }
+
+            if (item.away_coach !== undefined) {
+                const awayName = item.away_coach?.trim();
+                if (awayName) {
+                    const personId = await findOrCreatePerson(supabase, awayName);
+                    if (personId) {
+                        const { data: existingStaff } = await supabase
+                            .from("game_staff")
+                            .select("id")
+                            .eq("game_id", item.id)
+                            .eq("team_id", gameInfo.away_team_id)
+                            .eq("role", "head_coach")
+                            .maybeSingle();
+
+                        if (existingStaff) {
+                            await supabase
+                                .from("game_staff")
+                                .update({ person_id: personId })
+                                .eq("id", existingStaff.id);
+                        } else {
+                            await supabase
+                                .from("game_staff")
+                                .insert({
+                                    game_id: item.id,
+                                    team_id: gameInfo.away_team_id,
+                                    person_id: personId,
+                                    role: "head_coach"
+                                });
+                        }
+                    }
+                } else {
+                    await supabase
+                        .from("game_staff")
+                        .delete()
+                        .eq("game_id", item.id)
+                        .eq("team_id", gameInfo.away_team_id)
+                        .eq("role", "head_coach");
+                }
+            }
         }
     }
 
