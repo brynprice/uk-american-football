@@ -2,7 +2,7 @@
 
 import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
-import { assertAdmin } from "@/lib/auth/admin-guard";
+import { assertPermission } from "@/lib/auth/admin-guard";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY!;
@@ -71,7 +71,7 @@ async function findOrCreatePerson(supabase: any, name: string): Promise<string |
 }
 
 export async function fetchGamedayData(seasonId?: string, phaseId?: string, dateFilter?: string) {
-    await assertAdmin();
+    await assertPermission("gameday");
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     // Fetch seasons
@@ -80,18 +80,27 @@ export async function fetchGamedayData(seasonId?: string, phaseId?: string, date
         .select("id, year, name, competition:competitions(name)")
         .order("year", { ascending: false });
 
-    const activeSeasonId = seasonId || seasons?.[0]?.id;
-
-    // Fetch phases for active season
-    let phases: any[] = [];
-    if (activeSeasonId) {
-        const { data: phaseData } = await supabase
-            .from("phases")
-            .select("id, name, type, ordinal_number, parent_phase_id")
-            .eq("season_id", activeSeasonId)
-            .order("ordinal_number", { ascending: true });
-        phases = phaseData || [];
+    // Do not load fixtures or season metadata until a season is explicitly selected
+    if (!seasonId) {
+        return {
+            seasons: seasons || [],
+            phases: [],
+            games: [],
+            venues: [],
+            people: [],
+            gameStaff: [],
+            defaultCoaches: []
+        };
     }
+
+    // Fetch phases for selected season
+    const { data: phaseData } = await supabase
+        .from("phases")
+        .select("id, name, type, ordinal, parent_phase_id")
+        .eq("season_id", seasonId)
+        .order("ordinal", { ascending: true });
+    const phases: any[] = phaseData || [];
+    const phaseIds = phases.map(p => p.id);
 
     // Build games query
     let gamesQuery = supabase
@@ -117,8 +126,10 @@ export async function fetchGamedayData(seasonId?: string, phaseId?: string, date
 
     if (phaseId) {
         gamesQuery = gamesQuery.eq("phase_id", phaseId);
-    } else if (activeSeasonId) {
-        gamesQuery = gamesQuery.eq("season_id", activeSeasonId);
+    } else if (phaseIds.length > 0) {
+        gamesQuery = gamesQuery.or(`season_id.eq.${seasonId},phase_id.in.(${phaseIds.join(",")})`);
+    } else {
+        gamesQuery = gamesQuery.eq("season_id", seasonId);
     }
 
     if (dateFilter) {
@@ -157,7 +168,6 @@ export async function fetchGamedayData(seasonId?: string, phaseId?: string, date
 
     // Fetch default head coaches from participations for the active season's phases
     let defaultCoaches: any[] = [];
-    const phaseIds = phases.map(p => p.id);
     if (phaseIds.length > 0) {
         const { data: partData } = await supabase
             .from("participations")
@@ -179,7 +189,7 @@ export async function fetchGamedayData(seasonId?: string, phaseId?: string, date
 }
 
 export async function saveGamedayScores(updates: GamedayUpdatePayload[]) {
-    await assertAdmin();
+    await assertPermission("gameday");
     if (!updates || updates.length === 0) {
         return { success: true, count: 0 };
     }

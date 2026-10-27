@@ -2,7 +2,7 @@
 
 import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
-import { assertAdmin } from "@/lib/auth/admin-guard";
+import { assertPermission } from "@/lib/auth/admin-guard";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY!;
@@ -32,7 +32,7 @@ async function findOrCreatePerson(supabase: any, name: string): Promise<string |
 }
 
 export async function updateGameCoach(gameId: string, teamId: string, coachName: string, phaseId: string) {
-    await assertAdmin();
+    await assertPermission("set_coach");
     const supabase = createClient(supabaseUrl, supabaseKey);
     const coachId = await findOrCreatePerson(supabase, coachName);
 
@@ -80,7 +80,7 @@ export async function updateGameCoach(gameId: string, teamId: string, coachName:
 }
 
 export async function updateSeasonCoach(seasonId: string, teamId: string, coachName: string) {
-    await assertAdmin();
+    await assertPermission("set_coach");
     const supabase = createClient(supabaseUrl, supabaseKey);
     const coachId = await findOrCreatePerson(supabase, coachName);
 

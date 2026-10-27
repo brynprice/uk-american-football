@@ -4,14 +4,15 @@ import { createClient } from '@/lib/supabase/server';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { isSuperAdmin } from '@/lib/auth/permissions';
 
 export async function deleteGame(gameId: string, redirectUrl?: string) {
-    // 1. Verify User Authentication
+    // 1. Verify User Authentication & Super Admin privilege
     const supabase = await createClient();
     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-    if (authError || !user) {
-        return { success: false, error: 'Unauthorized: You must be logged in as an admin to perform this action.' };
+    if (authError || !user || !isSuperAdmin(user)) {
+        return { success: false, error: 'Unauthorized: You must be logged in as a Super Admin to delete games.' };
     }
 
     // 2. Initialize Service Role Client for bypassing RLS

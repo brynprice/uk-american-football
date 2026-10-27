@@ -2,13 +2,13 @@
 
 import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
-import { assertAdmin } from "@/lib/auth/admin-guard";
+import { assertPermission } from "@/lib/auth/admin-guard";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY!;
 
 export async function updateWalkoverScore(gameId: string, homeScore: number, awayScore: number, formData: FormData) {
-    await assertAdmin();
+    await assertPermission("walkovers");
     const supabase = createClient(supabaseUrl, supabaseKey);
     const notes = formData.get("notes")?.toString();
 
@@ -32,7 +32,7 @@ export async function updateWalkoverScore(gameId: string, homeScore: number, awa
 }
 
 export async function deleteGame(gameId: string) {
-    await assertAdmin();
+    await assertPermission("walkovers");
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     // Delete related items first (notes, staff, sources)
@@ -56,7 +56,7 @@ export async function deleteGame(gameId: string) {
 }
 
 export async function updateGameNotes(gameId: string, formData: FormData) {
-    await assertAdmin();
+    await assertPermission("walkovers");
     const supabase = createClient(supabaseUrl, supabaseKey);
     const notes = formData.get("notes")?.toString();
 

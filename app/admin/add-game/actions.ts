@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@supabase/supabase-js";
-import { assertAdmin } from "@/lib/auth/admin-guard";
+import { assertPermission } from "@/lib/auth/admin-guard";
 
 export async function submitGameAction(payload: {
     homeTeam: string;
@@ -22,7 +22,7 @@ export async function submitGameAction(payload: {
     notes: string;
 }) {
     try {
-        await assertAdmin();
+        await assertPermission("add_game");
 
         // Determine the environment variables. Use process.env on the server.
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;

@@ -2,7 +2,7 @@
 
 import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
-import { assertAdmin } from "@/lib/auth/admin-guard";
+import { assertPermission } from "@/lib/auth/admin-guard";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY!;
@@ -12,7 +12,7 @@ export async function setDivisionalChampion(
     teamId: string,
     isChampion: boolean
 ) {
-    await assertAdmin();
+    await assertPermission("champions");
 
     if (!supabaseUrl || !supabaseKey) {
         throw new Error("Supabase service role credentials not configured.");

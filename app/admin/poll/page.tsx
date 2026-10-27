@@ -20,6 +20,12 @@ export default function UniballPollBuilderPage() {
     const [seasonYear, setSeasonYear] = useState<number>(new Date().getFullYear());
     const [divisions, setDivisions] = useState<PollDivisionGroup[]>([]);
     const [savedBallots, setSavedBallots] = useState<SavedPollBallot[]>([]);
+    const [allBallots, setAllBallots] = useState<SavedPollBallot[]>([]);
+    const [currentUserId, setCurrentUserId] = useState<string>("");
+
+    // Right panel tab: "my_ballot" | "consensus"
+    const [rightPanelTab, setRightPanelTab] = useState<"my_ballot" | "consensus">("my_ballot");
+    const [consensusWeekFilter, setConsensusWeekFilter] = useState<string>("latest_per_voter");
 
     // Top 25 slots: array of 25 teamIds (or null if empty)
     const [slots, setSlots] = useState<(string | null)[]>(() => Array(TOTAL_SLOTS).fill(null));
@@ -60,6 +66,8 @@ export default function UniballPollBuilderPage() {
             setSeasons(data.seasons);
             setDivisions(data.divisions);
             setSavedBallots(data.savedBallots);
+            setAllBallots(data.allBallots || []);
+            setCurrentUserId(data.currentUserId || "");
             setSeasonYear(data.activeSeasonYear);
 
             if (!seasonIdParam && data.activeSeasonId) {
@@ -69,7 +77,7 @@ export default function UniballPollBuilderPage() {
             const activeId = seasonIdParam || data.activeSeasonId;
             if (activeId) {
                 // Restore from localStorage draft first, or latest saved ballot
-                const localKey = `britball_poll_draft_${activeId}`;
+                const localKey = `britball_poll_draft_${activeId}_${data.currentUserId || "anon"}`;
                 const savedLocal = typeof window !== "undefined" ? localStorage.getItem(localKey) : null;
                 if (savedLocal) {
                     try {
@@ -105,11 +113,14 @@ export default function UniballPollBuilderPage() {
     useEffect(() => {
         if (!selectedSeasonId || isLoading) return;
         try {
-            localStorage.setItem(`britball_poll_draft_${selectedSeasonId}`, JSON.stringify(slots));
+            localStorage.setItem(
+                `britball_poll_draft_${selectedSeasonId}_${currentUserId || "anon"}`,
+                JSON.stringify(slots)
+            );
         } catch {
             // ignore storage errors
         }
-    }, [slots, selectedSeasonId, isLoading]);
+    }, [slots, selectedSeasonId, currentUserId, isLoading]);
 
     // Map teamId -> PollTeamItem for fast lookup
     const teamsMap = useMemo(() => {
@@ -401,6 +412,7 @@ export default function UniballPollBuilderPage() {
                 showToast(`Saved "${ballotLabel}" ballot to database!`, "success");
                 const refreshed = await fetchPollBuilderData(selectedSeasonId);
                 setSavedBallots(refreshed.savedBallots);
+                setAllBallots(refreshed.allBallots || []);
             } else {
                 showToast(res.error || "Failed to save ballot", "error");
             }
@@ -419,11 +431,120 @@ export default function UniballPollBuilderPage() {
             const res = await deletePollBallotAction(ballot.id);
             if (res.success) {
                 setSavedBallots((prev) => prev.filter((b) => b.id !== ballot.id));
+                setAllBallots((prev) => prev.filter((b) => b.id !== ballot.id));
                 showToast(`Deleted "${ballot.label}"`, "info");
             } else {
                 showToast(res.error || "Failed to delete ballot", "error");
             }
         });
+    };
+
+    // Unique ballot labels across all writers for consensus filtering
+    const availableBallotLabels = useMemo(() => {
+        const set = new Set<string>();
+        for (const b of allBallots) {
+            if (b.label) set.add(b.label);
+        }
+        return Array.from(set);
+    }, [allBallots]);
+
+    // Compute Consensus Poll (25 pts for #1, 24 pts for #2, ..., 1 pt for #25)
+    const consensusData = useMemo(() => {
+        // Select which ballots are included
+        let activeBallots: SavedPollBallot[] = [];
+        if (consensusWeekFilter === "latest_per_voter") {
+            const seenVoters = new Set<string>();
+            for (const b of allBallots) {
+                const voterKey = b.userId || b.id;
+                if (!seenVoters.has(voterKey)) {
+                    seenVoters.add(voterKey);
+                    activeBallots.push(b);
+                }
+            }
+        } else {
+            const seenVoters = new Set<string>();
+            for (const b of allBallots) {
+                if (b.label.toLowerCase() === consensusWeekFilter.toLowerCase()) {
+                    const voterKey = b.userId || b.id;
+                    if (!seenVoters.has(voterKey)) {
+                        seenVoters.add(voterKey);
+                        activeBallots.push(b);
+                    }
+                }
+            }
+        }
+
+        const tally = new Map<
+            string,
+            {
+                teamId: string;
+                points: number;
+                firstPlaceVotes: number;
+                appearances: number;
+                highestRank: number;
+                lowestRank: number;
+            }
+        >();
+
+        for (const ballot of activeBallots) {
+            ballot.slots.forEach((teamId, idx) => {
+                if (!teamId) return;
+                const rank = idx + 1;
+                const pts = TOTAL_SLOTS - idx; // 25 down to 1
+                if (pts <= 0) return;
+
+                const curr = tally.get(teamId) || {
+                    teamId,
+                    points: 0,
+                    firstPlaceVotes: 0,
+                    appearances: 0,
+                    highestRank: 25,
+                    lowestRank: 1,
+                };
+                curr.points += pts;
+                if (rank === 1) curr.firstPlaceVotes += 1;
+                curr.appearances += 1;
+                if (rank < curr.highestRank) curr.highestRank = rank;
+                if (rank > curr.lowestRank) curr.lowestRank = rank;
+                tally.set(teamId, curr);
+            });
+        }
+
+        const ranked = Array.from(tally.values()).sort((a, b) => {
+            if (b.points !== a.points) return b.points - a.points;
+            if (b.firstPlaceVotes !== a.firstPlaceVotes)
+                return b.firstPlaceVotes - a.firstPlaceVotes;
+            if (b.appearances !== a.appearances) return b.appearances - a.appearances;
+            return a.highestRank - b.highestRank;
+        });
+
+        return {
+            voterCount: activeBallots.length,
+            voters: activeBallots.map((b) => ({
+                id: b.id,
+                voterName: b.voterName || "Writer",
+                label: b.label,
+            })),
+            rankings: ranked,
+        };
+    }, [allBallots, consensusWeekFilter]);
+
+    const handleCopyConsensus = async () => {
+        const lines: string[] = [];
+        consensusData.rankings.slice(0, 25).forEach((item, idx) => {
+            const rank = idx + 1;
+            const team = teamsMap.get(item.teamId);
+            const name = team?.name || "Unknown Team";
+            const fpStr = item.firstPlaceVotes > 0 ? ` (${item.firstPlaceVotes})` : "";
+            lines.push(`${rank}. ${name}${fpStr} — ${item.points} pts`);
+        });
+
+        try {
+            await navigator.clipboard.writeText(lines.join("\n"));
+            showToast("Copied Consensus Top 25 to clipboard!", "success");
+        } catch {
+            showToast("Failed to copy consensus poll", "error");
+        }
     };
 
     const handleClearBallot = () => {
@@ -800,8 +921,181 @@ export default function UniballPollBuilderPage() {
                             )}
                         </div>
 
-                        {/* RIGHT COLUMN: Top 25 Ballot (5 cols, sticky) */}
+                        {/* RIGHT COLUMN: Top 25 Ballot & Consensus Poll (5 cols, sticky) */}
                         <div className="lg:col-span-5 lg:sticky lg:top-20 space-y-4">
+                            {/* Tab Switcher: My Ballot vs Consensus Poll */}
+                            <div className="grid grid-cols-2 border-2 border-slate-900 bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-sans">
+                                <button
+                                    type="button"
+                                    onClick={() => setRightPanelTab("my_ballot")}
+                                    className={`py-2.5 px-3 text-xs font-black uppercase tracking-wider transition-colors flex items-center justify-center gap-2 ${
+                                        rightPanelTab === "my_ballot"
+                                            ? "bg-slate-900 text-amber-400"
+                                            : "bg-white text-slate-600 hover:bg-slate-100"
+                                    }`}
+                                >
+                                    <span>My Top 25 Ballot</span>
+                                    <span className="px-1.5 py-0.5 text-[10px] rounded bg-amber-400 text-slate-950">
+                                        {filledCount}/25
+                                    </span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setRightPanelTab("consensus")}
+                                    className={`py-2.5 px-3 text-xs font-black uppercase tracking-wider border-l-2 border-slate-900 transition-colors flex items-center justify-center gap-2 ${
+                                        rightPanelTab === "consensus"
+                                            ? "bg-slate-900 text-amber-400"
+                                            : "bg-white text-slate-600 hover:bg-slate-100"
+                                    }`}
+                                >
+                                    <span>Consensus Poll</span>
+                                    <span className="px-1.5 py-0.5 text-[10px] rounded bg-blue-600 text-white">
+                                        {consensusData.voterCount}{" "}
+                                        {consensusData.voterCount === 1 ? "Voter" : "Voters"}
+                                    </span>
+                                </button>
+                            </div>
+
+                            {rightPanelTab === "consensus" ? (
+                                <div className="bg-white border-2 border-slate-900 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] font-sans">
+                                    <div className="bg-slate-900 text-white p-4 border-b-2 border-slate-900">
+                                        <div className="flex items-center justify-between gap-2 mb-2">
+                                            <div>
+                                                <h2 className="text-xl font-black uppercase italic tracking-tight">
+                                                    Writers&apos; Consensus Top 25
+                                                </h2>
+                                                <p className="text-xs text-slate-300">
+                                                    25 pts for #1 down to 1 pt for #25 across{" "}
+                                                    <strong className="text-amber-400">
+                                                        {consensusData.voterCount}
+                                                    </strong>{" "}
+                                                    submitted{" "}
+                                                    {consensusData.voterCount === 1
+                                                        ? "ballot"
+                                                        : "ballots"}
+                                                </p>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={handleCopyConsensus}
+                                                disabled={consensusData.rankings.length === 0}
+                                                className="bg-amber-400 text-slate-950 text-[11px] font-black uppercase px-3 py-1.5 hover:bg-white transition-colors disabled:opacity-40 shrink-0"
+                                            >
+                                                Copy Consensus
+                                            </button>
+                                        </div>
+
+                                        {/* Week / Label Filter */}
+                                        <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-800">
+                                            <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+                                                Ballot Filter:
+                                            </span>
+                                            <select
+                                                value={consensusWeekFilter}
+                                                onChange={(e) =>
+                                                    setConsensusWeekFilter(e.target.value)
+                                                }
+                                                className="bg-slate-800 text-white border border-slate-600 px-2.5 py-1 text-xs font-bold focus:outline-none"
+                                            >
+                                                <option value="latest_per_voter">
+                                                    Latest Ballot per Writer
+                                                </option>
+                                                {availableBallotLabels.map((lbl) => (
+                                                    <option key={lbl} value={lbl}>
+                                                        Week / Label: {lbl}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+
+                                        {consensusData.voters.length > 0 && (
+                                            <div className="mt-2 pt-2 border-t border-slate-800/80 flex flex-wrap items-center gap-1.5 text-[10px] text-slate-400">
+                                                <span className="font-black uppercase">Voters:</span>
+                                                {consensusData.voters.map((v) => (
+                                                    <span
+                                                        key={v.id}
+                                                        className="bg-slate-800 text-slate-200 px-1.5 py-0.5 rounded font-bold"
+                                                    >
+                                                        {v.voterName} ({v.label})
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {consensusData.rankings.length === 0 ? (
+                                        <div className="p-10 text-center text-slate-400 text-sm italic">
+                                            No saved ballots match this filter yet. Save your ballot in the &ldquo;My Top 25 Ballot&rdquo; tab to populate the Consensus Poll!
+                                        </div>
+                                    ) : (
+                                        <div className="divide-y divide-slate-200 max-h-[72vh] overflow-y-auto">
+                                            {consensusData.rankings.slice(0, 25).map((item, idx) => {
+                                                const rank = idx + 1;
+                                                const team = teamsMap.get(item.teamId);
+                                                return (
+                                                    <div
+                                                        key={item.teamId}
+                                                        className="px-3 py-2.5 flex items-center justify-between gap-2 bg-white hover:bg-slate-50"
+                                                    >
+                                                        <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                                                            <span
+                                                                className={`w-7 h-7 rounded font-black text-xs flex items-center justify-center shrink-0 border ${
+                                                                    rank === 1
+                                                                        ? "bg-amber-400 text-slate-950 border-slate-900"
+                                                                        : rank <= 5
+                                                                        ? "bg-slate-900 text-white border-slate-900"
+                                                                        : "bg-slate-200 text-slate-900 border-slate-400"
+                                                                }`}
+                                                            >
+                                                                {rank}
+                                                            </span>
+
+                                                            {team?.logoUrl && (
+                                                                <div className="w-6 h-6 bg-white border border-slate-200 rounded p-0.5 flex items-center justify-center shrink-0">
+                                                                    <img
+                                                                        src={team.logoUrl}
+                                                                        alt=""
+                                                                        className="max-w-full max-h-full object-contain"
+                                                                    />
+                                                                </div>
+                                                            )}
+
+                                                            <div className="min-w-0 flex-1">
+                                                                <div className="font-bold text-sm text-slate-900 truncate flex items-center gap-1.5">
+                                                                    <span className="truncate">
+                                                                        {team?.name || "Unknown Team"}
+                                                                    </span>
+                                                                    {item.firstPlaceVotes > 0 && (
+                                                                        <span className="bg-amber-100 text-amber-900 border border-amber-400 text-[10px] font-black px-1.5 py-0.2 rounded shrink-0">
+                                                                            {item.firstPlaceVotes} 1st
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                                <div className="text-[10px] text-slate-500 truncate">
+                                                                    {team?.phaseName || ""} &bull;{" "}
+                                                                    {item.appearances}/
+                                                                    {consensusData.voterCount} ballots
+                                                                    (Hi: #{item.highestRank}, Lo: #
+                                                                    {item.lowestRank})
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="text-right shrink-0">
+                                                            <span className="font-mono font-black text-sm text-slate-900">
+                                                                {item.points}
+                                                            </span>
+                                                            <span className="text-[10px] font-bold uppercase text-slate-400 ml-1">
+                                                                pts
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
                             <div className="bg-white border-2 border-slate-900 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] font-sans">
                                 {/* Ballot Header */}
                                 <div className="bg-slate-900 text-white p-4 border-b-2 border-slate-900">
@@ -1098,6 +1392,7 @@ export default function UniballPollBuilderPage() {
                                     })}
                                 </div>
                             </div>
+                            )}
                         </div>
                     </div>
                 )}

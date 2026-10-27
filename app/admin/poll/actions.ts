@@ -2,7 +2,7 @@
 
 import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
-import { assertAdmin } from "@/lib/auth/admin-guard";
+import { assertPermission, isSuperAdmin } from "@/lib/auth/admin-guard";
 import { isPlayoffPhase, getPhaseTierInfo } from "@/lib/utils/phase-utils";
 import { resolveTeamIdentity } from "@/lib/utils/team-resolver";
 
@@ -59,10 +59,13 @@ export interface SavedPollBallot {
     label: string;
     updatedAt: string;
     slots: (string | null)[];
+    userId?: string;
+    voterName?: string;
 }
 
 export async function fetchPollBuilderData(seasonId?: string) {
-    await assertAdmin();
+    const user = await assertPermission("poll");
+    const userIsAdmin = isSuperAdmin(user);
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     // 1. Fetch all seasons with competition details
@@ -114,6 +117,8 @@ export async function fetchPollBuilderData(seasonId?: string) {
             activeSeasonYear: new Date().getFullYear(),
             divisions: [] as PollDivisionGroup[],
             savedBallots: [] as SavedPollBallot[],
+            allBallots: [] as SavedPollBallot[],
+            currentUserId: user.id,
         };
     }
 
@@ -138,6 +143,8 @@ export async function fetchPollBuilderData(seasonId?: string) {
             activeSeasonYear: activeSeason.year,
             divisions: [] as PollDivisionGroup[],
             savedBallots: [] as SavedPollBallot[],
+            allBallots: [] as SavedPollBallot[],
+            currentUserId: user.id,
         };
     }
 
@@ -338,18 +345,27 @@ export async function fetchPollBuilderData(seasonId?: string) {
         return a.phaseName.localeCompare(b.phaseName);
     });
 
-    // Parse saved ballots
+    // Parse saved ballots (both user-specific and all writers for consensus)
     const savedBallots: SavedPollBallot[] = [];
+    const allBallots: SavedPollBallot[] = [];
     for (const note of notesRes.data || []) {
         try {
             const parsed = JSON.parse(note.content);
             if (parsed && Array.isArray(parsed.slots)) {
-                savedBallots.push({
+                const item: SavedPollBallot = {
                     id: note.id,
                     label: parsed.label || "Saved Poll",
                     updatedAt: parsed.updatedAt || note.created_at,
                     slots: parsed.slots,
-                });
+                    userId: parsed.userId || undefined,
+                    voterName: parsed.voterName || "Writer",
+                };
+                allBallots.push(item);
+
+                // Include in "My Saved Ballots" if it belongs to this user, or if it's a legacy ballot and user is admin
+                if (parsed.userId === user.id || (!parsed.userId && userIsAdmin)) {
+                    savedBallots.push(item);
+                }
             }
         } catch {
             // Ignore malformed note
@@ -362,6 +378,8 @@ export async function fetchPollBuilderData(seasonId?: string) {
         activeSeasonYear: activeSeason.year,
         divisions,
         savedBallots,
+        allBallots,
+        currentUserId: user.id,
     };
 }
 
@@ -371,19 +389,26 @@ export async function savePollBallotAction(
     slots: (string | null)[]
 ) {
     try {
-        await assertAdmin();
+        const user = await assertPermission("poll");
+        const userIsAdmin = isSuperAdmin(user);
         const supabase = createClient(supabaseUrl, supabaseKey);
 
         const cleanLabel = (label || "Current Ballot").trim();
         const normalizedSlots = Array.from({ length: 25 }, (_, i) => slots[i] || null);
+        const voterName =
+            user.user_metadata?.display_name ||
+            user.user_metadata?.name ||
+            (user.email ? user.email.split("@")[0] : "Writer");
 
         const contentPayload = JSON.stringify({
             label: cleanLabel,
             updatedAt: new Date().toISOString(),
             slots: normalizedSlots,
+            userId: user.id,
+            voterName,
         });
 
-        // Check if a ballot with the same label exists for this season
+        // Check if a ballot with the same label exists for THIS user in this season
         const { data: existingNotes } = await supabase
             .from("notes")
             .select("id, content")
@@ -394,7 +419,10 @@ export async function savePollBallotAction(
         for (const note of existingNotes || []) {
             try {
                 const parsed = JSON.parse(note.content);
-                if (parsed?.label?.toLowerCase() === cleanLabel.toLowerCase()) {
+                const sameLabel = parsed?.label?.toLowerCase() === cleanLabel.toLowerCase();
+                const sameOwner =
+                    parsed?.userId === user.id || (!parsed?.userId && userIsAdmin);
+                if (sameLabel && sameOwner) {
                     matchingNoteId = note.id;
                     break;
                 }
@@ -428,8 +456,34 @@ export async function savePollBallotAction(
 
 export async function deletePollBallotAction(noteId: string) {
     try {
-        await assertAdmin();
+        const user = await assertPermission("poll");
+        const userIsAdmin = isSuperAdmin(user);
         const supabase = createClient(supabaseUrl, supabaseKey);
+
+        const { data: note } = await supabase
+            .from("notes")
+            .select("id, content")
+            .eq("id", noteId)
+            .eq("entity_type", "writers_poll")
+            .maybeSingle();
+
+        if (!note) {
+            return { success: false, error: "Ballot not found." };
+        }
+
+        if (!userIsAdmin) {
+            try {
+                const parsed = JSON.parse(note.content);
+                if (parsed?.userId !== user.id) {
+                    return {
+                        success: false,
+                        error: "You can only delete your own saved ballots.",
+                    };
+                }
+            } catch {
+                return { success: false, error: "Unauthorized." };
+            }
+        }
 
         const { error } = await supabase
             .from("notes")

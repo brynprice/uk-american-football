@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@supabase/supabase-js";
-import { assertAdmin } from "@/lib/auth/admin-guard";
+import { assertPermission } from "@/lib/auth/admin-guard";
 import { revalidatePath } from "next/cache";
 import {
   predictBatchSlate,
@@ -31,7 +31,7 @@ export async function recordPredictionAction(payload: {
   gameId?: string;
 }) {
   try {
-    await assertAdmin();
+    await assertPermission("predictions");
 
     if (!payload.homeTeamId || !payload.awayTeamId) {
       return { success: false, error: "Missing required team IDs." };
@@ -105,7 +105,7 @@ export async function getWeeklySlateAction(params: {
   error?: string;
 }> {
   try {
-    await assertAdmin();
+    await assertPermission("predictions");
 
     const seasonYear = params.seasonYear || 2026;
     const weekDef = BUCS_2026_WEEKS.find((w) => w.weekNumber === params.weekNumber);
@@ -229,7 +229,7 @@ export async function generateSlatePredictionsAction(params: {
   error?: string;
 }> {
   try {
-    await assertAdmin();
+    await assertPermission("predictions");
 
     if (!params.games || params.games.length === 0) {
       return { success: false, error: "No games provided to predict." };
@@ -261,7 +261,7 @@ export async function saveBatchPredictionsAction(
   }>
 ) {
   try {
-    await assertAdmin();
+    await assertPermission("predictions");
 
     if (!predictions || predictions.length === 0) {
       return { success: false, error: "No predictions to save." };

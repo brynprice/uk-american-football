@@ -2,11 +2,11 @@
 
 import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
-import { assertAdmin } from "@/lib/auth/admin-guard";
+import { assertPermission } from "@/lib/auth/admin-guard";
 
 export async function approveGameProposal(proposalId: string, adminNotes?: string) {
     try {
-        await assertAdmin();
+        await assertPermission("proposals");
 
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
         const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY;
@@ -210,7 +210,7 @@ export async function approveGameProposal(proposalId: string, adminNotes?: strin
 
 export async function rejectGameProposal(proposalId: string, adminNotes?: string) {
     try {
-        await assertAdmin();
+        await assertPermission("proposals");
 
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
         const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY;

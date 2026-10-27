@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { deleteGame } from '@/app/(public)/games/[id]/actions';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
+import { isSuperAdmin } from '@/lib/auth/permissions';
 
 interface Props {
     gameId: string;
@@ -18,7 +19,7 @@ export default function DeleteGameButton({ gameId, redirectUrl, variant = 'large
 
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
-            if (session?.user) {
+            if (session?.user && isSuperAdmin(session.user)) {
                 setIsAdmin(true);
             }
         });
