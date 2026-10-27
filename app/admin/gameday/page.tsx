@@ -16,6 +16,7 @@ export default function GamedayPage() {
     const [selectedPhase, setSelectedPhase] = useState<string>("");
     const [selectedDate, setSelectedDate] = useState<string>("");
     const [statusFilter, setStatusFilter] = useState<string>("all");
+    const [hideCompletedAndAwarded, setHideCompletedAndAwarded] = useState<boolean>(false);
 
 interface GameEditState {
     home_score: number | null;
@@ -35,29 +36,48 @@ const getVenue = (v: any) => Array.isArray(v) ? v[0] : v;
 
     const [editedScores, setEditedScores] = useState<Record<string, GameEditState>>({});
 
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [isPending, startTransition] = useTransition();
     const [message, setMessage] = useState<{ text: string; type: "success" | "error" } | null>(null);
 
-    // Initial Load
+    // Fetch seasons list on mount without loading fixtures
     useEffect(() => {
+        async function loadSeasons() {
+            try {
+                const data = await fetchGamedayData();
+                setSeasons(data.seasons);
+            } catch (err: any) {
+                setMessage({ text: err.message || "Failed to load seasons", type: "error" });
+            }
+        }
+        loadSeasons();
+    }, []);
+
+    // Load fixtures only after a Season is selected
+    useEffect(() => {
+        if (!selectedSeason) {
+            setPhases([]);
+            setGames([]);
+            setEditedScores({});
+            setIsLoading(false);
+            return;
+        }
         loadData();
     }, [selectedSeason, selectedPhase, selectedDate]);
 
     async function loadData() {
+        if (!selectedSeason) return;
         setIsLoading(true);
         setMessage(null);
         try {
-            const data = await fetchGamedayData(selectedSeason || undefined, selectedPhase || undefined, selectedDate || undefined);
-            setSeasons(data.seasons);
+            const data = await fetchGamedayData(selectedSeason, selectedPhase || undefined, selectedDate || undefined);
+            if (data.seasons.length > 0) {
+                setSeasons(data.seasons);
+            }
             setPhases(data.phases);
             setGames(data.games);
             setVenues(data.venues || []);
             setPeople(data.people || []);
-
-            if (!selectedSeason && data.seasons.length > 0) {
-                setSelectedSeason(data.seasons[0].id);
-            }
 
             // Quick lookup maps
             const staffMap = new Map<string, string>();
@@ -258,7 +278,18 @@ const getVenue = (v: any) => Array.isArray(v) ? v[0] : v;
             try {
                 const res = await saveGamedayScores(dirtyPayloads);
                 setMessage({ text: `Successfully updated ${res.count} fixture(s) and recomputed standings!`, type: "success" });
-                // Mark all clean
+                // Sync saved status/scores into games state and mark edits clean
+                setGames(prev => prev.map(g => {
+                    const updated = dirtyPayloads.find(p => p.id === g.id);
+                    if (!updated) return g;
+                    return {
+                        ...g,
+                        home_score: updated.home_score,
+                        away_score: updated.away_score,
+                        status: updated.status,
+                        notes: updated.notes
+                    };
+                }));
                 setEditedScores(prev => {
                     const next = { ...prev };
                     dirtyPayloads.forEach(p => {
@@ -274,17 +305,21 @@ const getVenue = (v: any) => Array.isArray(v) ? v[0] : v;
 
     // Filter games
     const filteredGames = games.filter(g => {
-        if (statusFilter === "pending") {
-            const currentStatus = editedScores[g.id]?.status || g.status;
-            return currentStatus === "scheduled" || currentStatus === "postponed";
+        const edit = editedScores[g.id];
+        // Use persisted game status while a row has unsaved edits so it does not disappear mid-entry
+        const persistedStatus = edit && !edit.isDirty ? edit.status : (g.status || "scheduled");
+
+        if (hideCompletedAndAwarded && (persistedStatus === "completed" || persistedStatus === "awarded")) {
+            return false;
+        }
+        if (statusFilter === "pending" || statusFilter === "hide_completed") {
+            return persistedStatus !== "completed" && persistedStatus !== "awarded";
         }
         if (statusFilter === "completed") {
-            const currentStatus = editedScores[g.id]?.status || g.status;
-            return currentStatus === "completed" || currentStatus === "awarded";
+            return persistedStatus === "completed" || persistedStatus === "awarded";
         }
         if (statusFilter === "disrupted") {
-            const currentStatus = editedScores[g.id]?.status || g.status;
-            return currentStatus === "postponed" || currentStatus === "cancelled" || currentStatus === "awarded";
+            return persistedStatus === "postponed" || persistedStatus === "cancelled" || persistedStatus === "awarded";
         }
         return true;
     });
@@ -332,66 +367,113 @@ const getVenue = (v: any) => Array.isArray(v) ? v[0] : v;
             )}
 
             {/* Filters Bar */}
-            <div className="bg-white border-2 border-slate-900 p-6 mb-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 font-sans">
-                <div>
-                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-1">Season</label>
-                    <select
-                        value={selectedSeason}
-                        onChange={e => {
-                            setSelectedSeason(e.target.value);
-                            setSelectedPhase("");
-                        }}
-                        className="w-full bg-slate-50 border-2 border-slate-900 p-2 text-sm font-bold"
-                    >
-                        {seasons.map(s => (
-                            <option key={s.id} value={s.id}>
-                                {s.competition?.name} {s.year} ({s.name || `${s.year}/${(s.year + 1).toString().slice(-2)}`})
-                            </option>
-                        ))}
-                    </select>
+            <div className="bg-white border-2 border-slate-900 p-6 mb-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-sans">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-1">Season</label>
+                        <select
+                            value={selectedSeason}
+                            onChange={e => {
+                                setSelectedSeason(e.target.value);
+                                setSelectedPhase("");
+                            }}
+                            className="w-full bg-slate-50 border-2 border-slate-900 p-2 text-sm font-bold"
+                        >
+                            <option value="">-- Select a Season --</option>
+                            {seasons.map(s => (
+                                <option key={s.id} value={s.id}>
+                                    {s.competition?.name} {s.year} ({s.name || `${s.year}/${(s.year + 1).toString().slice(-2)}`})
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-1">Phase / Conference</label>
+                        <select
+                            value={selectedPhase}
+                            onChange={e => setSelectedPhase(e.target.value)}
+                            disabled={!selectedSeason}
+                            className="w-full bg-slate-50 border-2 border-slate-900 p-2 text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            <option value="">All Phases ({phases.length})</option>
+                            {phases.map(p => (
+                                <option key={p.id} value={p.id}>{p.name}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-1">Date Filter (Optional)</label>
+                        <input
+                            type="date"
+                            value={selectedDate}
+                            onChange={e => setSelectedDate(e.target.value)}
+                            disabled={!selectedSeason}
+                            className="w-full bg-slate-50 border-2 border-slate-900 p-2 text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-1">Status Filter</label>
+                        <select
+                            value={statusFilter}
+                            onChange={e => {
+                                const val = e.target.value;
+                                setStatusFilter(val);
+                                if (val === "completed") {
+                                    setHideCompletedAndAwarded(false);
+                                } else if (val === "hide_completed") {
+                                    setHideCompletedAndAwarded(true);
+                                }
+                            }}
+                            disabled={!selectedSeason}
+                            className="w-full bg-slate-50 border-2 border-slate-900 p-2 text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            <option value="all">All Fixtures</option>
+                            <option value="hide_completed">Hide Completed &amp; Awarded</option>
+                            <option value="pending">Scheduled / Unplayed Only</option>
+                            <option value="completed">Completed / Awarded Only</option>
+                            <option value="disrupted">Disrupted (Walkovers / Postponed / Cancelled)</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div>
-                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-1">Phase / Conference</label>
-                    <select
-                        value={selectedPhase}
-                        onChange={e => setSelectedPhase(e.target.value)}
-                        className="w-full bg-slate-50 border-2 border-slate-900 p-2 text-sm font-bold"
-                    >
-                        <option value="">All Phases ({phases.length})</option>
-                        {phases.map(p => (
-                            <option key={p.id} value={p.id}>{p.name}</option>
-                        ))}
-                    </select>
-                </div>
+                <div className="mt-4 pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+                    <label className="inline-flex items-center gap-2.5 cursor-pointer select-none">
+                        <input
+                            type="checkbox"
+                            checked={hideCompletedAndAwarded}
+                            onChange={e => {
+                                const checked = e.target.checked;
+                                setHideCompletedAndAwarded(checked);
+                                if (checked && statusFilter === "completed") {
+                                    setStatusFilter("all");
+                                } else if (!checked && statusFilter === "hide_completed") {
+                                    setStatusFilter("all");
+                                }
+                            }}
+                            className="w-4 h-4 accent-slate-900 border-2 border-slate-900 rounded-none cursor-pointer"
+                        />
+                        <span className="text-xs font-black uppercase text-slate-800">
+                            Hide completed and awarded games
+                        </span>
+                    </label>
 
-                <div>
-                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-1">Date Filter (Optional)</label>
-                    <input
-                        type="date"
-                        value={selectedDate}
-                        onChange={e => setSelectedDate(e.target.value)}
-                        className="w-full bg-slate-50 border-2 border-slate-900 p-2 text-sm font-bold"
-                    />
-                </div>
-
-                <div>
-                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-1">Status Filter</label>
-                    <select
-                        value={statusFilter}
-                        onChange={e => setStatusFilter(e.target.value)}
-                        className="w-full bg-slate-50 border-2 border-slate-900 p-2 text-sm font-bold"
-                    >
-                        <option value="all">All Fixtures</option>
-                        <option value="pending">Scheduled / Unplayed Only</option>
-                        <option value="completed">Completed / Awarded</option>
-                        <option value="disrupted">Disrupted (Walkovers / Postponed / Cancelled)</option>
-                    </select>
+                    {selectedSeason && !isLoading && (
+                        <span className="text-xs font-bold text-slate-500">
+                            Showing {filteredGames.length} of {games.length} fixture{games.length === 1 ? "" : "s"}
+                        </span>
+                    )}
                 </div>
             </div>
 
             {/* Scoreboard List */}
-            {isLoading ? (
+            {!selectedSeason ? (
+                <div className="p-12 text-center text-slate-500 font-bold bg-white border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                    Select a season above to load fixtures.
+                </div>
+            ) : isLoading ? (
                 <div className="p-12 text-center text-slate-500 font-bold bg-white border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                     Loading fixtures...
                 </div>
