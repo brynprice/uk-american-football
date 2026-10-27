@@ -52,6 +52,16 @@ export default async function AdminDashboard() {
                     </p>
                 </Link>
 
+                <Link href="/admin/poll" className="group bg-slate-900 text-white border-2 border-slate-900 p-8 shadow-[8px_8px_0px_0px_rgba(59,130,246,1)] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[12px_12px_0px_0px_rgba(59,130,246,1)] transition-all">
+                    <div className="flex items-center gap-2 mb-2">
+                        <span className="bg-amber-400 text-slate-950 text-[10px] font-black uppercase px-2 py-0.5 rounded">Top 25 Ballot</span>
+                    </div>
+                    <h2 className="text-2xl font-black mb-4 uppercase tracking-tight group-hover:text-amber-400">Uniball Writer&apos;s Poll &rarr;</h2>
+                    <p className="text-slate-300 font-sans leading-relaxed">
+                        Pick and rank your Top 25 Uniball teams from tiered division standings with one-click assignment and drag-and-drop ordering.
+                    </p>
+                </Link>
+
                 <Link href="/admin/add-game" className="group bg-white border-2 border-slate-900 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all">
                     <h2 className="text-2xl font-black mb-4 uppercase tracking-tight group-hover:text-blue-700">Add Game Record &rarr;</h2>
                     <p className="text-slate-600 font-sans leading-relaxed">
