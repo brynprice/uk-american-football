@@ -6,6 +6,7 @@ import { useState } from 'react';
 interface Team {
     id: string;
     name: string;
+    aliases?: string[];
 }
 
 interface H2HSelectorProps {
@@ -35,7 +36,7 @@ export default function H2HSelector({ teamId, opponents }: H2HSelectorProps) {
                     <option value="">Select an opponent...</option>
                     {opponents.map((opponent) => (
                         <option key={opponent.id} value={opponent.id}>
-                            {opponent.name}
+                            {opponent.name}{opponent.aliases && opponent.aliases.length > 0 ? ` (fka ${opponent.aliases.join(', ')})` : ''}
                         </option>
                     ))}
                 </select>

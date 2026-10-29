@@ -11,11 +11,12 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
     const team = await ArchiveService.getTeamHistory(id);
 
     // Derive opponents directly from already-fetched games to avoid 3 redundant DB round-trips
-    const oppMap = new Map<string, { id: string; name: string }>();
+    const oppMap = new Map<string, { id: string; name: string; aliases?: string[] }>();
     (team.games || []).forEach((g: any) => {
         const opp = g.home_team_id === id ? g.away_team : g.home_team;
         if (opp && opp.id && !oppMap.has(opp.id)) {
-            oppMap.set(opp.id, { id: opp.id, name: opp.name });
+            const aliases = (opp.team_aliases || []).map((a: any) => a.name);
+            oppMap.set(opp.id, { id: opp.id, name: opp.name, aliases });
         }
     });
     const opponents = Array.from(oppMap.values()).sort((a, b) => a.name.localeCompare(b.name));
@@ -165,6 +166,30 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                                 </span>
                             )}
                         </div>
+
+                        {team.team_aliases && team.team_aliases.length > 0 && (
+                            <div className="flex flex-wrap items-center gap-2 mb-3">
+                                <span className="text-[11px] font-black uppercase text-slate-400 font-sans tracking-wider">
+                                    Formerly Known As:
+                                </span>
+                                {([...team.team_aliases])
+                                    .sort((a: any, b: any) => (b.start_year || 0) - (a.start_year || 0))
+                                    .map((alias: any) => (
+                                        <span
+                                            key={alias.id}
+                                            className="inline-flex items-center gap-1.5 bg-slate-100 text-slate-800 px-2.5 py-0.5 rounded text-xs font-semibold border border-slate-200"
+                                        >
+                                            <span>{alias.name}</span>
+                                            {(alias.start_year || alias.end_year) && (
+                                                <span className="text-slate-500 font-normal text-[10px]">
+                                                    ({alias.start_year || '?'}&ndash;{alias.end_year || 'Present'})
+                                                </span>
+                                            )}
+                                        </span>
+                                    ))}
+                            </div>
+                        )}
+
                         <div className="flex gap-4 items-center mb-4">
                             <span className="text-slate-500 font-sans uppercase tracking-widest text-xs">
                                 {team.location} &bull; Founded {team.founded_year || "Unknown"}

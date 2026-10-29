@@ -8,6 +8,10 @@ export type Season = Database["public"]["Tables"]["seasons"]["Row"];
 export type Phase = Database["public"]["Tables"]["phases"]["Row"];
 export type Game = Database["public"]["Tables"]["games"]["Row"];
 export type Team = Database["public"]["Tables"]["teams"]["Row"];
+export type TeamAlias = Database["public"]["Tables"]["team_aliases"]["Row"];
+export type TeamWithAliases = Team & {
+    team_aliases?: TeamAlias[];
+};
 export type Person = Database["public"]["Tables"]["people"]["Row"];
 export type PersonWithRoles = Person & {
     participations?: Array<{
@@ -599,10 +603,13 @@ export const ArchiveService = {
         });
     },
 
-    async getTeams(): Promise<Team[]> {
-        const { data, error } = await supabase.from("teams").select("*").order("name");
+    async getTeams(): Promise<TeamWithAliases[]> {
+        const { data, error } = await supabase
+            .from("teams")
+            .select("*, team_aliases(*)")
+            .order("name");
         if (error) throw error;
-        return data || [];
+        return (data || []) as TeamWithAliases[];
     },
 
     async getSeasons(): Promise<any[]> {

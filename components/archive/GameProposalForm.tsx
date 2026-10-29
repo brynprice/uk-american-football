@@ -2,7 +2,7 @@
 
 import { useState, FormEvent, useEffect } from "react";
 import { ProposalType, submitGameProposal } from "../../app/(public)/propose-game/actions";
-import { ArchiveService, Team, Phase } from "@/services/archive-service";
+import { ArchiveService, TeamWithAliases, Phase } from "@/services/archive-service";
 
 interface GameProposalFormProps {
     gameId?: string;
@@ -31,7 +31,7 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
     const isUpdate = !!gameId;
 
     // Data lists for dropdowns
-    const [teams, setTeams] = useState<Team[]>([]);
+    const [teams, setTeams] = useState<TeamWithAliases[]>([]);
     const [seasons, setSeasons] = useState<any[]>([]);
     const [phases, setPhases] = useState<Phase[]>([]);
     const [people, setPeople] = useState<any[]>([]);
@@ -333,7 +333,9 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
                             >
                                 <option value="">Select Home Team...</option>
                                 {teams.map(t => (
-                                    <option key={t.id} value={t.name}>{t.name}</option>
+                                    <option key={t.id} value={t.name}>
+                                        {t.name}{t.team_aliases && t.team_aliases.length > 0 ? ` (fka ${t.team_aliases.map(a => a.name).join(', ')})` : ''}
+                                    </option>
                                 ))}
                             </select>
                             <div className="flex items-center justify-center gap-2">
@@ -370,7 +372,9 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
                             >
                                 <option value="">Select Away Team...</option>
                                 {teams.map(t => (
-                                    <option key={t.id} value={t.name}>{t.name}</option>
+                                    <option key={t.id} value={t.name}>
+                                        {t.name}{t.team_aliases && t.team_aliases.length > 0 ? ` (fka ${t.team_aliases.map(a => a.name).join(', ')})` : ''}
+                                    </option>
                                 ))}
                             </select>
                             <div className="flex items-center justify-center gap-2">
