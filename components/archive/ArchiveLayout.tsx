@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function ArchiveLayout({
     children,
@@ -8,9 +9,17 @@ export default function ArchiveLayout({
     return (
         <div className="min-h-screen bg-slate-50 text-slate-900 font-serif">
             <header className="border-b bg-white sticky top-0 z-50">
-                <div className="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <Link href="/" className="text-2xl font-bold tracking-tight hover:text-blue-700 transition-colors">
-                        Britball Archive
+                <div className="container mx-auto px-4 py-3 sm:py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <Link href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
+                        <Image
+                            src="/images/britball-logo.png"
+                            alt="Britball Archive"
+                            width={160}
+                            height={41}
+                            priority
+                            className="h-9 sm:h-10 w-auto object-contain"
+                        />
+                        <span className="sr-only">Britball Archive</span>
                     </Link>
                     <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm uppercase tracking-widest font-sans font-medium">
                         <Link href="/about" className="hover:text-blue-700">About</Link>
@@ -27,7 +36,16 @@ export default function ArchiveLayout({
                 {children}
             </main>
             <footer className="border-t bg-white mt-12 py-8">
-                <div className="container mx-auto px-4 text-center text-slate-500 text-sm font-sans">
+                <div className="container mx-auto px-4 text-center text-slate-500 text-sm font-sans flex flex-col items-center">
+                    <Link href="/" className="mb-4 inline-block hover:opacity-85 transition-opacity">
+                        <Image
+                            src="/images/britball-logo.png"
+                            alt="Britball Archive"
+                            width={125}
+                            height={32}
+                            className="h-7 w-auto object-contain opacity-75 hover:opacity-100 transition-opacity"
+                        />
+                    </Link>
                     <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 mb-3">
                         <Link href="/about" className="text-slate-700 font-semibold hover:text-blue-700">About the Project</Link>
                         <span>&bull;</span>

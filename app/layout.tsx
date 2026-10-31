@@ -28,12 +28,25 @@ export const metadata: Metadata = {
     siteName: "Britball Archive",
     locale: "en_GB",
     type: "website",
+    images: [
+      {
+        url: "/images/britball-logo.png",
+        width: 940,
+        height: 240,
+        alt: "Britball Archive Logo",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Britball Archive",
     description:
       "The definitive historical archive of British American football.",
+    images: ["/images/britball-logo.png"],
+  },
+  icons: {
+    icon: "/images/britball-icon.png",
+    apple: "/images/britball-icon.png",
   },
 };
 

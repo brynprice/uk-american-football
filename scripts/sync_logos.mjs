@@ -55,6 +55,16 @@ async function syncLogos() {
         logoMap.set(slug, f);
     });
 
+    const MANUAL_SLUG_MAP = {
+        'aberdeen-roughnecks-university-team': 'aberdeen-roughnecks-uni.jpg',
+        'carlisle-kestrels': 'carlisle-kestrals.png'
+    };
+    for (const [slug, fileName] of Object.entries(MANUAL_SLUG_MAP)) {
+        if (files.includes(fileName)) {
+            logoMap.set(slug, fileName);
+        }
+    }
+
     // 2. Fetch all teams and aliases
     const { data: teams, error: teamError } = await supabase
         .from('teams')
