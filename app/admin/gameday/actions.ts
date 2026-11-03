@@ -219,7 +219,11 @@ export async function saveGamedayScores(updates: GamedayUpdatePayload[]) {
             status: item.status,
             notes: item.notes !== undefined ? (item.notes?.trim() || null) : undefined,
         };
-        if (item.date !== undefined) payload.date = item.date;
+        if (item.date !== undefined) {
+            const cleanDate = item.date?.trim() || null;
+            payload.date = cleanDate;
+            payload.date_precision = cleanDate ? "full" : "season";
+        }
         if (item.time !== undefined) payload.time = item.time;
 
         if (item.venue_name !== undefined) {

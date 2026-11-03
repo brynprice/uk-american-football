@@ -22,6 +22,7 @@ interface GameEditState {
     home_score: number | null;
     away_score: number | null;
     status: string;
+    date: string;
     notes: string;
     venue_name: string;
     home_coach: string;
@@ -110,6 +111,7 @@ const getVenue = (v: any) => Array.isArray(v) ? v[0] : v;
                     home_score: g.home_score,
                     away_score: g.away_score,
                     status: g.status || "scheduled",
+                    date: g.date ? String(g.date).slice(0, 10) : "",
                     notes: g.notes || "",
                     venue_name: venue?.name || "",
                     home_coach: homeOverride,
@@ -218,6 +220,35 @@ const getVenue = (v: any) => Array.isArray(v) ? v[0] : v;
         });
     };
 
+    const handleDateChange = (gameId: string, newDate: string) => {
+        setEditedScores(prev => {
+            const current = prev[gameId];
+            if (!current) return prev;
+            let updatedNotes = current.notes;
+            if (current.status === "postponed") {
+                if (newDate && current.notes === "Fixture postponed. Replay date TBD.") {
+                    const formatted = new Date(`${newDate}T00:00:00`).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric"
+                    });
+                    updatedNotes = `Fixture postponed; rescheduled to ${formatted}.`;
+                } else if (!newDate && current.notes.startsWith("Fixture postponed; rescheduled to ")) {
+                    updatedNotes = "Fixture postponed. Replay date TBD.";
+                }
+            }
+            return {
+                ...prev,
+                [gameId]: {
+                    ...current,
+                    date: newDate,
+                    notes: updatedNotes,
+                    isDirty: true
+                }
+            };
+        });
+    };
+
     const handleNotesChange = (gameId: string, text: string) => {
         setEditedScores(prev => {
             const current = prev[gameId];
@@ -266,6 +297,7 @@ const getVenue = (v: any) => Array.isArray(v) ? v[0] : v;
                 home_score: data.home_score,
                 away_score: data.away_score,
                 status: data.status,
+                date: data.date || null,
                 notes: data.notes,
                 venue_name: data.venue_name,
                 home_coach: data.home_coach,
@@ -287,6 +319,7 @@ const getVenue = (v: any) => Array.isArray(v) ? v[0] : v;
                         home_score: updated.home_score,
                         away_score: updated.away_score,
                         status: updated.status,
+                        date: updated.date,
                         notes: updated.notes
                     };
                 }));
@@ -488,6 +521,7 @@ const getVenue = (v: any) => Array.isArray(v) ? v[0] : v;
                             home_score: game.home_score,
                             away_score: game.away_score,
                             status: game.status,
+                            date: game.date ? String(game.date).slice(0, 10) : "",
                             notes: game.notes || "",
                             venue_name: game.venue?.name || "",
                             home_coach: "",
@@ -506,14 +540,25 @@ const getVenue = (v: any) => Array.isArray(v) ? v[0] : v;
                             >
                                 {/* Top metadata row */}
                                 <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-200 text-xs font-sans">
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex flex-wrap items-center gap-2">
                                         <span className="font-black bg-slate-100 text-slate-700 px-2 py-0.5 rounded border border-slate-300 uppercase">
                                             {game.phase?.name || "League"}
                                         </span>
-                                        <span className="text-slate-500 font-bold">
-                                            {game.date ? new Date(game.date).toLocaleDateString("en-GB", { weekday: "short", day: "2-digit", month: "short", year: "numeric" }) : "Date TBD"}
-                                            {game.time && ` • ${game.time}`}
-                                        </span>
+                                        <div className="inline-flex items-center gap-1.5">
+                                            <span className="text-slate-500 font-bold">
+                                                {edit.date
+                                                    ? new Date(`${edit.date}T00:00:00`).toLocaleDateString("en-GB", { weekday: "short", day: "2-digit", month: "short", year: "numeric" })
+                                                    : "Date TBD"}
+                                                {game.time && ` • ${game.time}`}
+                                            </span>
+                                            <input
+                                                type="date"
+                                                value={edit.date}
+                                                onChange={e => handleDateChange(game.id, e.target.value)}
+                                                title="Change fixture date"
+                                                className="text-[11px] font-bold px-1.5 py-0.5 bg-slate-50 border border-slate-300 rounded text-slate-700 hover:border-slate-500 focus:border-slate-900 outline-none"
+                                            />
+                                        </div>
                                         {edit.venue_name ? (
                                             <span className="text-slate-600 font-bold">
                                                 📍 {edit.venue_name}
@@ -545,6 +590,41 @@ const getVenue = (v: any) => Array.isArray(v) ? v[0] : v;
                                         )}
                                     </div>
                                 </div>
+
+                                {/* Postponed Reschedule Date Bar */}
+                                {edit.status === "postponed" && (
+                                    <div className="mb-3 p-2.5 bg-amber-50 border border-amber-300 rounded flex flex-wrap items-center justify-between gap-2 text-xs font-sans">
+                                        <div className="flex flex-wrap items-center gap-2">
+                                            <span className="text-[10px] font-black uppercase text-amber-900 tracking-wider">
+                                                📅 Postponed — Replay / New Date:
+                                            </span>
+                                            <input
+                                                type="date"
+                                                value={edit.date}
+                                                onChange={e => handleDateChange(game.id, e.target.value)}
+                                                className="text-xs font-bold px-2 py-1 bg-white border-2 border-amber-500 rounded text-slate-900"
+                                            />
+                                            {edit.date && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleDateChange(game.id, "")}
+                                                    className="text-[10px] font-black uppercase px-2 py-1 bg-white hover:bg-amber-100 text-amber-900 border border-amber-300 rounded transition-colors"
+                                                >
+                                                    Clear (Date TBD)
+                                                </button>
+                                            )}
+                                        </div>
+                                        {edit.date && (
+                                            <button
+                                                type="button"
+                                                onClick={() => handleStatusChange(game.id, "scheduled")}
+                                                className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded transition-colors"
+                                            >
+                                                Set Status to Scheduled
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
 
                                 {/* Main Match Row */}
                                 <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
