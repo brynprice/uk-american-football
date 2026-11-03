@@ -78,6 +78,22 @@ export const BUCS_2026_WEEKS: GameWeekDefinition[] = [
 ];
 
 /**
+ * Ensures a predicted American football score is non-negative and never equals 1
+ * (scoring a single point in a game is effectively impossible; 1 rounds down to a 0-point shutout).
+ */
+export function sanitizePredictedScore(rawScore: number): number {
+  const rounded = Math.max(0, Math.round(rawScore));
+  return rounded === 1 ? 0 : rounded;
+}
+
+/**
+ * Returns true if a scoreline is a 1-0 or 0-1 walkover forfeit rather than an on-field score.
+ */
+export function isWalkoverScoreline(homeScore: number | null | undefined, awayScore: number | null | undefined): boolean {
+  return (homeScore === 1 && awayScore === 0) || (homeScore === 0 && awayScore === 1);
+}
+
+/**
  * Calculates in-season prediction residuals for all teams in a given season.
  * Measures how actual scores differ from expected/predicted baselines to learn team form.
  */
@@ -133,6 +149,7 @@ export async function getInSeasonTeamResiduals(
   });
 
   completedGames.forEach(game => {
+    if (isWalkoverScoreline(game.home_score, game.away_score)) return;
     const homeId = game.home_team_id;
     const awayId = game.away_team_id;
     const actualHome = game.home_score;
@@ -226,14 +243,15 @@ export async function predictMatchup(
     h2hQuery = h2hQuery.lt('date', gameDate);
   }
 
-  const { data: h2hGames } = await h2hQuery;
+  const { data: rawH2hGames } = await h2hQuery;
+  const h2hGames = (rawH2hGames || []).filter(g => !isWalkoverScoreline(g.home_score, g.away_score));
 
   let h2hHomeScore = 0;
   let h2hAwayScore = 0;
   let h2hWeightTotal = 0;
   let h2hWins = 0;
 
-  (h2hGames || []).forEach(g => {
+  h2hGames.forEach(g => {
     const isHome = g.home_team_id === homeTeamId;
     const gYear = (g as any).phase?.season?.year || 2020;
     const weight = gYear >= seasonYear - 2 ? 1.5 : 1.0;
@@ -275,8 +293,8 @@ export async function predictMatchup(
       .filter('phase.season.year', 'gte', startCommonYear),
   ]);
 
-  const hGames = (homeHistory.data || []) as any[];
-  const aGames = (awayHistory.data || []) as any[];
+  const hGames = ((homeHistory.data || []) as any[]).filter(g => !isWalkoverScoreline(g.home_score, g.away_score));
+  const aGames = ((awayHistory.data || []) as any[]).filter(g => !isWalkoverScoreline(g.home_score, g.away_score));
 
   const homeOpponents = new Set(hGames.map(g => (g.home_team_id === homeTeamId ? g.away_team_id : g.home_team_id)));
   const awayOpponents = new Set(aGames.map(g => (g.home_team_id === awayTeamId ? g.away_team_id : g.home_team_id)));
@@ -330,14 +348,12 @@ export async function predictMatchup(
   const inSeasonHomeDefenseAdjustment = awayRes.defenseDelta * 0.3;
   const inSeasonAwayDefenseAdjustment = homeRes.defenseDelta * 0.3;
 
-  const finalHomeScore = Math.max(
-    0,
-    Math.round(baseHome + inSeasonHomeOffenseAdjustment - inSeasonHomeDefenseAdjustment + homeAdvantage)
+  const finalHomeScore = sanitizePredictedScore(
+    baseHome + inSeasonHomeOffenseAdjustment - inSeasonHomeDefenseAdjustment + homeAdvantage
   );
 
-  const finalAwayScore = Math.max(
-    0,
-    Math.round(baseAway + inSeasonAwayOffenseAdjustment - inSeasonAwayDefenseAdjustment)
+  const finalAwayScore = sanitizePredictedScore(
+    baseAway + inSeasonAwayOffenseAdjustment - inSeasonAwayDefenseAdjustment
   );
 
   // Win probability via logistic margin mapping: Margin / 14 scale

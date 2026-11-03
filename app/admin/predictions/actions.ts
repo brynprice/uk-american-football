@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import {
   predictBatchSlate,
   predictMatchup,
+  sanitizePredictedScore,
   PredictionResult,
   SlateGame,
   BUCS_2026_WEEKS,
@@ -38,6 +39,8 @@ export async function recordPredictionAction(payload: {
     }
 
     const supabase = getAdminClient();
+    const cleanHomeScore = sanitizePredictedScore(payload.predictedHomeScore);
+    const cleanAwayScore = sanitizePredictedScore(payload.predictedAwayScore);
 
     if (payload.gameId) {
       // Check if a prediction already exists for this game
@@ -51,8 +54,8 @@ export async function recordPredictionAction(payload: {
         const { error } = await supabase
           .from("predictions")
           .update({
-            predicted_home_score: payload.predictedHomeScore,
-            predicted_away_score: payload.predictedAwayScore,
+            predicted_home_score: cleanHomeScore,
+            predicted_away_score: cleanAwayScore,
             win_probability: payload.winProbability,
             confidence: payload.confidence,
             weights: payload.weights,
@@ -69,8 +72,8 @@ export async function recordPredictionAction(payload: {
     const { error } = await supabase.from("predictions").insert({
       home_team_id: payload.homeTeamId,
       away_team_id: payload.awayTeamId,
-      predicted_home_score: payload.predictedHomeScore,
-      predicted_away_score: payload.predictedAwayScore,
+      predicted_home_score: cleanHomeScore,
+      predicted_away_score: cleanAwayScore,
       win_probability: payload.winProbability,
       confidence: payload.confidence,
       weights: payload.weights,
@@ -176,9 +179,23 @@ export async function getWeeklySlateAction(params: {
       .in("game_id", gameIds);
 
     const predMap = new Map<string, any>();
-    (storedPredictions || []).forEach((p) => {
+    for (const p of storedPredictions || []) {
+      const cleanHome = sanitizePredictedScore(p.predicted_home_score);
+      const cleanAway = sanitizePredictedScore(p.predicted_away_score);
+      if (cleanHome !== p.predicted_home_score || cleanAway !== p.predicted_away_score) {
+        // Auto-correct any legacy 1-point stored prediction in the DB
+        await supabase
+          .from("predictions")
+          .update({
+            predicted_home_score: cleanHome,
+            predicted_away_score: cleanAway,
+          })
+          .eq("id", p.id);
+        p.predicted_home_score = cleanHome;
+        p.predicted_away_score = cleanAway;
+      }
       if (p.game_id) predMap.set(p.game_id, p);
-    });
+    }
 
     // 4. Map into clean SlateGame array
     const slateGames: SlateGame[] = (rawGames || []).map((g: any) => {
@@ -286,13 +303,15 @@ export async function saveBatchPredictionsAction(
 
     for (const p of predictions) {
       const existingId = existingMap.get(p.gameId);
+      const cleanHomeScore = sanitizePredictedScore(p.predictedHomeScore);
+      const cleanAwayScore = sanitizePredictedScore(p.predictedAwayScore);
       if (existingId) {
         updatePromises.push(
           supabase
             .from("predictions")
             .update({
-              predicted_home_score: p.predictedHomeScore,
-              predicted_away_score: p.predictedAwayScore,
+              predicted_home_score: cleanHomeScore,
+              predicted_away_score: cleanAwayScore,
               win_probability: p.winProbability,
               confidence: p.confidence,
               weights: p.weights,
@@ -304,8 +323,8 @@ export async function saveBatchPredictionsAction(
           game_id: p.gameId,
           home_team_id: p.homeTeamId,
           away_team_id: p.awayTeamId,
-          predicted_home_score: p.predictedHomeScore,
-          predicted_away_score: p.predictedAwayScore,
+          predicted_home_score: cleanHomeScore,
+          predicted_away_score: cleanAwayScore,
           win_probability: p.winProbability,
           confidence: p.confidence,
           weights: p.weights,

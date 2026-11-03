@@ -9,7 +9,13 @@ import {
   generateSlatePredictionsAction,
   saveBatchPredictionsAction,
 } from "./actions";
-import { BUCS_2026_WEEKS, SlateGame, PredictionResult } from "@/lib/predictions/engine";
+import {
+  BUCS_2026_WEEKS,
+  SlateGame,
+  PredictionResult,
+  sanitizePredictedScore,
+  isWalkoverScoreline,
+} from "@/lib/predictions/engine";
 import { supabase } from "@/lib/supabase/client";
 
 interface Team {
@@ -199,9 +205,15 @@ export default function PredictionsPage() {
           .filter("phase.season.year", "gte", startYear),
       ]);
 
-      const hGames = (homeHistory.data || []) as any[];
-      const aGames = (awayHistory.data || []) as any[];
-      const h2h = (h2hGames || []) as any[];
+      const hGames = ((homeHistory.data || []) as any[]).filter(
+        (g) => !isWalkoverScoreline(g.home_score, g.away_score)
+      );
+      const aGames = ((awayHistory.data || []) as any[]).filter(
+        (g) => !isWalkoverScoreline(g.home_score, g.away_score)
+      );
+      const h2h = ((h2hGames || []) as any[]).filter(
+        (g) => !isWalkoverScoreline(g.home_score, g.away_score)
+      );
 
       const homeOpponents = new Set(hGames.map((g) => (g.home_team_id === homeTeamId ? g.away_team_id : g.home_team_id)));
       const awayOpponents = new Set(aGames.map((g) => (g.home_team_id === awayTeamId ? g.away_team_id : g.home_team_id)));
@@ -287,8 +299,8 @@ export default function PredictionsPage() {
       setSinglePrediction({
         homeName,
         awayName,
-        homeScore: Math.round(finalHome + 3), // +3 home advantage
-        awayScore: Math.round(finalAway),
+        homeScore: sanitizePredictedScore(finalHome + 3), // +3 home advantage
+        awayScore: sanitizePredictedScore(finalAway),
         h2hCount: h2h.length,
         commonCount: commonWeight,
         confidence,
