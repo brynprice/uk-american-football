@@ -145,31 +145,32 @@ export default function AdminFactsPage() {
     }
   }
 
-  // Destructure Recap Data
+  // Destructure Recap Data Safely
   const {
-    overview: recapOverview,
-    scorigamis,
-    rivalries: recapRivalries,
-    extremes,
-    recordsAndMilestones,
-    standingsMomentum,
-    brightonSpotlight,
-    postponements,
+    overview: recapOverview = {},
+    scorigamis = { allTime: [], level: [] },
+    rivalries: recapRivalries = { inauguralMatchups: [], longHiatusMatchups: [], seriesStreaks: [], revengeGames: [] },
+    extremes = { shutouts: [], nailbiters: [] },
+    recordsAndMilestones = { programRecords: [], milestoneWins: [] },
+    standingsMomentum = { perfectStarts: [], bounceBacks: [], winlessStarts: [] },
+    brightonSpotlight = null,
+    postponements = [],
   } = factsData || {};
 
-  // Destructure Preview Data
-  const {
-    overview: previewOverview,
-    marqueeMatchups = [],
-    brightonPreview,
-    inauguralMatchups = [],
-    longHiatusMatchups = [],
-    revengeAngles = [],
-    formWatch = { clashOfUnbeatens: [], unblemishedWatch: [], winlessBowls: [], shutoutStreaks: [] },
-    milestoneAlerts = [],
-    predictedGames = [],
-    window: previewWindowInfo,
-  } = previewData || {};
+  // Destructure Preview Data Safely
+  const totalFixtures = previewData?.totalFixtures ?? 0;
+  const marqueeMatchups = previewData?.marqueeMatchups ?? [];
+  const brightonPreview = previewData?.brightonPreview ?? null;
+  const inauguralMatchups = previewData?.inauguralMatchups ?? [];
+  const longHiatusMatchups = previewData?.longHiatusMatchups ?? [];
+  const seriesDominance = previewData?.seriesDominance ?? [];
+  const revengeAngles = previewData?.revengeAngles ?? [];
+  const formWatch = previewData?.formWatch ?? {};
+  const defendingPerfection = formWatch?.defendingPerfection ?? [];
+  const winlessTeams = formWatch?.winlessTeams ?? [];
+  const shutoutStreaks = formWatch?.shutoutStreaks ?? [];
+  const milestoneAlerts = previewData?.milestoneAlerts ?? [];
+  const predictedGames = previewData?.predictedGames ?? [];
 
   return (
     <ArchiveLayout>
@@ -210,9 +211,9 @@ export default function AdminFactsPage() {
               onClick={() => handleCopy("brief")}
               disabled={isLoading || (activeTab === "recap" ? !recapBrief : !previewBrief)}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md border border-slate-300 bg-white text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-50 transition"
-              title="Copy executive 4-bullet summary"
+              title="Copy executive summary"
             >
-              💬 {copiedType === "brief" ? "Copied Brief!" : "Copy Summary"}
+              💬 {copiedType === "brief" ? "Copied Summary!" : "Copy Summary"}
             </button>
 
             <button
@@ -237,7 +238,7 @@ export default function AdminFactsPage() {
           >
             🔮 Upcoming Slate Preview
             <span className="bg-sky-100 text-sky-700 text-[10px] font-black px-1.5 py-0.5 rounded-full">
-              Week {selectedWeek === 2 ? 3 : selectedWeek}
+              Week {selectedWeek}
             </span>
           </button>
 
@@ -340,22 +341,22 @@ export default function AdminFactsPage() {
               {/* Preview KPI Snapshot Tiles */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm text-center">
-                  <div className="text-2xl font-black text-slate-900">{previewOverview?.totalScheduled || 0}</div>
+                  <div className="text-2xl font-black text-slate-900">{totalFixtures}</div>
                   <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mt-1">Scheduled Fixtures</div>
                 </div>
 
                 <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm text-center">
-                  <div className="text-2xl font-black text-sky-600">{marqueeMatchups?.length || 0}</div>
+                  <div className="text-2xl font-black text-sky-600">{marqueeMatchups?.length ?? 0}</div>
                   <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mt-1">Marquee Showdowns</div>
                 </div>
 
                 <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm text-center">
-                  <div className="text-2xl font-black text-purple-600">{inauguralMatchups?.length || 0}</div>
+                  <div className="text-2xl font-black text-purple-600">{inauguralMatchups?.length ?? 0}</div>
                   <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mt-1">First-Ever Clashes</div>
                 </div>
 
                 <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm text-center">
-                  <div className="text-2xl font-black text-emerald-600">{predictedGames?.length || 0}</div>
+                  <div className="text-2xl font-black text-emerald-600">{predictedGames?.length ?? 0}</div>
                   <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mt-1">Model Predictions</div>
                 </div>
               </div>
@@ -371,7 +372,7 @@ export default function AdminFactsPage() {
                       </h2>
                     </div>
                     <span className="bg-sky-600 text-white text-xs font-extrabold px-2.5 py-1 rounded-md self-start sm:self-auto">
-                      {brightonPreview.opponent}
+                      {brightonPreview.opponent || "Brighton Fixture"}
                     </span>
                   </div>
 
@@ -380,13 +381,15 @@ export default function AdminFactsPage() {
                       <div className="text-[10px] font-bold text-slate-500 uppercase">Matchup Details</div>
                       <div className="text-sm font-extrabold text-slate-900 mt-0.5">{brightonPreview.matchup}</div>
                       <div className="text-xs text-slate-600 mt-1">
-                        📍 {brightonPreview.venue || "TBD"} · 📅 {brightonPreview.kickoffDate || "Upcoming"}
+                        📍 {brightonPreview.venue || "TBD"} · 📅 {brightonPreview.date || brightonPreview.kickoffDate || "Upcoming"}
                       </div>
                     </div>
 
                     <div className="bg-white/80 backdrop-blur rounded-lg p-3 border border-sky-200">
                       <div className="text-[10px] font-bold text-slate-500 uppercase">All-Time Series Record</div>
-                      <div className="text-sm font-extrabold text-sky-900 mt-0.5">{brightonPreview.allTimeSeries}</div>
+                      <div className="text-sm font-extrabold text-sky-900 mt-0.5">
+                        {brightonPreview.allTimeSeries || (brightonPreview.priorMeetingsCount ? `${brightonPreview.priorMeetingsCount} Prior Meetings` : "First-ever Meeting")}
+                      </div>
                       <div className="text-xs text-slate-600 mt-1">Definitive Brighton Archive</div>
                     </div>
 
@@ -399,6 +402,15 @@ export default function AdminFactsPage() {
                           </div>
                           <div className="text-xs text-sky-700 font-semibold mt-1">
                             {brightonPreview.prediction.projectedWinner} ({brightonPreview.prediction.winProb}% Win Prob)
+                          </div>
+                        </div>
+                      ) : brightonPreview.predictedScore ? (
+                        <div>
+                          <div className="text-sm font-black text-slate-900 mt-0.5">
+                            {brightonPreview.predictedScore}
+                          </div>
+                          <div className="text-xs text-sky-700 font-semibold mt-1">
+                            {brightonPreview.winProb ? `${brightonPreview.winProb}% Win Prob` : "Projected"}
                           </div>
                         </div>
                       ) : (
@@ -414,7 +426,7 @@ export default function AdminFactsPage() {
               )}
 
               {/* Marquee Matchups & Clash of Unbeatens */}
-              {marqueeMatchups.length > 0 && (
+              {(marqueeMatchups?.length ?? 0) > 0 && (
                 <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
                   <h2 className="text-base font-extrabold text-slate-900 uppercase tracking-wide flex items-center gap-2 mb-4">
                     ⭐ Marquee Showdowns of the Slate
@@ -426,7 +438,7 @@ export default function AdminFactsPage() {
                           <div className="flex items-center justify-between gap-2 mb-2">
                             <span className="text-sm font-black text-slate-900">{m.matchup}</span>
                             <span className="bg-sky-600 text-white text-[10px] font-bold uppercase px-2 py-0.5 rounded">
-                              {m.division}
+                              {m.division || m.type}
                             </span>
                           </div>
                           <p className="text-xs text-slate-700 leading-relaxed font-medium mb-3">
@@ -453,14 +465,14 @@ export default function AdminFactsPage() {
                   <h2 className="text-base font-extrabold text-slate-900 uppercase tracking-wide flex items-center gap-2 mb-3">
                     🆕 First-Ever Clashes in 40+ Years
                   </h2>
-                  {inauguralMatchups.length > 0 ? (
+                  {(inauguralMatchups?.length ?? 0) > 0 ? (
                     <div className="space-y-3">
                       {inauguralMatchups.map((inau: any, idx: number) => (
                         <div key={idx} className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
                           <div className="flex items-center justify-between text-xs font-black text-purple-950 mb-1">
                             <span>{inau.matchup}</span>
                             <span className="text-[10px] bg-purple-200 text-purple-800 px-1.5 py-0.5 rounded uppercase">
-                              {inau.division}
+                              {inau.division || "Inaugural"}
                             </span>
                           </div>
                           <p className="text-xs text-purple-900">{inau.description}</p>
@@ -476,14 +488,14 @@ export default function AdminFactsPage() {
                   <h2 className="text-base font-extrabold text-slate-900 uppercase tracking-wide flex items-center gap-2 mb-3">
                     ⏳ Multi-Year Hiatus Breakers
                   </h2>
-                  {longHiatusMatchups.length > 0 ? (
+                  {(longHiatusMatchups?.length ?? 0) > 0 ? (
                     <div className="space-y-3">
                       {longHiatusMatchups.map((h: any, idx: number) => (
                         <div key={idx} className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
                           <div className="flex items-center justify-between text-xs font-black text-amber-950 mb-1">
                             <span>{h.matchup}</span>
                             <span className="text-[10px] bg-amber-200 text-amber-800 px-1.5 py-0.5 rounded uppercase">
-                              {h.division}
+                              {h.division || `${h.diffYears} Year Hiatus`}
                             </span>
                           </div>
                           <p className="text-xs text-amber-900">{h.description}</p>
@@ -503,9 +515,9 @@ export default function AdminFactsPage() {
                   <h3 className="text-xs font-extrabold text-slate-900 uppercase tracking-wide flex items-center gap-1.5 mb-2">
                     🛡️ Shutout Wall Watch
                   </h3>
-                  {formWatch.shutoutStreaks.length > 0 ? (
+                  {(shutoutStreaks?.length ?? 0) > 0 ? (
                     <ul className="space-y-2 text-xs text-slate-700">
-                      {formWatch.shutoutStreaks.map((s: any, idx: number) => (
+                      {shutoutStreaks.map((s: any, idx: number) => (
                         <li key={idx} className="p-2 bg-emerald-50 border border-emerald-200 rounded font-medium text-emerald-950">
                           {s.description}
                         </li>
@@ -521,11 +533,11 @@ export default function AdminFactsPage() {
                   <h3 className="text-xs font-extrabold text-slate-900 uppercase tracking-wide flex items-center gap-1.5 mb-2">
                     🟢 Perfection on the Line
                   </h3>
-                  {formWatch.unblemishedWatch.length > 0 ? (
+                  {(defendingPerfection?.length ?? 0) > 0 ? (
                     <ul className="space-y-2 text-xs text-slate-700">
-                      {formWatch.unblemishedWatch.map((u: any, idx: number) => (
+                      {defendingPerfection.map((u: any, idx: number) => (
                         <li key={idx} className="p-2 bg-slate-50 border border-slate-200 rounded font-medium text-slate-900">
-                          {u.description}
+                          <strong>{u.team}</strong> ({u.record}, {u.pointDiff > 0 ? `+${u.pointDiff}` : u.pointDiff} diff) aims to improve to 3-0.
                         </li>
                       ))}
                     </ul>
@@ -534,27 +546,27 @@ export default function AdminFactsPage() {
                   )}
                 </div>
 
-                {/* Winless Desperation */}
+                {/* Winless Seeking 1st Win */}
                 <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
                   <h3 className="text-xs font-extrabold text-slate-900 uppercase tracking-wide flex items-center gap-1.5 mb-2">
-                    🔴 Desperation Bowls (0-2)
+                    🔴 Seeking 1st Win (0-2)
                   </h3>
-                  {formWatch.winlessBowls.length > 0 ? (
+                  {(winlessTeams?.length ?? 0) > 0 ? (
                     <ul className="space-y-2 text-xs text-slate-700">
-                      {formWatch.winlessBowls.map((wb: any, idx: number) => (
+                      {winlessTeams.map((wb: any, idx: number) => (
                         <li key={idx} className="p-2 bg-rose-50 border border-rose-200 rounded font-medium text-rose-950">
-                          {wb.description}
+                          <strong>{wb.team}</strong> ({wb.record}, {wb.pointDiff} diff) hunting for their first win of the season.
                         </li>
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-xs text-slate-400 italic">No head-to-head clashes between winless 0-2 programs.</p>
+                    <p className="text-xs text-slate-400 italic">No winless 0-2 programs in action.</p>
                   )}
                 </div>
               </div>
 
               {/* Model Projected Scores Table */}
-              {predictedGames.length > 0 && (
+              {(predictedGames?.length ?? 0) > 0 && (
                 <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
                     <div>
@@ -606,7 +618,7 @@ export default function AdminFactsPage() {
               )}
 
               {/* Milestone Watch */}
-              {milestoneAlerts.length > 0 && (
+              {(milestoneAlerts?.length ?? 0) > 0 && (
                 <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
                   <h2 className="text-base font-extrabold text-slate-900 uppercase tracking-wide flex items-center gap-2 mb-3">
                     🏆 Program Milestone Watch
@@ -662,7 +674,7 @@ export default function AdminFactsPage() {
               </div>
 
               {/* 1. Scorigami Watch */}
-              {(scorigamis?.allTime?.length > 0 || scorigamis?.level?.length > 0) && (
+              {((scorigamis?.allTime?.length ?? 0) > 0 || (scorigamis?.level?.length ?? 0) > 0) && (
                 <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
                   <h2 className="text-base font-extrabold text-slate-900 uppercase tracking-wide flex items-center gap-2 mb-3">
                     🎯 Scorigami Watch
@@ -699,7 +711,7 @@ export default function AdminFactsPage() {
               )}
 
               {/* 2. Program Records & Historic Milestones */}
-              {(recordsAndMilestones?.programRecords?.length > 0 || recordsAndMilestones?.milestoneWins?.length > 0) && (
+              {((recordsAndMilestones?.programRecords?.length ?? 0) > 0 || (recordsAndMilestones?.milestoneWins?.length ?? 0) > 0) && (
                 <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
                   <h2 className="text-base font-extrabold text-slate-900 uppercase tracking-wide flex items-center gap-2 mb-3">
                     📜 Program Records & Milestones
@@ -786,7 +798,7 @@ export default function AdminFactsPage() {
                 </div>
 
                 {/* Reversals & Revenge */}
-                {recapRivalries?.revengeGames?.length > 0 && (
+                {(recapRivalries?.revengeGames?.length ?? 0) > 0 && (
                   <div className="border border-slate-200 rounded-lg p-3.5 mt-3 bg-slate-50">
                     <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
                       Score Reversals & Revenge Victories
@@ -855,7 +867,7 @@ export default function AdminFactsPage() {
                   <h2 className="text-base font-extrabold text-slate-900 uppercase tracking-wide flex items-center gap-2 mb-3">
                     🛡️ The Shutout Club ({extremes?.shutouts?.length || 0} Clean Sheets)
                   </h2>
-                  {extremes?.shutouts?.length > 0 ? (
+                  {(extremes?.shutouts?.length ?? 0) > 0 ? (
                     <div className="grid grid-cols-2 gap-2">
                       {extremes.shutouts.map((s: any, idx: number) => (
                         <div key={idx} className="bg-slate-50 border-l-4 border-emerald-500 border-slate-200 rounded px-2.5 py-1.5 text-xs">
@@ -877,19 +889,19 @@ export default function AdminFactsPage() {
                     📈 Season Form & Momentum
                   </h2>
                   <ul className="space-y-2 text-xs text-slate-700">
-                    {standingsMomentum?.perfectStarts?.length > 0 && (
+                    {(standingsMomentum?.perfectStarts?.length ?? 0) > 0 && (
                       <li>
                         <span className="font-bold text-emerald-700">🟢 Unblemished (2-0):</span>{" "}
                         {standingsMomentum.perfectStarts.map((t: any) => `${t.team} (+${t.pointDiff})`).join(", ")}
                       </li>
                     )}
-                    {standingsMomentum?.bounceBacks?.length > 0 && (
+                    {(standingsMomentum?.bounceBacks?.length ?? 0) > 0 && (
                       <li>
                         <span className="font-bold text-sky-700">🔄 Bounce-Back Wins (1-1):</span>{" "}
                         {standingsMomentum.bounceBacks.map((b: any) => `${b.team} (${b.score} vs ${b.opponent})`).join(", ")}
                       </li>
                     )}
-                    {standingsMomentum?.winlessStarts?.length > 0 && (
+                    {(standingsMomentum?.winlessStarts?.length ?? 0) > 0 && (
                       <li>
                         <span className="font-bold text-rose-700">🔴 Seeking 1st Win (0-2):</span>{" "}
                         {standingsMomentum.winlessStarts.map((t: any) => t.team).join(", ")}
@@ -920,7 +932,7 @@ export default function AdminFactsPage() {
               </div>
 
               {/* 6. Postponements */}
-              {postponements?.length > 0 && (
+              {(postponements?.length ?? 0) > 0 && (
                 <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs text-slate-600">
                   <span className="font-bold text-slate-800 mr-2">⏸️ Postponed Fixtures:</span>
                   {postponements.map((p: any) => `${p.matchup} (${p.division})`).join(" · ")}
