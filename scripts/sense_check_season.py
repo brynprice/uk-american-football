@@ -244,7 +244,9 @@ def sense_check_season(csv_path):
                 tname = trow.get('name', '').strip()
                 ttype = trow.get('team_type', '').strip()
                 if tname and ttype:
-                    team_type_map[tname] = ttype
+                    if tname not in team_type_map:
+                        team_type_map[tname] = set()
+                    team_type_map[tname].add(ttype)
 
     norm_path = csv_path.replace('\\', '/')
     if any(kw in first_comp for kw in ['BAFA', 'BAFL', 'ADULT', 'SENIOR', 'GRIDIRON CONFERENCE', 'BIG C', 'SCOTTISH GRIDIRON', 'SGA']) or 'data/BAFANL' in norm_path or 'data/BAFL' in norm_path or 'data/BIGC' in norm_path or 'data/SGA' in norm_path or 'data/Seniors' in norm_path:
@@ -265,11 +267,9 @@ def sense_check_season(csv_path):
             for side in ['away_team', 'home_team']:
                 raw_team = (g.get(side) or '').strip()
                 canonical_team = ALIAS_MAP.get(raw_team, raw_team)
-                if canonical_team == 'Lancaster Bombers':
-                    continue
                 if canonical_team in team_type_map:
-                    act_type = team_type_map[canonical_team]
-                    if act_type != expected_team_type:
+                    act_types = team_type_map[canonical_team]
+                    if expected_team_type not in act_types:
                         hint = ""
                         if canonical_team == 'Glasgow Tigers' and expected_team_type == 'University':
                             hint = " Did you mean 'Glasgow University Tigers'?"
@@ -280,7 +280,7 @@ def sense_check_season(csv_path):
                         elif canonical_team == 'Aberdeen Roughnecks University Team' and expected_team_type == 'Adult':
                             hint = " Did you mean 'Aberdeen Roughnecks'?"
                         issues.append(
-                            f"Row {idx}: Team Type Mismatch - '{canonical_team}' is classified as a '{act_type}' team, "
+                            f"Row {idx}: Team Type Mismatch - '{canonical_team}' is classified as a '{'/'.join(sorted(act_types))}' team, "
                             f"but this file is for a '{expected_team_type}' competition ({first_comp or norm_path})!{hint}"
                         )
 
@@ -402,8 +402,8 @@ def sense_check_season(csv_path):
                 if canonical_t == 'Lancaster Bombers':
                     continue
                 if expected_team_type and team_type_map and canonical_t in team_type_map:
-                    act_type = team_type_map[canonical_t]
-                    if act_type != expected_team_type:
+                    act_types = team_type_map[canonical_t]
+                    if expected_team_type not in act_types:
                         hint = ""
                         if canonical_t == 'Glasgow Tigers' and expected_team_type == 'University':
                             hint = " Did you mean 'Glasgow University Tigers'?"
@@ -414,7 +414,7 @@ def sense_check_season(csv_path):
                         elif canonical_t == 'Aberdeen Roughnecks University Team' and expected_team_type == 'Adult':
                             hint = " Did you mean 'Aberdeen Roughnecks'?"
                         issues.append(
-                            f"Standings Row {s_idx}: Team Type Mismatch - '{canonical_t}' is classified as a '{act_type}' team, "
+                            f"Standings Row {s_idx}: Team Type Mismatch - '{canonical_t}' is classified as a '{'/'.join(sorted(act_types))}' team, "
                             f"but this file is for a '{expected_team_type}' competition!{hint}"
                         )
 
