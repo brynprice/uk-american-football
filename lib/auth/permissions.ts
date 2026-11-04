@@ -2,6 +2,7 @@ export const ALL_PERMISSIONS = [
   "poll",
   "gameday",
   "predictions",
+  "facts",
   "proposals",
   "add_game",
   "walkovers",
@@ -47,6 +48,14 @@ export const PERMISSION_METADATA: Record<PermissionKey, PermissionMeta> = {
     shortLabel: "Predictions",
     description: "Run H2H matchup simulations, weekly slates, and calibration stats.",
     href: "/admin/predictions",
+    category: "live",
+  },
+  facts: {
+    key: "facts",
+    label: "Weekly Facts & Insights",
+    shortLabel: "Weekly Facts",
+    description: "Surface scorigamis, rivalry context, milestone records, and export PDF digests.",
+    href: "/admin/facts",
     category: "live",
   },
   proposals: {

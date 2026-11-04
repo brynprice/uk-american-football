@@ -54,6 +54,15 @@ const ADMIN_CARDS: AdminCardItem[] = [
         variant: "white",
     },
     {
+        key: "facts",
+        href: "/admin/facts",
+        title: "Weekly Facts & Insights",
+        description:
+            "Extract scorigamis, rivalry storylines, program records, and generate one-click PDF scouting digests.",
+        badge: "Intelligence",
+        variant: "blue",
+    },
+    {
         key: "proposals",
         href: "/admin/proposals",
         title: "Review Proposals",

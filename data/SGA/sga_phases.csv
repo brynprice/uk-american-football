@@ -1,0 +1,10 @@
+competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal
+sga,1995,Division One,Division,,high,1
+sga,1995,Division Two,Division,,high,2
+sga,1995,Playoffs,Playoffs,,high,3
+sga,1996,Division One,Division,,high,1
+sga,1996,Playoffs,Playoffs,,high,2
+sga,1997,Division One,Division,,high,1
+sga,1997,Playoffs,Playoffs,,high,2
+sga,1998,Division One,Division,,high,1
+sga,1998,Playoffs,Playoffs,,high,2

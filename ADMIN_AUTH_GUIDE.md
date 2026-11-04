@@ -1,6 +1,6 @@
 # Admin Authentication Guide
 
-This guide explains how to manage administrative users for the Britball Archive.
+This guide explains how to manage administrative users for Britball.io.
 
 ## Creating an Admin User
 

@@ -3,8 +3,8 @@ import Link from 'next/link';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 
 export const metadata: Metadata = {
-  title: 'About the Project | Britball Archive',
-  description: 'The story, purpose, and origin of the Britball Archive, founded by Bryn Price.',
+  title: 'About the Project | Britball.io',
+  description: 'The story, purpose, and origin of Britball.io, founded by Bryn Price.',
 };
 
 export default function AboutPage() {
@@ -91,7 +91,7 @@ export default function AboutPage() {
           </h2>
           <div className="space-y-5 text-slate-700 font-sans leading-relaxed text-base md:text-lg">
             <p>
-              The primary purpose of the <strong>Britball Archive</strong> is simple: <strong>to preserve the history of American Football played in Great Britain and become the definitive one-stop archive to find out what happened on that day.</strong>
+              The primary purpose of <strong>Britball.io</strong> is simple: <strong>to preserve the history of American Football played in Great Britain and become the definitive one-stop archive to find out what happened on that day.</strong>
             </p>
             <p>
               Whether you are an alumnus looking back at your rookie season, a current coach scouting an upcoming opponent’s head-to-head lineage, or a fan tracking national champions from the 1980s through today, this platform exists so that the record is never lost again.

@@ -376,6 +376,12 @@ const getVenue = (v: any) => Array.isArray(v) ? v[0] : v;
 
                 {/* Floating / Action Bar */}
                 <div className="flex items-center gap-3">
+                    <Link
+                        href="/admin/facts"
+                        className="text-xs uppercase font-black px-4 py-3 border-2 border-slate-900 bg-sky-100 text-sky-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-sky-200 transition-all flex items-center gap-1.5"
+                    >
+                        🏈 Weekly Insights &rarr;
+                    </Link>
                     <button
                         onClick={handleSaveAll}
                         disabled={dirtyGamesCount === 0 || isPending}

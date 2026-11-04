@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "facts": "node scripts/weekly_facts.mjs",
+    "facts:pdf": "node scripts/generate_weekly_pdf.mjs",
     "benchmark": "node scripts/benchmark_performance.mjs"
   },
   "dependencies": {

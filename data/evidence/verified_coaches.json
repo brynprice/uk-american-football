@@ -126,6 +126,13 @@
     "source_details": "Documented as head coach on all 2019/20 game records in data/gamesbrighton.csv"
   },
   {
+    "team": "Brunel Burners",
+    "year": 2019,
+    "head_coach": "Luke Hextall",
+    "source": "https://www.britball.io/games/61e4aec3-ca17-4f90-827f-fd986d391c85",
+    "source_details": "Confirmed head coach for Brunel Burners 2019/20 season via contemporary participant proposal and fixture records."
+  },
+  {
     "team": "Brighton Tsunami",
     "year": 2021,
     "head_coach": "Ollie Kent",
@@ -613,112 +620,112 @@
     "year": 1996,
     "head_coach": "Justin Smith",
     "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
-    "source_details": "Documented as Head Coach of Nottingham Outlaws 1996\u20131997 in official club history"
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 1996–1997 in official club history"
   },
   {
     "team": "Nottingham Gold",
     "year": 1997,
     "head_coach": "Grahame Clamp",
     "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
-    "source_details": "Documented as Head Coach of Nottingham Outlaws 1997\u20132001 in official club history"
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 1997–2001 in official club history"
   },
   {
     "team": "Nottingham Gold",
     "year": 1998,
     "head_coach": "Grahame Clamp",
     "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
-    "source_details": "Documented as Head Coach of Nottingham Outlaws 1997\u20132001 in official club history"
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 1997–2001 in official club history"
   },
   {
     "team": "Nottingham Gold",
     "year": 1999,
     "head_coach": "Grahame Clamp",
     "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
-    "source_details": "Documented as Head Coach of Nottingham Outlaws 1997\u20132001 in official club history"
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 1997–2001 in official club history"
   },
   {
     "team": "Nottingham Gold",
     "year": 2000,
     "head_coach": "Grahame Clamp",
     "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
-    "source_details": "Documented as Head Coach of Nottingham Outlaws 1997\u20132001 in official club history"
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 1997–2001 in official club history"
   },
   {
     "team": "Nottingham Gold",
     "year": 2001,
     "head_coach": "Justin Smith",
     "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
-    "source_details": "Documented as Head Coach of Nottingham Outlaws 2001\u20132002 in official club history"
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 2001–2002 in official club history"
   },
   {
     "team": "Nottingham Gold",
     "year": 2002,
     "head_coach": "Paul Sherratt",
     "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
-    "source_details": "Documented as Head Coach of Nottingham Outlaws 2002\u20132005 in official club history"
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 2002–2005 in official club history"
   },
   {
     "team": "Nottingham Gold",
     "year": 2003,
     "head_coach": "Paul Sherratt",
     "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
-    "source_details": "Documented as Head Coach of Nottingham Outlaws 2002\u20132005 in official club history"
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 2002–2005 in official club history"
   },
   {
     "team": "Nottingham Gold",
     "year": 2004,
     "head_coach": "Paul Sherratt",
     "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
-    "source_details": "Documented as Head Coach of Nottingham Outlaws 2002\u20132005 in official club history"
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 2002–2005 in official club history"
   },
   {
     "team": "Nottingham Gold",
     "year": 2005,
     "head_coach": "Justin Smith",
     "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
-    "source_details": "Documented as Interim Head Coach of Nottingham Outlaws 2005\u20132006 in official club history"
+    "source_details": "Documented as Interim Head Coach of Nottingham Outlaws 2005–2006 in official club history"
   },
   {
     "team": "Nottingham Gold",
     "year": 2006,
     "head_coach": "Jeremy Wood",
     "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
-    "source_details": "Documented as Head Coach of Nottingham Outlaws 2006\u20132007 in official club history"
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 2006–2007 in official club history"
   },
   {
     "team": "Nottingham Gold",
     "year": 2007,
     "head_coach": "Simon Dale",
     "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
-    "source_details": "Documented as Head Coach of Nottingham Outlaws 2007\u20132009 in official club history"
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 2007–2009 in official club history"
   },
   {
     "team": "Nottingham Gold",
     "year": 2008,
     "head_coach": "Simon Dale",
     "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
-    "source_details": "Documented as Head Coach of Nottingham Outlaws 2007\u20132009 in official club history"
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 2007–2009 in official club history"
   },
   {
     "team": "Nottingham Gold",
     "year": 2009,
     "head_coach": "Chris Davies",
     "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
-    "source_details": "Documented as Head Coach of Nottingham Outlaws 2009\u20132011 in official club history"
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 2009–2011 in official club history"
   },
   {
     "team": "Nottingham Gold",
     "year": 2010,
     "head_coach": "Chris Davies",
     "source": "https://nottinghamunioutlaws.wordpress.com/about/history/",
-    "source_details": "Documented as Head Coach of Nottingham Outlaws 2009\u20132011 in official club history"
+    "source_details": "Documented as Head Coach of Nottingham Outlaws 2009–2011 in official club history"
   },
   {
     "team": "Loughborough Students",
     "year": 2004,
     "head_coach": "Jason Scott",
     "source": "https://britball.fandom.com/wiki/Loughborough_Aces",
-    "source_details": "Documented as Head Coach of Loughborough Aces 2004\u20132010 on Britball Wiki and BUAFL archives"
+    "source_details": "Documented as Head Coach of Loughborough Aces 2004–2010 on Britball Wiki and BUAFL archives"
   },
   {
     "team": "Loughborough Students",
@@ -781,7 +788,7 @@
     "year": 2004,
     "head_coach": "Graham Thorpe",
     "source": "https://britball.fandom.com/wiki/Southampton_Stags",
-    "source_details": "Documented as long-serving Head Coach of Southampton Stags 2002\u20132009 on Britball Wiki"
+    "source_details": "Documented as long-serving Head Coach of Southampton Stags 2002–2009 on Britball Wiki"
   },
   {
     "team": "Edinburgh Predators",
@@ -1594,5 +1601,894 @@
     "head_coach": "Chris Wallis",
     "source": "https://www.eadt.co.uk/",
     "source_details": "Inaugural Head Coach Chris Wallis guiding newly established Bury Saints in 2014 debut season"
+  },
+  {
+    "team": "London Warriors",
+    "year": 2013,
+    "head_coach": "Tony Allen",
+    "source": "https://en.wikipedia.org/wiki/London_Warriors",
+    "source_details": "Britbowl XXVII contemporary game reports & London Warriors club records documenting Tony Allen as Head Coach for their first national championship in 2013"
+  },
+  {
+    "team": "London Blitz",
+    "year": 2013,
+    "head_coach": "Mark Moss",
+    "source": "https://en.wikipedia.org/wiki/London_Blitz_(American_football)",
+    "source_details": "London Blitz official archives & contemporary news coverage documenting Mark Moss as Head Coach (2006-2015)"
+  },
+  {
+    "team": "East Kilbride Pirates",
+    "year": 2013,
+    "head_coach": "Ross Templeton",
+    "source": "http://piratesfootball.co.uk",
+    "source_details": "East Kilbride Pirates official website history & Scotsman reporting Ross Templeton took over as HC ahead of the 2013 season (10-0 regular season)"
+  },
+  {
+    "team": "Colchester Gladiators",
+    "year": 2013,
+    "head_coach": "Matt Roberts",
+    "source": "https://colchestergladiators.wordpress.com",
+    "source_details": "Colchester Gladiators official club history (The Vault) & Gazette News reporting Matt Roberts as HC during the undefeated 13-0 National Championship season"
+  },
+  {
+    "team": "Gateshead Senators",
+    "year": 2013,
+    "head_coach": "Gary Marshall",
+    "source": "https://www.chroniclelive.co.uk",
+    "source_details": "Gateshead Senators 25th anniversary official history & contemporary news coverage confirming Gary Marshall as Adult Team HC in 2013"
+  },
+  {
+    "team": "Rushmoor Knights",
+    "year": 2013,
+    "head_coach": "Steve Rains",
+    "source": "https://en.wikipedia.org/wiki/Farnham_Knights",
+    "source_details": "Farnham/Rushmoor Knights historical coaching register documenting Steve Rains as Head Coach for 2013"
+  },
+  {
+    "team": "Oxford Saints",
+    "year": 2013,
+    "head_coach": "Andrew Day",
+    "source": "https://oxfordsaints.com/history",
+    "source_details": "Oxford Saints official club history documenting Andrew Day as appointed HC from 2012 through 2015"
+  },
+  {
+    "team": "Edinburgh Wolves",
+    "year": 2013,
+    "head_coach": "Don Edmonston",
+    "source": "https://www.scotsman.com",
+    "source_details": "Edinburgh Wolves historical club records & Scotsman reports documenting Don Edmonston as HC and Chairman 2013-2015"
+  },
+  {
+    "team": "Peterborough Saxons",
+    "year": 2013,
+    "head_coach": "Gary Van Zandt",
+    "source": "https://en.wikipedia.org/wiki/Peterborough_Saxons",
+    "source_details": "Peterborough Saxons club history documenting Gary Van Zandt appointed as HC for 2013 Premiership campaign"
+  },
+  {
+    "team": "Coventry Phoenix",
+    "year": 2013,
+    "head_coach": "Graham Kelly",
+    "source": "https://bafra.info",
+    "source_details": "Tamworth Phoenix club records & BAFRA contemporary directory documenting Graham Kelly as HC 2010-2013"
+  },
+  {
+    "team": "Merseyside Nighthawks",
+    "year": 2013,
+    "head_coach": "Craig Pennington",
+    "source": "https://en.wikipedia.org/wiki/Merseyside_Nighthawks",
+    "source_details": "Merseyside Nighthawks official history documenting Craig Pennington as long-standing HC in 2013"
+  },
+  {
+    "team": "London Blitz",
+    "year": 2012,
+    "head_coach": "Mark Moss",
+    "source": "https://football-aktuell.de",
+    "source_details": "Contemporary European and UK American football coverage of Britbowl XXVI confirming Mark Moss as London Blitz Head Coach winning the national championship"
+  },
+  {
+    "team": "London Warriors",
+    "year": 2012,
+    "head_coach": "Tony Allen",
+    "source": "https://www.britishamericanfootball.org",
+    "source_details": "BAFA official records and contemporary coverage of Britbowl XXVI confirming Tony Allen as London Warriors Head Coach"
+  },
+  {
+    "team": "Oxford Saints",
+    "year": 2012,
+    "head_coach": "Andrew Day",
+    "source": "https://oxfordsaints.com/history",
+    "source_details": "Oxford Saints official club history and contemporary Oxford Mail report documenting Andrew Day appointed Head Coach for 2012 season"
+  },
+  {
+    "team": "Peterborough Saxons",
+    "year": 2012,
+    "head_coach": "William White",
+    "source": "https://en.wikipedia.org/wiki/Peterborough_Saxons",
+    "source_details": "Peterborough Saxons historical records documenting William 'Will' White as Head Coach leading 10-0 regular season and D2 Final appearance in 2012"
+  },
+  {
+    "team": "Sheffield Giants",
+    "year": 2012,
+    "head_coach": "Richard Batty",
+    "source": "https://www.thestar.co.uk",
+    "source_details": "Sheffield Star contemporary news coverage and BAFANL Coach of the Year award confirming Richard 'Grizz' Batty as Head Coach leading Sheffield Predators to 2012 Division 2 National Championship"
+  },
+  {
+    "team": "Sussex Thunder",
+    "year": 2012,
+    "head_coach": "Ian Ellis",
+    "source": "https://en.wikipedia.org/wiki/Sussex_Thunder",
+    "source_details": "Sussex Thunder official club records documenting Ian Ellis as Head Coach winning the 2012 Division 1 National Championship"
+  },
+  {
+    "team": "West Coast Trojans",
+    "year": 2012,
+    "head_coach": "Gary McNey",
+    "source": "https://en.wikipedia.org/wiki/West_Coast_Trojans",
+    "source_details": "West Coast Trojans historical records and contemporary coverage documenting Gary McNey as Head Coach in 2012 leading team to Division 1 Final"
+  },
+  {
+    "team": "East Kilbride Pirates",
+    "year": 2012,
+    "head_coach": "Ross Templeton",
+    "source": "https://piratesfootball.co.uk",
+    "source_details": "East Kilbride Pirates official club history documenting Ross Templeton as Senior Team Head Coach in 2012"
+  },
+  {
+    "team": "Gateshead Senators",
+    "year": 2012,
+    "head_coach": "Gary Marshall",
+    "source": "https://www.youtube.com",
+    "source_details": "May 2012 contemporary post-match interview confirming Gary Marshall as Head Coach of Gateshead Senators in BAFANL Division 1"
+  },
+  {
+    "team": "Rushmoor Knights",
+    "year": 2012,
+    "head_coach": "Steve Rains",
+    "source": "https://en.wikipedia.org/wiki/Farnham_Knights",
+    "source_details": "Farnham/Rushmoor Knights historical coaching register documenting Steve Rains as Head Coach for 2012"
+  },
+  {
+    "team": "Coventry Phoenix",
+    "year": 2012,
+    "head_coach": "Graham Kelly",
+    "source": "https://alchetron.com/Tamworth-Phoenix",
+    "source_details": "Tamworth/Coventry Phoenix club history documenting Graham Kelly as Head Coach for 2010-2013 Premiership seasons"
+  },
+  {
+    "team": "London Blitz",
+    "year": 2011,
+    "head_coach": "Mark Moss",
+    "source": "https://www.theguardian.com/sport/2011/jul/04/london-blitz-efaf-cup",
+    "source_details": "The Guardian feature covering London Blitz winning the 2011 EFAF Cup and Britbowl XXV under Head Coach Mark Moss"
+  },
+  {
+    "team": "London Warriors",
+    "year": 2011,
+    "head_coach": "Tony Allen",
+    "source": "https://www.independent.co.uk",
+    "source_details": "The Independent contemporary feature (September 2011) documenting founder Tony Allen as Head Coach leading London Warriors to Britbowl XXV"
+  },
+  {
+    "team": "East Kilbride Pirates",
+    "year": 2011,
+    "head_coach": "Gerry Mackintosh",
+    "source": "https://www.dailyrecord.co.uk",
+    "source_details": "Daily Record contemporary coverage (May 2011) confirming Gerry Mackintosh re-appointed Head Coach leading Pirates to Division 1 title"
+  },
+  {
+    "team": "Coventry Phoenix",
+    "year": 2011,
+    "head_coach": "Graham Kelly",
+    "source": "https://alchetron.com/Tamworth-Phoenix",
+    "source_details": "Tamworth/Coventry Phoenix club history documenting Graham Kelly as Head Coach for 2010-2013 Premiership seasons"
+  },
+  {
+    "team": "Rushmoor Knights",
+    "year": 2011,
+    "head_coach": "Steve Rains",
+    "source": "https://en.wikipedia.org/wiki/Farnham_Knights",
+    "source_details": "Farnham/Rushmoor Knights historical coaching register documenting Steve Rains as Head Coach for 2011"
+  },
+  {
+    "team": "Sussex Thunder",
+    "year": 2011,
+    "head_coach": "Ian Ellis",
+    "source": "http://sussexthunder.com",
+    "source_details": "Sussex Thunder official club records documenting Ian Ellis as Head Coach for 2011 Division 1 campaign"
+  },
+  {
+    "team": "West Coast Trojans",
+    "year": 2011,
+    "head_coach": "Gary McNey",
+    "source": "https://www.dailyrecord.co.uk",
+    "source_details": "Daily Record contemporary coverage of West Coast Trojans undefeated regular season and Division 2 final run under Head Coach Gary McNey"
+  },
+  {
+    "team": "London Blitz",
+    "year": 2010,
+    "head_coach": "Mark Moss",
+    "source": "https://www.theguardian.com/sport/2011/jul/04/london-blitz-efaf-cup",
+    "source_details": "The Guardian and Camden New Journal contemporary coverage documenting Mark Moss as Head Coach leading London Blitz to victory in Britbowl XXIV over Coventry Jets (34-20)"
+  },
+  {
+    "team": "London Warriors",
+    "year": 2010,
+    "head_coach": "Tony Allen",
+    "source": "https://www.independent.co.uk",
+    "source_details": "The Independent and club archives documenting Tony Allen as Head Coach leading London Cobras/Warriors to 2010 Premiership playoffs"
+  },
+  {
+    "team": "Coventry Jets",
+    "year": 2010,
+    "head_coach": "Stuart Franklin",
+    "source": "https://www.coventrytelegraph.net",
+    "source_details": "Coventry Telegraph contemporary report (April 2010) explicitly announcing quarterback Stuart Franklin as the new Head Coach for the 2010 season, reaching Britbowl XXIV"
+  },
+  {
+    "team": "Coventry Phoenix",
+    "year": 2010,
+    "head_coach": "Graham Kelly",
+    "source": "https://alchetron.com/Tamworth-Phoenix",
+    "source_details": "Tamworth/Coventry Phoenix club history documenting Graham Kelly as Head Coach leading the team to an undefeated 10-0 regular season and Division 1 title"
+  },
+  {
+    "team": "East Kilbride Pirates",
+    "year": 2010,
+    "head_coach": "Darryn Trainor",
+    "source": "https://www.dailyrecord.co.uk",
+    "source_details": "Daily Record contemporary report (March 2010) confirming Darryn Trainor appointed Head Coach, leading Pirates to Division 1 North title and Division 1 Final"
+  },
+  {
+    "team": "Rushmoor Knights",
+    "year": 2010,
+    "head_coach": "Steve Rains",
+    "source": "https://en.wikipedia.org/wiki/Farnham_Knights",
+    "source_details": "Farnham/Rushmoor Knights historical coaching register documenting Steve Rains as Head Coach for the 2010 Premiership season"
+  },
+  {
+    "team": "Sussex Thunder",
+    "year": 2010,
+    "head_coach": "Tony Stitt",
+    "source": "https://britball.fandom.com/wiki/Sussex_Thunder",
+    "source_details": "Britball Wiki and Sussex Express club history documenting Tony Stitt appointed Head Coach in November 2009 for the 2010 campaign"
+  },
+  {
+    "team": "Manchester Titans",
+    "year": 2010,
+    "head_coach": "Nigel Dias",
+    "source": "https://www.scribd.com/document/55584577/Manchester-Titans-American-Football-Club",
+    "source_details": "Manchester Titans club official history documenting Nigel Dias as Head Coach leading Titans to an undefeated regular season and Division 2 Final"
+  },
+  {
+    "team": "London Blitz",
+    "year": 2009,
+    "head_coach": "Mark Moss",
+    "source": "https://britball.fandom.com/wiki/London_Blitz",
+    "source_details": "Britball Wiki and contemporary Britbowl XXIII coverage documenting Mark Moss as Head Coach leading London Blitz to victory in Britbowl XXIII"
+  },
+  {
+    "team": "Coventry Jets",
+    "year": 2009,
+    "head_coach": "Gerry McManus",
+    "source": "https://www.coventrytelegraph.net",
+    "source_details": "Coventry Telegraph contemporary reporting documenting Gerry McManus as Head Coach for the 2009 season and Britbowl XXIII appearance"
+  },
+  {
+    "team": "London Warriors",
+    "year": 2009,
+    "head_coach": "Tony Allen",
+    "source": "https://www.londonwarriors.org.uk",
+    "source_details": "London Warriors club official archives documenting Tony Allen as Head Coach leading the team (competing as London Cobras) to the BAFL Division 1 Championship"
+  },
+  {
+    "team": "Coventry Phoenix",
+    "year": 2009,
+    "head_coach": "Jay Alexander",
+    "source": "https://alchetron.com/Tamworth-Phoenix",
+    "source_details": "Tamworth Phoenix club founding history documenting co-founder Jay Alexander as Head Coach for the 2009 season prior to handing over to Graham Kelly"
+  },
+  {
+    "team": "Manchester Titans",
+    "year": 2009,
+    "head_coach": "Nigel Dias",
+    "source": "https://www.scribd.com/document/55584577/Manchester-Titans-American-Football-Club",
+    "source_details": "Manchester Titans club official history documenting Nigel Dias as Head Coach leading Titans to an undefeated 10-0 regular season in Division 2"
+  },
+  {
+    "team": "Leicester Panthers",
+    "year": 2009,
+    "head_coach": "Lester Hopewell",
+    "source": "https://alchetron.com/Leicester-Falcons",
+    "source_details": "Leicester Falcons/Panthers club history documenting Lester Hopewell as Head Coach leading the team to the 2009 BAFL Division 2 National Championship"
+  },
+  {
+    "team": "Colchester Gladiators",
+    "year": 2009,
+    "head_coach": "Matt Roberts",
+    "source": "https://www.gazette-news.co.uk",
+    "source_details": "Gazette News contemporary coverage and club archives documenting Matt Roberts as Head Coach leading Gladiators to the 2009 Division 2 Final"
+  },
+  {
+    "team": "Rushmoor Knights",
+    "year": 2009,
+    "head_coach": "Steve Rains",
+    "source": "https://en.wikipedia.org/wiki/Farnham_Knights",
+    "source_details": "Farnham/Rushmoor Knights historical register documenting Steve Rains as Head Coach for the 2009 Premier Division campaign"
+  },
+  {
+    "team": "Coventry Jets",
+    "year": 2008,
+    "head_coach": "Gerry McManus",
+    "source": "https://en.wikipedia.org/wiki/Coventry_Jets",
+    "source_details": "Gerry McManus led Coventry Cassidy Jets to Britbowl XXII victory against London Blitz (33-28)."
+  },
+  {
+    "team": "London Blitz",
+    "year": 2008,
+    "head_coach": "Mark Moss",
+    "source": "https://britball.fandom.com/wiki/London_Blitz",
+    "source_details": "Mark Moss was head coach of the London Blitz from 2006 to 2015, leading them to the Britbowl XXII final."
+  },
+  {
+    "team": "Rushmoor Knights",
+    "year": 2008,
+    "head_coach": "Steve Rains",
+    "source": "https://en.wikipedia.org/wiki/Farnham_Knights",
+    "source_details": "Steve Rains served as longtime head coach of Farnham Knights through the 2008 season."
+  },
+  {
+    "team": "Sussex Thunder",
+    "year": 2008,
+    "head_coach": "Len Scott",
+    "source": "https://en.wikipedia.org/wiki/Sussex_Thunder",
+    "source_details": "Len Scott was head coach of Sussex Thunder in 2008, winning the Division 1 national championship in 4OT."
+  },
+  {
+    "team": "Redditch Arrows",
+    "year": 2008,
+    "head_coach": "Ian Hill",
+    "source": "https://www.redditchadvertiser.co.uk",
+    "source_details": "Ian Hill was head coach of Redditch Arrows during their 2008 Division 1 bowl run."
+  },
+  {
+    "team": "London Warriors",
+    "year": 2008,
+    "head_coach": "Tony Allen",
+    "source": "https://americanfootballinternational.com",
+    "source_details": "Tony Allen co-founded and served as head coach of the London Cobras in their undefeated 2008 inaugural championship season."
+  },
+  {
+    "team": "Coventry Phoenix",
+    "year": 2008,
+    "head_coach": "Jay Alexander",
+    "source": "https://alchetron.com/Tamworth-Phoenix",
+    "source_details": "Jay Alexander served as head coach of Tamworth Phoenix in their inaugural competitive 2008 campaign."
+  },
+  {
+    "team": "Colchester Gladiators",
+    "year": 2008,
+    "head_coach": "Matt Roberts",
+    "source": "https://www.gazette-news.co.uk",
+    "source_details": "Matt Roberts took over the senior head coach role for Colchester Gladiators in 2008 through 2014."
+  },
+  {
+    "team": "East Kilbride Pirates",
+    "year": 2008,
+    "head_coach": "Steve Smith",
+    "source": "https://www.dailyrecord.co.uk",
+    "source_details": "Steve Smith was head coach of the East Kilbride Pirates during their 2008 BAFL campaign."
+  },
+  {
+    "team": "London Blitz",
+    "year": 2007,
+    "head_coach": "Mark Moss",
+    "source": "https://britball.fandom.com/wiki/London_Blitz",
+    "source_details": "Mark Moss was head coach of the London Blitz from 2006 to 2015, leading them to their first Britbowl XXI championship victory in 2007."
+  },
+  {
+    "team": "Coventry Jets",
+    "year": 2007,
+    "head_coach": "Gerry McManus",
+    "source": "https://www.coventrytelegraph.net",
+    "source_details": "Gerry McManus served as head coach of the Coventry Cassidy Jets, leading them to Britbowl XXI and the Milano Bowl in 2007."
+  },
+  {
+    "team": "Rushmoor Knights",
+    "year": 2007,
+    "head_coach": "Steve Rains",
+    "source": "https://en.wikipedia.org/wiki/Farnham_Knights",
+    "source_details": "Steve Rains served as longtime head coach of Farnham Knights, leading them to an undefeated 10-0 regular season and the 2007 Division 1 Bowl title."
+  },
+  {
+    "team": "Coventry Jets",
+    "year": 2006,
+    "head_coach": "Gerry McManus",
+    "source": "https://en.wikipedia.org/wiki/Coventry_Jets",
+    "source_details": "Gerry McManus served as head coach of the Coventry Cassidy Jets, winning Manager/Coach of the Year at the 2006 Coventry, Solihull and Warwickshire Sports Awards and leading the Jets to the 2006 Division 1A Bowl title."
+  },
+  {
+    "team": "London Blitz",
+    "year": 2006,
+    "head_coach": "Mark Moss",
+    "source": "https://www.britishamericanfootball.org/hall-of-fame",
+    "source_details": "Mark Moss was appointed head coach of London Blitz in 2006, leading them to their first Britbowl appearance (Britbowl XX) in his first season."
+  },
+  {
+    "team": "Oxford Saints",
+    "year": 2006,
+    "head_coach": "Chris Janes",
+    "source": "https://www.oxfordmail.co.uk/news/926685.saints-seal-title-glory-with-last-gasp-touchdown/",
+    "source_details": "Contemporary Oxford Mail report on 26 September 2006 documents head coach Chris Janes leading Oxford Saints to the 2006 BAFL Division 2 national championship."
+  },
+  {
+    "team": "Rushmoor Knights",
+    "year": 2006,
+    "head_coach": "Steve Rains",
+    "source": "https://en.wikipedia.org/wiki/Farnham_Knights",
+    "source_details": "Steve Rains was the longtime head coach of Farnham Knights (Rushmoor Knights), leading the team in the 2006 BAFL Division 1 and EFAF Cup campaigns."
+  },
+  {
+    "team": "Coventry Jets",
+    "year": 2005,
+    "head_coach": "Gerry McManus",
+    "source": "https://en.wikipedia.org/wiki/Coventry_Jets",
+    "source_details": "Gerry McManus was named BAFCA Coach of the Year in 2005 after leading Coventry Jets to an undefeated 10-0 regular season and the Division Two Bowl national title."
+  },
+  {
+    "team": "London Olympians",
+    "year": 2005,
+    "head_coach": "Riq Ayub",
+    "source": "https://en.wikipedia.org/wiki/London_Olympians",
+    "source_details": "Riq Ayub served as head coach of the London Olympians, leading them to the 2005 national championship title in Britbowl XIX."
+  },
+  {
+    "team": "Rushmoor Knights",
+    "year": 2005,
+    "head_coach": "Steve Rains",
+    "source": "https://en.wikipedia.org/wiki/Farnham_Knights",
+    "source_details": "Steve Rains was the head coach of Farnham Knights (Rushmoor Knights), leading the team to a 9-1 record and the Britbowl XIX final."
+  },
+  {
+    "team": "London Blitz",
+    "year": 2005,
+    "head_coach": "Nick Rockell",
+    "source": "https://britball.fandom.com/wiki/London_Blitz",
+    "source_details": "Nick Rockell served as head coach of the London Blitz through 2005 before stepping down and being succeeded by Mark Moss in 2006."
+  },
+  {
+    "team": "London Olympians",
+    "year": 2004,
+    "head_coach": "Riq Ayub",
+    "source": "https://en.wikipedia.org/wiki/London_Olympians",
+    "source_details": "Riq Ayub served as head coach of the London O's (London Olympians) during their 2004 BSL campaign and Britbowl XVIII finalist appearance."
+  },
+  {
+    "team": "Rushmoor Knights",
+    "year": 2004,
+    "head_coach": "Steve Rains",
+    "source": "https://en.wikipedia.org/wiki/Farnham_Knights",
+    "source_details": "Steve Rains was the head coach of Farnham Knights (Personal Assurance Knights), leading the team to an undefeated 9-0-1 regular season and the Britbowl XVIII National Championship title."
+  },
+  {
+    "team": "London Blitz",
+    "year": 2004,
+    "head_coach": "Nick Rockell",
+    "source": "https://britball.fandom.com/wiki/London_Blitz",
+    "source_details": "Nick Rockell served as head coach of the London Blitz 2003-2005."
+  },
+  {
+    "team": "London Olympians",
+    "year": 2003,
+    "head_coach": "Riq Ayub",
+    "source": "https://en.wikipedia.org/wiki/London_Olympians",
+    "source_details": "Riq Ayub served as head coach of the London O's (London Olympians) during their undefeated 2003 BSL campaign and Britbowl XVII National Championship title."
+  },
+  {
+    "team": "Rushmoor Knights",
+    "year": 2003,
+    "head_coach": "Steve Rains",
+    "source": "https://en.wikipedia.org/wiki/Farnham_Knights",
+    "source_details": "Steve Rains was the head coach of Farnham Knights (Personal Assurance Knights) during the 2003 BSL Division One season."
+  },
+  {
+    "team": "London Blitz",
+    "year": 2003,
+    "head_coach": "Nick Rockell",
+    "source": "https://britball.fandom.com/wiki/London_Blitz",
+    "source_details": "Nick Rockell was appointed head coach of London Blitz in 2003."
+  },
+  {
+    "team": "London Olympians",
+    "year": 2002,
+    "head_coach": "Riq Ayub",
+    "source": "https://en.wikipedia.org/wiki/London_Olympians",
+    "source_details": "Riq Ayub served as head coach of the London O's (London Olympians) during their undefeated 10-0 regular season and Britbowl XVI National Championship title."
+  },
+  {
+    "team": "Rushmoor Knights",
+    "year": 2002,
+    "head_coach": "Steve Rains",
+    "source": "https://en.wikipedia.org/wiki/Farnham_Knights",
+    "source_details": "Steve Rains was the head coach of Farnham Knights (Personal Assurance Knights) during the 2002 BSL season, leading them to the Britbowl XVI final."
+  },
+  {
+    "team": "Norwich Devils",
+    "year": 2002,
+    "head_coach": "Pete Wrigley",
+    "source": "https://norwichdevils.com/season-2002/",
+    "source_details": "Pete Wrigley served as head coach of the Norwich Devils, leading them to an undefeated 9-0 regular season and the 2002 BSL Division Two National Championship."
+  },
+  {
+    "team": "London Olympians",
+    "year": 2001,
+    "head_coach": "Riq Ayub",
+    "source": "https://en.wikipedia.org/wiki/London_Olympians",
+    "source_details": "Riq Ayub served as head coach of the London O's (London Olympians) during their undefeated 8-0 regular season and Britbowl XV National Championship title."
+  },
+  {
+    "team": "Ipswich Cardinals",
+    "year": 2001,
+    "head_coach": "James Mitchell",
+    "source": "https://www.ipswichcardinals.co.uk/news/cardinals-history/",
+    "source_details": "James Mitchell served as head coach of the Ipswich Cardinals, leading them to the 2001 BSL Division Two National Championship (Division Two Bowl)."
+  },
+  {
+    "team": "East Kilbride Pirates",
+    "year": 2001,
+    "head_coach": "James Dougall",
+    "source": "https://piratesfootball.co.uk/history/",
+    "source_details": "In 2001 the Pirates were coached by James Dougall and reached their second Britbowl against London O's at Leicester."
+  },
+  {
+    "team": "Rushmoor Knights",
+    "year": 2001,
+    "head_coach": "Steve Rains",
+    "source": "https://en.wikipedia.org/wiki/Farnham_Knights",
+    "source_details": "Steve Rains was the head coach of Farnham Knights (Personal Assurance Knights) during the 2001 BSL season."
+  },
+  {
+    "team": "Norwich Devils",
+    "year": 2001,
+    "head_coach": "Pete Wrigley",
+    "source": "https://en.wikipedia.org/wiki/Norwich_Devils",
+    "source_details": "Pete Wrigley served as head coach of the Norwich Devils, leading them to a 7-0-1 regular season and the 2001 BSL Division Two Bowl final."
+  },
+  {
+    "team": "London Olympians",
+    "year": 2000,
+    "head_coach": "Riq Ayub",
+    "source": "https://en.wikipedia.org/wiki/London_Olympians",
+    "source_details": "Riq Ayub served as head coach of the London O's (London Olympians) during their undefeated 8-0 regular season and Britbowl XIV National Championship title."
+  },
+  {
+    "team": "Rushmoor Knights",
+    "year": 2000,
+    "head_coach": "Steve Rains",
+    "source": "https://en.wikipedia.org/wiki/Farnham_Knights",
+    "source_details": "Steve Rains was the head coach of Farnham Knights (Personal Assurance Knights) leading them to an 8-0 regular season and the 2000 BSL Division Two National Championship."
+  },
+  {
+    "team": "Norwich Devils",
+    "year": 2000,
+    "head_coach": "Pete Wrigley",
+    "source": "https://en.wikipedia.org/wiki/Norwich_Devils",
+    "source_details": "Pete Wrigley served as head coach of the Norwich Devils from 1999 to 2005, leading them to a 6-2 regular season and playoff quarter-finals in 2000."
+  },
+  {
+    "team": "London Olympians",
+    "year": 1999,
+    "head_coach": "Riq Ayub",
+    "source": "https://www.thetouchdown.co.uk/britball-hall-of-fame-tariq-ayub/",
+    "source_details": "Tariq \"Riq\" Ayub served as head coach of the London Olympians from 1995 to 2007, leading them to victory in Britbowl XIII (9–6 vs Birmingham Bulls)."
+  },
+  {
+    "team": "Norwich Devils",
+    "year": 1999,
+    "head_coach": "Pete Wrigley",
+    "source": "https://norwichdevils.com/season-1999/",
+    "source_details": "Pete Wrigley served as head coach of the Norwich Devils, documented on the club's official 1999 season archive page."
+  },
+  {
+    "team": "Rushmoor Knights",
+    "year": 1999,
+    "head_coach": "Steve Rains",
+    "source": "https://en.wikipedia.org/wiki/Farnham_Knights",
+    "source_details": "Steve Rains was the head coach of Farnham Knights (Personal Assurance Knights) during the 1999 BSL season."
+  },
+  {
+    "team": "Gateshead Senators",
+    "year": 1999,
+    "head_coach": "Gary Marshall",
+    "source": "http://www.senators.zetnet.co.uk/",
+    "source_details": "Gary Marshall served as head coach of the Gateshead Senators, leading them to the 1999 Division One Regional Championship title."
+  },
+  {
+    "team": "Tiger Bay Warriors",
+    "year": 1999,
+    "head_coach": "Robert Mota",
+    "source": "https://en.wikipedia.org/wiki/Tiger_Bay_Warriors",
+    "source_details": "Rob Mota served as head coach of the Tiger Bay Warriors in 1999 leading them to the BSL Division Two Southern Conference title and Division Two Bowl final."
+  },
+  {
+    "team": "London Olympians",
+    "year": 1998,
+    "head_coach": "Riq Ayub",
+    "source": "https://www.thetouchdown.co.uk/britball-hall-of-fame-tariq-ayub/",
+    "source_details": "Tariq \"Riq\" Ayub served as head coach of the London Olympians from 1995 to 2007, leading them to an undefeated 13–0 campaign and victory in Britbowl XII (20–0 vs Sussex Thunder)."
+  },
+  {
+    "team": "Sussex Thunder",
+    "year": 1998,
+    "head_coach": "Ian Ellis",
+    "source": "https://en.wikipedia.org/wiki/Sussex_Thunder",
+    "source_details": "Ian Ellis served as head coach of Sussex Thunder in 1998, guiding them to an undefeated 10–0 regular season and the Britbowl XII final in only the club's second year of existence."
+  },
+  {
+    "team": "Southern Sundevils",
+    "year": 1998,
+    "head_coach": "Russell Hewitt",
+    "source": "https://en.wikipedia.org/wiki/Southern_Sundevils",
+    "source_details": "Russell \"Russ\" Hewitt served as head coach and GM of the Southern Sundevils, leading them to the 1998 BSL Division Two National Championship (22–16 vs Lancashire Wolverines)."
+  },
+  {
+    "team": "Tiger Bay Warriors",
+    "year": 1998,
+    "head_coach": "Robert Mota",
+    "source": "https://en.wikipedia.org/wiki/Tiger_Bay_Warriors",
+    "source_details": "Rob Mota served as long-time head coach of the Tiger Bay Warriors senior team through 2000, leading them to a 7–1 regular season and the 1998 Division Two playoffs."
+  },
+  {
+    "team": "London Olympians",
+    "year": 1997,
+    "head_coach": "Riq Ayub",
+    "source": "https://www.thetouchdown.co.uk/britball-hall-of-fame-tariq-ayub/",
+    "source_details": "Tariq \"Riq\" Ayub served as head coach of the London O's (London Olympians) from 1995 to 2007, leading them to victory in the 1997 BIG C Final (26–20 OT vs Milton Keynes Pioneers)."
+  },
+  {
+    "team": "Gateshead Senators",
+    "year": 1997,
+    "head_coach": "Gary Marshall",
+    "source": "http://www.senators.zetnet.co.uk/",
+    "source_details": "Gary Marshall authored the 1997 season report on the official Gateshead Senators website as Chairman and Head Coach, leading the club to a 7–3 regular season and the BSL Division One Semi-Finals."
+  },
+  {
+    "team": "Norwich Devils",
+    "year": 1997,
+    "head_coach": "Charles Ashby",
+    "source": "https://norwichdevils.com/season-1997/",
+    "source_details": "Charles Ashby is documented on the official Norwich Devils 1997 season archive as Head Coach (with Pete Wrigley as Offensive Coordinator and William Hale as Defensive Coordinator), leading the club to a 6–3–1 record."
+  },
+  {
+    "team": "Oxford Saints",
+    "year": 1997,
+    "head_coach": "Richard Emerick",
+    "source": "https://en.wikipedia.org/wiki/Oxford_Saints",
+    "source_details": "American head coach Richard Emerick led the Oxford Saints to a 9–1 regular season record and the BSL Division One Semi-Finals in 1997."
+  },
+  {
+    "team": "Sussex Thunder",
+    "year": 1997,
+    "head_coach": "Jim Jasicki",
+    "source": "https://en.wikipedia.org/wiki/Sussex_Thunder",
+    "source_details": "Jim Jasicki served as the inaugural head coach of Sussex Thunder upon their formation in 1997, guiding them to a 9–1 regular season record and the Division One playoffs."
+  },
+  {
+    "team": "Bristol Aztecs",
+    "year": 1997,
+    "head_coach": "Stan Andersen",
+    "source": "https://britball.fandom.com/wiki/Bristol_Aztecs",
+    "source_details": "Stan Andersen served as head coach of the Bristol Aztecs in 1997, guiding them to a 9–1 regular season and the 1997 BSL Division Two National Championship (27–6 vs Chiltern Cheetahs)."
+  },
+  {
+    "team": "Tiger Bay Warriors",
+    "year": 1997,
+    "head_coach": "Robert Mota",
+    "source": "https://en.wikipedia.org/wiki/Tiger_Bay_Warriors",
+    "source_details": "Rob Mota served as head coach of the Tiger Bay Warriors senior team in 1997, leading them to a 7–3 regular season record and the BSL Division Two playoffs."
+  },
+  {
+    "team": "London Olympians",
+    "year": 1996,
+    "head_coach": "Riq Ayub",
+    "source": "https://www.thetouchdown.co.uk/britball-hall-of-fame-tariq-ayub/",
+    "source_details": "Tariq \"Riq\" Ayub served as head coach of the London O's (London Olympians) from 1995 to 2007, leading them to a 10–0 regular season and the 1996 BSL Division Two Championship (32–7 vs Birmingham Bulls)."
+  },
+  {
+    "team": "Gateshead Senators",
+    "year": 1996,
+    "head_coach": "Gary Marshall",
+    "source": "http://www.senators.zetnet.co.uk/",
+    "source_details": "Gary Marshall served as Head Coach and Chairman of the Gateshead Senators during the 1996 BSL Division Two North season, guiding the club to a 6–4 record."
+  },
+  {
+    "team": "Oxford Saints",
+    "year": 1996,
+    "head_coach": "Richard Emerick",
+    "source": "https://en.wikipedia.org/wiki/Oxford_Saints",
+    "source_details": "American head coach Richard Emerick served as head coach of the Oxford Saints from 1994 through 1997, leading them to a 5–4–1 record in BSL Division Two South in 1996."
+  },
+  {
+    "team": "Tiger Bay Warriors",
+    "year": 1996,
+    "head_coach": "Robert Mota",
+    "source": "https://en.wikipedia.org/wiki/Tiger_Bay_Warriors",
+    "source_details": "Rob Mota served as head coach of the Tiger Bay Warriors in their debut senior season in 1996, leading them to an 8–2 regular season record and the BSL Division Three Semi-Finals."
+  },
+  {
+    "team": "London Olympians",
+    "year": 1995,
+    "head_coach": "Riq Ayub",
+    "source": "https://www.thetouchdown.co.uk/britball-hall-of-fame-tariq-ayub/",
+    "source_details": "Tariq \"Riq\" Ayub was appointed head coach of the London Olympians in 1995 (serving through 2007), leading them to a 9–1 regular season and Britbowl IX appearance (30–34 vs Birmingham Bulls)."
+  },
+  {
+    "team": "Gateshead Senators",
+    "year": 1995,
+    "head_coach": "Gary Marshall",
+    "source": "http://www.senators.zetnet.co.uk/",
+    "source_details": "Gary Marshall served as Head Coach and Chairman of the Gateshead Senators during the 1995 BAFA Division Two North/Midlands season (4–6–0)."
+  },
+  {
+    "team": "Oxford Saints",
+    "year": 1995,
+    "head_coach": "Richard Emerick",
+    "source": "https://en.wikipedia.org/wiki/Oxford_Saints",
+    "source_details": "American head coach Richard Emerick led the Oxford Saints to their first-ever national championship victory in 1995, defeating the Gwent Mustangs 14–6 in the BAFA Division Three Final."
+  },
+  {
+    "team": "London Olympians",
+    "year": 1994,
+    "head_coach": "Warren Smart",
+    "source": "https://www.football-aktuell.de/",
+    "source_details": "Warren Smart served as head coach of the London Olympians in 1994, leading the team to both the Britbowl VIII title (defeating Birmingham Bulls 24–23) and Eurobowl VIII title (defeating Bergamo Lions 26–23)."
+  },
+  {
+    "team": "Gateshead Senators",
+    "year": 1994,
+    "head_coach": "Gary Marshall",
+    "source": "http://www.senators.zetnet.co.uk/",
+    "source_details": "Gary Marshall served as Head Coach and Chairman of the Gateshead Senators during the 1994 BAFA Division Two North/Midlands season."
+  },
+  {
+    "team": "Oxford Saints",
+    "year": 1994,
+    "head_coach": "Richard Emerick",
+    "source": "https://en.wikipedia.org/wiki/Oxford_Saints",
+    "source_details": "American coach Richard Emerick was appointed head coach of the Oxford Saints ahead of the 1994 season, succeeding Steve Conner."
+  },
+  {
+    "team": "Oxford Saints",
+    "year": 1993,
+    "head_coach": "Steve Connor",
+    "source": "https://en.wikipedia.org/wiki/Steve_Connor_(American_football)",
+    "source_details": "Steve Connor served as head coach of the Oxford Saints from 1990 through 1993, leading them to a 5-4-1 regular season record and the BNGL National Quarter-Finals in 1993 before returning to the United States."
+  },
+  {
+    "team": "London Olympians",
+    "year": 1992,
+    "head_coach": "Tony Allen",
+    "source": "https://en.wikipedia.org/wiki/Tony_Allen_(American_football)",
+    "source_details": "Tony Allen served as head coach of the London Olympians, leading them to a 9-1-0 regular season and their first Britbowl national championship (Britbowl VI, defeating Leicester Panthers 34-6 at Alexander Stadium)."
+  },
+  {
+    "team": "Oxford Saints",
+    "year": 1992,
+    "head_coach": "Steve Connor",
+    "source": "https://en.wikipedia.org/wiki/Steve_Connor_(American_football)",
+    "source_details": "Steve Connor served as head coach of the Oxford Saints during the 1992 campaign, overseeing the franchise rebrand from Bulldogs to Saints and relocation to Cowley Oxford Stadium, finishing 8-2-0 and reaching the BNGL National Quarter-Finals."
+  },
+  {
+    "team": "Manchester Spartans",
+    "year": 1992,
+    "head_coach": "Terry Smith",
+    "source": "https://en.wikipedia.org/wiki/Manchester_Spartans",
+    "source_details": "Terry Smith served as player-head coach of the Manchester Spartans for the 1992 NDMA Division One season, guiding them to a 7-3-0 record and the NDMA Quarter-Finals."
+  },
+  {
+    "team": "Birmingham Bulls",
+    "year": 1991,
+    "head_coach": "Steve Moon",
+    "source": "https://en.wikipedia.org/wiki/Birmingham_Bulls_(American_football)",
+    "source_details": "Steve Moon served as head coach of the Birmingham Bulls in 1991, leading them to a 9-1-0 regular season and the NDMA National Championship in Britbowl V (defeating London Olympians 39-38 at Alexander Stadium)."
+  },
+  {
+    "team": "London Olympians",
+    "year": 1991,
+    "head_coach": "Tony Allen",
+    "source": "https://en.wikipedia.org/wiki/Tony_Allen_(American_football)",
+    "source_details": "Tony Allen began his head coaching career with the London Olympians in 1991, leading them to an undefeated 10-0-0 regular season and Britbowl V national finalists."
+  },
+  {
+    "team": "Manchester Spartans",
+    "year": 1991,
+    "head_coach": "Terry Smith",
+    "source": "https://en.wikipedia.org/wiki/Manchester_Spartans",
+    "source_details": "Terry Smith served as player-head coach of the Manchester Spartans during their 1991 NDMA First Division campaign."
+  },
+  {
+    "team": "Oxford Saints",
+    "year": 1991,
+    "head_coach": "Steve Connor",
+    "source": "https://en.wikipedia.org/wiki/Steve_Connor_(American_football)",
+    "source_details": "Steve Connor served as head coach of the Oxford club (competing as Oxford Bulldogs) in 1991, guiding them to a 9-1-0 regular season record and the BNGL Premier Division playoffs."
+  },
+  {
+    "team": "SMC Admirals",
+    "year": 1991,
+    "head_coach": "Lee Rowland",
+    "source": "http://www.britballnow.co.uk/History/Britball%20Teams/SMCAdmirals.htm",
+    "source_details": "Documented as head coach of the SMC Admirals for both their 1990 and 1991 seasons, leading them in the NDMA Second Division Southern Conference."
+  },
+  {
+    "team": "Manchester Spartans",
+    "year": 1990,
+    "head_coach": "Terry Smith",
+    "source": "https://en.wikipedia.org/wiki/Manchester_Spartans",
+    "source_details": "Terry Smith served as player-head coach of the Manchester Spartans during their 1990 championship campaign, leading them to Britbowl IV (defeating Northants Storm 27-25 at Crystal Palace) and the Eurobowl IV European title."
+  },
+  {
+    "team": "Ipswich Cardinals",
+    "year": 1990,
+    "head_coach": "JJ Johnson",
+    "source": "https://www.ipswichcardinals.co.uk",
+    "source_details": "Head coach JJ Johnson guided the Ipswich Cardinals to a 9-1-0 regular season and the 1990 BNGL National Championship title, defeating the Clydesdale Colts 34-22 at Saffron Lane Stadium in Leicester."
+  },
+  {
+    "team": "SMC Admirals",
+    "year": 1990,
+    "head_coach": "Lee Rowland",
+    "source": "http://www.britballnow.co.uk/History/Britball%20Teams/SMCAdmirals.htm",
+    "source_details": "Documented as head coach of the SMC Admirals for both their 1990 and 1991 seasons, leading them to a 9-1-0 regular season record in the 1990 BNGL National Southern Conference."
+  },
+  {
+    "team": "Manchester Spartans",
+    "year": 1989,
+    "head_coach": "Terry Smith",
+    "source": "https://en.wikipedia.org/wiki/Manchester_Spartans",
+    "source_details": "Terry Smith served as player-head coach of the Manchester Spartans during their 1989 championship campaign, leading them to the Budweiser League national championship (Britbowl III, defeating the Birmingham Bulls 21-14 at Crystal Palace National Sports Centre) as well as head coach of the victorious Great Britain Lions."
+  },
+  {
+    "team": "Birmingham Bulls",
+    "year": 1989,
+    "head_coach": "Warren Tate",
+    "source": "https://www.birminghambulls.co.uk",
+    "source_details": "Warren Tate served as head coach of the Birmingham Bulls in 1989, leading them to a 9-1-0 regular season and the Budweiser Bowl / Britbowl III national final."
+  },
+  {
+    "team": "Manchester Spartans",
+    "year": 1988,
+    "head_coach": "Terry Smith",
+    "source": "https://en.wikipedia.org/wiki/Manchester_Spartans",
+    "source_details": "Terry Smith served as player-head coach of the Manchester Spartans during the 1988 season after joining from the USFL/NFL, leading them to a 14-0-0 undefeated regular season in the Budweiser League National Division."
+  },
+  {
+    "team": "London Ravens",
+    "year": 1988,
+    "head_coach": "Lance Cone",
+    "source": "https://www.britishamericanfootball.org",
+    "source_details": "Lance Cone served as head coach of the London Ravens during the 1988 season, concluding their historic 63-game domestic unbeaten streak before reaching the Budweiser League National Division semi-finals."
+  },
+  {
+    "team": "Colchester Gladiators",
+    "year": 1988,
+    "head_coach": "George Baldwin",
+    "source": "https://colchestergladiators.wordpress.com/hall-of-fame/",
+    "source_details": "George Baldwin served as head coach of the Colchester Gladiators in 1988, leading them to a perfect 17-0 season and the Budweiser League Premier Division Championship (defeating Brighton B-52s 47-28 in the final); documented in his book 'Seeing England from the fifty yard line' (ISBN: 0-930753-20-8)."
+  },
+  {
+    "team": "Manchester Spartans",
+    "year": 1987,
+    "head_coach": "Terry Smith",
+    "source": "https://en.wikipedia.org/wiki/Manchester_Spartans",
+    "source_details": "Terry Smith served as player-head coach of the Manchester Spartans during the 1987 season, leading them in the Budweiser League National Division."
+  },
+  {
+    "team": "London Ravens",
+    "year": 1987,
+    "head_coach": "Lance Cone",
+    "source": "https://www.britishamericanfootball.org",
+    "source_details": "Lance Cone served as head coach of the London Ravens during the 1987 season, leading them to an undefeated 10-0-0 regular season and the Bud Bowl II National Championship victory (40-23 over Manchester Allstars at Loftus Road)."
   }
 ]

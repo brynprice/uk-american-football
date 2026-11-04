@@ -28,3 +28,16 @@
 - **Ban on Hardcoded Dictionaries**: Never create ad-hoc hardcoded personnel maps (e.g. `const headCoaches = { ... }`) in rebuild scripts unless they are validated against `data/evidence/verified_coaches.json`.
 - **Sense-Check Enforcement**: `scripts/sense_check_season.py` strictly validates that every non-empty `head_coach` has a corresponding verified record in `data/evidence/verified_coaches.json`. Any unverified coach fails the check as a CRITICAL error.
 
+## 7. Weekly Interesting Facts Protocol
+- When asked "what is interesting about the past week", "what happened in the past week", or requested for weekly highlights or trivia:
+  - Run `node scripts/weekly_facts.mjs` (or `npm run facts`), optionally with `--week <N>`, `--season <YYYY>`, `--start <YYYY-MM-DD> --end <YYYY-MM-DD>`, or `--format brief|markdown|json`.
+  - The script deterministically cross-references all completed fixtures against the 40+ year historical archive in Supabase to surface:
+    - **Scorigamis**: All-time totally unique scores (across 40+ years) and level-specific unique scores.
+    - **Program Records & Milestones**: Top scoring performances in program history, heaviest defeats, milestone wins (25th, 50th, 75th, etc.).
+    - **Rivalry Context**: Inaugural matchups, multi-year hiatuses, revenge wins, and head-to-head win streaks.
+    - **Extremes**: Shootouts, defensive slugfests, blowouts, and nailbiters (≤ 7 pts).
+    - **The Shutout Wall**: Clean sheets pitched and consecutive shutout streaks.
+    - **Standings Momentum**: Unblemished 2-0 starts, 0-2 struggles, and bounce-back wins.
+    - **Brighton Tsunami / Panthers Spotlight**: Performance and historical series context for Brighton.
+  - Present the output with engaging, journalistic sports flair while strictly adhering to the facts extracted from the database.
+

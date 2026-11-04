@@ -62,10 +62,15 @@ async function importPhases(filePath) {
 
     const fileYearMatch = filePath.match(/(\d{4})/);
     const defaultYear = fileYearMatch ? fileYearMatch[1] : null;
+    const yearArg = process.argv.find(a => a.startsWith('--year='));
+    const filterYear = yearArg ? yearArg.split('=')[1].trim() : null;
 
     for (const record of records) {
         const competition_name = record.competition_name || record.competition || 'BUAFL';
         const year = record.year || defaultYear;
+        if (filterYear && String(year).trim() !== filterYear) {
+            continue;
+        }
         const phase_name = record.phase_name || record.phase;
         const type = record.type || record.phase_type;
         const parent_phase = record.parent_phase || record.parent;

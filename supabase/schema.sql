@@ -1,4 +1,4 @@
--- Britball Archive - SQL Schema
+-- Britball.io - SQL Schema
 -- Production-grade historical archive schema
 
 -- 1. EXTENSIONS

@@ -247,3 +247,55 @@ bafanl,2014,National North West,Division,National Division,high,2
 bafanl,2014,National Central,Division,National Division,high,3
 bafanl,2014,National South East,Division,National Division,high,4
 bafanl,2014,National South West,Division,National Division,high,5
+bafanl,2013,Premiership,Tier,,high,0
+bafanl,2013,Playoffs,Playoffs,Premiership,high,0
+bafanl,2013,Premiership North,Division,Premiership,high,1
+bafanl,2013,Premiership South,Division,Premiership,high,2
+bafanl,2013,National Division,Tier,,high,1
+bafanl,2013,Playoffs,Playoffs,National Division,high,0
+bafanl,2013,National Central,Division,National Division,high,1
+bafanl,2013,National North,Division,National Division,high,2
+bafanl,2013,National South,Division,National Division,high,3
+bafanl,2013,National South Central,Division,National Division,high,4
+bafanl,2012,Premiership,Tier,,high,0
+bafanl,2012,Playoffs,Playoffs,Premiership,high,0
+bafanl,2012,Premiership North,Division,Premiership,high,1
+bafanl,2012,Premiership South,Division,Premiership,high,2
+bafanl,2012,Division One,Tier,,high,1
+bafanl,2012,Playoffs,Playoffs,Division One,high,0
+bafanl,2012,Division 1 North,Division,Division One,high,1
+bafanl,2012,Division 1 Central & South,Division,Division One,high,2
+bafanl,2012,Division Two,Tier,,high,2
+bafanl,2012,Playoffs,Playoffs,Division Two,high,0
+bafanl,2012,Division 2 Central,Division,Division Two,high,1
+bafanl,2012,Division 2 East,Division,Division Two,high,2
+bafanl,2012,Division 2 North,Division,Division Two,high,3
+bafanl,2012,Division 2 West,Division,Division Two,high,4
+bafanl,2011,Premiership,Tier,,high,0
+bafanl,2011,Playoffs,Playoffs,Premiership,high,0
+bafanl,2011,Premier Division,Division,Premiership,high,1
+bafanl,2011,Division One,Tier,,high,1
+bafanl,2011,Playoffs,Playoffs,Division One,high,0
+bafanl,2011,Division 1 Central,Division,Division One,high,1
+bafanl,2011,Division 1 North,Division,Division One,high,2
+bafanl,2011,Division 1 South,Division,Division One,high,3
+bafanl,2011,Division Two,Tier,,high,2
+bafanl,2011,Playoffs,Playoffs,Division Two,high,0
+bafanl,2011,Division 2 Central,Division,Division Two,high,1
+bafanl,2011,Division 2 East,Division,Division Two,high,2
+bafanl,2011,Division 2 North,Division,Division Two,high,3
+bafanl,2011,Division 2 West,Division,Division Two,high,4
+bafanl,2010,Premiership,Tier,,high,0
+bafanl,2010,Playoffs,Playoffs,Premiership,high,0
+bafanl,2010,Premier Division,Division,Premiership,high,1
+bafanl,2010,Division One,Tier,,high,1
+bafanl,2010,Playoffs,Playoffs,Division One,high,0
+bafanl,2010,Division 1 Central,Division,Division One,high,1
+bafanl,2010,Division 1 North,Division,Division One,high,2
+bafanl,2010,Division 1 South,Division,Division One,high,3
+bafanl,2010,Division Two,Tier,,high,2
+bafanl,2010,Playoffs,Playoffs,Division Two,high,0
+bafanl,2010,Division 2 Central,Division,Division Two,high,1
+bafanl,2010,Division 2 East,Division,Division Two,high,2
+bafanl,2010,Division 2 North,Division,Division Two,high,3
+bafanl,2010,Division 2 West,Division,Division Two,high,4

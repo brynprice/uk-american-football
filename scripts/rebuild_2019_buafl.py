@@ -61,15 +61,35 @@ with open(RAW_GAMES_FILE, 'r', encoding='utf-8') as f:
 
         key = (away, home, date, phase)
         if key in seen_game_keys:
+            # Handle double header duplicate from raw scrape (e.g. Brunel Burners @ Kent Falcons on 2020-01-26)
+            if key == ('Brunel Burners', 'Kent Falcons', '2020-01-26', 'Division 1 South Eastern'):
+                for g in final_games:
+                    if (g['away_team'], g['home_team'], g['date'], g['phase']) == key:
+                        g['is_double_header'] = 'TRUE'
+                        g['notes'] = 'Double header (counts as two results). Source: BUCS Play historical records'
+                        if r['status'] == 'completed':
+                            as_val = int(r['away_score'])
+                            hs_val = int(r['home_score'])
+                            standings_map[(phase, home)]['p'] += 1
+                            standings_map[(phase, away)]['p'] += 1
+                            if as_val > hs_val:
+                                standings_map[(phase, away)]['w'] += 1
+                                standings_map[(phase, home)]['l'] += 1
+                            elif hs_val > as_val:
+                                standings_map[(phase, home)]['w'] += 1
+                                standings_map[(phase, away)]['l'] += 1
+                            else:
+                                standings_map[(phase, home)]['d'] += 1
+                                standings_map[(phase, away)]['d'] += 1
             continue
         seen_game_keys.add(key)
         
         division_teams[phase].add(away)
         division_teams[phase].add(home)
         
-        # Check Brighton coaching
-        away_coach = 'Chris Denny' if away == 'Brighton Tsunami' else ''
-        home_coach = 'Chris Denny' if home == 'Brighton Tsunami' else ''
+        # Check coaching
+        away_coach = 'Chris Denny' if away == 'Brighton Tsunami' else ('Luke Hextall' if away == 'Brunel Burners' else '')
+        home_coach = 'Chris Denny' if home == 'Brighton Tsunami' else ('Luke Hextall' if home == 'Brunel Burners' else '')
         
         venue = r.get('venue') or ''
         time_val = r.get('time') or ''
@@ -199,8 +219,8 @@ with open(RAW_PLAYOFFS_FILE, 'r', encoding='utf-8') as f:
             'home_score': home_score,
             'venue': venue,
             'notes': notes,
-            'away_coach': '',
-            'home_coach': '',
+            'away_coach': 'Chris Denny' if away == 'Brighton Tsunami' else ('Luke Hextall' if away == 'Brunel Burners' else ''),
+            'home_coach': 'Chris Denny' if home == 'Brighton Tsunami' else ('Luke Hextall' if home == 'Brunel Burners' else ''),
             'is_double_header': 'FALSE',
             'date_precision': 'day',
             'date_display': '',
@@ -248,7 +268,7 @@ for phase in sorted(division_teams.keys()):
     for rank, t in enumerate(sorted_teams, 1):
         st = standings_map[(phase, t)]
         is_champ = 'TRUE' if rank == 1 else 'FALSE'
-        head_coach = 'Chris Denny' if t == 'Brighton Tsunami' else ''
+        head_coach = 'Chris Denny' if t == 'Brighton Tsunami' else ('Luke Hextall' if t == 'Brunel Burners' else '')
         notes = 'Source: Brighton Tsunami historical records' if t == 'Brighton Tsunami' else 'Source: BUCS Play historical records'
         
         row = {

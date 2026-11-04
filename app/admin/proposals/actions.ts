@@ -179,6 +179,17 @@ export async function approveGameProposal(proposalId: string, adminNotes?: strin
             }
             console.log("Finished processing coaches.");
 
+            // 3b. Recompute standings for the affected phase
+            const targetPhaseId = phaseId || (await supabase.from("games").select("phase_id").eq("id", proposal.game_id).single()).data?.phase_id;
+            if (targetPhaseId) {
+                console.log("Recomputing standings for phase:", targetPhaseId);
+                await recomputePhaseStandings(supabase, targetPhaseId);
+                revalidatePath(`/phases/${targetPhaseId}`);
+            }
+
+            if (currentHomeTeamId) revalidatePath(`/teams/${currentHomeTeamId}`);
+            if (currentAwayTeamId) revalidatePath(`/teams/${currentAwayTeamId}`);
+
         } else if (proposal.proposal_type === 'add') {
             // For now, we still point admins to the manual tool for "add" 
             // unless we want to fully implement auto-creation here.
@@ -200,11 +211,76 @@ export async function approveGameProposal(proposalId: string, adminNotes?: strin
 
         revalidatePath("/admin/proposals");
         if (proposal.game_id) revalidatePath(`/games/${proposal.game_id}`);
+        revalidatePath("/scorigami");
+        revalidatePath("/scorigami/unique");
+        revalidatePath("/");
 
         return { success: true };
     } catch (err: any) {
         console.error("Proposal approval error:", err);
         return { success: false, error: err.message || "An unknown error occurred" };
+    }
+}
+
+async function recomputePhaseStandings(supabase: any, phaseId: string) {
+    const { data: participations } = await supabase
+        .from("participations")
+        .select("id, team_id")
+        .eq("phase_id", phaseId);
+
+    if (!participations || participations.length === 0) return;
+
+    const { data: phaseGames } = await supabase
+        .from("games")
+        .select("home_team_id, away_team_id, home_score, away_score, status, is_double_header, game_type, is_playoff")
+        .eq("phase_id", phaseId)
+        .in("status", ["completed", "awarded"])
+        .eq("is_playoff", false);
+
+    const stats = new Map<string, { w: number; l: number; t: number; pf: number; pa: number }>();
+    for (const p of participations) {
+        stats.set(p.team_id, { w: 0, l: 0, t: 0, pf: 0, pa: 0 });
+    }
+
+    for (const g of (phaseGames || [])) {
+        if (g.game_type && g.game_type !== "league") continue;
+        if (g.home_score === null || g.away_score === null) continue;
+
+        const mult = g.is_double_header ? 2 : 1;
+
+        if (stats.has(g.home_team_id)) {
+            const h = stats.get(g.home_team_id)!;
+            h.pf += g.home_score;
+            h.pa += g.away_score;
+            if (g.home_score > g.away_score) h.w += mult;
+            else if (g.home_score < g.away_score) h.l += mult;
+            else h.t += mult;
+        }
+
+        if (stats.has(g.away_team_id)) {
+            const a = stats.get(g.away_team_id)!;
+            a.pf += g.away_score;
+            a.pa += g.home_score;
+            if (g.away_score > g.home_score) a.w += mult;
+            else if (g.away_score < g.home_score) a.l += mult;
+            else a.t += mult;
+        }
+    }
+
+    for (const p of participations) {
+        const s = stats.get(p.team_id);
+        if (s) {
+            await supabase
+                .from("participations")
+                .update({
+                    wins: s.w,
+                    losses: s.l,
+                    ties: s.t,
+                    points_for: s.pf,
+                    points_against: s.pa
+                })
+                .eq("id", p.id);
+        }
     }
 }
 

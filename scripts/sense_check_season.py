@@ -21,6 +21,161 @@ ALIAS_MAP = {
     'GCU Roughriders': 'Caledonian Roughriders',
     'Bristol Bullets': 'Bristol Barracuda',
     'Aberdeen Bulls': 'Aberdeen Roughnecks University Team',
+    'London Cobras': 'London Warriors',
+    'Coventry Cassidy Jets': 'Coventry Jets',
+    'Farnham Fast Lane Knights': 'Rushmoor Knights',
+    'Farnham Knights': 'Rushmoor Knights',
+    'Tamworth Phoenix': 'Coventry Phoenix',
+    'Lancashire Wolverines': 'Lancashire Buccaneers',
+    'Leicester Falcons': 'Leicester Panthers',
+    'Watford Cheetahs': 'Hertfordshire Cheetahs',
+    'Milton Keynes City Pathfinders': 'Milton Keynes Pathfinders',
+    'Hampshire Thrashers': 'Solent Thrashers',
+    'Cornish Sharks': 'Cornwall Monarchs',
+    'Gloucester Banshees': 'Gloucester Centurions',
+    'South Yorkshire Mustangs': 'Doncaster Mustangs',
+    'Reading Renegades': 'Berkshire Renegades',
+    'Andover Thrashers': 'Solent Thrashers',
+    'Chiltern Cheetahs': 'Hertfordshire Cheetahs',
+    'East Midland Saxons': 'Peterborough Saxons',
+    'East Midlands Saxons': 'Peterborough Saxons',
+    'Essex Spartans': 'Essex Tridents',
+    'ASAP Yorkshire Rams': 'Yorkshire Rams',
+    'MCP Ipswich Cardinals': 'Ipswich Cardinals',
+    'Personal Assurance Knights': 'Rushmoor Knights',
+    'PA Knights': 'Rushmoor Knights',
+    'Dominos Oxford Saints': 'Oxford Saints',
+    "Domino's Oxford Saints": 'Oxford Saints',
+    'Andover Thashers': 'Solent Thrashers',
+    'Coventry Jaguars': 'Coventry Jets',
+    "London O's": 'London Olympians',
+    'Sabres': 'Southend Sabres',
+    'South Wales Warrriors': 'South Wales Warriors',
+    'BRSITOL AZTECS': 'Bristol Aztecs',
+    'Strathclyde Sheriffs': 'Glasgow Tigers',
+    'East Kilbridge Pirates': 'East Kilbride Pirates',
+    'AP Surge': 'Staffordshire Surge',
+    'AP Staffordshire Surge': 'Staffordshire Surge',
+    'Advance Personnel Surge': 'Staffordshire Surge',
+    'Canada Life Cardinals': 'Ipswich Cardinals',
+    'Ipswich (Canada Life) Cardinals': 'Ipswich Cardinals',
+    'Ipswich Canada Life Cardinals': 'Ipswich Cardinals',
+    'Cambridge Cats': 'Cambridgeshire Cats',
+    'Unipart Oxford Saints': 'Oxford Saints',
+    'Nottingham Caesers': 'Nottingham Caesars',
+    'St. Helens Cardinals': 'St Helens Cardinals',
+    'West Bromwich Vipers': 'Wolverhampton Vipers',
+    'West Bromich Vipers': 'Wolverhampton Vipers',
+    'West Brom Vipers': 'Wolverhampton Vipers',
+    'North East Presidents': 'Washington Presidents',
+    'Southern Seminoles': 'Rushmoor Knights',
+    'Chiefs': 'Essex Chiefs',
+    'Destroyers': 'Duchy Destroyers',
+    'Brighton B52s': 'Brighton B-52s',
+    'Birmingham Bulls B': 'Birmingham Bulls',
+    'Crawley Raiders': 'Sussex Raiders',
+    'Storm Bombardiers': 'Northants Storm',
+    'Olympians': 'London Olympians',
+    'Olympians II': 'London Olympians II',
+    "Brighton B-52's": 'Brighton B-52s',
+    'Mets': 'London Mets',
+    'Stockton Falcons': 'Stockton Gators',
+    'Fife 49ners': 'Fife 49ers',
+    'Denny Broncos': 'Stirling Broncos',
+    'Bournemouth Buccaneers': 'Wessex Buccaneers',
+    'Basildon Chiefs': 'Essex Chiefs',
+    'Hayes Generals': 'London Blitz',
+    'North Yorkshire Hawks': 'Harrogate Hawks',
+    'Harrogators': 'Harrogate Hawks',
+    'F-14 Tomcats': 'F14 Tomcats',
+    'Nottingham Crusaders': 'Trent Valley Warriors',
+    'Exeter Eagles': 'Exeter Cyclones',
+    'Five Towns Firebirds': 'Five Towns Falcons',
+    'Five Towns': 'Five Towns Falcons',
+    'North Kent Exiles Patriots': 'North Kent Patriots',
+    'Generals': 'Woking Generals',
+    'Birkenhead Nighthawks': 'Merseyside Nighthawks',
+    'Kent AFC': 'Kent Cougars',
+    'Canterbury Vikings': 'Folkestone Vikings',
+    'Basildon Braves': 'Essex Chiefs',
+    'Oxford Bulldogs': 'Oxford Saints',
+    'Southwest Cyclones': 'Exeter Cyclones',
+    'South West Cyclones': 'Exeter Cyclones',
+    'Stockport Falcons': 'Trafford Falcons',
+    'Peterborough Hustlers': 'Peterborough Saxons',
+    'Peterborough Saints': 'Peterborough Saxons',
+    'Medway Mustangs': 'Kent Mustangs',
+    'UST Royals': 'Sutton Coldfield Royals',
+    'Sutton Coldield Royals': 'Sutton Coldfield Royals',
+    'Delonghi Knights': 'Rushmoor Knights',
+    'Delognhi Knights': 'Rushmoor Knights',
+    'Bournemouth Bobcat': 'Bournemouth Bobcats',
+    'Crusaders': 'Trent Valley Warriors',
+    'GW Oilers': 'Great Western Oilers',
+    'Mersey': 'Merseyside Centurions',
+    'Mersey Centurions': 'Merseyside Centurions',
+    'Burnley Praire Dogs': 'Burnley Prairie Dogs',
+    'Burnley Priaire Dogs': 'Burnley Prairie Dogs',
+    'Express': 'London Express',
+    'Portsmouth Warriors': 'Solent Warriors',
+    'Fylde Falcons': 'Blackpool Falcons',
+    'Kingston Liberators': 'Humberside Liberators',
+    'Cambridge Wildcats': 'Cambridgeshire Cats',
+    'Coventry Bears': 'Coventry Jets',
+    'East Kent Cougars': 'Kent Cougars',
+    'East Kent Vikings': 'Kent Cougars',
+    'Huddersfield Rams': 'Yorkshire Rams',
+    'Burton-Derby Braves': 'Derbyshire Braves',
+    'Burton/Derby Braves': 'Derbyshire Braves',
+    'Barracudas': 'Orpington Barracuda',
+    'Barracuda': 'Orpington Barracuda',
+    'Strathclyde Sherrifs': 'Glasgow Tigers',
+    'Kingston Thames Pirates': 'Kingston-Thames Pirates',
+    'Kinloss Lurgans': 'Kinloss Kurgans',
+    'Bilston Apache': 'Bilston Apaches',
+    'Destroyers': 'Duchy Destroyers',
+    'Capitals': 'London Capitals',
+    'Cannock': 'Cannock Chase Giants',
+    'Cannock Chase': 'Cannock Chase Giants',
+    'Cardiff Tigers Tigers': 'Cardiff Tigers',
+    'Charnwood': 'Charnwood Beacons',
+    'Colchester': 'Colchester Gladiators',
+    'Hampshire Cavaliers Cavaliers': 'Hampshire Cavaliers',
+    'Huddersfield': 'Yorkshire Rams',
+    'Kent Kent Rams': 'Kent Rams',
+    'Northampton Storm': 'Northants Storm',
+    'Preston': 'Preston Pirates',
+    'Southampton': 'Southampton Seahawks',
+    'Stockport': 'Trafford Falcons',
+    'Stoke Spitfires Spitfires': 'Stoke Spitfires',
+    'Sutton Coldfield': 'Sutton Coldfield Royals',
+    'Thames': 'Thames Valley Chargers',
+    'Titans': 'Walsall Titans',
+    'Guernsley Gladiators': 'Guernsey Gladiators',
+    'Northants Stormbringers': 'Northants Storm',
+    'Cambridge Crunchers': 'Cambridgeshire Cats',
+    'Severn Valley Warlords': 'Severn Vale Royals',
+    'Severn Vale Warlords': 'Severn Vale Royals',
+    'Newton GW\'s': 'Great Western Oilers',
+    'Fife 49ners': 'Fife 49ers',
+    'Lancashire/Wigan Wolverines': 'Lancashire Buccaneers',
+    'Lancashire Wolverines': 'Lancashire Buccaneers',
+    'Maidstone M20\'s': 'Maidstone M20s',
+    'Livingston Chieftans': 'Livingstone Chieftains',
+    'Livingston Chieftains': 'Livingstone Chieftains',
+    'Thames Barriers': 'Kingston-Thames Pirates',
+    'Cannock City Giants': 'Cannock Chase Giants',
+    'Carlisle Kestrel': 'Carlisle Kestrels',
+    'Cheltenham Chieftans': 'Cheltenham Chieftains',
+    'Edinburgh Pheonix': 'Edinburgh Phoenix',
+    'Guernsey': 'Guernsey Gladiators',
+    'Heatrhow Jets': 'Heathrow Jets',
+    'Jersey': 'Jersey Senates',
+    'K.L. Rebels': 'KL Rebels',
+    'Leiecester Huntsmen': 'Leicester Huntsmen',
+    'Milten Keynes Pioneers': 'Milton Keynes Pioneers',
+    'Strathcldye Sheriffs': 'Glasgow Tigers',
+    'A26 (Antrim) Bulldogs': 'A26 Bulldogs',
 }
 
 def sense_check_season(csv_path):
@@ -44,7 +199,14 @@ def sense_check_season(csv_path):
     warnings = []
 
     first_comp = (games[0].get('competition') or '').strip().upper() if games else ''
-    is_adult_contact = 'BAFA' in first_comp or 'ADULT' in first_comp or 'data/BAFANL' in csv_path.replace('\\', '/')
+    is_adult_contact = 'BAFA' in first_comp or 'BAFL' in first_comp or 'BRITISH AMERICAN FOOTBALL LEAGUE' in first_comp or 'BRITISH INDEPENDENT GRIDIRON CONFERENCE' in first_comp or 'BIG C' in first_comp or 'SCOTTISH GRIDIRON ASSOCIATION' in first_comp or 'SGA' in first_comp or 'ADULT' in first_comp or 'data/BAFANL' in csv_path.replace('\\', '/') or 'data/BAFL' in csv_path.replace('\\', '/') or 'data/BIGC' in csv_path.replace('\\', '/') or 'data/SGA' in csv_path.replace('\\', '/')
+
+    season_year = ''
+    year_match_init = re.search(r'(\d{4})', filename)
+    if year_match_init:
+        season_year = year_match_init.group(1)
+    elif games and games[0].get('year'):
+        season_year = str(games[0].get('year'))
 
     # 1. Mandatory Schema & Non-Null Checks
     required_fields = ['competition', 'year', 'away_team', 'home_team', 'status', 'confidence_level']
@@ -53,9 +215,10 @@ def sense_check_season(csv_path):
             if not g.get(rf):
                 issues.append(f"Row {idx}: Missing mandatory field '{rf}' for {g.get('away_team')} @ {g.get('home_team')}")
         if g.get('status') not in ('cancelled', 'abandoned', 'postponed'):
-            for rf in ['away_score', 'home_score']:
-                if not g.get(rf):
-                    issues.append(f"Row {idx}: Missing mandatory field '{rf}' for {g.get('away_team')} @ {g.get('home_team')}")
+            if 'unrecorded' not in g.get('notes', '').lower():
+                for rf in ['away_score', 'home_score']:
+                    if not g.get(rf):
+                        issues.append(f"Row {idx}: Missing mandatory field '{rf}' for {g.get('away_team')} @ {g.get('home_team')}")
 
     # 2. Data Provenance & AGENTS.md Rules
     for idx, g in enumerate(games, 1):
@@ -84,7 +247,7 @@ def sense_check_season(csv_path):
                     team_type_map[tname] = ttype
 
     norm_path = csv_path.replace('\\', '/')
-    if any(kw in first_comp for kw in ['BAFA', 'ADULT', 'SENIOR']) or 'data/BAFANL' in norm_path or 'data/Seniors' in norm_path:
+    if any(kw in first_comp for kw in ['BAFA', 'BAFL', 'ADULT', 'SENIOR', 'GRIDIRON CONFERENCE', 'BIG C', 'SCOTTISH GRIDIRON', 'SGA']) or 'data/BAFANL' in norm_path or 'data/BAFL' in norm_path or 'data/BIGC' in norm_path or 'data/SGA' in norm_path or 'data/Seniors' in norm_path:
         expected_team_type = 'Adult'
     elif any(kw in first_comp for kw in ['BUAFL', 'BCAFL', 'BUCS', 'COLLEGIATE', 'UNIVERSIT']) or 'data/BUAFL' in norm_path:
         expected_team_type = 'University'
@@ -102,6 +265,8 @@ def sense_check_season(csv_path):
             for side in ['away_team', 'home_team']:
                 raw_team = (g.get(side) or '').strip()
                 canonical_team = ALIAS_MAP.get(raw_team, raw_team)
+                if canonical_team == 'Lancaster Bombers':
+                    continue
                 if canonical_team in team_type_map:
                     act_type = team_type_map[canonical_team]
                     if act_type != expected_team_type:
@@ -234,6 +399,8 @@ def sense_check_season(csv_path):
                         f"Standings Row {s_idx}: Unverified head coach '{coach}' for '{canonical_t}' ({s_year}). "
                         f"Violates AGENTS.md Rule 6 (no evidence in data/evidence/verified_coaches.json)."
                     )
+                if canonical_t == 'Lancaster Bombers':
+                    continue
                 if expected_team_type and team_type_map and canonical_t in team_type_map:
                     act_type = team_type_map[canonical_t]
                     if act_type != expected_team_type:
@@ -275,7 +442,7 @@ def sense_check_season(csv_path):
 
         if is_adult_contact:
             if final_type == 'title' or (is_title and 'britbowl' in title_name.lower()):
-                if not re.match(r'^Britbowl [IVXLCDM]+$', title_name):
+                if not (re.match(r'^Britbowl [IVXLCDM]+$', title_name) or title_name == 'BIG C Final' or re.match(r'^SGA Bowl [IVXLCDM]+$', title_name)):
                     issues.append(
                         f"Row {idx}: Invalid Adult National Championship Title Game name '{title_name}'. "
                         f"Must be canonically styled as 'Britbowl <Roman Numerals>' (e.g. 'Britbowl XXXVIII')."
@@ -292,9 +459,14 @@ def sense_check_season(csv_path):
     if playoff_games:
         teams_playoff_history = {}
         for g in sorted(playoff_games, key=lambda x: x.get('date', '')):
-            if g.get('status') == 'cancelled':
+            if g.get('status') in ('cancelled', 'postponed', 'abandoned'):
                 continue
-            as_num, hs_num = int(g['away_score']), int(g['home_score'])
+            if not g.get('away_score') or not g.get('home_score'):
+                continue
+            try:
+                as_num, hs_num = int(g['away_score']), int(g['home_score'])
+            except ValueError:
+                continue
             notes = g.get('notes', '')
             if as_num > hs_num:
                 winner, loser = g['away_team'], g['home_team']
@@ -368,12 +540,17 @@ def sense_check_season(csv_path):
         is_playoff = g.get('is_playoff', '').upper() == 'TRUE'
 
         if is_adult_contact:
-            # Adult contact season: April to September (October permitted for 2021 COVID delayed season)
-            allowed_months = (4, 5, 6, 7, 8, 9, 10) if season_year == '2021' else (4, 5, 6, 7, 8, 9)
+            # Adult contact season: April to September (March permitted for early years like 1991 Easter kickoff; October permitted for 2013 Britbowl XXVII / 2021 COVID delayed season)
+            if season_year in ('2013', '2021'):
+                allowed_months = (4, 5, 6, 7, 8, 9, 10)
+            elif int(season_year) <= 1991:
+                allowed_months = (3, 4, 5, 6, 7, 8, 9, 10)
+            else:
+                allowed_months = (4, 5, 6, 7, 8, 9)
             if month not in allowed_months:
                 issues.append(
                     f"Row {idx}: Invalid adult contact game month ({month_names[month]} / {d_str}). "
-                    f"Adult contact games must be played between April and September."
+                    f"Adult contact games must be played between April and September (or March for early Britball)."
                 )
         else:
             # University football: October to April

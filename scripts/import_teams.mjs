@@ -82,26 +82,32 @@ async function importTeams(filePath) {
 
         if (existing) {
             console.log(`[Info] Updating ${cleanName}...`);
-            await supabase.from('teams').update({
+            const updatePayload = {
                 location: location || null,
                 founded_year: founded_year ? parseInt(founded_year) : null,
                 folded_year: folded_year ? parseInt(folded_year) : null,
                 notes: notes || null,
-                logo_url: logo_url || null,
                 team_type: team_type || 'Adult'
-            }).eq('id', existing.id);
+            };
+            if (logo_url !== undefined && logo_url !== null && logo_url.trim() !== '') {
+                updatePayload.logo_url = logo_url.trim();
+            }
+            await supabase.from('teams').update(updatePayload).eq('id', existing.id);
             await ensureSampleNote('teams', existing.id);
         } else {
             console.log(`[Success] Creating ${cleanName}...`);
-            const { data: newData, error: insertError } = await supabase.from('teams').insert({
+            const insertPayload = {
                 name: cleanName,
                 location: location || null,
                 founded_year: founded_year ? parseInt(founded_year) : null,
                 folded_year: folded_year ? parseInt(folded_year) : null,
                 notes: notes || null,
-                logo_url: logo_url || null,
                 team_type: team_type || 'Adult'
-            }).select('id').single();
+            };
+            if (logo_url !== undefined && logo_url !== null && logo_url.trim() !== '') {
+                insertPayload.logo_url = logo_url.trim();
+            }
+            const { data: newData, error: insertError } = await supabase.from('teams').insert(insertPayload).select('id').single();
 
             if (!insertError && newData) {
                 await ensureSampleNote('teams', newData.id);

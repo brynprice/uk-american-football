@@ -63,7 +63,7 @@ async function measureQuery(name, budgetMs, fn) {
 async function runBenchmark() {
   const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19);
   console.log('========================================================================');
-  console.log(` BRITBALL ARCHIVE PERFORMANCE BENCHMARK (${timestamp} UTC)`);
+  console.log(` BRITBALL.IO PERFORMANCE BENCHMARK (${timestamp} UTC)`);
   console.log('========================================================================\n');
 
   // 1. Table Counts

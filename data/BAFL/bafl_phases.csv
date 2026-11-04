@@ -1,0 +1,462 @@
+competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal
+bafl,2009,Premiership,Tier,,high,0
+bafl,2009,Playoffs,Playoffs,Premiership,high,0
+bafl,2009,Premier Division,Division,Premiership,high,1
+bafl,2009,Division One,Tier,,high,1
+bafl,2009,Playoffs,Playoffs,Division One,high,0
+bafl,2009,Division 1 North,Division,Division One,high,1
+bafl,2009,Division 1 South East,Division,Division One,high,2
+bafl,2009,Division 1 South West,Division,Division One,high,3
+bafl,2009,Division Two,Tier,,high,2
+bafl,2009,Playoffs,Playoffs,Division Two,high,0
+bafl,2009,Division 2 Scottish,Division,Division Two,high,1
+bafl,2009,Division 2 North,Division,Division Two,high,2
+bafl,2009,Division 2 Central,Division,Division Two,high,3
+bafl,2009,Division 2 East,Division,Division Two,high,4
+bafl,2009,Division 2 South East,Division,Division Two,high,5
+bafl,2009,Division 2 South West,Division,Division Two,high,6
+bafl,2008,Premiership,Tier,,high,0
+bafl,2008,Playoffs,Playoffs,Premiership,high,0
+bafl,2008,Premier Division,Division,Premiership,high,1
+bafl,2008,Division One,Tier,,high,1
+bafl,2008,Playoffs,Playoffs,Division One,high,0
+bafl,2008,Division 1 North,Division,Division One,high,1
+bafl,2008,Division 1 South,Division,Division One,high,2
+bafl,2008,Division Two,Tier,,high,2
+bafl,2008,Playoffs,Playoffs,Division Two,high,0
+bafl,2008,Division 2 Central,Division,Division Two,high,1
+bafl,2008,Division 2 East,Division,Division Two,high,2
+bafl,2008,Division 2 North,Division,Division Two,high,3
+bafl,2008,Division 2 South East,Division,Division Two,high,4
+bafl,2008,Division 2 South West,Division,Division Two,high,5
+bafl,2007,Premiership,Tier,,high,0
+bafl,2007,Playoffs,Playoffs,Premiership,high,0
+bafl,2007,Premier Division,Division,Premiership,high,1
+bafl,2007,Division One,Tier,,high,1
+bafl,2007,Playoffs,Playoffs,Division One,high,0
+bafl,2007,Division 1 North,Division,Division One,high,1
+bafl,2007,Division 1 South,Division,Division One,high,2
+bafl,2007,Division Two,Tier,,high,2
+bafl,2007,Playoffs,Playoffs,Division Two,high,0
+bafl,2007,Division 2 North,Division,Division Two,high,1
+bafl,2007,Division 2 Central,Division,Division Two,high,2
+bafl,2007,Division 2 South East,Division,Division Two,high,3
+bafl,2007,Division 2 South West,Division,Division Two,high,4
+bafl,2006,Division One,Tier,,high,0
+bafl,2006,Playoffs,Playoffs,Division One,high,0
+bafl,2006,Division 1 North,Division,Division One,high,1
+bafl,2006,Division 1 South,Division,Division One,high,2
+bafl,2006,Division 1A,Tier,,high,1
+bafl,2006,Playoffs,Playoffs,Division 1A,high,0
+bafl,2006,Division 1a North,Division,Division 1A,high,1
+bafl,2006,Division 1a South,Division,Division 1A,high,2
+bafl,2006,Division Two,Tier,,high,2
+bafl,2006,Playoffs,Playoffs,Division Two,high,0
+bafl,2006,Division 2 Scottish,Division,Division Two,high,1
+bafl,2006,Division 2 Central,Division,Division Two,high,2
+bafl,2006,Division 2 East,Division,Division Two,high,3
+bafl,2006,Division 2 South,Division,Division Two,high,4
+bafl,2006,Division 2 West,Division,Division Two,high,5
+bafl,2005,Division One,Tier,,high,0
+bafl,2005,Playoffs,Playoffs,Division One,high,0
+bafl,2005,Division 1 North,Division,Division One,high,1
+bafl,2005,Division 1 South,Division,Division One,high,2
+bafl,2005,Division 1A,Tier,,high,1
+bafl,2005,Playoffs,Playoffs,Division 1A,high,0
+bafl,2005,Division 1a North,Division,Division 1A,high,1
+bafl,2005,Division 1a South,Division,Division 1A,high,2
+bafl,2005,Division Two,Tier,,high,2
+bafl,2005,Playoffs,Playoffs,Division Two,high,0
+bafl,2005,Division 2 Scottish,Division,Division Two,high,1
+bafl,2005,Division 2 Central,Division,Division Two,high,2
+bafl,2005,Division 2 South East,Division,Division Two,high,3
+bafl,2005,Division 2 South West,Division,Division Two,high,4
+bafl,2004,Division One,Tier,,high,0
+bafl,2004,Playoffs,Playoffs,Division One,high,0
+bafl,2004,Division 1 North,Division,Division One,high,1
+bafl,2004,Division 1 South,Division,Division One,high,2
+bafl,2004,Division 1A,Tier,,high,1
+bafl,2004,Playoffs,Playoffs,Division 1A,high,0
+bafl,2004,Division 1a North,Division,Division 1A,high,1
+bafl,2004,Division 1a South,Division,Division 1A,high,2
+bafl,2004,Division Two,Tier,,high,2
+bafl,2004,Playoffs,Playoffs,Division Two,high,0
+bafl,2004,Division 2 Scottish,Division,Division Two,high,1
+bafl,2004,Division 2 North,Division,Division Two,high,2
+bafl,2004,Division 2 South East,Division,Division Two,high,3
+bafl,2004,Division 2 South West,Division,Division Two,high,4
+bafl,2003,Division One,Tier,,high,0
+bafl,2003,Playoffs,Playoffs,Division One,high,0
+bafl,2003,Division 1 North,Division,Division One,high,1
+bafl,2003,Division 1 South,Division,Division One,high,2
+bafl,2003,Division Two,Tier,,high,1
+bafl,2003,Playoffs,Playoffs,Division Two,high,0
+bafl,2003,Division 2 North,Division,Division Two,high,1
+bafl,2003,Division 2 South West,Division,Division Two,high,2
+bafl,2003,Division 2 South East,Division,Division Two,high,3
+bafl,2002,Division One,Tier,,high,0
+bafl,2002,Playoffs,Playoffs,Division One,high,0
+bafl,2002,Division 1 North,Division,Division One,high,1
+bafl,2002,Division 1 South,Division,Division One,high,2
+bafl,2002,Division Two,Tier,,high,1
+bafl,2002,Playoffs,Playoffs,Division Two,high,0
+bafl,2002,Division 2 North,Division,Division Two,high,1
+bafl,2002,Division 2 South,Division,Division Two,high,2
+bafl,2001,Division One,Tier,,high,0
+bafl,2001,Playoffs,Playoffs,Division One,high,0
+bafl,2001,Division 1 North,Division,Division One,high,1
+bafl,2001,Division 1 South,Division,Division One,high,2
+bafl,2001,Division Two,Tier,,high,1
+bafl,2001,Playoffs,Playoffs,Division Two,high,0
+bafl,2001,Division 2 North,Division,Division Two,high,1
+bafl,2001,Division 2 South,Division,Division Two,high,2
+bafl,2000,Division One,Tier,,high,0
+bafl,2000,Playoffs,Playoffs,Division One,high,0
+bafl,2000,Division 1 North,Division,Division One,high,1
+bafl,2000,Division 1 South,Division,Division One,high,2
+bafl,2000,Division Two,Tier,,high,1
+bafl,2000,Playoffs,Playoffs,Division Two,high,0
+bafl,2000,Division 2 North,Division,Division Two,high,1
+bafl,2000,Division 2 South,Division,Division Two,high,2
+bafl,2000,Division 2 East,Division,Division Two,high,3
+bafl,1999,Division One,Tier,,high,0
+bafl,1999,Playoffs,Playoffs,Division One,high,0
+bafl,1999,Division 1 National,Division,Division One,high,1
+bafl,1999,Division 1 Central,Division,Division One,high,2
+bafl,1999,Division 1 Eastern,Division,Division One,high,3
+bafl,1999,Division 1 Northern,Division,Division One,high,4
+bafl,1999,Division Two,Tier,,high,1
+bafl,1999,Playoffs,Playoffs,Division Two,high,0
+bafl,1999,Division 2 Northern,Division,Division Two,high,1
+bafl,1999,Division 2 Southern,Division,Division Two,high,2
+bafl,1998,Division One,Tier,,high,0
+bafl,1998,Playoffs,Playoffs,Division One,high,0
+bafl,1998,Division 1 North,Division,Division One,high,1
+bafl,1998,Division 1 South East,Division,Division One,high,2
+bafl,1998,Division 1 South West,Division,Division One,high,3
+bafl,1998,Division Two,Tier,,high,1
+bafl,1998,Playoffs,Playoffs,Division Two,high,0
+bafl,1998,Division 2 North East,Division,Division Two,high,1
+bafl,1998,Division 2 North West,Division,Division Two,high,2
+bafl,1998,Division 2 South East,Division,Division Two,high,3
+bafl,1998,Division 2 South West,Division,Division Two,high,4
+bafl,1997,Division One,Tier,,high,0
+bafl,1997,Playoffs,Playoffs,Division One,high,0
+bafl,1997,Division 1 North,Division,Division One,high,1
+bafl,1997,Division 1 South East & Midlands,Division,Division One,high,2
+bafl,1997,Division 1 South West & Midlands,Division,Division One,high,3
+bafl,1997,Division Two,Tier,,high,1
+bafl,1997,Playoffs,Playoffs,Division Two,high,0
+bafl,1997,Division 2 Midlands,Division,Division Two,high,1
+bafl,1997,Division 2 North,Division,Division Two,high,2
+bafl,1997,Division 2 South East,Division,Division Two,high,3
+bafl,1997,Division 2 South West,Division,Division Two,high,4
+bafl,1996,Division One,Tier,,high,0
+bafl,1996,Playoffs,Playoffs,Division One,high,0
+bafl,1996,Division 1 North,Division,Division One,high,1
+bafl,1996,Division 1 South,Division,Division One,high,2
+bafl,1996,Division Two,Tier,,high,1
+bafl,1996,Playoffs,Playoffs,Division Two,high,0
+bafl,1996,Division 2 North,Division,Division Two,high,1
+bafl,1996,Division 2 South,Division,Division Two,high,2
+bafl,1996,Division Three,Tier,,high,2
+bafl,1996,Playoffs,Playoffs,Division Three,high,0
+bafl,1996,Division 3 North,Division,Division Three,high,1
+bafl,1996,Division 3 South East,Division,Division Three,high,2
+bafl,1996,Division 3 Midlands,Division,Division Three,high,3
+bafl,1996,Division 3 South West,Division,Division Three,high,4
+bafl,1995,Division One,Tier,,high,0
+bafl,1995,Playoffs,Playoffs,Division One,high,0
+bafl,1995,Division 1,Division,Division One,high,1
+bafl,1995,Division Two,Tier,,high,1
+bafl,1995,Playoffs,Playoffs,Division Two,high,0
+bafl,1995,Division 2 North & Midlands,Division,Division Two,high,1
+bafl,1995,Division 2 South East,Division,Division Two,high,2
+bafl,1995,Division 2 South West,Division,Division Two,high,3
+bafl,1995,Division Three,Tier,,high,2
+bafl,1995,Playoffs,Playoffs,Division Three,high,0
+bafl,1995,Division 3 East Midlands,Division,Division Three,high,1
+bafl,1995,Division 3 North East,Division,Division Three,high,2
+bafl,1995,Division 3 North West,Division,Division Three,high,3
+bafl,1995,Division 3 South,Division,Division Three,high,4
+bafl,1995,Division 3 South Central,Division,Division Three,high,5
+bafl,1995,Division 3 West Midlands,Division,Division Three,high,6
+bafl,1994,Division One,Tier,,high,0
+bafl,1994,Playoffs,Playoffs,Division One,high,0
+bafl,1994,Division 1,Division,Division One,high,1
+bafl,1994,Division Two,Tier,,high,1
+bafl,1994,Playoffs,Playoffs,Division Two,high,0
+bafl,1994,Division 2 Scotland,Division,Division Two,high,1
+bafl,1994,Division 2 North/Midlands,Division,Division Two,high,2
+bafl,1994,Division 2 Southwest,Division,Division Two,high,3
+bafl,1994,Division 2 Southeast,Division,Division Two,high,4
+bafl,1994,Division Three,Tier,,high,2
+bafl,1994,Playoffs,Playoffs,Division Three,high,0
+bafl,1994,Division 3 North,Division,Division Three,high,1
+bafl,1994,Division 3 Midlands,Division,Division Three,high,2
+bafl,1994,Division 3 Southwest,Division,Division Three,high,3
+bafl,1994,Division 3 Southeast,Division,Division Three,high,4
+bafl,1994,Division Four,Tier,,high,3
+bafl,1994,Playoffs,Playoffs,Division Four,high,0
+bafl,1994,Division 4 North,Division,Division Four,high,1
+bafl,1994,Division 4 Midlands,Division,Division Four,high,2
+bafl,1994,Division 4 Southern,Division,Division Four,high,3
+bafl,1993,NDMA,Tier,,high,0
+bafl,1993,Playoffs,Playoffs,NDMA,high,0
+bafl,1993,NDMA Northern,Division,NDMA,high,1
+bafl,1993,NDMA Central,Division,NDMA,high,2
+bafl,1993,NDMA Southern,Division,NDMA,high,3
+bafl,1993,BNGL National,Tier,,high,1
+bafl,1993,Playoffs,Playoffs,BNGL National,high,0
+bafl,1993,BNGL National North,Division,BNGL National,high,1
+bafl,1993,BNGL National Midlands,Division,BNGL National,high,2
+bafl,1993,BNGL National South,Division,BNGL National,high,3
+bafl,1993,BNGL Premier,Tier,,high,2
+bafl,1993,Playoffs,Playoffs,BNGL Premier,high,0
+bafl,1993,BNGL Premier North,Division,BNGL Premier,high,1
+bafl,1993,BNGL Premier Midlands,Division,BNGL Premier,high,2
+bafl,1993,BNGL Premier Southwest,Division,BNGL Premier,high,3
+bafl,1993,BNGL Premier South Central,Division,BNGL Premier,high,4
+bafl,1993,BNGL Premier Southeast,Division,BNGL Premier,high,5
+bafl,1993,BNGL First Division,Tier,,high,3
+bafl,1993,Playoffs,Playoffs,BNGL First Division,high,0
+bafl,1993,BNGL Div 1 East Midlands,Division,BNGL First Division,high,1
+bafl,1993,BNGL Div 1 West Midlands,Division,BNGL First Division,high,2
+bafl,1993,BNGL Div 1 North,Division,BNGL First Division,high,3
+bafl,1993,BNGL Div 1 South Central,Division,BNGL First Division,high,4
+bafl,1993,BNGL Div 1 Southwest,Division,BNGL First Division,high,5
+bafl,1993,BNGL Div 1 Southeast,Division,BNGL First Division,high,6
+bafl,1992,NDMA Division One,Tier,,high,0
+bafl,1992,Playoffs,Playoffs,NDMA Division One,high,0
+bafl,1992,NDMA Div 1 Northern,Division,NDMA Division One,high,1
+bafl,1992,NDMA Div 1 Southern,Division,NDMA Division One,high,2
+bafl,1992,NDMA Division Two,Tier,,high,1
+bafl,1992,Playoffs,Playoffs,NDMA Division Two,high,0
+bafl,1992,NDMA Div 2 Northern,Division,NDMA Division Two,high,1
+bafl,1992,NDMA Div 2 Southern,Division,NDMA Division Two,high,2
+bafl,1992,BNGL National,Tier,,high,2
+bafl,1992,Playoffs,Playoffs,BNGL National,high,0
+bafl,1992,BNGL National Scottish,Division,BNGL National,high,1
+bafl,1992,BNGL National North/West Midlands,Division,BNGL National,high,2
+bafl,1992,BNGL National Southwest,Division,BNGL National,high,3
+bafl,1992,BNGL National South/East Midlands,Division,BNGL National,high,4
+bafl,1992,BNGL Premier,Tier,,high,3
+bafl,1992,Playoffs,Playoffs,BNGL Premier,high,0
+bafl,1992,BNGL Premier North,Division,BNGL Premier,high,1
+bafl,1992,BNGL Premier West Midlands,Division,BNGL Premier,high,2
+bafl,1992,BNGL Premier East Midlands,Division,BNGL Premier,high,3
+bafl,1992,BNGL Premier Southeast,Division,BNGL Premier,high,4
+bafl,1992,BNGL Premier Southwest,Division,BNGL Premier,high,5
+bafl,1992,BNGL First Division,Tier,,high,4
+bafl,1992,Playoffs,Playoffs,BNGL First Division,high,0
+bafl,1992,BNGL Div 1 North West,Division,BNGL First Division,high,1
+bafl,1992,BNGL Div 1 North Midlands,Division,BNGL First Division,high,2
+bafl,1992,BNGL Div 1 South Midlands,Division,BNGL First Division,high,3
+bafl,1992,BNGL Div 1 South,Division,BNGL First Division,high,4
+bafl,1992,BNGL Div 1 Southwest,Division,BNGL First Division,high,5
+bafl,1991,NDMA Division One,Tier,,high,0
+bafl,1991,Playoffs,Playoffs,NDMA Division One,high,0
+bafl,1991,NDMA Div 1 Northern,Division,NDMA Division One,high,1
+bafl,1991,NDMA Div 1 Southern,Division,NDMA Division One,high,2
+bafl,1991,NDMA Division Two,Tier,,high,1
+bafl,1991,Playoffs,Playoffs,NDMA Division Two,high,0
+bafl,1991,NDMA Div 2 Northern,Division,NDMA Division Two,high,1
+bafl,1991,NDMA Div 2 Southern,Division,NDMA Division Two,high,2
+bafl,1991,BNGL National,Tier,,high,2
+bafl,1991,Playoffs,Playoffs,BNGL National,high,0
+bafl,1991,BNGL National Scottish,Division,BNGL National,high,1
+bafl,1991,BNGL National Northern,Division,BNGL National,high,2
+bafl,1991,BNGL National Midland,Division,BNGL National,high,3
+bafl,1991,BNGL National Southwest,Division,BNGL National,high,4
+bafl,1991,BNGL National South Capital,Division,BNGL National,high,5
+bafl,1991,BNGL National Southeast,Division,BNGL National,high,6
+bafl,1991,BNGL Premier,Tier,,high,3
+bafl,1991,Playoffs,Playoffs,BNGL Premier,high,0
+bafl,1991,BNGL Premier Northwest,Division,BNGL Premier,high,1
+bafl,1991,BNGL Premier Northeast,Division,BNGL Premier,high,2
+bafl,1991,BNGL Premier Southwest,Division,BNGL Premier,high,3
+bafl,1991,BNGL Premier Midlands,Division,BNGL Premier,high,4
+bafl,1991,BNGL Premier Southeast,Division,BNGL Premier,high,5
+bafl,1991,BNGL First Division,Tier,,high,4
+bafl,1991,Playoffs,Playoffs,BNGL First Division,high,0
+bafl,1991,BNGL Div 1 Northern,Division,BNGL First Division,high,1
+bafl,1991,BNGL Div 1 East Midlands,Division,BNGL First Division,high,2
+bafl,1991,BNGL Div 1 Southeast,Division,BNGL First Division,high,3
+bafl,1991,BNGL Div 1 Southwest,Division,BNGL First Division,high,4
+bafl,1991,BNGL Div 1 West Midlands,Division,BNGL First Division,high,5
+bafl,1991,BNGL Div 1 South Capital,Division,BNGL First Division,high,6
+bafl,1990,NDMA,Tier,,high,0
+bafl,1990,Playoffs,Playoffs,NDMA,high,0
+bafl,1990,NDMA Northern,Division,NDMA,high,1
+bafl,1990,NDMA Southern,Division,NDMA,high,2
+bafl,1990,NCMMA,Tier,,high,1
+bafl,1990,Playoffs,Playoffs,NCMMA,high,0
+bafl,1990,NCMMA Northern,Division,NCMMA,high,1
+bafl,1990,NCMMA Southern,Division,NCMMA,high,2
+bafl,1990,NCMMA Midland,Division,NCMMA,high,3
+bafl,1990,NCMMA Central,Division,NCMMA,high,4
+bafl,1990,BNGL National,Tier,,high,2
+bafl,1990,Playoffs,Playoffs,BNGL National,high,0
+bafl,1990,BNGL National Scottish,Division,BNGL National,high,1
+bafl,1990,BNGL National Midlands,Division,BNGL National,high,2
+bafl,1990,BNGL National Northern,Division,BNGL National,high,3
+bafl,1990,BNGL National Southeast,Division,BNGL National,high,4
+bafl,1990,BNGL National Southern,Division,BNGL National,high,5
+bafl,1990,BNGL National Southwest,Division,BNGL National,high,6
+bafl,1990,BNGL Premier,Tier,,high,3
+bafl,1990,Playoffs,Playoffs,BNGL Premier,high,0
+bafl,1990,BNGL Premier Scottish,Division,BNGL Premier,high,1
+bafl,1990,BNGL Premier Northeast,Division,BNGL Premier,high,2
+bafl,1990,BNGL Premier Midlands,Division,BNGL Premier,high,3
+bafl,1990,BNGL Premier Southwest,Division,BNGL Premier,high,4
+bafl,1990,BNGL Premier Northwest,Division,BNGL Premier,high,5
+bafl,1990,BNGL Premier Southeast,Division,BNGL Premier,high,6
+bafl,1990,BNGL Premier Southern,Division,BNGL Premier,high,7
+bafl,1990,BNGL First Division,Tier,,high,4
+bafl,1990,Playoffs,Playoffs,BNGL First Division,high,0
+bafl,1990,BNGL Div 1 Southern,Division,BNGL First Division,high,1
+bafl,1990,BNGL Div 1 West Midlands,Division,BNGL First Division,high,2
+bafl,1990,BNGL Div 1 East Midlands,Division,BNGL First Division,high,3
+bafl,1990,BNGL Div 1 Southwest,Division,BNGL First Division,high,4
+bafl,1990,BNGL Div 1 Northeast,Division,BNGL First Division,high,5
+bafl,1990,BNGL Div 1 Northwest,Division,BNGL First Division,high,6
+bafl,1990,BNGL Div 1 Southeast,Division,BNGL First Division,high,7
+bafl,1989,Budweiser League,Tier,,high,0
+bafl,1989,Playoffs,Playoffs,Budweiser League,high,0
+bafl,1989,Budweiser League Southeast,Division,Budweiser League,high,1
+bafl,1989,Budweiser League Southwest,Division,Budweiser League,high,2
+bafl,1989,Budweiser League Midlands,Division,Budweiser League,high,3
+bafl,1989,Budweiser League North,Division,Budweiser League,high,4
+bafl,1989,CGL Crown National,Tier,,high,1
+bafl,1989,Playoffs,Playoffs,CGL Crown National,high,0
+bafl,1989,CGL Crown Southern,Division,CGL Crown National,high,1
+bafl,1989,CGL Crown Central,Division,CGL Crown National,high,2
+bafl,1989,CGL Crown Northern,Division,CGL Crown National,high,3
+bafl,1989,CGL Crown Scottish,Division,CGL Crown National,high,4
+bafl,1989,CGL Duke Premier,Tier,,high,2
+bafl,1989,Playoffs,Playoffs,CGL Duke Premier,high,0
+bafl,1989,CGL Duke Scottish,Division,CGL Duke Premier,high,1
+bafl,1989,CGL Duke Southern,Division,CGL Duke Premier,high,2
+bafl,1989,CGL Duke Eastern,Division,CGL Duke Premier,high,3
+bafl,1989,CGL Duke Northern,Division,CGL Duke Premier,high,4
+bafl,1989,CGL Duke Irish,Division,CGL Duke Premier,high,5
+bafl,1989,CGL Duke Western,Division,CGL Duke Premier,high,6
+bafl,1989,CGL Baron First Division,Tier,,high,3
+bafl,1989,Playoffs,Playoffs,CGL Baron First Division,high,0
+bafl,1989,CGL Baron Northern,Division,CGL Baron First Division,high,1
+bafl,1989,CGL Baron Central,Division,CGL Baron First Division,high,2
+bafl,1989,CGL Baron Southern,Division,CGL Baron First Division,high,3
+bafl,1989,CGL Baron Scottish,Division,CGL Baron First Division,high,4
+bafl,1989,CGL Baron Irish,Division,CGL Baron First Division,high,5
+bafl,1989,BNGL National,Tier,,high,4
+bafl,1989,Playoffs,Playoffs,BNGL National,high,0
+bafl,1989,BNGL National Northern,Division,BNGL National,high,1
+bafl,1989,BNGL National Southern,Division,BNGL National,high,2
+bafl,1989,BNGL Premier,Tier,,high,5
+bafl,1989,Playoffs,Playoffs,BNGL Premier,high,0
+bafl,1989,BNGL Premier North A,Division,BNGL Premier,high,1
+bafl,1989,BNGL Premier North B,Division,BNGL Premier,high,2
+bafl,1989,BNGL Premier North C,Division,BNGL Premier,high,3
+bafl,1989,BNGL Premier South A,Division,BNGL Premier,high,4
+bafl,1989,BNGL Premier South B,Division,BNGL Premier,high,5
+bafl,1989,BNGL Premier South C,Division,BNGL Premier,high,6
+bafl,1989,BNGL First Division,Tier,,high,6
+bafl,1989,Playoffs,Playoffs,BNGL First Division,high,0
+bafl,1989,BNGL Div 1 North A,Division,BNGL First Division,high,1
+bafl,1989,BNGL Div 1 North B,Division,BNGL First Division,high,2
+bafl,1989,BNGL Div 1 North C,Division,BNGL First Division,high,3
+bafl,1989,BNGL Div 1 South A,Division,BNGL First Division,high,4
+bafl,1989,BNGL Div 1 South B,Division,BNGL First Division,high,5
+bafl,1989,BNGL Div 1 South C,Division,BNGL First Division,high,6
+bafl,1989,BNGL Div 1 South D,Division,BNGL First Division,high,7
+bafl,1989,SWAFL,Tier,,high,7
+bafl,1989,SWAFL Western,Division,SWAFL,high,1
+bafl,1988,Budweiser National Division,Tier,,high,0
+bafl,1988,Playoffs,Playoffs,Budweiser National Division,high,0
+bafl,1988,Budweiser National Northern,Division,Budweiser National Division,high,1
+bafl,1988,Budweiser National Midlands,Division,Budweiser National Division,high,2
+bafl,1988,Budweiser National Southern,Division,Budweiser National Division,high,3
+bafl,1988,Budweiser Premier Division,Tier,,high,1
+bafl,1988,Playoffs,Playoffs,Budweiser Premier Division,high,0
+bafl,1988,Budweiser Premier Scottish,Division,Budweiser Premier Division,high,1
+bafl,1988,Budweiser Premier Northern,Division,Budweiser Premier Division,high,2
+bafl,1988,Budweiser Premier North Midlands,Division,Budweiser Premier Division,high,3
+bafl,1988,Budweiser Premier East Midlands,Division,Budweiser Premier Division,high,4
+bafl,1988,Budweiser Premier North London & East,Division,Budweiser Premier Division,high,5
+bafl,1988,Budweiser Premier Southern,Division,Budweiser Premier Division,high,6
+bafl,1988,Budweiser Premier Southwest,Division,Budweiser Premier Division,high,7
+bafl,1988,Budweiser Premier South London & West,Division,Budweiser Premier Division,high,8
+bafl,1988,Budweiser Division One,Tier,,high,2
+bafl,1988,Playoffs,Playoffs,Budweiser Division One,high,0
+bafl,1988,Budweiser Div 1 Northern,Division,Budweiser Division One,high,1
+bafl,1988,Budweiser Div 1 Central,Division,Budweiser Division One,high,2
+bafl,1988,Budweiser Div 1 Scottish,Division,Budweiser Division One,high,3
+bafl,1988,Budweiser Div 1 Eastern,Division,Budweiser Division One,high,4
+bafl,1988,Budweiser Div 1 South West,Division,Budweiser Division One,high,5
+bafl,1988,Budweiser Div 1 Southeast,Division,Budweiser Division One,high,6
+bafl,1988,BNGL National,Tier,,high,3
+bafl,1988,Playoffs,Playoffs,BNGL National,high,0
+bafl,1988,BNGL Midlands,Division,BNGL National,high,1
+bafl,1988,BNGL Channel,Division,BNGL National,high,2
+bafl,1988,BNGL Pennine,Division,BNGL National,high,3
+bafl,1988,BNGL Severn,Division,BNGL National,high,4
+bafl,1988,BNGL Thames,Division,BNGL National,high,5
+bafl,1988,BNGL Northwest,Division,BNGL National,high,6
+bafl,1988,BNGL Northern,Division,BNGL National,high,7
+bafl,1988,BNGL Capital,Division,BNGL National,high,8
+bafl,1988,BNGL Humber,Division,BNGL National,high,9
+bafl,1988,BNGL Anglian,Division,BNGL National,high,10
+bafl,1988,BNGL County,Division,BNGL National,high,11
+bafl,1988,UKAFL,Tier,,high,4
+bafl,1988,Playoffs,Playoffs,UKAFL,high,0
+bafl,1988,UKAFL Division,Division,UKAFL,high,1
+bafl,1988,SWAFL,Tier,,high,5
+bafl,1988,SWAFL Division,Division,SWAFL,high,1
+bafl,1988,CAFL,Tier,,high,6
+bafl,1988,Playoffs,Playoffs,CAFL,high,0
+bafl,1988,CAFL Division,Division,CAFL,high,1
+bafl,1987,Budweiser National Division,Tier,,high,1
+bafl,1987,Playoffs,Playoffs,Budweiser National Division,high,0
+bafl,1987,Budweiser National Northern,Division,Budweiser National Division,high,1
+bafl,1987,Budweiser National Western,Division,Budweiser National Division,high,2
+bafl,1987,Budweiser National Eastern,Division,Budweiser National Division,high,3
+bafl,1987,Budweiser National Southern,Division,Budweiser National Division,high,4
+bafl,1987,Budweiser Premier Division,Tier,,high,2
+bafl,1987,Playoffs,Playoffs,Budweiser Premier Division,high,0
+bafl,1987,Budweiser Premier Borders,Division,Budweiser Premier Division,high,1
+bafl,1987,Budweiser Premier Northern,Division,Budweiser Premier Division,high,2
+bafl,1987,Budweiser Premier Central,Division,Budweiser Premier Division,high,3
+bafl,1987,Budweiser Premier Southwest,Division,Budweiser Premier Division,high,4
+bafl,1987,Budweiser Premier Southern,Division,Budweiser Premier Division,high,5
+bafl,1987,Budweiser Premier Southeast,Division,Budweiser Premier Division,high,6
+bafl,1987,Budweiser Division One,Tier,,high,3
+bafl,1987,Playoffs,Playoffs,Budweiser Division One,high,0
+bafl,1987,Budweiser Div 1 Scotland,Division,Budweiser Division One,high,1
+bafl,1987,Budweiser Div 1 Northern,Division,Budweiser Division One,high,2
+bafl,1987,Budweiser Div 1 Central,Division,Budweiser Division One,high,3
+bafl,1987,Budweiser Div 1 Southwest,Division,Budweiser Division One,high,4
+bafl,1987,Budweiser Div 1 Southern,Division,Budweiser Division One,high,5
+bafl,1987,Budweiser Div 1 Southeast,Division,Budweiser Division One,high,6
+bafl,1987,Budweiser Div 1 Eastern,Division,Budweiser Division One,high,7
+bafl,1987,Budweiser Div 1 Capital,Division,Budweiser Division One,high,8
+bafl,1987,British Gridiron Football League,Tier,,high,4
+bafl,1987,Playoffs,Playoffs,British Gridiron Football League,high,0
+bafl,1987,BGFL West,Division,British Gridiron Football League,high,1
+bafl,1987,BGFL East,Division,British Gridiron Football League,high,2
+bafl,1987,Capital League,Tier,,high,5
+bafl,1987,Playoffs,Playoffs,Capital League,high,0
+bafl,1987,Capital League County,Division,Capital League,high,1
+bafl,1987,Capital League City,Division,Capital League,high,2
+bafl,1987,Thistle League,Tier,,high,6
+bafl,1987,Thistle League Division,Division,Thistle League,high,1
+bafl,1987,NWWCAFL,Tier,,high,7
+bafl,1987,Playoffs,Playoffs,NWWCAFL,high,0
+bafl,1987,NWWCAFL Division,Division,NWWCAFL,high,1
+bafl,1987,UKAFL,Tier,,high,8
+bafl,1987,Playoffs,Playoffs,UKAFL,high,0
+bafl,1987,UKAFL Northern A,Division,UKAFL,high,1
+bafl,1987,UKAFL Northern B,Division,UKAFL,high,2
+bafl,1987,UKAFL Central A,Division,UKAFL,high,3
+bafl,1987,UKAFL Central B,Division,UKAFL,high,4
+bafl,1987,UKAFL Southern A,Division,UKAFL,high,5
+bafl,1987,UKAFL Southern B,Division,UKAFL,high,6

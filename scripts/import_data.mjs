@@ -458,12 +458,16 @@ async function importData(filePath) {
             // Resolve away phase if this is an inter-phase game
             let awayPhaseId = null;
             if (away_phase && away_phase.trim()) {
-                awayPhaseId = await getPhase(seasonId, away_phase.trim(), away_parent_phase);
-                if (!awayPhaseId) {
-                    console.warn(`  [Skip] Away Phase "${away_phase}" not found for season ${year}. skipping record.`);
-                    continue;
+                if (away_phase.trim() === phase?.trim() && (!away_parent_phase || away_parent_phase.trim() === parent_phase?.trim())) {
+                    awayPhaseId = phaseId;
+                } else {
+                    awayPhaseId = await getPhase(seasonId, away_phase.trim(), away_parent_phase || parent_phase);
+                    if (!awayPhaseId) {
+                        console.warn(`  [Skip] Away Phase "${away_phase}" not found for season ${year}. skipping record.`);
+                        continue;
+                    }
+                    console.log(`  [Inter-Phase] Away team phase resolved to: ${awayPhaseId}`);
                 }
-                console.log(`  [Inter-Phase] Away team phase resolved to: ${awayPhaseId}`);
             }
 
             // 2. Resolve Teams

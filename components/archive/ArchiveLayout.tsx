@@ -13,13 +13,13 @@ export default function ArchiveLayout({
                     <Link href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
                         <Image
                             src="/images/britball-logo.png"
-                            alt="Britball Archive"
+                            alt="Britball.io"
                             width={160}
                             height={41}
                             priority
                             className="h-9 sm:h-10 w-auto object-contain"
                         />
-                        <span className="sr-only">Britball Archive</span>
+                        <span className="sr-only">Britball.io</span>
                     </Link>
                     <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm uppercase tracking-widest font-sans font-medium">
                         <Link href="/about" className="hover:text-blue-700">About</Link>
@@ -40,7 +40,7 @@ export default function ArchiveLayout({
                     <Link href="/" className="mb-4 inline-block hover:opacity-85 transition-opacity">
                         <Image
                             src="/images/britball-logo.png"
-                            alt="Britball Archive"
+                            alt="Britball.io"
                             width={125}
                             height={32}
                             className="h-7 w-auto object-contain opacity-75 hover:opacity-100 transition-opacity"
@@ -55,7 +55,7 @@ export default function ArchiveLayout({
                         <span>&bull;</span>
                         <a href="mailto:ukaffootballproject@gmail.com" className="text-slate-700 font-semibold hover:text-blue-700">Contact</a>
                     </div>
-                    <p>&copy; {new Date().getFullYear()} Britball Archive</p>
+                    <p>&copy; {new Date().getFullYear()} Britball.io</p>
                     <p className="mt-1 italic">Preserving the history of American Football in Great Britain — founded by Bryn Price.</p>
                 </div>
             </footer>
