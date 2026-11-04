@@ -239,8 +239,8 @@ export default function AdminUsersPage() {
   };
 
   const handleResetPassword = (userId: string) => {
-    if (!resetPasswordValue || resetPasswordValue.length < 6) {
-      showToast("Password must be at least 6 characters.", "error");
+    if (!resetPasswordValue || resetPasswordValue.length < 10) {
+      showToast("Password must be at least 10 characters.", "error");
       return;
     }
     startTransition(async () => {
@@ -403,10 +403,10 @@ export default function AdminUsersPage() {
                 <input
                   type="text"
                   required
-                  minLength={6}
+                  minLength={10}
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="Min 6 characters"
+                  placeholder="Min 10 characters"
                   className="w-full border-2 border-slate-900 px-3 py-2 text-sm font-mono font-bold focus:outline-none focus:bg-amber-50/40"
                 />
               </div>
@@ -664,7 +664,7 @@ export default function AdminUsersPage() {
                           type="text"
                           value={resetPasswordValue}
                           onChange={(e) => setResetPasswordValue(e.target.value)}
-                          placeholder="Min 6 characters"
+                          placeholder="Min 10 characters"
                           className="border border-slate-400 bg-white px-2.5 py-1 text-xs font-mono"
                         />
                         <button

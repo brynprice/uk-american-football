@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { approveGameProposal, rejectGameProposal } from "./actions";
+import { isSafeHttpUrl } from "@/lib/utils/validation";
 
 interface Proposal {
     id: string;
@@ -117,9 +118,16 @@ export default function ProposalsDashboard({ proposals: initialProposals }: { pr
                                 </div>
                                 {proposal.source_url && (
                                     <div className="pt-2">
-                                        <a href={proposal.source_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1 font-bold">
-                                            View Source Proof &rarr;
-                                        </a>
+                                        {isSafeHttpUrl(proposal.source_url) ? (
+                                            <a href={proposal.source_url.trim()} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1 font-bold">
+                                                View Source Proof &rarr;
+                                            </a>
+                                        ) : (
+                                            <div className="text-xs text-slate-600">
+                                                <span className="text-slate-500 italic">Source Reference:</span>{" "}
+                                                <span className="font-bold">{proposal.source_url}</span>
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                             </div>

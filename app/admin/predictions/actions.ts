@@ -363,6 +363,7 @@ export async function saveBatchPredictionsAction(
  */
 export async function getModelCalibrationStatsAction(seasonYear: number | "all" = 2026) {
   try {
+    await assertPermission("predictions");
     const supabase = getAdminClient();
 
     let seasonId: string | null = null;

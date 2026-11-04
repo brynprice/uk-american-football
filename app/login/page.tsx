@@ -1,12 +1,13 @@
 import { login } from './actions'
 import ArchiveLayout from '@/components/archive/ArchiveLayout'
+import { sanitizeInternalRedirect } from '@/lib/utils/validation'
 
 export default async function LoginPage(props: {
   searchParams: Promise<{ error?: string; next?: string }>
 }) {
   const searchParams = await props.searchParams
   const error = searchParams.error
-  const next = searchParams.next || '/admin'
+  const next = sanitizeInternalRedirect(searchParams.next, '/admin')
 
   return (
     <ArchiveLayout>

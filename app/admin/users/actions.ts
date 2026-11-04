@@ -118,10 +118,10 @@ export async function createManagedUserAction(payload: {
     if (!cleanEmail || !cleanEmail.includes("@")) {
       return { success: false, error: "Please provide a valid email address." };
     }
-    if (password.length < 6) {
+    if (password.length < 10) {
       return {
         success: false,
-        error: "Password must be at least 6 characters long.",
+        error: "Password must be at least 10 characters long.",
       };
     }
 
@@ -226,10 +226,10 @@ export async function resetUserPasswordAction(payload: {
     await assertAdmin();
     const supabase = getServiceClient();
 
-    if (!payload.newPassword || payload.newPassword.length < 6) {
+    if (!payload.newPassword || payload.newPassword.length < 10) {
       return {
         success: false,
-        error: "New password must be at least 6 characters long.",
+        error: "New password must be at least 10 characters long.",
       };
     }
 

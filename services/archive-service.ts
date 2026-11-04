@@ -2,6 +2,7 @@ import { supabase } from "@/lib/supabase/client";
 import { Database } from "@/lib/supabase/types";
 import { isPlayoffPhase, sortPhasesInTreeOrder } from "@/lib/utils/phase-utils";
 import { resolveTeamIdentity } from "@/lib/utils/team-resolver";
+import { isValidUuid } from "@/lib/utils/validation";
 
 export type Competition = Database["public"]["Tables"]["competitions"]["Row"];
 export type Season = Database["public"]["Tables"]["seasons"]["Row"];
@@ -167,6 +168,7 @@ export const ArchiveService = {
     },
 
     async getPhaseData(phaseId: string): Promise<any> {
+        if (!isValidUuid(phaseId)) throw new Error("Invalid phase ID");
         // 1. Fetch the initial phase to get season_id and descriptive info
         const { data: phaseData, error: phaseError } = await supabase.from("phases")
             .select("*, season:seasons(id, year, competition:competitions(name))")
@@ -285,6 +287,7 @@ export const ArchiveService = {
 
 
     async getTeamHistory(teamId: string): Promise<any> {
+        if (!isValidUuid(teamId)) throw new Error("Invalid team ID");
         const [teamRes, gamesRes, champNotesRes] = await Promise.all([
             supabase
                 .from("teams")
@@ -342,11 +345,16 @@ export const ArchiveService = {
     },
 
     async searchGamesByScore(scoreA: number, scoreB: number): Promise<any[]> {
+        const cleanScoreA = Math.trunc(Number(scoreA));
+        const cleanScoreB = Math.trunc(Number(scoreB));
+        if (!Number.isFinite(cleanScoreA) || !Number.isFinite(cleanScoreB)) {
+            return [];
+        }
         // Query games where (home = scoreA AND away = scoreB) OR (home = scoreB AND away = scoreA)
         const { data, error } = await supabase
             .from('games')
             .select('*, phase:phases!games_phase_id_fkey(*, season:seasons(*, competition:competitions(*))), home_team:teams!home_team_id(*, team_aliases(*)), away_team:teams!away_team_id(*, team_aliases(*)), venue:venues(*)')
-            .or(`and(home_score.eq.${scoreA},away_score.eq.${scoreB}),and(home_score.eq.${scoreB},away_score.eq.${scoreA})`)
+            .or(`and(home_score.eq.${cleanScoreA},away_score.eq.${cleanScoreB}),and(home_score.eq.${cleanScoreB},away_score.eq.${cleanScoreA})`)
             .neq("status", "anomaly")
             .order('date', { ascending: false, nullsFirst: false });
 
@@ -517,6 +525,7 @@ export const ArchiveService = {
     },
 
     async getPersonGamesAsCoach(personId: string): Promise<any[]> {
+        if (!isValidUuid(personId)) return [];
         // 1. Get all participations where they are the head coach
         const { data: participations } = await supabase
             .from('participations')
@@ -673,6 +682,7 @@ export const ArchiveService = {
     },
 
     async getH2HGames(team1Id: string, team2Id: string): Promise<any[]> {
+        if (!isValidUuid(team1Id) || !isValidUuid(team2Id)) return [];
         const { data, error } = await supabase
             .from("games")
             .select(`

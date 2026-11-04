@@ -1,15 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { resolveTeamIdentity } from "@/lib/utils/team-resolver";
+import { isValidUuid } from "@/lib/utils/validation";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 function escapeCSV(val: any): string {
     if (val === null || val === undefined) return "";
     let str = String(val);
-    if (str.includes(",") || str.includes('"') || str.includes("\n")) {
+    // Neutralize spreadsheet formula injection (=, +, -, @, tab, CR) unless plain negative number
+    if (/^[=+\-@\t\r]/.test(str) && !/^-\d+(\.\d+)?$/.test(str)) {
+        str = `'${str}`;
+    }
+    if (str.includes(",") || str.includes('"') || str.includes("\n") || str.includes("\r")) {
         return `"${str.replace(/"/g, '""')}"`;
     }
     return str;
@@ -20,6 +25,10 @@ export async function GET(
     { params }: { params: Promise<{ id: string }> }
 ) {
     const { id } = await params;
+
+    if (!isValidUuid(id)) {
+        return NextResponse.json({ error: "Invalid phase ID" }, { status: 400 });
+    }
 
     try {
         // 1. Fetch phase and season info

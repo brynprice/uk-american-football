@@ -3,6 +3,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
 import { assertPermission } from "@/lib/auth/admin-guard";
+import { isValidUuid } from "@/lib/utils/validation";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY!;
@@ -91,6 +92,13 @@ export async function fetchGamedayData(seasonId?: string, phaseId?: string, date
             gameStaff: [],
             defaultCoaches: []
         };
+    }
+
+    if (!isValidUuid(seasonId)) {
+        throw new Error("Invalid season ID.");
+    }
+    if (phaseId && !isValidUuid(phaseId)) {
+        throw new Error("Invalid phase ID.");
     }
 
     // Fetch phases for selected season

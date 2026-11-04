@@ -7,12 +7,12 @@ import {
   formatFactsMarkdown,
   formatFactsBrief
 } from "@/lib/facts/weekly-facts-core.mjs";
-import { exec } from "child_process";
+import { execFile } from "child_process";
 import util from "util";
 import path from "path";
 import fs from "fs";
 
-const execPromise = util.promisify(exec);
+const execFilePromise = util.promisify(execFile);
 
 function getAdminClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -60,19 +60,45 @@ export async function generateWeeklyPdfAction(options: {
   try {
     await assertPermission("facts");
 
-    const week = options.week || 2;
-    const season = options.season || 2026;
+    const rawWeek = options?.week !== undefined ? Number(options.week) : 2;
+    const rawSeason = options?.season !== undefined ? Number(options.season) : 2026;
+
+    if (!Number.isInteger(rawWeek) || rawWeek < 1 || rawWeek > 25) {
+      throw new Error("Invalid week number.");
+    }
+    if (!Number.isInteger(rawSeason) || rawSeason < 1980 || rawSeason > 2100) {
+      throw new Error("Invalid season year.");
+    }
+
+    const week = rawWeek;
+    const season = rawSeason;
     const filename = `BUCS_${season}_Week_${week}_Insights.pdf`;
-    const outputPath = path.resolve(process.cwd(), "public/reports", filename);
+    const reportsDir = path.resolve(process.cwd(), "public/reports");
+    const outputPath = path.resolve(reportsDir, filename);
+
+    if (!outputPath.startsWith(reportsDir + path.sep)) {
+      throw new Error("Invalid output file path.");
+    }
 
     // Make sure reports directory exists
-    const reportsDir = path.dirname(outputPath);
     if (!fs.existsSync(reportsDir)) {
       fs.mkdirSync(reportsDir, { recursive: true });
     }
 
-    const cmd = `node scripts/generate_weekly_pdf.mjs --week ${week} --season ${season} --output "${outputPath}"`;
-    await execPromise(cmd, { cwd: process.cwd() });
+    const scriptPath = path.resolve(process.cwd(), "scripts/generate_weekly_pdf.mjs");
+    await execFilePromise(
+      process.execPath,
+      [
+        scriptPath,
+        "--week",
+        String(week),
+        "--season",
+        String(season),
+        "--output",
+        outputPath,
+      ],
+      { cwd: process.cwd() }
+    );
 
     return {
       success: true,

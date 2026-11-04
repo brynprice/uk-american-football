@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getUserAccess, PERMISSION_METADATA } from '@/lib/auth/permissions'
+import { sanitizeInternalRedirect } from '@/lib/utils/validation'
 
 export async function login(formData: FormData) {
   const supabase = await createClient()
@@ -11,7 +12,7 @@ export async function login(formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
   const rawNext = formData.get('next') as string | null
-  let next = rawNext || '/admin'
+  let next = sanitizeInternalRedirect(rawNext, '/admin')
 
   const { data, error } = await supabase.auth.signInWithPassword({
     email,

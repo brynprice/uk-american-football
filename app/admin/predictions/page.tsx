@@ -17,6 +17,7 @@ import {
   isWalkoverScoreline,
 } from "@/lib/predictions/engine";
 import { supabase } from "@/lib/supabase/client";
+import { isValidUuid } from "@/lib/utils/validation";
 
 interface Team {
   id: string;
@@ -175,7 +176,7 @@ export default function PredictionsPage() {
 
   // Single matchup calculation
   const calculateSinglePrediction = async () => {
-    if (!homeTeamId || !awayTeamId) return;
+    if (!homeTeamId || !awayTeamId || !isValidUuid(homeTeamId) || !isValidUuid(awayTeamId)) return;
     setIsSingleLoading(true);
     setSinglePrediction(null);
 

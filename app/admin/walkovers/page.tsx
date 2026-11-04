@@ -2,10 +2,13 @@ import { createClient } from "@supabase/supabase-js";
 import Link from "next/link";
 import { updateWalkoverScore, deleteGame, updateGameNotes } from "./actions";
 import ArchiveLayout from "@/components/archive/ArchiveLayout";
+import { assertPermission } from "@/lib/auth/admin-guard";
 
 export const dynamic = "force-dynamic";
 
 export default async function WalkoverManagerPage() {
+    await assertPermission("walkovers");
+
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY!;
     const supabase = createClient(supabaseUrl, supabaseKey);

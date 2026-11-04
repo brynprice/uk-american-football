@@ -187,7 +187,7 @@ CREATE POLICY "Public read access" ON venues FOR SELECT USING (true);
 CREATE POLICY "Public read access" ON games FOR SELECT USING (true);
 CREATE POLICY "Public read access" ON game_staff FOR SELECT USING (true);
 CREATE POLICY "Public read access" ON sources FOR SELECT USING (true);
-CREATE POLICY "Public read access" ON notes FOR SELECT USING (true);
+CREATE POLICY "Public read access" ON notes FOR SELECT USING (entity_type <> 'writers_poll');
 
 -- 4. INDICES
 CREATE INDEX idx_seasons_competition_id ON seasons(competition_id);

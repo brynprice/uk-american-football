@@ -5,8 +5,13 @@ import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { isSuperAdmin } from '@/lib/auth/permissions';
+import { isValidUuid, sanitizeInternalRedirect } from '@/lib/utils/validation';
 
 export async function deleteGame(gameId: string, redirectUrl?: string) {
+    if (!isValidUuid(gameId)) {
+        return { success: false, error: 'Invalid game ID.' };
+    }
+
     // 1. Verify User Authentication & Super Admin privilege
     const supabase = await createClient();
     const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -43,7 +48,7 @@ export async function deleteGame(gameId: string, redirectUrl?: string) {
         revalidatePath('/', 'layout');
         
         if (redirectUrl) {
-            redirect(redirectUrl);
+            redirect(sanitizeInternalRedirect(redirectUrl, '/'));
         }
 
         return { success: true };

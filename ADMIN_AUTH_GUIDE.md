@@ -2,9 +2,11 @@
 
 This guide explains how to manage administrative users for Britball.io.
 
-## Creating an Admin User
+## Creating an Admin or Contributor User
 
-Since the admin section is private, you must manually create users via the Supabase Dashboard. There is no public registration form.
+The preferred way to create new accounts is through the in-app **User & Permissions Manager** at `/admin/users` (requires an existing Super Admin session), which automatically configures `app_metadata.role` and `app_metadata.permissions` with a strong password (minimum 10 characters).
+
+If bootstrapping the very first Super Admin directly via the Supabase Dashboard:
 
 1.  **Log in to Supabase**: Go to the [Supabase Dashboard](https://supabase.com/dashboard).
 2.  **Select Your Project**: Click on your project (e.g., `fbdctuiaegvdwtgtxhwv`).
@@ -14,9 +16,9 @@ Since the admin section is private, you must manually create users via the Supab
     -   Select **Create new user**.
 5.  **Enter User Details**:
     -   **Email**: Enter the email address for the admin.
-    -   **Password**: Set a secure password.
+    -   **Password**: Set a secure password (at least 10 characters).
     -   **Auto-confirm User**: Ensure this is checked so the user doesn't have to wait for an email confirmation.
-6.  **Save**: Click **Create user**.
+6.  **Save & Assign Super Admin Role**: Click **Create user**, then ensure the user's `raw_app_meta_data` includes `"role": "admin"` (accounts without `app_metadata.role === "admin"` default to zero privileges under fail-closed RBAC).
 
 ## Logging In
 

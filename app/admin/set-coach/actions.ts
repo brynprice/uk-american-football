@@ -3,6 +3,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
 import { assertPermission } from "@/lib/auth/admin-guard";
+import { isValidUuid } from "@/lib/utils/validation";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY!;
@@ -81,6 +82,9 @@ export async function updateGameCoach(gameId: string, teamId: string, coachName:
 
 export async function updateSeasonCoach(seasonId: string, teamId: string, coachName: string) {
     await assertPermission("set_coach");
+    if (!isValidUuid(seasonId) || !isValidUuid(teamId)) {
+        throw new Error("Invalid season or team ID.");
+    }
     const supabase = createClient(supabaseUrl, supabaseKey);
     const coachId = await findOrCreatePerson(supabase, coachName);
 

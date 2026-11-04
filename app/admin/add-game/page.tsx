@@ -97,38 +97,6 @@ export default function AddGamePage() {
         fetchPhases();
     }, [selectedSeason]);
 
-    const findOrCreateTeam = async (name: string): Promise<string | null> => {
-        if (!name.trim()) return null;
-        const exists = teams.find(t => t.name.toLowerCase() === name.toLowerCase());
-        if (exists) return exists.id;
-
-        throw new Error(`Team "${name}" does not exist. Please create teams via the bulk importer first.`);
-    };
-
-    const findOrCreateVenue = async (name: string): Promise<string | null> => {
-        if (!name.trim()) return null;
-        const exists = venues.find(v => v.name.toLowerCase() === name.toLowerCase());
-        if (exists) return exists.id;
-
-        // Create new
-        const { data, error } = await supabase.from("venues").insert({ name: name.trim() }).select().single();
-        if (error) throw error;
-        setVenues(prev => [...prev, data]);
-        return data.id;
-    };
-
-    const findOrCreatePerson = async (name: string): Promise<string | null> => {
-        if (!name.trim()) return null;
-        const exists = people.find(p => p.display_name.toLowerCase() === name.toLowerCase());
-        if (exists) return exists.id;
-
-        // Create new
-        const { data, error } = await supabase.from("people").insert({ display_name: name.trim() }).select().single();
-        if (error) throw error;
-        setPeople(prev => [...prev, data]);
-        return data.id;
-    };
-
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);

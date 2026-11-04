@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 import ArchiveLayout from "@/components/archive/ArchiveLayout";
 import { updateGameCoach, updateSeasonCoach } from "./actions";
+import { isValidUuid } from "@/lib/utils/validation";
 
 // Initialize standard client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
@@ -91,6 +92,7 @@ export default function SetCoachPage() {
     }, [selectedSeason, selectedTeam]);
 
     const fetchGames = async () => {
+        if (!isValidUuid(selectedSeason) || !isValidUuid(selectedTeam)) return;
         setIsLoadingGames(true);
         try {
             const { data: phases } = await supabase

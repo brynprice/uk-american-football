@@ -172,16 +172,13 @@ export const ROLE_PRESETS: RolePreset[] = [
 
 /**
  * Determines whether a Supabase user is a Super Admin.
- * Legacy admin accounts created prior to RBAC have no `app_metadata.role` and no `app_metadata.permissions`
- * and are preserved as full Super Admins so existing admins are never locked out.
+ * Enforces fail-closed authorization: only users with explicit `app_metadata.role === "admin"`
+ * are granted Super Admin privileges.
  */
 export function isSuperAdmin(user: { app_metadata?: Record<string, any> } | null | undefined): boolean {
   if (!user) return false;
   const meta = user.app_metadata || {};
-  if (meta.role === "admin") return true;
-  if (meta.role === "member") return false;
-  if (Array.isArray(meta.permissions)) return false;
-  return true;
+  return meta.role === "admin";
 }
 
 export interface UserAccessProfile {

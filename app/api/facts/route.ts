@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { assertPermission, UnauthorizedError } from '@/lib/auth/admin-guard';
 import {
   generateWeeklyFacts,
   formatFactsMarkdown,
@@ -13,6 +14,8 @@ const supabase = createClient(
 
 export async function GET(request: NextRequest) {
   try {
+    await assertPermission('facts');
+
     const { searchParams } = new URL(request.url);
     const weekParam = searchParams.get('week');
     const seasonParam = searchParams.get('season');
@@ -47,6 +50,12 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(facts);
   } catch (error: any) {
+    if (error instanceof UnauthorizedError) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: error.message.startsWith('Forbidden') ? 403 : 401 }
+      );
+    }
     return NextResponse.json(
       { error: error?.message || 'Failed to generate weekly facts' },
       { status: 500 }

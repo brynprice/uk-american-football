@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
+import crypto from "crypto";
 
-export async function GET(request: NextRequest) {
-    return handleRevalidation(request);
+function timingSafeSecretMatch(provided: string | null, expected: string | undefined): boolean {
+    if (!provided || !expected) return false;
+    const bufA = Buffer.from(provided);
+    const bufB = Buffer.from(expected);
+    if (bufA.length !== bufB.length) return false;
+    return crypto.timingSafeEqual(bufA, bufB);
 }
 
 export async function POST(request: NextRequest) {
@@ -11,14 +16,14 @@ export async function POST(request: NextRequest) {
 
 async function handleRevalidation(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
-    const secret = searchParams.get("secret");
+    const authHeader = request.headers.get("authorization");
+    const bearerSecret = authHeader?.startsWith("Bearer ") ? authHeader.slice(7).trim() : null;
+    const headerSecret = request.headers.get("x-revalidate-secret");
+    const secret = headerSecret || bearerSecret;
 
-    const expectedSecret =
-        process.env.REVALIDATION_SECRET ||
-        process.env.SUPABASE_SERVICE_ROLE_KEY ||
-        process.env.SERVICE_ROLE_KEY;
+    const expectedSecret = process.env.REVALIDATION_SECRET;
 
-    if (!expectedSecret || secret !== expectedSecret) {
+    if (!timingSafeSecretMatch(secret, expectedSecret)) {
         return NextResponse.json({ message: "Invalid or missing revalidation secret" }, { status: 401 });
     }
 

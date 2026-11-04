@@ -50,6 +50,16 @@ if (!weekArg) {
 const seasonArg = getArg('--season') || getArg('-s');
 const outputArg = getArg('--output') || getArg('-o');
 
+function escapeHtml(val) {
+  if (val === null || val === undefined) return '';
+  return String(val)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function generateHtml(facts) {
   const { window, overview, scorigamis, rivalries, extremes, recordsAndMilestones, standingsMomentum, brightonSpotlight, postponements } = facts;
 
@@ -57,7 +67,7 @@ function generateHtml(facts) {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Britball Weekly Insights - ${window.label}</title>
+  <title>Britball Weekly Insights - ${escapeHtml(window.label)}</title>
   <style>
     @page {
       size: A4 portrait;
@@ -275,11 +285,11 @@ function generateHtml(facts) {
   <div class="header">
     <div class="header-left">
       <h1>UK American Football Archive</h1>
-      <div class="sub">Weekly Intelligence & Scouting Digest — ${window.label}</div>
+      <div class="sub">Weekly Intelligence & Scouting Digest — ${escapeHtml(window.label)}</div>
     </div>
     <div class="header-right">
       <div class="badge">OFFICIAL ARCHIVE DIGEST</div>
-      <div>Season: <strong>BUCS ${window.seasonYear}</strong></div>
+      <div>Season: <strong>BUCS ${escapeHtml(window.seasonYear)}</strong></div>
       <div>Generated: ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
     </div>
   </div>
@@ -287,19 +297,19 @@ function generateHtml(facts) {
   <!-- Snapshot Bar -->
   <div class="snapshot-bar">
     <div class="stat-box">
-      <div class="stat-val">${overview.completedGames}</div>
+      <div class="stat-val">${escapeHtml(overview.completedGames)}</div>
       <div class="stat-label">Fixtures Completed</div>
     </div>
     <div class="stat-box">
-      <div class="stat-val">${overview.totalPoints}</div>
-      <div class="stat-label">Total Points (${overview.avgPoints} PPG)</div>
+      <div class="stat-val">${escapeHtml(overview.totalPoints)}</div>
+      <div class="stat-label">Total Points (${escapeHtml(overview.avgPoints)} PPG)</div>
     </div>
     <div class="stat-box">
-      <div class="stat-val">${extremes.shutouts.length}</div>
+      <div class="stat-val">${escapeHtml(extremes.shutouts.length)}</div>
       <div class="stat-label">Shutouts Pitched</div>
     </div>
     <div class="stat-box">
-      <div class="stat-val">${scorigamis.allTime.length + scorigamis.level.length}</div>
+      <div class="stat-val">${escapeHtml(scorigamis.allTime.length + scorigamis.level.length)}</div>
       <div class="stat-label">Scorigamis Unlocked</div>
     </div>
   </div>
@@ -310,20 +320,20 @@ function generateHtml(facts) {
     ${scorigamis.allTime.map(sc => `
       <div class="card card-gold">
         <div class="card-header">
-          <div class="card-title">${sc.game}</div>
+          <div class="card-title">${escapeHtml(sc.game)}</div>
           <span class="tag tag-gold">ALL-TIME BRITBALL SCORIGAMI</span>
         </div>
-        <div class="card-desc">${sc.description} (Division: ${sc.division})</div>
+        <div class="card-desc">${escapeHtml(sc.description)} (Division: ${escapeHtml(sc.division)})</div>
       </div>
     `).join('')}
     <div class="grid-2">
       ${scorigamis.level.map(sc => `
         <div class="card card-blue">
           <div class="card-header">
-            <div class="card-title">${sc.game}</div>
-            <span class="tag tag-blue">${sc.level.toUpperCase()} SCORIGAMI</span>
+            <div class="card-title">${escapeHtml(sc.game)}</div>
+            <span class="tag tag-blue">${escapeHtml(sc.level.toUpperCase())} SCORIGAMI</span>
           </div>
-          <div class="card-desc">${sc.description}</div>
+          <div class="card-desc">${escapeHtml(sc.description)}</div>
         </div>
       `).join('')}
     </div>
@@ -336,19 +346,19 @@ function generateHtml(facts) {
       ${recordsAndMilestones.programRecords.map(rec => `
         <div class="card">
           <div class="card-header">
-            <div class="card-title">${rec.team}</div>
-            <span class="tag ${rec.type.includes('Explosion') ? 'tag-green' : 'tag-purple'}">${rec.type}</span>
+            <div class="card-title">${escapeHtml(rec.team)}</div>
+            <span class="tag ${rec.type.includes('Explosion') ? 'tag-green' : 'tag-purple'}">${escapeHtml(rec.type)}</span>
           </div>
-          <div class="card-desc">${rec.description}</div>
+          <div class="card-desc">${escapeHtml(rec.description)}</div>
         </div>
       `).join('')}
       ${recordsAndMilestones.milestoneWins.map(ms => `
         <div class="card card-green">
           <div class="card-header">
-            <div class="card-title">${ms.team}</div>
-            <span class="tag tag-green">${ms.wins}th PROGRAM WIN</span>
+            <div class="card-title">${escapeHtml(ms.team)}</div>
+            <span class="tag tag-green">${escapeHtml(ms.wins)}th PROGRAM WIN</span>
           </div>
-          <div class="card-desc">${ms.description}</div>
+          <div class="card-desc">${escapeHtml(ms.description)}</div>
         </div>
       `).join('')}
     </div>
@@ -364,8 +374,8 @@ function generateHtml(facts) {
           <span class="tag tag-blue">SERIES CONTEXT</span>
         </div>
         <ul class="fact-list">
-          ${rivalries.inauguralMatchups.map(inau => `<li><strong>${inau.game}</strong>: ${inau.description}</li>`).join('')}
-          ${rivalries.longHiatusMatchups.map(h => `<li><strong>${h.game}</strong>: ${h.description}</li>`).join('')}
+          ${rivalries.inauguralMatchups.map(inau => `<li><strong>${escapeHtml(inau.game)}</strong>: ${escapeHtml(inau.description)}</li>`).join('')}
+          ${rivalries.longHiatusMatchups.map(h => `<li><strong>${escapeHtml(h.game)}</strong>: ${escapeHtml(h.description)}</li>`).join('')}
         </ul>
       </div>
       <div class="card">
@@ -374,7 +384,7 @@ function generateHtml(facts) {
           <span class="tag tag-purple">ACTIVE STREAKS</span>
         </div>
         <ul class="fact-list">
-          ${rivalries.seriesStreaks.slice(0, 5).map(str => `<li><strong>${str.team}</strong>: ${str.description}</li>`).join('')}
+          ${rivalries.seriesStreaks.slice(0, 5).map(str => `<li><strong>${escapeHtml(str.team)}</strong>: ${escapeHtml(str.description)}</li>`).join('')}
         </ul>
       </div>
     </div>
@@ -384,7 +394,7 @@ function generateHtml(facts) {
         <span class="tag tag-gold">SCORE REVERSED</span>
       </div>
       <ul class="fact-list">
-        ${rivalries.revengeGames.slice(0, 5).map(rev => `<li><strong>${rev.winner} ${rev.currentScore} ${rev.loser}</strong>: ${rev.description}</li>`).join('')}
+        ${rivalries.revengeGames.slice(0, 5).map(rev => `<li><strong>${escapeHtml(rev.winner)} ${escapeHtml(rev.currentScore)} ${escapeHtml(rev.loser)}</strong>: ${escapeHtml(rev.description)}</li>`).join('')}
       </ul>
     </div>
   </div>
@@ -398,23 +408,23 @@ function generateHtml(facts) {
           <div class="card-title">Slate Extremes</div>
         </div>
         <ul class="fact-list">
-          ${extremes.shootout ? `<li>🔥 <strong>Shootout of the Week</strong>: ${extremes.shootout.game} (${extremes.shootout.combined} combined points)</li>` : ''}
-          ${extremes.defensiveBattle ? `<li>🔒 <strong>Defensive Slugfest</strong>: ${extremes.defensiveBattle.game} (${extremes.defensiveBattle.combined} combined points)</li>` : ''}
-          ${extremes.biggestBlowout ? `<li>🚜 <strong>Margin of the Week</strong>: ${extremes.biggestBlowout.game} (+${extremes.biggestBlowout.diff} margin)</li>` : ''}
-          ${extremes.nailbiters.map(nb => `<li>⏱️ <strong>Thriller (≤7 pts)</strong>: ${nb.game} (decided by ${nb.diff} pt${nb.diff === 1 ? '' : 's'})</li>`).join('')}
+          ${extremes.shootout ? `<li>🔥 <strong>Shootout of the Week</strong>: ${escapeHtml(extremes.shootout.game)} (${escapeHtml(extremes.shootout.combined)} combined points)</li>` : ''}
+          ${extremes.defensiveBattle ? `<li>🔒 <strong>Defensive Slugfest</strong>: ${escapeHtml(extremes.defensiveBattle.game)} (${escapeHtml(extremes.defensiveBattle.combined)} combined points)</li>` : ''}
+          ${extremes.biggestBlowout ? `<li>🚜 <strong>Margin of the Week</strong>: ${escapeHtml(extremes.biggestBlowout.game)} (+${escapeHtml(extremes.biggestBlowout.diff)} margin)</li>` : ''}
+          ${extremes.nailbiters.map(nb => `<li>⏱️ <strong>Thriller (≤7 pts)</strong>: ${escapeHtml(nb.game)} (decided by ${escapeHtml(nb.diff)} pt${nb.diff === 1 ? '' : 's'})</li>`).join('')}
         </ul>
       </div>
 
       <div class="card">
         <div class="card-header">
-          <div class="card-title">The Shutout Wall (${extremes.shutouts.length} Clean Sheets)</div>
+          <div class="card-title">The Shutout Wall (${escapeHtml(extremes.shutouts.length)} Clean Sheets)</div>
           <span class="tag tag-green">ZERO CONCEDED</span>
         </div>
         <div class="shutout-grid">
           ${extremes.shutouts.map(s => `
             <div class="shutout-item">
-              <div class="shutout-score">${s.team} ${s.score}</div>
-              <div class="shutout-div">${s.opponent}</div>
+              <div class="shutout-score">${escapeHtml(s.team)} ${escapeHtml(s.score)}</div>
+              <div class="shutout-div">${escapeHtml(s.opponent)}</div>
             </div>
           `).join('')}
         </div>
@@ -431,9 +441,9 @@ function generateHtml(facts) {
           <div class="card-title">Early Season Form Watch</div>
         </div>
         <ul class="fact-list">
-          ${standingsMomentum.perfectStarts.length > 0 ? `<li>🟢 <strong>Unblemished (2-0 Starts)</strong>: ${standingsMomentum.perfectStarts.map(t => `${t.team} (+${t.pointDiff})`).join(', ')}</li>` : ''}
-          ${standingsMomentum.bounceBacks.length > 0 ? `<li>🔄 <strong>Bounce-Back Wins (1-1)</strong>: ${standingsMomentum.bounceBacks.map(b => `${b.team} (${b.score} vs ${b.opponent})`).join(', ')}</li>` : ''}
-          ${standingsMomentum.winlessStarts.length > 0 ? `<li>🔴 <strong>Seeking 1st Win (0-2)</strong>: ${standingsMomentum.winlessStarts.map(t => t.team).join(', ')}</li>` : ''}
+          ${standingsMomentum.perfectStarts.length > 0 ? `<li>🟢 <strong>Unblemished (2-0 Starts)</strong>: ${standingsMomentum.perfectStarts.map(t => `${escapeHtml(t.team)} (+${escapeHtml(t.pointDiff)})`).join(', ')}</li>` : ''}
+          ${standingsMomentum.bounceBacks.length > 0 ? `<li>🔄 <strong>Bounce-Back Wins (1-1)</strong>: ${standingsMomentum.bounceBacks.map(b => `${escapeHtml(b.team)} (${escapeHtml(b.score)} vs ${escapeHtml(b.opponent)})`).join(', ')}</li>` : ''}
+          ${standingsMomentum.winlessStarts.length > 0 ? `<li>🔴 <strong>Seeking 1st Win (0-2)</strong>: ${standingsMomentum.winlessStarts.map(t => escapeHtml(t.team)).join(', ')}</li>` : ''}
         </ul>
       </div>
 
@@ -441,12 +451,12 @@ function generateHtml(facts) {
         <div class="card card-blue">
           <div class="card-header">
             <div class="card-title">Brighton Historical Records Spotlight</div>
-            <span class="tag tag-blue">${brightonSpotlight.result.toUpperCase()}</span>
+            <span class="tag tag-blue">${escapeHtml(brightonSpotlight.result.toUpperCase())}</span>
           </div>
           <div style="font-size: 11pt; font-weight: 700; color: #0284c7; margin-bottom: 4px;">
-            ${brightonSpotlight.team} ${brightonSpotlight.score} ${brightonSpotlight.opponent}
+            ${escapeHtml(brightonSpotlight.team)} ${escapeHtml(brightonSpotlight.score)} ${escapeHtml(brightonSpotlight.opponent)}
           </div>
-          <div class="card-desc">${brightonSpotlight.note}</div>
+          <div class="card-desc">${escapeHtml(brightonSpotlight.note)}</div>
         </div>
       ` : ''}
     </div>
