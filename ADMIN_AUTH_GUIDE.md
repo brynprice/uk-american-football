@@ -28,6 +28,18 @@ Once the user is created, you can log in at:
 -   **Reset Password**: From the **Authentication > Users** list, click on a user and select **Send password reset** or manually change the password.
 -   **Disable/Delete**: You can revoke access at any time by clicking the menu next to a user in the dashboard.
 
+## Managing User Permissions & Roles
+
+Admins can manage granular tool permissions at `/admin/users`:
+
+- **Super Admin**: Unrestricted access to all tools, user management, and sensitive operations.
+- **Role Presets**:
+  - **Media & Intelligence Analyst**: Access to Weekly Facts (`/admin/facts`), Score Predictor, and Writer's Poll.
+  - **Gameday & Poll Contributor**: Access to Gameday Scoreboard, Writer's Poll, Score Predictor, and Weekly Facts.
+  - **Poll Voter**: Access only to the Uniball Writer's Poll.
+  - **Historical Archivist**: Access to archive management tools (games, coaches, champions, proposals, anomalies).
+- **Individual Tool Toggles**: Toggle individual permissions (e.g. `facts`, `gameday`, `poll`, `predictions`, `proposals`, `add_game`, `walkovers`, `set_coach`, `anomalies`, `game_counts`, `champions`).
+
 ## Technical Notes
 
 -   The authentication is managed via `@supabase/ssr` using cookies.

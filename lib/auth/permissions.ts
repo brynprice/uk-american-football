@@ -133,11 +133,18 @@ export const ROLE_PRESETS: RolePreset[] = [
     permissions: ["poll"],
   },
   {
+    id: "media_analyst",
+    label: "Media & Intelligence Analyst",
+    description: "Access to Weekly Facts & Insights, Score Predictor, and Writer's Poll.",
+    role: "member",
+    permissions: ["facts", "predictions", "poll"],
+  },
+  {
     id: "live_contributor",
     label: "Gameday & Poll Contributor",
-    description: "Access to Writer's Poll, Gameday Scoreboard, and Score Predictor.",
+    description: "Access to Writer's Poll, Gameday Scoreboard, Score Predictor, and Weekly Facts.",
     role: "member",
-    permissions: ["poll", "gameday", "predictions"],
+    permissions: ["poll", "gameday", "predictions", "facts"],
   },
   {
     id: "archivist",
@@ -256,6 +263,9 @@ export function getRequiredPermissionForPath(
   }
   if (pathname.startsWith("/admin/predictions")) {
     return "predictions";
+  }
+  if (pathname.startsWith("/admin/facts") || pathname.startsWith("/api/admin/facts")) {
+    return "facts";
   }
   if (pathname.startsWith("/admin/proposals")) {
     return "proposals";
