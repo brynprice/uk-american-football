@@ -9,6 +9,8 @@
     "lint": "eslint",
     "facts": "node scripts/weekly_facts.mjs",
     "facts:pdf": "node scripts/generate_weekly_pdf.mjs",
+    "preview": "node scripts/weekly_preview.mjs",
+    "preview:pdf": "node scripts/generate_weekly_preview_pdf.mjs",
     "benchmark": "node scripts/benchmark_performance.mjs"
   },
   "dependencies": {

@@ -41,3 +41,17 @@
     - **Brighton Tsunami / Panthers Spotlight**: Performance and historical series context for Brighton.
   - Present the output with engaging, journalistic sports flair while strictly adhering to the facts extracted from the database.
 
+## 8. Weekly Upcoming Slate Preview Protocol
+- When asked "what's coming up this week", "preview the upcoming week", "what games should I watch", or requested for upcoming week highlights, predictions, or matchup previews:
+  - Run `node scripts/weekly_preview.mjs` (or `npm run preview`), optionally with `--week <N>`, `--season <YYYY>`, `--start <YYYY-MM-DD> --end <YYYY-MM-DD>`, `--pdf`, or `--format brief|markdown|json`.
+  - The script deterministically cross-references all scheduled fixtures against the 40+ year historical archive and stored model predictions in Supabase to surface:
+    - **Marquee Matchups & Clash of Unbeatens**: Top fixtures between undefeated squads, division title implications, and high-stakes showdowns.
+    - **Inaugural Encounters**: First-ever meetings in 40+ years between programs.
+    - **Multi-Year Hiatus Breakers**: First time programs are clashing in 4+ seasons.
+    - **Series Dominance & Revenge Opportunities**: Teams looking to snap multi-game losing streaks against opponents.
+    - **Form & Defense Watch**: Teams defending clean sheet streaks (e.g. Shutout Wall) and winless 0-2 desperation bowls.
+    - **Model Score Predictions**: Win probabilities, projected scores, and spreads.
+    - **Brighton Tsunami / Panthers Spotlight**: Historical matchup context, all-time record, and model projections for Brighton's upcoming fixture.
+  - Present the preview with crisp, engaging journalistic sports flair while strictly adhering to the facts and model lines extracted from the database.
+
+
