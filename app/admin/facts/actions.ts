@@ -85,7 +85,24 @@ export async function generateWeeklyPdfAction(options: {
       throw new Error("Invalid output file path.");
     }
 
-    // Make sure reports directory exists
+    // 1. Return immediately if already generated / exists
+    if (fs.existsSync(outputPath)) {
+      return {
+        success: true,
+        filename,
+        pdfUrl: `/reports/${filename}`
+      };
+    }
+
+    // 2. In serverless / Vercel environment, headless browser cannot be spawned on-demand
+    if (process.env.VERCEL) {
+      return {
+        success: false,
+        error: `Report ${filename} has not been published yet. Please run 'npm run facts:pdf -- --week ${week}' to publish.`
+      };
+    }
+
+    // 3. Make sure reports directory exists in local environment
     if (!fs.existsSync(reportsDir)) {
       fs.mkdirSync(reportsDir, { recursive: true });
     }
@@ -175,6 +192,23 @@ export async function generateWeeklyPreviewPdfAction(options: {
 
     if (!outputPath.startsWith(reportsDir + path.sep)) {
       throw new Error("Invalid output file path.");
+    }
+
+    // 1. Return immediately if already generated / exists
+    if (fs.existsSync(outputPath)) {
+      return {
+        success: true,
+        filename,
+        pdfUrl: `/reports/${filename}`
+      };
+    }
+
+    // 2. In serverless / Vercel environment, headless browser cannot be spawned on-demand
+    if (process.env.VERCEL) {
+      return {
+        success: false,
+        error: `Report ${filename} has not been published yet. Please run 'npm run preview:pdf -- --week ${week}' to publish.`
+      };
     }
 
     if (!fs.existsSync(reportsDir)) {

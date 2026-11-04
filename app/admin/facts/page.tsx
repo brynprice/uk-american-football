@@ -99,26 +99,46 @@ export default function AdminFactsPage() {
     setErrorMessage(null);
     setSuccessMessage(null);
 
+    const filename =
+      activeTab === "recap"
+        ? `BUCS_${selectedSeason}_Week_${selectedWeek}_Insights.pdf`
+        : `BUCS_${selectedSeason}_Week_${selectedWeek}_Preview.pdf`;
+    const staticUrl = `/reports/${filename}`;
+
     try {
+      // 1. Fast path: check if static pre-generated PDF is available on CDN
+      try {
+        const headCheck = await fetch(staticUrl, { method: "HEAD" });
+        if (headCheck.ok) {
+          window.open(staticUrl, "_blank");
+          setSuccessMessage(`Opened ${filename}`);
+          setIsPdfLoading(false);
+          return;
+        }
+      } catch {
+        // Fall back to server action
+      }
+
+      // 2. Server action path (handles local dev generation or status response)
       if (activeTab === "recap") {
         const res = await generateWeeklyPdfAction({ week: selectedWeek, season: selectedSeason });
         if (res.success && res.pdfUrl) {
-          setSuccessMessage(`Recap PDF generated successfully: ${res.filename}`);
+          setSuccessMessage(`Report available: ${res.filename}`);
           window.open(res.pdfUrl, "_blank");
         } else {
-          setErrorMessage(res.error || "Failed to generate recap PDF.");
+          setErrorMessage(res.error || `Report ${filename} is not published yet.`);
         }
       } else {
         const res = await generateWeeklyPreviewPdfAction({ week: selectedWeek, season: selectedSeason });
         if (res.success && res.pdfUrl) {
-          setSuccessMessage(`Preview PDF generated successfully: ${res.filename}`);
+          setSuccessMessage(`Report available: ${res.filename}`);
           window.open(res.pdfUrl, "_blank");
         } else {
-          setErrorMessage(res.error || "Failed to generate preview PDF.");
+          setErrorMessage(res.error || `Report ${filename} is not published yet.`);
         }
       }
     } catch (err: any) {
-      setErrorMessage(err.message || "Failed to generate PDF.");
+      setErrorMessage(err.message || "Failed to download PDF.");
     } finally {
       setIsPdfLoading(false);
     }
