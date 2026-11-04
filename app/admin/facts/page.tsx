@@ -388,7 +388,7 @@ export default function AdminFactsPage() {
                     <div className="flex items-center gap-2">
                       <span className="text-xl">🌊</span>
                       <h2 className="text-base font-black text-sky-950 uppercase tracking-wide">
-                        Brighton Tsunami Spotlight Preview
+                        Brighton Panthers Spotlight Preview
                       </h2>
                     </div>
                     <span className="bg-sky-600 text-white text-xs font-extrabold px-2.5 py-1 rounded-md self-start sm:self-auto">
@@ -935,7 +935,7 @@ export default function AdminFactsPage() {
                   <div className="bg-gradient-to-br from-sky-50 to-indigo-50 border border-sky-200 rounded-xl p-5 shadow-sm">
                     <div className="flex items-center justify-between mb-2">
                       <h2 className="text-base font-extrabold text-sky-950 uppercase tracking-wide">
-                        🌊 Brighton Historical Spotlight
+                        🌊 Brighton Panthers Historical Spotlight
                       </h2>
                       <span className="bg-sky-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">
                         {brightonSpotlight.result.toUpperCase()}
