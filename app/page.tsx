@@ -42,26 +42,26 @@ export default async function HomePage() {
       </section>
 
       {/* Key Metrics Strip */}
-      <section className="mb-12 grid grid-cols-2 md:grid-cols-5 gap-4">
-        <div className="col-span-2 md:col-span-1 p-5 lg:p-6 bg-slate-900 text-white border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(255,255,255,0.15)] hover:shadow-[6px_6px_0px_0px_rgba(59,130,246,1)] transition-shadow duration-200 flex flex-col justify-between cursor-default min-w-0">
-          <span className="text-3xl sm:text-4xl xl:text-5xl font-black tabular-nums tracking-tight leading-none mb-2 truncate">{stats.totalGames.toLocaleString()}</span>
-          <span className="text-xs font-black uppercase tracking-widest text-slate-400 mt-auto">Games Recorded</span>
+      <section className="mb-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+        <div className="p-4 sm:p-5 bg-slate-900 text-white border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(255,255,255,0.15)] hover:shadow-[6px_6px_0px_0px_rgba(59,130,246,1)] transition-shadow duration-200 flex flex-col justify-between cursor-default">
+          <span className="text-2xl sm:text-3xl font-black font-sans tabular-nums tracking-tight leading-none mb-2 whitespace-nowrap">{stats.totalGames.toLocaleString()}</span>
+          <span className="text-[11px] font-black uppercase tracking-wider text-slate-400 mt-auto">Games Recorded</span>
         </div>
-        <div className="p-5 lg:p-6 bg-white border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] hover:shadow-[6px_6px_0px_0px_rgba(59,130,246,1)] transition-shadow duration-200 flex flex-col justify-between cursor-default min-w-0">
-          <span className="text-3xl sm:text-4xl xl:text-5xl font-black tabular-nums tracking-tight leading-none mb-2 truncate">{stats.totalSeasons.toLocaleString()}</span>
-          <span className="text-xs font-black uppercase tracking-widest text-slate-500 mt-auto">Seasons</span>
+        <div className="p-4 sm:p-5 bg-white border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] hover:shadow-[6px_6px_0px_0px_rgba(59,130,246,1)] transition-shadow duration-200 flex flex-col justify-between cursor-default">
+          <span className="text-2xl sm:text-3xl font-black font-sans tabular-nums tracking-tight leading-none mb-2 whitespace-nowrap">{stats.totalSeasons.toLocaleString()}</span>
+          <span className="text-[11px] font-black uppercase tracking-wider text-slate-500 mt-auto">Seasons</span>
         </div>
-        <div className="p-5 lg:p-6 bg-white border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] hover:shadow-[6px_6px_0px_0px_rgba(59,130,246,1)] transition-shadow duration-200 flex flex-col justify-between cursor-default min-w-0">
-          <span className="text-3xl sm:text-4xl xl:text-5xl font-black tabular-nums tracking-tight leading-none mb-2 truncate">{stats.totalTeams.toLocaleString()}</span>
-          <span className="text-xs font-black uppercase tracking-widest text-slate-500 mt-auto">Teams Documented</span>
+        <div className="p-4 sm:p-5 bg-white border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] hover:shadow-[6px_6px_0px_0px_rgba(59,130,246,1)] transition-shadow duration-200 flex flex-col justify-between cursor-default">
+          <span className="text-2xl sm:text-3xl font-black font-sans tabular-nums tracking-tight leading-none mb-2 whitespace-nowrap">{stats.totalTeams.toLocaleString()}</span>
+          <span className="text-[11px] font-black uppercase tracking-wider text-slate-500 mt-auto">Teams Documented</span>
         </div>
-        <div className="p-5 lg:p-6 bg-white border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] hover:shadow-[6px_6px_0px_0px_rgba(59,130,246,1)] transition-shadow duration-200 flex flex-col justify-between cursor-default min-w-0">
-          <span className="text-3xl sm:text-4xl xl:text-5xl font-black tabular-nums tracking-tight leading-none mb-2 truncate">{stats.titleGames.toLocaleString()}</span>
-          <span className="text-xs font-black uppercase tracking-widest text-slate-500 mt-auto">Title Games</span>
+        <div className="p-4 sm:p-5 bg-white border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] hover:shadow-[6px_6px_0px_0px_rgba(59,130,246,1)] transition-shadow duration-200 flex flex-col justify-between cursor-default">
+          <span className="text-2xl sm:text-3xl font-black font-sans tabular-nums tracking-tight leading-none mb-2 whitespace-nowrap">{stats.titleGames.toLocaleString()}</span>
+          <span className="text-[11px] font-black uppercase tracking-wider text-slate-500 mt-auto">Title Games</span>
         </div>
-        <div className="p-5 lg:p-6 bg-white border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] hover:shadow-[6px_6px_0px_0px_rgba(59,130,246,1)] transition-shadow duration-200 flex flex-col justify-between cursor-default min-w-0">
-          <span className="text-3xl sm:text-4xl xl:text-5xl font-black tabular-nums tracking-tight leading-none mb-2 truncate">{stats.avgCompleteness}<span className="text-xl sm:text-2xl font-bold">%</span></span>
-          <span className="text-xs font-black uppercase tracking-widest text-slate-500 mt-auto">Avg. Completeness</span>
+        <div className="col-span-2 sm:col-span-1 p-4 sm:p-5 bg-white border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] hover:shadow-[6px_6px_0px_0px_rgba(59,130,246,1)] transition-shadow duration-200 flex flex-col justify-between cursor-default">
+          <span className="text-2xl sm:text-3xl font-black font-sans tabular-nums tracking-tight leading-none mb-2 whitespace-nowrap">{stats.avgCompleteness}<span className="text-lg font-bold">%</span></span>
+          <span className="text-[11px] font-black uppercase tracking-wider text-slate-500 mt-auto">Avg. Completeness</span>
         </div>
       </section>
 
