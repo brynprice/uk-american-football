@@ -40,6 +40,7 @@ CREATE TABLE phases (
   parent_phase_id UUID REFERENCES phases(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   type TEXT, -- division, conference, group, playoffs, wild_card
+  format TEXT, -- 11v11, 9v9, 7v7, 5v5
   ordinal INT DEFAULT 0,
   confidence_level TEXT DEFAULT 'high',
   created_at TIMESTAMPTZ DEFAULT now()

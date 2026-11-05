@@ -86,20 +86,41 @@ async function ensureSampleNote(entityType, entityId) {
 
 const slugify = (text) => text.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
 
+function resolveExpectedTeamType(compLevel, compName = '') {
+    const lvl = (compLevel || '').trim().toLowerCase();
+    const cname = (compName || '').trim().toLowerCase();
+    if (lvl === 'womens' || lvl === 'women' || cname.includes('nwfl') || cname.includes('sapphire') || cname.includes('women')) {
+        return 'Womens';
+    }
+    if (lvl === 'uniball' || lvl === 'university' || cname.includes('buafl') || cname.includes('bucs') || cname.includes('bcafl')) {
+        return 'University';
+    }
+    if (lvl === 'flag' || cname.includes('flag') || cname.includes('opal')) {
+        return 'Flag';
+    }
+    if (lvl === 'u19s' || lvl === 'youth' || cname.includes('u19') || cname.includes('youth')) {
+        return 'U19s';
+    }
+    if (lvl === 'adult contact' || lvl === 'adult' || lvl === 'senior' || cname.includes('bafanl') || cname.includes('bafl') || cname.includes('bigc') || cname.includes('sga')) {
+        return 'Adult';
+    }
+    return null;
+}
+
 async function getCompetition(name) {
     const cleanName = name.trim();
     const slug = slugify(cleanName);
 
     const { data, error } = await supabase
         .from('competitions')
-        .select('id')
+        .select('id, level')
         .or(`slug.eq.${slug},name.eq."${cleanName}"`)
         .maybeSingle();
 
     if (error && error.code !== 'PGRST116') console.error("Error looking up competition:", error);
     if (data) {
-        console.log(`  [Lookup] Found existing competition "${cleanName}" (ID: ${data.id})`);
-        return data.id;
+        console.log(`  [Lookup] Found existing competition "${cleanName}" (ID: ${data.id}, Level: ${data.level || 'Unknown'})`);
+        return data;
     }
 
     return null;
@@ -176,10 +197,10 @@ async function getPhase(seasonId, name, parentPhaseName = null) {
     return null;
 }
 
-async function getTeam(name, year = null, isUniversity = false) {
+async function getTeam(name, year = null, expectedTeamType = null) {
     if (!name) return null;
     let cleanName = name.trim();
-    if (isUniversity && (
+    if (expectedTeamType === 'University' && (
         cleanName.toLowerCase() === 'aberdeen roughnecks' ||
         cleanName.toLowerCase() === 'aberdeen bulls' ||
         cleanName.toLowerCase() === 'aberdeen' ||
@@ -191,63 +212,97 @@ async function getTeam(name, year = null, isUniversity = false) {
     const numericYear = year ? parseInt(year, 10) : null;
 
     if (numericYear) {
-        // 1. Check team_aliases for an alias active in numericYear
+        // 1. Check team_aliases for an alias active in numericYear (strictly filtered by expectedTeamType if set)
         const { data: aliases } = await supabase
             .from('team_aliases')
-            .select('team_id, start_year, end_year')
+            .select('team_id, start_year, end_year, teams!inner(team_type)')
             .eq('name', cleanName);
 
         if (aliases && aliases.length > 0) {
-            const matchingAlias = aliases.find(a => {
+            const typeFilteredAliases = expectedTeamType
+                ? aliases.filter(a => a.teams?.team_type === expectedTeamType)
+                : aliases;
+
+            const matchingAlias = typeFilteredAliases.find(a => {
                 const start = a.start_year || 0;
                 const end = a.end_year || 9999;
                 return numericYear >= start && numericYear <= end;
             });
             if (matchingAlias) {
-                console.log(`  [Info] Resolved team "${cleanName}" via alias for year ${numericYear}.`);
+                console.log(`  [Info] Resolved team "${cleanName}" via alias for year ${numericYear} (${expectedTeamType || 'any'}).`);
                 return matchingAlias.team_id;
             }
         }
 
-        // 2. Check primary team names for a team active in numericYear
+        // 2. Check primary team names for a team active in numericYear (strictly filtered by expectedTeamType if set)
         const { data: primaryTeams } = await supabase
             .from('teams')
-            .select('id, founded_year, folded_year')
+            .select('id, founded_year, folded_year, team_type')
             .eq('name', cleanName);
 
         if (primaryTeams && primaryTeams.length > 0) {
-            const matchingTeam = primaryTeams.find(t => {
-                const start = t.founded_year || 0;
-                const end = t.folded_year || 9999;
-                return numericYear >= start && numericYear <= end;
-            });
-            if (matchingTeam) {
-                return matchingTeam.id;
+            const typeFilteredTeams = expectedTeamType
+                ? primaryTeams.filter(t => t.team_type === expectedTeamType)
+                : primaryTeams;
+
+            if (typeFilteredTeams.length > 0) {
+                const matchingTeam = typeFilteredTeams.find(t => {
+                    const start = t.founded_year || 0;
+                    const end = t.folded_year || 9999;
+                    return numericYear >= start && numericYear <= end;
+                }) || typeFilteredTeams[0];
+                if (matchingTeam) {
+                    return matchingTeam.id;
+                }
             }
         }
     }
 
-    // Fallback: Check primary team name
+    // Fallback 1: Check primary team name (strictly validating expectedTeamType)
     const { data: primaryData, error } = await supabase
         .from('teams')
-        .select('id')
-        .eq('name', cleanName)
-        .maybeSingle();
+        .select('id, team_type')
+        .eq('name', cleanName);
 
     if (error && error.code !== 'PGRST116') console.error("Error looking up team:", error);
-    if (primaryData) return primaryData.id;
+    if (primaryData && primaryData.length > 0) {
+        if (expectedTeamType) {
+            const matched = primaryData.find(t => t.team_type === expectedTeamType);
+            if (matched) return matched.id;
+        } else {
+            return primaryData[0].id;
+        }
+    }
 
-    // Fallback: Check team aliases
+    // Fallback 2: Check team aliases (strictly validating expectedTeamType)
     const { data: aliasData, error: aliasError } = await supabase
         .from('team_aliases')
-        .select('team_id')
-        .eq('name', cleanName)
-        .maybeSingle();
+        .select('team_id, teams!inner(team_type)')
+        .eq('name', cleanName);
 
     if (aliasError && aliasError.code !== 'PGRST116') console.error("Error looking up team alias:", aliasError);
-    if (aliasData) {
-        console.log(`  [Info] Resolved team "${cleanName}" via alias.`);
-        return aliasData.team_id;
+    if (aliasData && aliasData.length > 0) {
+        if (expectedTeamType) {
+            const matchedAlias = aliasData.find(a => a.teams?.team_type === expectedTeamType);
+            if (matchedAlias) {
+                console.log(`  [Info] Resolved team "${cleanName}" via alias (${expectedTeamType}).`);
+                return matchedAlias.team_id;
+            }
+        } else {
+            console.log(`  [Info] Resolved team "${cleanName}" via alias.`);
+            return aliasData[0].team_id;
+        }
+    }
+
+    // If team exists under a different team_type, emit an explicit validation error
+    if (expectedTeamType) {
+        const mismatchedTypes = [
+            ...(primaryData || []).map(t => t.team_type),
+            ...(aliasData || []).map(a => a.teams?.team_type)
+        ].filter(Boolean);
+        if (mismatchedTypes.length > 0) {
+            console.error(`  [Validation Error] Team "${cleanName}" exists with team_type "${[...new Set(mismatchedTypes)].join('/')}", but competition requires team_type "${expectedTeamType}".`);
+        }
     }
 
     return null;
@@ -441,11 +496,13 @@ async function importData(filePath) {
             console.log(`Processing: ${year} ${competition} - ${away_team} @ ${home_team}`);
 
             // 1. Resolve Parents
-            const competitionId = await getCompetition(competition);
-            if (!competitionId) {
+            const compRecord = await getCompetition(competition);
+            if (!compRecord) {
                 console.warn(`  [Skip] Competition "${competition}" not found. skipping record.`);
                 continue;
             }
+            const competitionId = compRecord.id;
+            const expectedTeamType = resolveExpectedTeamType(compRecord.level, competition);
 
             const seasonId = await getSeason(competitionId, year);
             if (!seasonId) {
@@ -474,21 +531,16 @@ async function importData(filePath) {
                 }
             }
 
-            // 2. Resolve Teams
-            const isUniversity = competition && (
-                competition.toLowerCase().includes('buafl') ||
-                competition.toLowerCase().includes('bucs') ||
-                competition.toLowerCase().includes('bcafl')
-            );
-            const homeTeamId = await getTeam(home_team, year, isUniversity);
+            // 2. Resolve Teams (validated against expectedTeamType)
+            const homeTeamId = await getTeam(home_team, year, expectedTeamType);
             if (!homeTeamId) {
-                console.warn(`  [Skip] Home team "${home_team}" not found in teams or team_aliases. skipping record.`);
+                console.warn(`  [Skip] Home team "${home_team}" not found (or invalid team_type for ${expectedTeamType || 'competition'}). skipping record.`);
                 continue;
             }
 
-            const awayTeamId = await getTeam(away_team, year, isUniversity);
+            const awayTeamId = await getTeam(away_team, year, expectedTeamType);
             if (!awayTeamId) {
-                console.warn(`  [Skip] Away team "${away_team}" not found in teams or team_aliases. skipping record.`);
+                console.warn(`  [Skip] Away team "${away_team}" not found (or invalid team_type for ${expectedTeamType || 'competition'}). skipping record.`);
                 continue;
             }
 
@@ -516,10 +568,20 @@ async function importData(filePath) {
                 .eq('home_team_id', homeTeamId)
                 .eq('away_team_id', awayTeamId);
 
+            if (phaseId) {
+                gameQuery = gameQuery.eq('phase_id', phaseId);
+            } else {
+                gameQuery = gameQuery.is('phase_id', null);
+            }
+
             if (date && date.trim()) {
                 gameQuery = gameQuery.eq('date', date.trim());
             } else {
                 gameQuery = gameQuery.is('date', null);
+            }
+
+            if (time && time.trim()) {
+                gameQuery = gameQuery.eq('time', time.trim());
             }
 
             const isDH = ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase());

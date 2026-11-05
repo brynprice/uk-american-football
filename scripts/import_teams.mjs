@@ -73,21 +73,42 @@ async function importTeams(filePath) {
         console.log(`Team ${count} out of ${records.length} imported`);
 
         const cleanName = name.trim();
+        const targetType = (team_type || 'Adult').trim();
+        const validTeamTypes = ['Adult', 'Womens', 'University', 'Flag', 'U19s'];
+        if (!validTeamTypes.includes(targetType)) {
+            console.error(`[Validation Error] Invalid team_type "${targetType}" for team "${cleanName}". Expected one of: ${validTeamTypes.join(', ')}. Skipping.`);
+            continue;
+        }
 
-        const { data: existing } = await supabase
+        // Match by both name and team_type so teams sharing a club name across levels (e.g. Adult/University vs Womens) do not overwrite each other
+        let { data: existing } = await supabase
             .from('teams')
-            .select('id')
+            .select('id, team_type')
             .eq('name', cleanName)
+            .eq('team_type', targetType)
             .maybeSingle();
 
+        // Fallback: if a legacy team row exists with team_type IS NULL and matches cleanName, adopt it
+        if (!existing) {
+            const { data: legacyNullType } = await supabase
+                .from('teams')
+                .select('id, team_type')
+                .eq('name', cleanName)
+                .is('team_type', null)
+                .maybeSingle();
+            if (legacyNullType) {
+                existing = legacyNullType;
+            }
+        }
+
         if (existing) {
-            console.log(`[Info] Updating ${cleanName}...`);
+            console.log(`[Info] Updating ${cleanName} (${targetType})...`);
             const updatePayload = {
                 location: location || null,
                 founded_year: founded_year ? parseInt(founded_year) : null,
                 folded_year: folded_year ? parseInt(folded_year) : null,
                 notes: notes || null,
-                team_type: team_type || 'Adult'
+                team_type: targetType
             };
             if (logo_url !== undefined && logo_url !== null && logo_url.trim() !== '') {
                 updatePayload.logo_url = logo_url.trim();
@@ -95,14 +116,14 @@ async function importTeams(filePath) {
             await supabase.from('teams').update(updatePayload).eq('id', existing.id);
             await ensureSampleNote('teams', existing.id);
         } else {
-            console.log(`[Success] Creating ${cleanName}...`);
+            console.log(`[Success] Creating ${cleanName} (${targetType})...`);
             const insertPayload = {
                 name: cleanName,
                 location: location || null,
                 founded_year: founded_year ? parseInt(founded_year) : null,
                 folded_year: folded_year ? parseInt(folded_year) : null,
                 notes: notes || null,
-                team_type: team_type || 'Adult'
+                team_type: targetType
             };
             if (logo_url !== undefined && logo_url !== null && logo_url.trim() !== '') {
                 insertPayload.logo_url = logo_url.trim();

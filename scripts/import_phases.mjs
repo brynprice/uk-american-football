@@ -65,6 +65,12 @@ async function importPhases(filePath) {
     const yearArg = process.argv.find(a => a.startsWith('--year='));
     const filterYear = yearArg ? yearArg.split('=')[1].trim() : null;
 
+    const { error: formatColErr } = await supabase.from('phases').select('format').limit(1);
+    const hasFormatColumn = !formatColErr;
+    if (!hasFormatColumn) {
+        console.warn('⚠️  Column `phases.format` does not exist yet in the remote Supabase database (run `supabase/migrations/20261105_add_phase_format.sql` in the SQL Editor). Proceeding without `format`.');
+    }
+
     for (const record of records) {
         const competition_name = record.competition_name || record.competition || 'BUAFL';
         const year = record.year || defaultYear;
@@ -73,6 +79,7 @@ async function importPhases(filePath) {
         }
         const phase_name = record.phase_name || record.phase;
         const type = record.type || record.phase_type;
+        const format = record.format || record.phase_format || null;
         const parent_phase = record.parent_phase || record.parent;
         const confidence_level = record.confidence_level || 'high';
         const ordinal = record.ordinal;
@@ -149,6 +156,9 @@ async function importPhases(filePath) {
             ordinal: ordinal ? parseInt(ordinal) : null,
             max_games_per_team: max_games_per_team ? parseInt(max_games_per_team) : null
         };
+        if (hasFormatColumn && format && format.trim()) {
+            phaseData.format = format.trim();
+        }
 
         if (isDryRun) {
             console.log(`  [Dry Run] Would upsert phase: ${phase_name} (${type || 'No Type'})`);

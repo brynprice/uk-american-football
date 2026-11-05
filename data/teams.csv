@@ -1,480 +1,490 @@
 name,location,team_type,founded_year,folded_year
-Aberdeen Roughnecks,Aberdeen,Adult,,
-Aberdeen Roughnecks University Team,Aberdeen,University,1994,
-Anglia Ruskin Siege,Cambridge,University,2003,
-Aston Rhinos,Birmingham,University,1989,1996
-Bangor Llewod,Bangor,University,2009,
-Bath Killer Bees,Bath,University,1992,
-Bath Spa Bulldogs,Bath,University,,
-Berkshire Renegades,Reading,Adult,,
-Birmingham Bulls,Birmingham,Adult,,
-Birmingham Lions,Birmingham,University,,
-Black Country Steelers,,Adult,,
-BNU Buccaneers,Wycombe,University,,
-Bournemouth Bobcats,Bournemouth,Adult,,
-Bournemouth University Bobcats,Bournemouth,University,,
-Bradford Bears,Bradford,University,2009,
-Brighton Panthers,Brighton,University,2002,
-Bristol Apache,,Adult,,
-Bristol Aztecs,Bristol,Adult,,
-Bristol Barracuda,Bristol,University,,
-Brunel Burners,London,University,,
-Bury Saints,Bury St Edmunds,Adult,2013,2020
-Caledonian Roughriders,Glasgow,University,2003,2008
-Cambridge Pythons,Cambridge,University,,
-Cambridgeshire Cats,,Adult,,
-Canterbury CC Chargers,Canterbury,University,,
-Cardiff Cobras,Cardiff,University,1987,
-Carlisle Kestrels,Carlisle,Adult,2020,2021
-Chester Legion,Chester,University,,
-Chester Romans,Chester,Adult,,
-Chichester Spitfires,Chichester,University,,
-City Wolfpack,London,University,,
-Clyde Valley Blackhawks,,Adult,,
-Colchester Gladiators,,Adult,,
-Cornwall Monarchs,,Adult,,
-Coventry Phoenix,,Adult,,
-Coventry Jets,Coventry,Adult,1985,2018
-Coventry University Jets,Coventry,University,,
-Crewe Railroaders,Crewe,Adult,1984,2023
-Darlington Steam,,Adult,,
-DC Presidents,Durham,Adult,2014,2023
-Derby Braves,Derby,University,1996,
-DMU Lions,Leicester,University,2011,
-Doncaster Mustangs,,Adult,,
-Dumfries Hunters,Dumfries,Adult,2017,2022
-Dundee Bluedevils,Dundee,University,1999,2000
-Dunfermline Kings,Dunfermline,Adult,2017,2023
-Durham Saints,Durham,University,2006,
-East Essex Sabres,Rayleigh,Adult,2016,2023
-East Kent Mavericks,,Adult,,
-East Kilbride Pirates,,Adult,,
-Edge Hill Vikings,Ormskirk,University,2014,
-Edinburgh Napier Knights,Edinburgh,University,,
-Edinburgh Timberwolves,Edinburgh,University,,
-Edinburgh Wildcats,Edinburgh,University,2010,
-Edinburgh Wolves,Edinburgh,Adult,2002,
-Essex Blades,Colchester,University,,
-Essex Tridents,Essex,Adult,1998,
-Exeter Demons,Exeter,University,,
-FXU Tridents,Falmouth,University,2011,2018
-Furness Phantoms,Barrow-in-Furness,Adult,2011,2020
-Gateshead Senators,,Adult,,
-Glasgow Tigers,Glasgow,Adult,1986,
-Glasgow University Tigers,Glasgow,University,1986,
-Gloucestershire Gladiators,Cheltenham,University,,
-Greenwich Mariners,London,University,,
-Halton Spartans,Widnes,Adult,2014,2023
-Hastings Conquerors,Hastings,Adult,2013,2021
-Hereford Stampede,,Adult,,
-Hertfordshire Cheetahs,,Adult,,
-Hertfordshire Hurricanes,Hatfield,University,,
-Hertfordshire Stags,Hertfordshire,Adult,1996,2000
-Highland Stags,Inverness,Adult,2014,
-Huddersfield Hawks,Huddersfield,University,,
-Hull Sharks,Hull,University,1985,
-Hull Hornets,Hull,Adult,2005,2011
-Humber Warhawks,,Adult,,
-HWU Wolverines,Edinburgh,University,,
-Imperial Immortals,London,University,,
-Inverclyde Goliaths,,Adult,,
-Ipswich Cardinals,,Adult,,
-Jurassic Coast Raptors,Dorchester,Adult,2016,2021
-KCL Regents,London,University,,
-Keele Crusaders,Keele,University,,
-Kent Exiles,,Adult,,
-Kent Falcons,Canterbury,University,,
-Kingston Barbarians,Kingston upon Hull,Adult,2001,2001
-Kingston Cougars,London,University,,
-Lancashire Buccaneers,,Adult,,
-Lancaster Bombers,Lancaster,University,1991,
-Leeds Beckett Carnegie,Leeds,University,2008,
-Leeds Bobcats,Leeds,Adult,2008,2021
-Leeds Gryphons,Leeds,University,1990,
-Leicester Longhorns,Leicester,University,1986,
-Leicester Panthers,,Adult,,
-Leigh Miners,,Adult,,
-Lincoln Colonials,Lincoln,University,2006,
-Lincolnshire Bombers,,Adult,,
-Liverpool Raptors,Liverpool,University,,
-LJMU Fury,Liverpool,University,,
-London Blitz,London,Adult,1994,
-London Blitz B,,Adult,,
-London Hornets,London,Adult,2011,2024
-London Mets,Watford,Adult,1985,2003
-London Olympians,,Adult,,
-London Warriors,,Adult,,
-Loughborough Students,Loughborough,University,1988,
-LSBU Spartans,London,University,,
-Maidstone Pumas,Maidstone,Adult,1997,2020
-Manchester MPs,Manchester,University,1985,1988
-Manchester Titans,,Adult,,
-Manchester Tyrants,Manchester,University,,
-Merseyside Nighthawks,,Adult,,
-MMU Eagles,Manchester,University,,
-Morecambe Bay Storm,Morecambe,Adult,2016,2021
-Nene Valley Hybrids,Kettering,Adult,2003,2004
-Newcastle Raiders,Newcastle,University,1985,
-Newcastle Vikings,,Adult,,
-Northampton Nemesis,Northampton,University,,2018
-Northants Knights,,Adult,,
-Northumbria Mustangs,Newcastle,University,,
-Northumberland Lightning,Ashington,Adult,2012,2017
-Norwich Devils,,Adult,,
-Nottingham Caesars,,Adult,,
-Nottingham Gold,Nottingham,University,1995,
-Nottingham Green,Nottingham,University,2026,
-Nottingham Jade,Nottingham,University,2019,
-Nottingham Trent Renegades,Nottingham,University,2009,
-Ouse Valley Eagles,,Adult,,
-Oxford Brookes University,Oxford,University,2010,
-Oxford Cavaliers,Oxford,University,,2010
-Oxford Lancers,Oxford,University,2010,
-Oxford Saints,,Adult,,
-Plymouth Admirals,Plymouth,Adult,1984,2010
-Plymouth Blitz,Plymouth,University,,
-Plymouth Vanguard,,Adult,,
-Portsmouth Destroyers,Portsmouth,University,,
-Portsmouth Dreadnoughts,,Adult,,
-QMBL Vipers,"Queen Mary University, London",University,,
-Reading Knights,Reading,University,,
-Redditch Arrows,Redditch,Adult,1988,2011
-Rossendale Bucks,,Adult,,
-Royal Holloway Bears,Egham,University,,
-Rushmoor Knights,,Adult,,
-Salford Storm,Salford,University,2018,
-Sandwell Steelers,,Adult,,
-Scunthorpe Alphas,,Adult,,
-SGS Pride,Bristol,University,,
-Sheffield Giants,,Adult,,
-Sheffield Hallam Warriors,Sheffield,University,2002,
-Sheffield Sabres,Sheffield,University,1989,
-Shropshire Revolution,,Adult,,
-Solent Redhawks,Southampton,University,,
-Solent Thrashers,,Adult,,
-Somerset Wyverns,,Adult,,
-South East Squadron,Maidstone,Adult,2020,2022
-South Lincolnshire Lightning,Bourne,Adult,2020,2022
-South Wales Warriors,,Adult,,
-Southern Sundevils,Portsmouth,Adult,1987,2008
-Southend Sabres,Southend-on-Sea,Adult,1984,2004
-Southampton Stags,Southampton,University,,
-Staffordshire Stallions,Stoke-on-Trent,University,1992,
-Staffordshire Surge,,Adult,,
-Stirling Clansmen,Stirling,University,1986,
-Strathclyde Hawks,Glasgow,University,1986,2001
-Sunderland Spartans,Sunderland,University,,
-Surrey Stingers,Guildford,University,,
-Sussex Saxons,Brighton,University,,
-Sussex Thunder,Haywards Heath,Adult,,
-Sussex Thunderbolts,Brighton,Adult,2020,2021
-Swansea Titans,Swansea,University,,
-Swindon Storm,,Adult,,
-Tarannau Aberystwyth,Aberystwyth,University,1991,
-Teesside Cougars,Middlesborough,University,1985,
-Tees Valley Cougars,Darlington,Adult,2002,2003
-Torbay Trojans,Torbay,Adult,1983,2023
-UCL Emperors,London,University,,
-UCLan Rams,Preston,University,,
-UEA Pirates,Norwich,University,,
-UEL Phoenix,London,University,,
-UWE Bullets,Bristol,University,,
-UWE Bullets 2s,Bristol,University,,
-UWS Pyros,Paisley,University,1989,
-Wakefield District Raiders,,Adult,,
-Warwick Wolves,Warwick,University,,
-Wembley Stallions,,Adult,,
-West Coast Trojans,Irvine,Adult,2004,2018
-Westminster Dragons,London,University,,
-Winchester Silverbacks,Winchester,University,,
-Wolverhampton Wildcats,Wolverhampton,University,2012,2015
-Wolverhampton Vipers,Wolverhampton,Adult,1994,2001
-Worcester Royals,Worcester,University,,
-Worcestershire Black Knights,Worcester,Adult,2017,2022
-York Centurions,York,University,,
-Yorkshire Rams,,Adult,,
-YSJ Jaguars,York,University,2016,
-Peterborough Saxons,Peterborough,Adult,2001,2016
-Dundee Hurricanes,Dundee,Adult,2002,2016
-Gloucester Centurions,Gloucester,Adult,2007,2015
-Bedfordshire Blue Raiders,Bedford,Adult,2006,2013
-Milton Keynes Pathfinders,Milton Keynes,Adult,2006,2013
-Carlisle Border Reivers,Carlisle,Adult,2009,2013
-Highland Wildcats,Inverness,Adult,2002,2012
-Tiger Bay Warriors,Cardiff,Adult,1996,1999
-Sheffield Saxons,Sheffield,Adult,,
-Essex Chiefs,Essex,Adult,,1998
-Redbridge Fire,Redbridge,Adult,,1998
-Leicester Huntsmen,Leicester,Adult,,
-Hull Rockets,Hull,Adult,,
-St Helens Cardinals,St Helens,Adult,1985,1998
-Northants Storm,Northampton,Adult,1985,1997
-Washington Presidents,Washington,Adult,1985,1997
-Carterton Wildcats,Carterton,Adult,,1997
-South Yorkshire Jaguars,South Yorkshire,Adult,,1997
-Invicta Eagles,Kent,Adult,,1997
-Gwent Mustangs,Newport,Adult,1986,1997
-Bath Gladiators,Bath,Adult,1983,1997
-Milton Keynes Pioneers,Milton Keynes,Adult,1986,1997
-Sheffield Cyclones,Sheffield,Adult,,1997
-Sussex Raiders,Crawley,Adult,1984,1996
-Brighton B-52s,Brighton,Adult,1984,1996
-Winchester Rifles,Winchester,Adult,1995,1996
-Duchy Destroyers,Cornwall,Adult,1987,1996
-Manchester Falcons,Manchester,Adult,,1996
-Portsmouth Tridents,Portsmouth,Adult,,1996
-Wessex Buccaneers,Bournemouth,Adult,1992,1995
-London Olympians II,London,Adult,1994,1995
-Crawley Raiders II,Crawley,Adult,1995,1995
-Leeds Cougars,Leeds,Adult,1984,1995
-Trent Valley Warriors,Nottingham,Adult,1987,1995
-Tiptree Titans,Tiptree,Adult,1986,1995
-Rockingham Rebels,Kettering,Adult,1985,1995
-Stockton Gators,Stockton-on-Tees,Adult,1986,1995
-West Country Phoenix,Gloucester,Adult,1994,1995
-Glasgow Lions,Glasgow,Adult,1984,1996
-Granite City Oilers,Aberdeen,Adult,1986,1995
-Clydesdale Colts,Motherwell,Adult,1986,1995
-Fife 49ers,Kirkcaldy,Adult,1988,1996
-Dundee Whalers,Dundee,Adult,1986,1998
-Stirling Broncos,Stirling,Adult,1995,1999
-Bedford Bombardiers,Bedford,Adult,1986,1994
-Nottingham Hoods,Nottingham,Adult,1984,1994
-Thames Valley Aces,Reading,Adult,1987,1994
-Edinburgh Eagles,Edinburgh,Adult,1985,1994
-Falkirk Cougars,Falkirk,Adult,1993,1994
-Colwyn Bay Dragons,Colwyn Bay,Adult,1987,1994
-Derbyshire Braves,Derby,Adult,1989,1994
-Enfield Bullets,Enfield,Adult,1986,1994
-F14 Tomcats,Oxford,Adult,1987,1994
-Harrogate Hawks,Harrogate,Adult,1986,1994
-London Rockets,London,Adult,1990,1994
-London Thunder,London,Adult,1993,1994
-Merseyside Phoenix,Liverpool,Adult,1991,1994
-North Sea Hurricanes,King's Lynn,Adult,1992,1994
-South Coast Raiders,Portsmouth,Adult,1992,1994
-Stratford Tempests,Stratford-upon-Avon,Adult,1987,1994
-Swindon Steelers,Swindon,Adult,1985,1994
-Taunton Wyverns,Taunton,Adult,1983,1994
-Trafford Falcons,Manchester,Adult,1986,1994
-Hereford Chargers,Hereford,Adult,1986,1994
-Cardiff Mets,Cardiff,Adult,1987,1993
-Thames Valley Chargers,Reading,Adult,1983,1993
-West London Aces,London,Adult,1987,1993
-Kent Cougars,Folkestone,Adult,1986,1993
-Tyneside Tigers,Newcastle,Adult,1988,1993
-Stourbridge Pumas,Stourbridge,Adult,1988,1993
-Great Western Oilers,Taunton,Adult,1991,1993
-Severn Vale Royals,Gloucester,Adult,1989,1993
-Croydon Kings,Croydon,Adult,1987,1993
-Ealing Eagles,London,Adult,1984,1993
-Horsham Predators,Horsham,Adult,1990,1993
-Lincoln Saints,Lincoln,Adult,1988,1993
-Five Towns Falcons,Pontefract,Adult,1991,1993
-Woking Generals,Woking,Adult,1985,1993
-Newbury Bandits,Newbury,Adult,1990,1993
-Weymouth Renegades,Weymouth,Adult,1987,1993
-Exeter Cyclones,Exeter,Adult,1990,1993
-Wight Rhinos,Newport,Adult,1991,1993
-North Kent Patriots,Dartford,Adult,1991,1993
-Don Valley Bears,Doncaster,Adult,1989,1993
-Hampshire Cavaliers,Winchester,Adult,1988,1993
-Charnwood Beacons,Loughborough,Adult,1987,1993
-Eastleigh Royals,Eastleigh,Adult,1988,1993
-Folkestone Vikings,Folkestone,Adult,1988,1993
-South Cheshire Refugees,Crewe,Adult,1989,1993
-Blackpool Falcons,Blackpool,Adult,1991,1992
-Bristol Blackhawks,Bristol,Adult,1987,1992
-Cumbria Cougars,Cumbria,Adult,1991,1992
-Edinburgh Phoenix,Edinburgh,Adult,1989,1992
-Essex Buccaneers,Essex,Adult,1989,1992
-Glasgow Cyclones,Glasgow,Adult,1991,1992
-Gravesend Lions,Gravesend,Adult,1987,1992
-Guernsey Gladiators,Guernsey,Adult,1989,1992
-Humberside Liberators,Hull,Adult,1990,1992
-Kent Mustangs,Medway,Adult,1986,1993
-London Gators,London,Adult,1990,1993
-Manchester Spartans,Manchester,Adult,1984,1994
-Mancunian Colts,Manchester,Adult,1989,1992
-Newmarket Hornets,Newmarket,Adult,1985,1993
-Newark Vulcans,Newark,Adult,1986,1992
-Stoke Spitfires,Stoke-on-Trent,Adult,1986,1992
-Wolverhampton Outlaws,Wolverhampton,Adult,1986,1992
-Sutton Coldfield Royals,Sutton Coldfield,Adult,1989,1992
-Orpington Phoenix,Orpington,Adult,1992,1992
-Lothian Raiders,Edinburgh,Adult,1995,1998
-London Ravens,London,Adult,1983,1994
-Solent Warriors,Portsmouth,Adult,1984,1991
-Bristol Packers,Bristol,Adult,1987,1991
-Bolton Buccaneers,Bolton,Adult,1988,1991
-SMC Admirals,Merton,Adult,1990,1991
-Merseyside Centurions,Merseyside,Adult,1987,1991
-Barnsley Bears,Barnsley,Adult,1988,1991
-Cardiff Tigers,Cardiff,Adult,1987,1992
-Cheltenham Chieftains,Cheltenham,Adult,1987,1991
-London Capitals,London,Adult,1986,1991
-London Barons,London,Adult,1990,1991
-Brent Bandits,London,Adult,1987,1991
-Leeds Cobras,Leeds,Adult,1988,1991
-Bournemouth Bulldogs,Bournemouth,Adult,1990,1991
-LA Panthers,London,Adult,1987,1991
-Watford Scorpions,Watford,Adult,1989,1991
-Burnley Prairie Dogs,Burnley,Adult,1990,1991
-St Austell Seahawks,St Austell,Adult,1988,1991
-Bristol Pirates,Bristol,Adult,1989,1991
-Nuneaton Norsemen,Nuneaton,Adult,1988,1991
-Eastbourne Crusaders,Eastbourne,Adult,1985,1991
-London Express,London,Adult,1991,1991
-Orpington Barracuda,Orpington,Adult,1990,1991
-Strathclyde Stallions,Gourock,Adult,1990,1991
-Chelmsford Cherokee,Chelmsford,Adult,1985,1990
-Scunthorpe Steelers,Scunthorpe,Adult,1984,1992
-Manchester Allstars,Manchester,Adult,1985,1990
-Walsall Titans,Walsall,Adult,1985,1990
-Dublin Celts,Dublin,Adult,1984,1990
-Kent Rams,Kent,Adult,1987,1990
-Kingston-Thames Pirates,Kingston upon Thames,Adult,1987,1990
-Herts Phantoms,Hertfordshire,Adult,1986,1990
-Halton Demons,Halton,Adult,1987,1990
-Heanor Hawks,Heanor,Adult,1986,1990
-Kinloss Kurgans,Kinloss,Adult,1988,1990
-KL Rebels,Moray,Adult,1988,1990
-Bilston Apaches,Bilston,Adult,1987,1990
-Breckland Bucks,Breckland,Adult,1989,1990
-Cannock Chase Giants,Cannock,Adult,1988,1990
-Notts Phoenix,Nottingham,Adult,1989,1990
-Preston Pirates,Preston,Adult,1988,1990
-Rugby Rollers,Rugby,Adult,1988,1990
-Somerset Wolfpack,Somerset,Adult,1988,1990
-South Coast Sharks,South Coast,Adult,1988,1990
-Southside Kestrels,London,Adult,1988,1990
-Swansea Dragons,Swansea,Adult,1987,1990
-Tamworth Trojans,Tamworth,Adult,1988,1990
-Tonbridge Tigers,Tonbridge,Adult,1988,1990
-Warrington Scorpions,Warrington,Adult,1988,1990
-York Vikings,York,Adult,1988,1990
-Southampton Seahawks,Southampton,Adult,1988,1990
-Manchester Heroes,Manchester,Adult,1989,1990
-Solent Scorpions,Solent,Adult,1989,1990
-Forth Valley,Forth Valley,Adult,1989,1990
 A26 Bulldogs,Antrim,Adult,1989,1989
-Basildon Astros,Basildon,Adult,1989,1989
-Belfast Spartans,Belfast,Adult,1989,1989
-Bexley Barons,Bexley,Adult,1987,1989
-Burton Barons,Burton-on-Trent,Adult,1988,1989
-Bury Pumas,Bury,Adult,1988,1989
-Cheshire Cats,Cheshire,Adult,1987,1989
-Craigavon Cowboys,Craigavon,Adult,1987,
-Doncaster Jaguars,Doncaster,Adult,1987,1989
-Dublin Tornadoes,Dublin,Adult,1986,1996
-East Antrim Cougars,Antrim,Adult,1989,1989
-East Coast Leopards,Grimsby,Adult,1989,1989
-Forth Valley Generals,Falkirk,Adult,1988,1989
-Hartlepool Steelers,Hartlepool,Adult,1987,1989
-Heathrow Jets,Hillingdon,Adult,1984,1994
-Inverclyde Crusaders,Greenock,Adult,1987,1989
-Jersey Senates,Jersey,Adult,1989,1989
-Lancashire Chieftains,Lancashire,Adult,1986,1989
-Lichfield AFC,Lichfield,Adult,1989,1989
-Lincoln Bombers,Lincoln,Adult,1987,1991
-Livingstone Chieftains,Livingston,Adult,1989,1989
-London Lasers,London,Adult,1988,1989
-Maidstone M20s,Maidstone,Adult,1987,1989
-Manx Comets,Isle of Man,Adult,1986,1989
-Merton Admirals,Merton,Adult,1986,1989
-Meyrick Marauders,Bournemouth,Adult,1989,1989
-Musselburgh Magnums,Musselburgh,Adult,1986,1989
-Ness Monsters,Inverness,Adult,1987,1989
-Newport Mustangs,Newport,Adult,1987,1989
-NI Giants,Belfast,Adult,1987,1989
-Poole Bay Panthers,Poole,Adult,1989,1989
-Rochdale Cobras,Rochdale,Adult,1988,1989
-Scarborough Warlords,Scarborough,Adult,1988,1989
-South Lincs Blitz,Boston,Adult,1988,1989
-St Albans Kestrels,St Albans,Adult,1987,1989
-Thanet Vikings,Thanet,Adult,1986,1989
-Weston Wolfpack,Weston-super-Mare,Adult,1988,1989
-Witney Wildcats,Witney,Adult,1986,1989
-Yeovil Harriers,Yeovil,Adult,1987,1989
+Aberdeen Roughnecks University Team,Aberdeen,University,1994,
+Aberdeen Roughnecks,Aberdeen,Adult,2014,
+Abingdon Pharaohs,Abingdon,Adult,1986,1988
+Anglia Ruskin Siege,Cambridge,University,2003,
 Ashford Raiders,Ashford,Adult,1988,1988
 Ashton Oilers,Ashton-under-Lyne,Adult,1987,1988
+Aston Rhinos,Birmingham,University,1989,1996
+Ayr Burners,Ayr,Adult,1987,1987
+Bangor Llewod,Bangor,University,2009,
+Barbarians,St Albans,Adult,1988,1988
+Barnsley Bears,Barnsley,Adult,1988,1991
+Barrhead Redhawks,Barrhead,Adult,1987,1987
+Basildon Astros,Basildon,Adult,1989,1989
+Bath Gladiators,Bath,Adult,1983,1997
+Bath Killer Bees,Bath,University,1992,
+Bath Spa Bulldogs,Bath,University,2009,
+Bedford Bombardiers,Bedford,Adult,1986,1994
+Bedfordshire Blue Raiders,Bedford,Adult,2006,2013
+Belfast Spartans,Belfast,Adult,1989,1989
+Berkshire Renegades,Reading,Adult,1986,
+Bexley Barons,Bexley,Adult,1987,1989
+Bilston Apaches,Bilston,Adult,1987,1990
+Birmingham Bulls,Birmingham,Adult,1985,
+Birmingham Huskies,Birmingham,Adult,1988,1988
+Birmingham Lions,Birmingham,University,1989,
+Birmingham Lions,Birmingham,Womens,2026,
 Black Country Nailers,Dudley,Adult,1987,1988
+Black Country Steelers,,Adult,2026,
+Blackpool Falcons,Blackpool,Adult,1991,1992
+Bletchley Bees,Bletchley,Adult,1987,1987
+BNU Buccaneers,Wycombe,University,2009,2020
+Bolton Buccaneers,Bolton,Adult,1988,1991
+Bournemouth Bobcats,Bournemouth,Adult,1985,
+Bournemouth Bulldogs,Bournemouth,Adult,1990,1991
+Bournemouth University Bobcats,Bournemouth,University,2014,
+Bradford Bears,Bradford,University,2009,
+Bradford Dolphins,Bradford,Adult,1986,1986
+Breckland Bucks,Breckland,Adult,1989,1990
+Brent Bandits,London,Adult,1987,1991
+Bridgend Celts,Bridgend,Adult,1987,1987
+Brighton B-52s,Brighton,Adult,1984,1996
+Brighton Panthers,Brighton,University,2002,
+Bristol Apache,,Adult,2011,
+Bristol Aztecs,Bristol,Adult,1991,
+Bristol Barracuda,Bristol,University,2007,
+Bristol Blackhawks,Bristol,Adult,1987,1992
+Bristol Bombers,Bristol,Adult,1986,1986
+Bristol Packers,Bristol,Adult,1987,1991
+Bristol Pirates,Bristol,Adult,1989,1991
+Brunel Burners,London,University,2011,
+Buckley Hangmen,Buckley,Adult,1987,1987
+Burnley Prairie Dogs,Burnley,Adult,1990,1991
+Burton Barons,Burton-on-Trent,Adult,1988,1989
+Bury Pumas,Bury,Adult,1988,1989
+Bury Saints,Bury St Edmunds,Adult,2013,2020
+Caernarfon Centurions,Caernarfon,Adult,1987,1987
+Caledonian Roughriders,Glasgow,University,2003,2008
+Cambridge Pythons,Cambridge,University,1992,
+Cambridgeshire Cats,,Adult,1985,
+Cannock Chase Giants,Cannock,Adult,1988,1990
+Canterbury CC Chargers,Canterbury,University,2011,
 Capital Clansmen,Edinburgh,Adult,1988,1988
 Capital Tigers,London,Adult,1986,1988
-City Blackhawks,London,Adult,1988,1988
-Cleveland Dragons,Middlesbrough,Adult,1988,1988
-Cotswold Bears,Gloucester,Adult,1985,1988
-Croydon Cyclones,Croydon,Adult,1988,1988
-Dunstable Cowboys,Dunstable,Adult,1987,1988
-Glasgow Diamonds,Glasgow,Adult,1987,1988
-Grays Saxons,Grays,Adult,1988,1988
-Grimsby Scorpions,Grimsby,Adult,1988,1988
-Gwynedd Knights,Bangor,Adult,1988,1988
-Birmingham Huskies,Birmingham,Adult,1988,1988
-Kings Lynn Patriots,King's Lynn,Adult,1988,1988
-Locomotive Derby,Derby,Adult,1984,1988
-Lothian Chieftains,Lothian,Adult,1988,1988
-Luton Flyers,Luton,Adult,1986,1988
-Macclesfield Cobras,Macclesfield,Adult,1988,1988
-Mansfield Express,Mansfield,Adult,1984,1988
-Meon Valley Vikings,Meon Valley,Adult,1988,1988
-Mount's Bay Buccaneers,Penzance,Adult,1988,1988
-Newton GWs,Newton Abbot,Adult,1988,1988
-Oakland Raiders,Southampton,Adult,1988,1988
-Oldham Phoenix,Oldham,Adult,1988,1988
-Prestatyn Panthers,Prestatyn,Adult,1987,1988
-Redditch Raiders,Redditch,Adult,1988,1988
-Rotherham Redskins,Rotherham,Adult,1988,1988
-Steel City Giants,Sheffield,Adult,1987,1988
-Strathmore Scorpions,Forfar,Adult,1988,1988
-West Bromwich Fireballs,West Bromwich,Adult,1988,1988
-Weymouth Warlords,Weymouth,Adult,1988,1988
-Wrekin Giants,Telford,Adult,1985,1992
-Yate Thundercats,Yate,Adult,1988,1988
-Staines Removers,Staines,Adult,1988,1988
-Barbarians,St Albans,Adult,1988,1988
-
-Ayr Burners,Ayr,Adult,1987,1987
-Barrhead Redhawks,Barrhead,Adult,1987,1987
-Bletchley Bees,Bletchley,Adult,1987,1987
-Bridgend Celts,Bridgend,Adult,1987,1987
-Buckley Hangmen,Buckley,Adult,1987,1987
-Caernarfon Centurions,Caernarfon,Adult,1987,1987
+Cardiff Cobras,Cardiff,University,1987,
+Cardiff Mets,Cardiff,Adult,1987,1993
+Cardiff Tigers,Cardiff,Adult,1987,1992
+Cardiff Valkyries,Cardiff,Womens,2026,
+Carlisle Border Reivers,Carlisle,Adult,2009,2013
+Carlisle Kestrels,Carlisle,Adult,2020,2021
+Carterton Wildcats,Carterton,Adult,1990,1997
+Charnwood Beacons,Loughborough,Adult,1987,1993
+Chelmsford Cherokee,Chelmsford,Adult,1985,1990
+Cheltenham Chieftains,Cheltenham,Adult,1987,1991
+Cheshire Bears,Chester,Womens,2026,
+Cheshire Cats,Cheshire,Adult,1987,1989
+Chester Legion,Chester,University,2016,
+Chester Romans,Chester,Adult,1987,
+Chichester Spitfires,Chichester,University,2014,
 Chiltern Panthers,Hemel Hempstead,Adult,1987,1987
 Chingford Centurions,Chingford,Adult,1987,1987
+City Blackhawks,London,Adult,1988,1988
 City of London Stags,London,Adult,1984,1987
+City Wolfpack,London,University,2012,
+Cleveland Dragons,Middlesbrough,Adult,1988,1988
+Clyde Valley Blackhawks,,Adult,2009,
+Clydesdale Colts,Motherwell,Adult,1986,1995
+Colchester Gladiators,,Adult,1985,
+Collier Row Oilers,Romford,Adult,1986,1986
+Colwyn Bay Dragons,Colwyn Bay,Adult,1987,1994
+Cornwall Monarchs,,Adult,2007,
+Cotswold Bears,Gloucester,Adult,1985,1988
+Coventry Jets,Coventry,Adult,1985,2018
+Coventry Phoenix,,Adult,2008,
+Coventry University Jets,Coventry,University,2011,
+Craigavon Cowboys,Craigavon,Adult,1987,
+Crawley Raiders II,Crawley,Adult,1995,1995
+Crewe Railroaders,Crewe,Adult,1984,2023
+Croydon Cyclones,Croydon,Adult,1988,1988
+Croydon Kings,Croydon,Adult,1987,1993
+Cumbria Cougars,Cumbria,Adult,1991,1992
 Darlington Dragons,Darlington,Adult,1987,1987
+Darlington Steam,,Adult,2019,
+DC Presidents,Durham,Adult,2014,2023
+Derby Braves,Derby,University,1996,
+Derbyshire Braves,Derby,Adult,1989,1994
+DMU Lions,Leicester,University,2011,
+Don Valley Bears,Doncaster,Adult,1989,1993
+Doncaster Jaguars,Doncaster,Adult,1987,1989
+Doncaster Mustangs,,Adult,2003,
+Dublin Celts,Dublin,Adult,1984,1990
+Dublin Tornadoes,Dublin,Adult,1986,1996
+Duchy Destroyers,Cornwall,Adult,1987,1996
+Dumfries Hunters,Dumfries,Adult,2017,2022
+Dundee Bluedevils,Dundee,University,1999,2000
+Dundee Hurricanes,Dundee,Adult,2002,2016
+Dundee Whalers,Dundee,Adult,1986,1998
+Dunfermline Kings,Dunfermline,Adult,2017,2023
+Dunstable Cowboys,Dunstable,Adult,1987,1988
+Durham Saints,Durham,Adult,1987,1987
+Durham Saints,Durham,University,2006,
+Ealing Eagles,London,Adult,1984,1993
+East Antrim Cougars,Antrim,Adult,1989,1989
+East Coast Leopards,Grimsby,Adult,1989,1989
+East Essex Sabres,Rayleigh,Adult,2016,2023
+East Kent Mavericks,,Adult,2006,
+East Kilbride Pirates,,Adult,1986,
+Eastbourne Crusaders,Eastbourne,Adult,1985,1991
 Eastleigh Britannia Royals,Eastleigh,Adult,1987,1987
+Eastleigh Royals,Eastleigh,Adult,1988,1993
+Edge Hill Vikings,Ormskirk,University,2014,
+Edinburgh Blue Eagles,Edinburgh,Adult,1985,1987
+Edinburgh Eagles,Edinburgh,Adult,1985,1994
+Edinburgh Napier Knights,Edinburgh,University,2007,
+Edinburgh Phoenix,Edinburgh,Adult,1989,1992
+Edinburgh Timberwolves,Edinburgh,University,2004,2007
+Edinburgh Wildcats,Edinburgh,University,2010,
+Edinburgh Wolves,Edinburgh,Adult,2002,
+Enfield Bullets,Enfield,Adult,1986,1994
+Essex Blades,Colchester,University,2003,
+Essex Buccaneers,Essex,Adult,1989,1992
+Essex Chiefs,Essex,Adult,1985,1998
+Essex Tridents,Essex,Adult,1998,
+Exeter Cyclones,Exeter,Adult,1990,1993
+Exeter Demons,Exeter,University,2010,
+F14 Tomcats,Oxford,Adult,1987,1994
+Falkirk Cougars,Falkirk,Adult,1993,1994
+Fife 49ers,Kirkcaldy,Adult,1988,1996
+Five Towns Falcons,Pontefract,Adult,1991,1993
+Folkestone Vikings,Folkestone,Adult,1988,1993
+Forth Valley Generals,Falkirk,Adult,1988,1989
+Forth Valley,Forth Valley,Adult,1989,1990
 Fulham Cardinals,Fulham,Adult,1987,1987
+Furness Phantoms,Barrow-in-Furness,Adult,2011,2020
+FXU Tridents,Falmouth,University,2011,2018
+Gateshead Senators,,Adult,1986,
+Glasgow Cyclones,Glasgow,Adult,1991,1992
+Glasgow Diamonds,Glasgow,Adult,1987,1988
+Glasgow Lions,Glasgow,Adult,1984,1996
+Glasgow Tigers,Glasgow,Adult,1986,
+Glasgow University Tigers,Glasgow,University,1986,
+Gloucester Centurions,Gloucester,Adult,2007,2015
+Gloucestershire Gladiators,Cheltenham,University,2011,
 Gosport Vikings,Gosport,Adult,1987,1987
+Granite City Oilers,Aberdeen,Adult,1986,1995
+Gravesend Lions,Gravesend,Adult,1987,1992
+Grays Saxons,Grays,Adult,1988,1988
+Great Western Oilers,Taunton,Adult,1991,1993
+Greenwich Mariners,London,University,2005,
+Greenwich Rams,Greenwich,Adult,1985,1988
+Grimsby Scorpions,Grimsby,Adult,1988,1988
+Guernsey Gladiators,Guernsey,Adult,1989,1992
+Gwent Mustangs,Newport,Adult,1986,1997
+Gwynedd Knights,Bangor,Adult,1988,1988
+Halton Demons,Halton,Adult,1987,1990
+Halton Spartans,Widnes,Adult,2014,2023
+Hampshire Cavaliers,Winchester,Adult,1988,1993
+Harrogate Hawks,Harrogate,Adult,1986,1994
+Hartlepool Steelers,Hartlepool,Adult,1987,1989
+Hastings Conquerors,Hastings,Adult,2013,2021
+Heanor Hawks,Heanor,Adult,1986,1990
+Heathrow Jets,Hillingdon,Adult,1984,1994
+Hereford Chargers,Hereford,Adult,1986,1994
+Hereford Stampede,,Adult,2021,
+Hertfordshire Cheetahs,,Adult,1987,
+Hertfordshire Cheetahs,Watford,Womens,2026,
+Hertfordshire Hurricanes,Hatfield,University,1994,
+Hertfordshire Stags,Hertfordshire,Adult,1996,2000
+Herts Phantoms,Hertfordshire,Adult,1986,1990
+Highland Stags,Inverness,Adult,2014,
+Highland Wildcats,Inverness,Adult,2002,2012
 Hinckley Hurricanes,Hinckley,Adult,1987,1987
+Horsham Predators,Horsham,Adult,1990,1993
+Huddersfield Hawks,Huddersfield,University,2007,
+Hull Hornets,Hull,Adult,2005,2011
+Hull Rockets,Hull,Adult,1998,1998
+Hull Sharks,Hull,University,1985,
+Humber Warhawks,,Adult,2015,
+Humberside Liberators,Hull,Adult,1990,1992
+HWU Wolverines,Edinburgh,University,2015,
+Ilford Blackhawks,Ilford,Adult,1984,1986
+Imperial Immortals,London,University,2009,
+Inverclyde Crusaders,Greenock,Adult,1987,1989
+Inverclyde Goliaths,,Adult,2019,
+Invicta Eagles,Kent,Adult,1990,1997
+Ipswich Cardinals,,Adult,1987,
+Jersey Senates,Jersey,Adult,1989,1989
+Johnstone Crusaders,Johnstone,Adult,1985,1986
+Jurassic Coast Raptors,Dorchester,Adult,2016,2021
+KCL Regents,London,University,2011,
+Keele Crusaders,Keele,University,2012,
+Kent Cougars,Folkestone,Adult,1986,1993
+Kent Exiles,,Adult,1992,
+Kent Exiles,Bromley,Womens,2026,
+Kent Falcons,Canterbury,University,1998,
+Kent Mustangs,Medway,Adult,1986,1993
+Kent Rams,Kent,Adult,1987,1990
+Kings Lynn Patriots,King's Lynn,Adult,1988,1988
+Kingston Barbarians,Kingston upon Hull,Adult,2001,2001
+Kingston Cougars,London,University,2011,
+Kingston-Thames Pirates,Kingston upon Thames,Adult,1987,1990
+Kinloss Kurgans,Kinloss,Adult,1988,1990
+KL Rebels,Moray,Adult,1988,1990
+LA Panthers,London,Adult,1987,1991
+Lancashire Buccaneers,,Adult,1988,
+Lancashire Chieftains,Lancashire,Adult,1986,1989
+Lancaster Bombers,Lancaster,Adult,1988,1992
+Lancaster Bombers,Lancaster,University,1991,
+Lee Valley Warriors,Lee Valley,Adult,1986,1986
+Leeds Beckett Carnegie,Leeds,University,2008,
+Leeds Bobcats,Leeds,Adult,2008,2021
+Leeds Cobras,Leeds,Adult,1988,1991
+Leeds Cougars,Leeds,Adult,1984,1995
+Leeds Gryphons,Leeds,University,1990,
+Leicester Huntsmen,Leicester,Adult,1987,1998
+Leicester Longhorns,Leicester,University,1986,
+Leicester Panthers,,Adult,1985,
+Leigh Miners,,Adult,2021,
+Leigh Razorbacks,Leigh,Adult,1985,1986
+Lichfield AFC,Lichfield,Adult,1989,1989
+Lincoln Bombers,Lincoln,Adult,1987,1991
+Lincoln Colonials,Lincoln,University,2006,
+Lincoln Saints,Lincoln,Adult,1988,1993
+Lincolnshire Bombers,,Adult,2007,
+Liverpool Raptors,Liverpool,University,2015,
+Livingstone Chieftains,Livingston,Adult,1989,1989
+LJMU Fury,Liverpool,University,2008,
+Locomotive Derby,Derby,Adult,1984,1988
+London Barons,London,Adult,1990,1991
+London Blitz B,,Adult,2015,
+London Blitz,London,Adult,1994,
+London Capitals,London,Adult,1986,1991
+London Express,London,Adult,1991,1991
+London Gators,London,Adult,1990,1993
+London Hornets,London,Adult,2011,2024
+London Lasers,London,Adult,1988,1989
+London Mets,Watford,Adult,1985,2003
+London Olympians II,London,Adult,1994,1995
+London Olympians,,Adult,1985,
+London Ravens,London,Adult,1983,1994
+London Rockets,London,Adult,1990,1994
+London Thunder,London,Adult,1993,1994
+London Warriors,,Adult,2008,
+London Warriors,London,Womens,2026,
+Lothian Chieftains,Lothian,Adult,1988,1988
+Lothian Raiders,Edinburgh,Adult,1995,1998
+Loughborough Students,Loughborough,University,1988,
+LSBU Spartans,London,University,2011,2018
+Luton Flyers,Luton,Adult,1986,1988
+Macclesfield Cobras,Macclesfield,Adult,1988,1988
+Maidstone M20s,Maidstone,Adult,1987,1989
+Maidstone Pumas,Maidstone,Adult,1997,2020
+Manchester Allstars,Manchester,Adult,1985,1990
+Manchester Falcons,Manchester,Adult,1995,1996
+Manchester Heroes,Manchester,Adult,1989,1990
+Manchester MPs,Manchester,University,1985,1988
+Manchester Spartans,Manchester,Adult,1984,1994
+Manchester Titans,,Adult,2003,
+Manchester Titans,Manchester,Womens,2026,
+Manchester Tyrants,Manchester,University,2011,
+Mancunian Colts,Manchester,Adult,1989,1992
+Mansfield Express,Mansfield,Adult,1984,1988
+Manx Comets,Isle of Man,Adult,1986,1989
+Meon Valley Vikings,Meon Valley,Adult,1988,1988
+Merseyside Centurions,Merseyside,Adult,1987,1991
+Merseyside Nighthawks,,Adult,1989,
+Merseyside Phoenix,Liverpool,Adult,1991,1994
+Merton Admirals,Merton,Adult,1986,1989
+Meyrick Marauders,Bournemouth,Adult,1989,1989
+Milton Keynes Pathfinders,Milton Keynes,Adult,2006,2013
+Milton Keynes Pioneers,Milton Keynes,Adult,1986,1997
+MMU Eagles,Manchester,University,2011,
+Morecambe Bay Storm,Morecambe,Adult,2016,2021
+Mount's Bay Buccaneers,Penzance,Adult,1988,1988
+Musselburgh Magnums,Musselburgh,Adult,1986,1989
+Nene Valley Hybrids,Kettering,Adult,2003,2004
+Ness Monsters,Inverness,Adult,1987,1989
+New Bolton Braves,Bolton,Adult,1986,1986
+Newark Vulcans,Newark,Adult,1986,1992
+Newbury Bandits,Newbury,Adult,1990,1993
+Newcastle Browns,Newcastle,Adult,1985,1985
+Newcastle Raiders,Newcastle,University,1985,
+Newcastle Shieldmaidens,Newcastle,Womens,2026,
+Newcastle Vikings,,Adult,2015,
+Newmarket Hornets,Newmarket,Adult,1985,1993
+Newport Mustangs,Newport,Adult,1987,1989
+Newton GWs,Newton Abbot,Adult,1988,1988
+NI Giants,Belfast,Adult,1987,1989
+North Herts Raiders,Letchworth,Adult,1986,1986
+North Kent Patriots,Dartford,Adult,1991,1993
+North Sea Hurricanes,King's Lynn,Adult,1992,1994
+Northampton Nemesis,Northampton,University,2011,2018
+Northants Knights,,Adult,2021,
+Northants Storm,Northampton,Adult,1985,1997
+Northumberland Lightning,Ashington,Adult,2012,2017
+Northumbria Mustangs,Newcastle,University,2009,
+Norwich Devils,,Adult,1986,
+Nottingham Caesars,,Adult,1995,
+Nottingham Gold,Nottingham,University,1995,
+Nottingham Green,Nottingham,University,2026,
+Nottingham Hoods,Nottingham,Adult,1984,1994
+Nottingham Jade,Nottingham,University,2019,
+Nottingham Trent Renegades,Nottingham,University,2009,
+Notts Phoenix,Nottingham,Adult,1989,1990
+Nuneaton Norsemen,Nuneaton,Adult,1988,1991
+Oakland Raiders,Southampton,Adult,1988,1988
+Oldham Phoenix,Oldham,Adult,1988,1988
+Orpington Barracuda,Orpington,Adult,1990,1991
+Orpington Phoenix,Orpington,Adult,1992,1992
+Ouse Valley Eagles,,Adult,2014,
+Oxford Brookes University,Oxford,University,2010,
+Oxford Cavaliers,Oxford,University,1991,2010
+Oxford Lancers,Oxford,University,2010,
+Oxford Saints,,Adult,1985,
+Peterborough Royals,Peterborough,Womens,2026,
+Peterborough Saxons,Peterborough,Adult,2001,2016
+Plymouth Admirals,Plymouth,Adult,1984,2010
+Plymouth Blitz,Plymouth,University,2001,
+Plymouth Vanguard,,Adult,2025,
+Poole Bay Panthers,Poole,Adult,1989,1989
+Portsmouth Destroyers,Portsmouth,University,2006,
+Portsmouth Dreadnoughts,,Adult,2014,
+Portsmouth Tridents,Portsmouth,Adult,1995,1996
+Prestatyn Panthers,Prestatyn,Adult,1987,1988
+Preston Pirates,Preston,Adult,1988,1990
+QMBL Vipers,"Queen Mary University, London",University,2016,
+Reading Knights,Reading,University,1987,
+Redbridge Fire,Redbridge,Adult,1993,1998
+Redditch Arrows,Redditch,Adult,1988,2011
+Redditch Raiders,Redditch,Adult,1988,1988
+Rochdale Cobras,Rochdale,Adult,1988,1989
+Rockingham Rebels,Kettering,Adult,1985,1995
+Rossendale Bucks,,Adult,2025,
+Rotherham Redskins,Rotherham,Adult,1988,1988
+Royal Holloway Bears,Egham,University,2005,
+Rugby Rollers,Rugby,Adult,1988,1990
+Runcorn Lynx,Runcorn,Adult,1986,1986
+Rushmoor Knights,,Adult,1986,
+Salford Storm,Salford,University,2018,
+Sandwell Steelers,,Adult,2014,
+Scarborough Warlords,Scarborough,Adult,1988,1989
+Scunthorpe Alphas,,Adult,2021,
+Scunthorpe Steelers,Scunthorpe,Adult,1984,1992
 Selsey Badgers,Selsey,Adult,1987,1987
+Severn Vale Royals,Gloucester,Adult,1989,1993
+SGS Pride,Bristol,University,2021,
+Sheffield Cyclones,Sheffield,Adult,1996,1997
+Sheffield Giants,,Adult,2010,
+Sheffield Hallam Warriors,Sheffield,University,2002,
+Sheffield Sabres,Sheffield,University,1989,
+Sheffield Saxons,Sheffield,Adult,1998,1998
+Sherwood Outlaws,Sherwood,Adult,1986,1986
+Shropshire Revolution,,Adult,2007,
 Slough Silverbacks,Slough,Adult,1987,1987
+SMC Admirals,Merton,Adult,1990,1991
+Solent Redhawks,Southampton,University,2009,
+Solent Scorpions,Solent,Adult,1989,1990
+Solent Thrashers,,Adult,2005,
+Solent Thrashers,Southampton,Womens,2026,
+Solent Warriors,Portsmouth,Adult,1984,1991
+Somerset Wolfpack,Somerset,Adult,1988,1990
+Somerset Wyverns,,Adult,2018,
+South Cheshire Refugees,Crewe,Adult,1989,1993
+South Coast Raiders,Portsmouth,Adult,1992,1994
+South Coast Sharks,South Coast,Adult,1988,1990
+South East Squadron,Maidstone,Adult,2020,2022
+South Lincolnshire Lightning,Bourne,Adult,2020,2022
+South Lincs Blitz,Boston,Adult,1988,1989
 South Notts Crusaders,Nottingham,Adult,1987,1987
 South Star Scorpions,Gosport,Adult,1986,1987
+South Wales Warriors,,Adult,2001,
+South Yorkshire Jaguars,South Yorkshire,Adult,1994,1997
+Southampton Seahawks,Southampton,Adult,1988,1990
+Southampton Stags,Southampton,University,1991,
+Southampton Wolverines,Southampton,Adult,1985,1985
+Southend Sabres,Southend-on-Sea,Adult,1984,2004
 Southern Bengals,Surrey,Adult,1987,1987
+Southern Sundevils,Portsmouth,Adult,1987,2008
+Southside Kestrels,London,Adult,1988,1990
+St Albans Kestrels,St Albans,Adult,1987,1989
+St Austell Seahawks,St Austell,Adult,1988,1991
+St Helens Cardinals,St Helens,Adult,1985,1998
+Staffordshire Stallions,Stoke-on-Trent,University,1992,
+Staffordshire Surge,,Adult,1994,
+Staines Removers,Staines,Adult,1988,1988
+Steel City Giants,Sheffield,Adult,1987,1988
+Stirling Broncos,Stirling,Adult,1995,1999
+Stirling Clansmen,Stirling,University,1986,
+Stockton Gators,Stockton-on-Tees,Adult,1986,1995
+Stoke Spitfires,Stoke-on-Trent,Adult,1986,1992
+Stourbridge Pumas,Stourbridge,Adult,1988,1993
+Stratford Tempests,Stratford-upon-Avon,Adult,1987,1994
+Strathclyde Hawks,Glasgow,University,1986,2001
+Strathclyde Stallions,Gourock,Adult,1990,1991
+Strathmore Scorpions,Forfar,Adult,1988,1988
+Sunderland Spartans,Sunderland,University,2002,
+Surrey Stingers,Guildford,University,1995,
+Surrey Thunderbolts,Surrey,Adult,1986,1986
+Sussex Raiders,Crawley,Adult,1984,1996
+Sussex Saxons,Brighton,University,2012,
+Sussex Thunder,Haywards Heath,Adult,1997,
+Sussex Thunderbolts,Brighton,Adult,2020,2021
+Sutton Coldfield Royals,Sutton Coldfield,Adult,1989,1992
+Swansea Dragons,Swansea,Adult,1987,1990
+Swansea Titans,Swansea,University,2010,
+Swindon Steelers,Swindon,Adult,1985,1994
+Swindon Storm,,Adult,2013,
+Tamworth Trojans,Tamworth,Adult,1988,1990
+Tarannau Aberystwyth,Aberystwyth,University,1991,
+Taunton Wyverns,Taunton,Adult,1983,1994
+Tees Valley Cougars,Darlington,Adult,2002,2003
+Teesside Cougars,Middlesborough,University,1985,
+Teesside Steelers,Middlesbrough,Womens,2026,
+Thames Valley Aces,Reading,Adult,1987,1994
+Thames Valley Chargers,Reading,Adult,1983,1993
+Thanet Vikings,Thanet,Adult,1986,1989
+The Royals,Midlands,Adult,1986,1986
+Tiger Bay Warriors,Cardiff,Adult,1996,1999
+Tiptree Titans,Tiptree,Adult,1986,1995
+Tonbridge Tigers,Tonbridge,Adult,1988,1990
+Torbay Trojans,Torbay,Adult,1983,2023
+Trafford Falcons,Manchester,Adult,1986,1994
+Trent Valley Warriors,Nottingham,Adult,1987,1995
+Tyneside Tigers,Newcastle,Adult,1988,1993
+Tyneside Trojans,Newcastle,Adult,1986,1986
+UCL Emperors,London,University,2016,
+UCLan Rams,Preston,University,2011,
+UEA Pirates,Norwich,University,1987,
+UEL Phoenix,London,University,2015,
+UWE Bullets 2s,Bristol,University,2019,
+UWE Bullets,Bristol,University,1992,
+UWS Pyros,Paisley,University,1989,
+Wakefield District Raiders,,Adult,2017,
+Walsall Titans,Walsall,Adult,1985,1990
 Walthamstow Warriors,Walthamstow,Adult,1987,1987
+Warrington Scorpions,Warrington,Adult,1988,1990
+Warwick Wolves,Warwick,University,1989,
+Washington Presidents,Washington,Adult,1985,1997
+Watford Scorpions,Watford,Adult,1989,1991
+Wembley Stallions,,Adult,2015,
+Wessex Buccaneers,Bournemouth,Adult,1992,1995
+West Bromwich Fireballs,West Bromwich,Adult,1988,1988
+West Coast Trojans,Irvine,Adult,2004,2018
+West Country Phoenix,Gloucester,Adult,1994,1995
+West London Aces,London,Adult,1987,1993
 Westhoughton Greyhounds,Westhoughton,Adult,1987,1987
+Westminster Dragons,London,University,2011,2017
+Weston Wolfpack,Weston-super-Mare,Adult,1988,1989
+Weymouth Renegades,Weymouth,Adult,1987,1993
+Weymouth Warlords,Weymouth,Adult,1988,1988
+Wight Rhinos,Newport,Adult,1991,1993
+Winchester Rifles,Winchester,Adult,1995,1996
+Winchester Silverbacks,Winchester,University,2019,
 Windsor Monarchs,Windsor,Adult,1987,1987
 Wirral Wolves,Wirral,Adult,1987,1987
-Durham Saints,Durham,Adult,1987,1987
-
-Abingdon Pharaohs,Abingdon,Adult,1986,1988
-Bradford Dolphins,Bradford,Adult,1986,1986
-Bristol Bombers,Bristol,Adult,1986,1986
-Collier Row Oilers,Romford,Adult,1986,1986
-Edinburgh Blue Eagles,Edinburgh,Adult,1985,1987
-Greenwich Rams,Greenwich,Adult,1985,1988
-Ilford Blackhawks,Ilford,Adult,1984,1986
-Johnstone Crusaders,Johnstone,Adult,1985,1986
-Lee Valley Warriors,Lee Valley,Adult,1986,1986
-Leigh Razorbacks,Leigh,Adult,1985,1986
-New Bolton Braves,Bolton,Adult,1986,1986
-North Herts Raiders,Letchworth,Adult,1986,1986
-Runcorn Lynx,Runcorn,Adult,1986,1986
-Sherwood Outlaws,Sherwood,Adult,1986,1986
-Surrey Thunderbolts,Surrey,Adult,1986,1986
-The Royals,Midlands,Adult,1986,1986
-Tyneside Trojans,Newcastle,Adult,1986,1986
-Newcastle Browns,Newcastle,Adult,1985,1985
-Southampton Wolverines,Southampton,Adult,1985,1985
+Witney Wildcats,Witney,Adult,1986,1989
+Woking Generals,Woking,Adult,1985,1993
+Wolverhampton Outlaws,Wolverhampton,Adult,1986,1992
+Wolverhampton Vipers,Wolverhampton,Adult,1994,2001
+Wolverhampton Wildcats,Wolverhampton,University,2012,2015
+Worcester Royals,Worcester,University,2011,
+Worcestershire Black Knights,Worcester,Adult,2017,2022
+Wrekin Giants,Telford,Adult,1985,1992
+Yate Thundercats,Yate,Adult,1988,1988
+Yeovil Harriers,Yeovil,Adult,1987,1989
+York Centurions,York,University,2009,
+York Vikings,York,Adult,1988,1990
+Yorkshire Rams,,Adult,1987,
+YSJ Jaguars,York,University,2016,

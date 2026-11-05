@@ -26,9 +26,16 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                 </Link>
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                     <div className="flex flex-col gap-2">
-                        <h1 className="text-4xl font-black">{phase.name}</h1>
+                        <div className="flex flex-wrap items-center gap-3">
+                            <h1 className="text-4xl font-black">{phase.name}</h1>
+                            {phase.format && (
+                                <span className="bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-black uppercase px-2.5 py-1 rounded font-sans tracking-wider">
+                                    {phase.format}
+                                </span>
+                            )}
+                        </div>
                         <div className="text-sm text-slate-500 font-sans uppercase tracking-widest">
-                            {phase.type} &bull; {phase.games?.length || 0} Games {phase.isLeaf ? "in Phase" : "Rolled Up"}
+                            {phase.type}{phase.format ? ` • ${phase.format}` : ''} &bull; {phase.games?.length || 0} Games {phase.isLeaf ? "in Phase" : "Rolled Up"}
                         </div>
                     </div>
                     <a

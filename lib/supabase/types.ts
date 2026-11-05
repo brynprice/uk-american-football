@@ -83,6 +83,7 @@ export interface Database {
           parent_phase_id: string | null
           name: string
           type: string | null
+          format: '11v11' | '9v9' | '7v7' | '5v5' | string | null
           ordinal: number
           confidence_level: string
           max_games_per_team: number | null
@@ -95,6 +96,7 @@ export interface Database {
           parent_phase_id?: string | null
           name: string
           type?: string | null
+          format?: '11v11' | '9v9' | '7v7' | '5v5' | string | null
           ordinal?: number
           confidence_level?: string
           max_games_per_team?: number | null
@@ -107,6 +109,7 @@ export interface Database {
           parent_phase_id?: string | null
           name?: string
           type?: string | null
+          format?: '11v11' | '9v9' | '7v7' | '5v5' | string | null
           ordinal?: number
           confidence_level?: string
           max_games_per_team?: number | null

@@ -88,7 +88,6 @@ async function importCompetitions(filePath) {
             }).eq('id', existing.id);
             await ensureSampleNote('competitions', existing.id);
         } else {
-            console.log(`[Success] Creating ${cleanName}...`);
             const { data: newData, error: insertError } = await supabase.from('competitions').insert({
                 name: cleanName,
                 slug,
@@ -96,7 +95,10 @@ async function importCompetitions(filePath) {
                 description: description || null
             }).select('id').single();
 
-            if (!insertError && newData) {
+            if (insertError) {
+                console.error(`[Error] Failed to create ${cleanName}:`, insertError.message);
+            } else if (newData) {
+                console.log(`[Success] Created ${cleanName} (ID: ${newData.id})...`);
                 await ensureSampleNote('competitions', newData.id);
             }
         }

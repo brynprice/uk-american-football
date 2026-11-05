@@ -33,7 +33,7 @@ export type PersonWithRoles = Person & {
     }> | null;
 };
 
-const COMPETITION_ORDER = ['bafl', 'bafanl', 'bcafl', 'buafl'];
+const COMPETITION_ORDER = ['bafl', 'bafanl', 'bcafl', 'buafl', 'sapphire-series', 'nwfl'];
 
 export function resolveGameLevel(g: any): string {
     if (g.game_level) return g.game_level;

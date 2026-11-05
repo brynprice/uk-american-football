@@ -366,7 +366,7 @@ async function runAudit() {
       }
 
       // Game integrity check: status completed but missing score
-      if (g.status === 'completed' && (g.home_score === null || g.away_score === null)) {
+      if (g.status === 'completed' && (g.home_score === null || g.away_score === null) && !(g.notes || '').toLowerCase().includes('unrecorded')) {
         addIssue({
           season,
           phase: gPhase,

@@ -49,7 +49,7 @@ Imports team information.
   ```
 * **CSV Columns Required**: `name`
 * **Optional Columns**: `location`, `founded_year`, `folded_year`, `notes`, `logo_url`, `team_type` (`Adult`, `Womens`, `University`, `Flag`, `U19s`)
-* **Behavior**: Matches teams by `name`. If found, updates the record; if not, creates a new team.
+* **Behavior**: Matches teams by `(name, team_type)` so teams sharing a club name across levels (e.g., `Birmingham Lions` in `University` vs `Womens`) are maintained as distinct records. If found, updates the record; if not, creates a new team.
 
 ### 2. Competitions Import (`import_competitions.mjs`)
 Imports league/competition data.
@@ -82,10 +82,11 @@ Imports a hierarchical structure of phases (divisions, conferences, playoffs) fo
   ```
 * **Example CSV**:
   ```csv
-  Competition,Year,Phase,Type,Parent Phase,Ordinal
-  BUAFL,2025,"Division 1",division,,1
-  BUAFL,2025,"South Eastern",conference,"Division 1",1
-  BUAFL,2025,"Group A",group,"South Eastern",1
+  Competition,Year,Phase,Type,Parent Phase,Ordinal,Format
+  BUAFL,2025,"Division 1",division,,1,11v11
+  BUAFL,2025,"South Eastern",conference,"Division 1",1,11v11
+  NWFL,2024,"Premiership",division,,1,9v9
+  NWFL,2024,"Division 1",division,,2,7v7
   ```
 
 *   **Orphan Adoption**: If a phase already exists in the database as an "orphan" (no parent), but the CSV provides a `parent_phase`, the script will automatically "adopt" that phase into the hierarchy instead of creating a duplicate.
@@ -111,9 +112,9 @@ A comprehensive script that imports game results. It requires that Competition, 
 * **Optional Columns**: `phase`, `parent_phase`, `date` (YYYY-MM-DD), `date_precision` (day/month/year/unknown), `date_display` (e.g. "Spring 1994"), `time` (HH:MM), `home_score`, `away_score`, `venue`, `notes`, `status` (completed/cancelled/postponed/awarded), `confidence_level` (high/medium/low), `is_playoff` (true/yes/1), `playoff_round` (e.g. "Quarter-Final"), `final_type` (title/bowl), `title_name` (e.g. "National Trophy"), `is_double_header` (true/yes/1), `home_coach`, `away_coach`, **`away_phase`**, **`away_parent_phase`**
 * **Behavior**: 
   1. Resolves Competition, Season, and Phase (uses `parent_phase` to disambiguate identical phase names). **Skips the record if any are not found.**
-  2. Resolves Home and Away Teams via `teams.name` or `team_aliases.name`. **Skips the record if either team is not found.**
+  2. Resolves Home and Away Teams via `teams.name` or `team_aliases.name`, **strictly validating `team_type`** against the competition's `level` (`Adult`, `Womens`, `University`, `Flag`, `U19s`). **Logs a validation error and skips the record if either team is missing or only exists under a mismatched `team_type`.**
   3. Resolves or creates Coaches and Venues.
-  4. **Upsert Behavior**: Matches games by `phase_id`, `home_team_id`, `away_team_id`, and `date`. 
+  4. **Upsert Behavior**: Matches games by `season_id`, `phase_id`, `home_team_id`, `away_team_id`, `date` (and `time` if provided, or scores if `is_double_header` is true). 
      - If the game **does not exist**, it inserts a new record. 
      - If it **already exists**, it updates the existing record with the latest scores, venue, notes, status, and flags from the CSV.
   5. Links head coaches to the specific game in `game_staff` **only if** a season-level participation record does not exist for that team/phase. It will never create a season-level `participations` record itself.

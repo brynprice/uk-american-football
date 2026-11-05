@@ -8,6 +8,7 @@ interface Phase {
     id: string;
     name: string;
     type: string | null;
+    format?: string | null;
     parent_phase_id: string | null;
     ordinal: number;
 }
@@ -63,6 +64,11 @@ export default function PhaseView({ phases, parentPhaseId = null, seasonId, init
                             {phase.type && (
                                 <span className="text-[10px] font-sans font-black bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded leading-none">
                                     {phase.type}
+                                </span>
+                            )}
+                            {phase.format && (
+                                <span className="text-[10px] font-sans font-black bg-indigo-50 text-indigo-700 border border-indigo-200 px-1.5 py-0.5 rounded leading-none">
+                                    {phase.format}
                                 </span>
                             )}
                         </div>

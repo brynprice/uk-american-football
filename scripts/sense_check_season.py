@@ -199,7 +199,9 @@ def sense_check_season(csv_path):
     warnings = []
 
     first_comp = (games[0].get('competition') or '').strip().upper() if games else ''
-    is_adult_contact = 'BAFA' in first_comp or 'BAFL' in first_comp or 'BRITISH AMERICAN FOOTBALL LEAGUE' in first_comp or 'BRITISH INDEPENDENT GRIDIRON CONFERENCE' in first_comp or 'BIG C' in first_comp or 'SCOTTISH GRIDIRON ASSOCIATION' in first_comp or 'SGA' in first_comp or 'ADULT' in first_comp or 'data/BAFANL' in csv_path.replace('\\', '/') or 'data/BAFL' in csv_path.replace('\\', '/') or 'data/BIGC' in csv_path.replace('\\', '/') or 'data/SGA' in csv_path.replace('\\', '/')
+    norm_path = csv_path.replace('\\', '/')
+    is_womens = any(kw in first_comp for kw in ['NWFL', 'SAPPHIRE', 'WAFN', 'WOMEN']) or any(p in norm_path for p in ['data/NWFL', 'data/Sapphire', 'data/Womens'])
+    is_adult_contact = (not is_womens) and ('BAFA' in first_comp or 'BAFL' in first_comp or 'BRITISH AMERICAN FOOTBALL LEAGUE' in first_comp or 'BRITISH INDEPENDENT GRIDIRON CONFERENCE' in first_comp or 'BIG C' in first_comp or 'SCOTTISH GRIDIRON ASSOCIATION' in first_comp or 'SGA' in first_comp or 'ADULT' in first_comp or 'data/BAFANL' in norm_path or 'data/BAFL' in norm_path or 'data/BIGC' in norm_path or 'data/SGA' in norm_path)
 
     season_year = ''
     year_match_init = re.search(r'(\d{4})', filename)
@@ -248,13 +250,12 @@ def sense_check_season(csv_path):
                         team_type_map[tname] = set()
                     team_type_map[tname].add(ttype)
 
-    norm_path = csv_path.replace('\\', '/')
-    if any(kw in first_comp for kw in ['BAFA', 'BAFL', 'ADULT', 'SENIOR', 'GRIDIRON CONFERENCE', 'BIG C', 'SCOTTISH GRIDIRON', 'SGA']) or 'data/BAFANL' in norm_path or 'data/BAFL' in norm_path or 'data/BIGC' in norm_path or 'data/SGA' in norm_path or 'data/Seniors' in norm_path:
+    if is_womens:
+        expected_team_type = 'Womens'
+    elif any(kw in first_comp for kw in ['BAFA', 'BAFL', 'ADULT', 'SENIOR', 'GRIDIRON CONFERENCE', 'BIG C', 'SCOTTISH GRIDIRON', 'SGA']) or 'data/BAFANL' in norm_path or 'data/BAFL' in norm_path or 'data/BIGC' in norm_path or 'data/SGA' in norm_path or 'data/Seniors' in norm_path:
         expected_team_type = 'Adult'
     elif any(kw in first_comp for kw in ['BUAFL', 'BCAFL', 'BUCS', 'COLLEGIATE', 'UNIVERSIT']) or 'data/BUAFL' in norm_path:
         expected_team_type = 'University'
-    elif any(kw in first_comp for kw in ['NWFL', 'WAFN', 'WOMEN']) or 'data/Womens' in norm_path:
-        expected_team_type = 'Womens'
     elif any(kw in first_comp for kw in ['FLAG']) or 'data/Flag' in norm_path:
         expected_team_type = 'Flag'
     elif any(kw in first_comp for kw in ['U19', 'YOUTH']) or 'data/U19' in norm_path:
@@ -283,6 +284,10 @@ def sense_check_season(csv_path):
                             f"Row {idx}: Team Type Mismatch - '{canonical_team}' is classified as a '{'/'.join(sorted(act_types))}' team, "
                             f"but this file is for a '{expected_team_type}' competition ({first_comp or norm_path})!{hint}"
                         )
+                elif is_womens and canonical_team:
+                    issues.append(
+                        f"Row {idx}: Unregistered Women's Team - '{canonical_team}' is not in data/teams.csv with team_type='Womens'."
+                    )
 
     # 4. Phase & Parent Phase Population Checks
     # Look up whether phases in this season have parent phases defined
@@ -417,6 +422,10 @@ def sense_check_season(csv_path):
                             f"Standings Row {s_idx}: Team Type Mismatch - '{canonical_t}' is classified as a '{'/'.join(sorted(act_types))}' team, "
                             f"but this file is for a '{expected_team_type}' competition!{hint}"
                         )
+                elif is_womens and canonical_t:
+                    issues.append(
+                        f"Standings Row {s_idx}: Unregistered Women's Team - '{canonical_t}' is not in data/teams.csv with team_type='Womens'."
+                    )
 
     # 5. Playoff Logic & Bracket Progression Checks
     playoff_games = [g for g in games if g.get('is_playoff', '').upper() == 'TRUE']
@@ -440,7 +449,10 @@ def sense_check_season(csv_path):
         final_type = (g.get('final_type') or '').lower().strip()
         title_name = (g.get('title_name') or '').strip()
 
-        if is_adult_contact:
+        if is_womens:
+            if (final_type == 'title' or is_title) and not title_name:
+                issues.append(f"Row {idx}: Women's Title/Bowl Game missing 'title_name'.")
+        elif is_adult_contact:
             if final_type == 'title' or (is_title and 'britbowl' in title_name.lower()):
                 if not (re.match(r'^Britbowl [IVXLCDM]+$', title_name) or title_name == 'BIG C Final' or re.match(r'^SGA Bowl [IVXLCDM]+$', title_name) or re.match(r'^Summerbowl [IVXLCDM]+$', title_name) or re.match(r'^Bud Bowl [IVXLCDM]+$', title_name)):
                     issues.append(
@@ -466,11 +478,16 @@ def sense_check_season(csv_path):
             'quarter-finals': 2,
             'semi-final': 3,
             'semi-finals': 3,
-            'final': 4
+            'third-place playoff': 4,
+            '3rd place playoff': 4,
+            'consolation': 4,
+            'placement': 4,
+            'final': 5
         }
+        consolation_rounds = {'third-place playoff', '3rd place playoff', 'consolation', 'placement', '5th place playoff', '7th place playoff'}
         def playoff_sort_key(x):
             r = (x.get('playoff_round') or '').lower().strip()
-            return (round_hierarchy.get(r, 9), x.get('date') or '')
+            return (round_hierarchy.get(r, 9), x.get('date') or '', x.get('time') or '')
 
         for g in sorted(playoff_games, key=playoff_sort_key):
             if g.get('status') in ('cancelled', 'postponed', 'abandoned'):
@@ -508,7 +525,8 @@ def sense_check_season(csv_path):
         for team, hist in teams_playoff_history.items():
             eliminated = False
             for outcome, date, round_name, title in hist:
-                if eliminated and outcome == 'W':
+                r_norm = (round_name or '').lower().strip()
+                if eliminated and outcome == 'W' and r_norm not in consolation_rounds:
                     issues.append(f"Bracket Error: '{team}' won a playoff game ({date} {round_name}) after being eliminated in a previous round!")
                 if outcome == 'L':
                     eliminated = True
@@ -519,7 +537,7 @@ def sense_check_season(csv_path):
         if g.get('is_double_header', '').upper() == 'TRUE':
             continue
         teams = tuple(sorted([g.get('away_team', ''), g.get('home_team', '')]))
-        key = (teams, g.get('date')) if g.get('date') else (teams, g.get('away_score'), g.get('home_score'))
+        key = (teams, g.get('date'), g.get('time', ''), g.get('playoff_round', '')) if g.get('date') else (teams, g.get('away_score'), g.get('home_score'))
         if key in seen:
             issues.append(f"Row {idx}: Duplicate game record of Row {seen[key]} ({teams}, date={g.get('date')})")
         else:
@@ -553,7 +571,16 @@ def sense_check_season(csv_path):
         month = dt.month
         is_playoff = g.get('is_playoff', '').upper() == 'TRUE'
 
-        if is_adult_contact:
+        if is_womens:
+            # NWFL (2021-present) runs April to October; Sapphire Series (2013-2019) ran October to April
+            if int(season_year or 0) >= 2021:
+                allowed_months = (4, 5, 6, 7, 8, 9, 10)
+                if month not in allowed_months:
+                    issues.append(
+                        f"Row {idx}: Invalid NWFL game month ({month_names[month]} / {d_str}). "
+                        f"NWFL games must be played between April and October."
+                    )
+        elif is_adult_contact:
             # Adult contact season: April to September (March permitted for early years like 1991 Easter kickoff; October permitted for 2013 Britbowl XXVII / 2021 COVID delayed season)
             if season_year in ('2013', '2021'):
                 allowed_months = (4, 5, 6, 7, 8, 9, 10)
