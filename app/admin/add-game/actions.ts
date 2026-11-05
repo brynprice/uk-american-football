@@ -18,6 +18,7 @@ export async function submitGameAction(payload: {
     playoffRound: string;
     finalType: string;
     titleName: string;
+    nickname?: string;
     isDoubleHeader: boolean;
     notes: string;
 }) {
@@ -90,7 +91,7 @@ export async function submitGameAction(payload: {
             findOrCreateVenue(payload.venue)
         ]);
 
-        const gameData = {
+        const gameData: Record<string, any> = {
             phase_id: payload.selectedPhase,
             date: payload.date,
             date_precision: "EXACT",
@@ -106,6 +107,13 @@ export async function submitGameAction(payload: {
             title_name: payload.finalType !== "none" && payload.titleName ? payload.titleName : null,
             is_double_header: payload.isDoubleHeader
         };
+
+        if (payload.nickname?.trim()) {
+            const { error: colErr } = await supabase.from("games").select("nickname").limit(1);
+            if (!colErr) {
+                gameData.nickname = payload.nickname.trim();
+            }
+        }
 
         const { data: newGame, error: gameError } = await supabase.from("games").insert(gameData).select().single();
         if (gameError) throw gameError;

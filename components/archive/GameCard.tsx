@@ -63,7 +63,7 @@ export default function GameCard({ game, seasonYear }: GameCardProps) {
                     )}
                     {game.nickname && (
                         <span className="text-[10px] font-black bg-slate-800 text-amber-300 border border-slate-700 px-2 py-0.5 rounded italic shadow-sm">
-                            "{game.nickname}"
+                            {game.nickname}
                         </span>
                     )}
                     {(game.is_playoff || game.playoff_round) && game.final_type !== 'title' && game.final_type !== 'bowl' && (

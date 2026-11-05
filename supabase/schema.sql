@@ -121,6 +121,7 @@ CREATE TABLE games (
   is_playoff BOOLEAN DEFAULT false,
   final_type TEXT DEFAULT null, -- 'title' or 'bowl'
   title_name TEXT,
+  nickname TEXT,
   playoff_round TEXT,
   is_double_header BOOLEAN DEFAULT false,
   is_unique_score BOOLEAN DEFAULT false,

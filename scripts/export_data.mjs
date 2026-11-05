@@ -59,25 +59,7 @@ async function exportData(outputPath) {
         const { data: games, error } = await supabase
             .from('games')
             .select(`
-                id,
-                date,
-                date_precision,
-                date_display,
-                time,
-                home_score,
-                away_score,
-                status,
-                confidence_level,
-                is_playoff,
-                final_type,
-                title_name,
-                playoff_round,
-                is_double_header,
-                notes,
-                home_team_id,
-                away_team_id,
-                phase_id,
-                away_phase_id,
+                *,
                 venue:venues(name),
                 home_team:teams!home_team_id(name),
                 away_team:teams!away_team_id(name),
@@ -161,7 +143,7 @@ async function exportData(outputPath) {
         "away_score", "home_score", "venue", "notes", "away_coach", "home_coach",
         "is_double_header", "date_precision", "date_display", "time", "status",
         "confidence_level", "is_playoff", "is_title_game", "final_type",
-        "title_name", "playoff_round"
+        "title_name", "nickname", "playoff_round"
     ];
 
     const csvData = allGames.map(game => {
@@ -221,6 +203,7 @@ async function exportData(outputPath) {
             is_title_game: isTitleGame,
             final_type: game.final_type || "",
             title_name: game.title_name || "",
+            nickname: game.nickname || "",
             playoff_round: game.playoff_round || "",
             parent_phase: parentPhase.name || ""
         };

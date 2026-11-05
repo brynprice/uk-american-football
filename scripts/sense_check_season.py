@@ -214,7 +214,7 @@ def sense_check_season(csv_path):
         for rf in required_fields:
             if not g.get(rf):
                 issues.append(f"Row {idx}: Missing mandatory field '{rf}' for {g.get('away_team')} @ {g.get('home_team')}")
-        if g.get('status') not in ('cancelled', 'abandoned', 'postponed'):
+        if g.get('status') not in ('cancelled', 'abandoned', 'postponed', 'unplayed'):
             if 'unrecorded' not in g.get('notes', '').lower():
                 for rf in ['away_score', 'home_score']:
                     if not g.get(rf):
@@ -442,7 +442,7 @@ def sense_check_season(csv_path):
 
         if is_adult_contact:
             if final_type == 'title' or (is_title and 'britbowl' in title_name.lower()):
-                if not (re.match(r'^Britbowl [IVXLCDM]+$', title_name) or title_name == 'BIG C Final' or re.match(r'^SGA Bowl [IVXLCDM]+$', title_name)):
+                if not (re.match(r'^Britbowl [IVXLCDM]+$', title_name) or title_name == 'BIG C Final' or re.match(r'^SGA Bowl [IVXLCDM]+$', title_name) or re.match(r'^Summerbowl [IVXLCDM]+$', title_name) or re.match(r'^Bud Bowl [IVXLCDM]+$', title_name)):
                     issues.append(
                         f"Row {idx}: Invalid Adult National Championship Title Game name '{title_name}'. "
                         f"Must be canonically styled as 'Britbowl <Roman Numerals>' (e.g. 'Britbowl XXXVIII')."
@@ -458,7 +458,21 @@ def sense_check_season(csv_path):
     # Check playoff bracket progression continuity
     if playoff_games:
         teams_playoff_history = {}
-        for g in sorted(playoff_games, key=lambda x: x.get('date', '')):
+        round_hierarchy = {
+            'wildcard': 1,
+            'wildcard round': 1,
+            'first round': 1,
+            'quarter-final': 2,
+            'quarter-finals': 2,
+            'semi-final': 3,
+            'semi-finals': 3,
+            'final': 4
+        }
+        def playoff_sort_key(x):
+            r = (x.get('playoff_round') or '').lower().strip()
+            return (round_hierarchy.get(r, 9), x.get('date') or '')
+
+        for g in sorted(playoff_games, key=playoff_sort_key):
             if g.get('status') in ('cancelled', 'postponed', 'abandoned'):
                 continue
             if not g.get('away_score') or not g.get('home_score'):

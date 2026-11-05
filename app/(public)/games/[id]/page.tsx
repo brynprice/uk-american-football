@@ -80,7 +80,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                             )}
                             {game.nickname && (
                                 <span className="bg-slate-800 text-amber-300 border border-slate-700 px-2 py-0.5 rounded text-[10px] font-black italic normal-case tracking-normal">
-                                    "{game.nickname}"
+                                    {game.nickname}
                                 </span>
                             )}
                             {game.away_phase_id && game.away_phase_id !== game.phase_id && game.away_phase?.name ? (

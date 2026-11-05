@@ -460,3 +460,58 @@ bafl,1987,UKAFL Central A,Division,UKAFL,high,3
 bafl,1987,UKAFL Central B,Division,UKAFL,high,4
 bafl,1987,UKAFL Southern A,Division,UKAFL,high,5
 bafl,1987,UKAFL Southern B,Division,UKAFL,high,6
+
+bafl,1986,Budweiser League,Tier,,high,1
+bafl,1986,Playoffs,Playoffs,Budweiser League,high,0
+bafl,1986,Budweiser Premier Division,Tier,Budweiser League,high,1
+bafl,1986,Budweiser Atlantic Premier,Division,Budweiser Premier Division,high,1
+bafl,1986,Budweiser Central Premier,Division,Budweiser Premier Division,high,2
+bafl,1986,Budweiser Channel Premier,Division,Budweiser Premier Division,high,3
+bafl,1986,Budweiser Division One,Tier,Budweiser League,high,2
+bafl,1986,Budweiser Atlantic Div 1 North,Division,Budweiser Division One,high,1
+bafl,1986,Budweiser Atlantic Div 1 South,Division,Budweiser Division One,high,2
+bafl,1986,Budweiser Central Division One,Division,Budweiser Division One,high,3
+bafl,1986,Budweiser Channel Division One,Division,Budweiser Division One,high,4
+bafl,1986,Budweiser Division Two,Tier,Budweiser League,high,3
+bafl,1986,Budweiser Central Division Two,Division,Budweiser Division Two,high,1
+bafl,1986,Budweiser Channel Division Two,Division,Budweiser Division Two,high,2
+bafl,1986,British American Football League,Tier,,high,2
+bafl,1986,Playoffs,Playoffs,British American Football League,high,0
+bafl,1986,BAFL National Division,Tier,British American Football League,high,1
+bafl,1986,BAFL National Central,Division,BAFL National Division,high,1
+bafl,1986,BAFL National Northern,Division,BAFL National Division,high,2
+bafl,1986,BAFL National Pennine,Division,BAFL National Division,high,3
+bafl,1986,BAFL National Southern,Division,BAFL National Division,high,4
+bafl,1986,BAFL Anglo Division,Tier,British American Football League,high,2
+bafl,1986,BAFL Anglo Anglian,Division,BAFL Anglo Division,high,1
+bafl,1986,BAFL Anglo Central,Division,BAFL Anglo Division,high,2
+bafl,1986,BAFL Anglo Northern,Division,BAFL Anglo Division,high,3
+bafl,1986,BAFL Anglo Scottish,Division,BAFL Anglo Division,high,4
+bafl,1986,BAFL Anglo Southern,Division,BAFL Anglo Division,high,5
+bafl,1986,Amateur American Football Conference,Tier,,high,3
+bafl,1986,Playoffs,Playoffs,Amateur American Football Conference,high,0
+bafl,1986,AAFC East,Division,Amateur American Football Conference,high,1
+bafl,1986,AAFC West,Division,Amateur American Football Conference,high,2
+
+bafl,1985,American Football League,Tier,,high,1
+bafl,1985,Playoffs,Playoffs,American Football League,high,0
+bafl,1985,AFL South Western Division,Division,American Football League,high,1
+bafl,1985,AFL Southern Division,Division,American Football League,high,2
+bafl,1985,AFL Capital Division,Division,American Football League,high,3
+bafl,1985,AFL Midlands Division,Division,American Football League,high,4
+bafl,1985,AFL Northern Division,Division,American Football League,high,5
+bafl,1985,AFL North Central Division,Division,American Football League,high,6
+bafl,1985,British American Football Federation,Tier,,high,2
+bafl,1985,Playoffs,Playoffs,British American Football Federation,high,0
+bafl,1985,BAFF A1 Division,Division,British American Football Federation,high,1
+bafl,1985,BAFF A2 Division,Division,British American Football Federation,high,2
+bafl,1985,BAFF B1 Division,Division,British American Football Federation,high,3
+bafl,1985,United Kingdom American Football Association,Tier,,high,3
+bafl,1985,Playoffs,Playoffs,United Kingdom American Football Association,high,0
+bafl,1985,UKAFA Central Division,Division,United Kingdom American Football Association,high,1
+bafl,1985,UKAFA Eastern Division,Division,United Kingdom American Football Association,high,2
+bafl,1985,UKAFA Western Division,Division,United Kingdom American Football Association,high,3
+bafl,1985,UKAFA Newcomers Division,Division,United Kingdom American Football Association,high,4
+bafl,1985,Amateur American Football Conference,Tier,,high,4
+bafl,1985,Playoffs,Playoffs,Amateur American Football Conference,high,0
+bafl,1985,AAFC Conference,Division,Amateur American Football Conference,high,1

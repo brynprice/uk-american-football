@@ -387,6 +387,10 @@ async function importData(filePath) {
 
     console.log(`--- Starting Import of ${records.length} records ---`);
 
+    const { error: nicknameColCheck } = await supabase.from('games').select('nickname').limit(1);
+    const hasNicknameCol = !nicknameColCheck;
+    let warnedMissingNicknameCol = false;
+
     let count = 0;
     for (const record of records) {
         count++;
@@ -545,6 +549,12 @@ async function importData(filePath) {
                 }
             }
 
+            const resolvedNickname = (nickname || game_nickname || '').trim() || null;
+            if (resolvedNickname && !hasNicknameCol && !warnedMissingNicknameCol) {
+                console.warn(`  [Notice] 'games.nickname' column not yet present in Supabase. Run supabase/migrations/20260928_add_game_nickname.sql in Supabase SQL Editor to sync game nicknames.`);
+                warnedMissingNicknameCol = true;
+            }
+
             if (existingGame) {
                 gameId = existingGame.id;
                 console.log(`  [Info] Game already exists (ID: ${gameId}). ${isDryRun ? 'Would update' : 'Updating'} fields...`);
@@ -552,27 +562,32 @@ async function importData(filePath) {
                 if (isDryRun) {
                     dryRunStats.updated.games++;
                 } else {
+                    const updatePayload = {
+                        home_score: home_score ? parseInt(home_score) : null,
+                        away_score: away_score ? parseInt(away_score) : null,
+                        date_precision: date_precision || (date ? 'day' : 'unknown'),
+                        date_display: date_display || (date ? date.split('-').reverse().join('/') : null),
+                        time: time || null,
+                        venue_id: venueId,
+                        notes: notes || null,
+                        status: status || existingGame.status || 'completed',
+                        confidence_level: (status === 'anomaly' || existingGame.status === 'anomaly') ? 'low' : (confidence_level || 'high'),
+                        is_playoff: ['true', 'yes', '1'].includes((is_playoff || '').toString().toLowerCase()),
+                        final_type: final_type ? final_type.toLowerCase().trim() : (['true', 'yes', '1'].includes((is_title_game || '').toString().toLowerCase()) ? 'title' : null),
+                        title_name: title_name || null,
+                        playoff_round: playoff_round ? playoff_round.trim() : null,
+                        is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase()),
+                        away_phase_id: awayPhaseId || null,
+                        game_type: game_type || 'league',
+                        season_id: seasonId
+                    };
+                    if (hasNicknameCol) {
+                        updatePayload.nickname = resolvedNickname;
+                    }
+
                     const { error: updateError } = await supabase
                         .from('games')
-                        .update({
-                            home_score: home_score ? parseInt(home_score) : null,
-                            away_score: away_score ? parseInt(away_score) : null,
-                            date_precision: date_precision || (date ? 'day' : 'unknown'),
-                            date_display: date_display || (date ? date.split('-').reverse().join('/') : null),
-                            time: time || null,
-                            venue_id: venueId,
-                            notes: notes || null,
-                            status: status || existingGame.status || 'completed',
-                            confidence_level: (status === 'anomaly' || existingGame.status === 'anomaly') ? 'low' : (confidence_level || 'high'),
-                            is_playoff: ['true', 'yes', '1'].includes((is_playoff || '').toString().toLowerCase()),
-                            final_type: final_type ? final_type.toLowerCase().trim() : (['true', 'yes', '1'].includes((is_title_game || '').toString().toLowerCase()) ? 'title' : null),
-                            title_name: title_name || null,
-                            playoff_round: playoff_round ? playoff_round.trim() : null,
-                            is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase()),
-                            away_phase_id: awayPhaseId || null,
-                            game_type: game_type || 'league',
-                            season_id: seasonId
-                        })
+                        .update(updatePayload)
                         .eq('id', gameId);
 
                     await ensureSampleNote('games', gameId);
@@ -584,31 +599,36 @@ async function importData(filePath) {
                     dryRunStats.added.games++;
                     gameId = `dry-run-game-${count}`;
                 } else {
+                    const insertPayload = {
+                        phase_id: phaseId,
+                        away_phase_id: awayPhaseId || null,
+                        home_team_id: homeTeamId,
+                        away_team_id: awayTeamId,
+                        home_score: home_score ? parseInt(home_score) : null,
+                        away_score: away_score ? parseInt(away_score) : null,
+                        date: date || null,
+                        date_precision: date_precision || (date ? 'day' : 'unknown'),
+                        date_display: date_display || (date ? date.split('-').reverse().join('/') : null),
+                        time: time || null,
+                        venue_id: venueId,
+                        notes: notes || null,
+                        status: status || 'completed',
+                        confidence_level: status === 'anomaly' ? 'low' : (confidence_level || 'high'),
+                        is_playoff: ['true', 'yes', '1'].includes((is_playoff || '').toString().toLowerCase()),
+                        final_type: final_type ? final_type.toLowerCase().trim() : (['true', 'yes', '1'].includes((is_title_game || '').toString().toLowerCase()) ? 'title' : null),
+                        title_name: title_name || null,
+                        playoff_round: playoff_round ? playoff_round.trim() : null,
+                        is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase()),
+                        game_type: game_type || 'league',
+                        season_id: seasonId
+                    };
+                    if (hasNicknameCol) {
+                        insertPayload.nickname = resolvedNickname;
+                    }
+
                     const { data: newGame, error: gameError } = await supabase
                         .from('games')
-                        .insert({
-                            phase_id: phaseId,
-                            away_phase_id: awayPhaseId || null,
-                            home_team_id: homeTeamId,
-                            away_team_id: awayTeamId,
-                            home_score: home_score ? parseInt(home_score) : null,
-                            away_score: away_score ? parseInt(away_score) : null,
-                            date: date || null,
-                            date_precision: date_precision || (date ? 'day' : 'unknown'),
-                            date_display: date_display || (date ? date.split('-').reverse().join('/') : null),
-                            time: time || null,
-                            venue_id: venueId,
-                            notes: notes || null,
-                            status: status || 'completed',
-                            confidence_level: status === 'anomaly' ? 'low' : (confidence_level || 'high'),
-                            is_playoff: ['true', 'yes', '1'].includes((is_playoff || '').toString().toLowerCase()),
-                            final_type: final_type ? final_type.toLowerCase().trim() : (['true', 'yes', '1'].includes((is_title_game || '').toString().toLowerCase()) ? 'title' : null),
-                            title_name: title_name || null,
-                            playoff_round: playoff_round ? playoff_round.trim() : null,
-                            is_double_header: ['true', 'yes', '1'].includes((is_double_header || '').toString().toLowerCase()),
-                            game_type: game_type || 'league',
-                            season_id: seasonId
-                        })
+                        .insert(insertPayload)
                         .select('id')
                         .single();
 

@@ -541,6 +541,11 @@ function GameRow({ game, teamId, seasonYear }: { game: any; teamId?: string; sea
                         {game.title_name}
                     </span>
                 )}
+                {game.nickname && (
+                    <span className="bg-slate-800 text-amber-300 border border-slate-700 text-[9px] font-black italic px-1.5 py-0.5 rounded">
+                        {game.nickname}
+                    </span>
+                )}
                 {resultBadge}
                 <span className="text-[10px] text-slate-400 font-sans">
                     {game.date || 'Date TBD'}

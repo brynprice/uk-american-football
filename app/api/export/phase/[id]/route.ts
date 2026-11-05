@@ -101,7 +101,7 @@ export async function GET(
             "away_score", "home_score", "venue", "notes", "away_coach", "home_coach",
             "is_double_header", "date_precision", "date_display", "time", "status",
             "confidence_level", "is_playoff", "is_title_game", "final_type",
-            "title_name", "playoff_round", "parent_phase"
+            "title_name", "nickname", "playoff_round", "parent_phase"
         ];
 
         const rows = (games || []).map(game => {
@@ -135,6 +135,7 @@ export async function GET(
                 game.final_type === "title" ? "true" : "false",
                 game.final_type || "",
                 game.title_name || "",
+                game.nickname || "",
                 game.playoff_round || "",
                 game.phase.parent_phase?.name || ""
             ].map(escapeCSV).join(",");

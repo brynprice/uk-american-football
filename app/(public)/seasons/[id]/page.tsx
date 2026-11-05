@@ -130,7 +130,7 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                                             )}
                                             {game.nickname && (
                                                 <span className="text-[10px] font-black bg-slate-800 text-amber-300 border border-slate-700 px-2 py-0.5 rounded italic shadow-sm flex items-center gap-1">
-                                                    "{game.nickname}"
+                                                    {game.nickname}
                                                 </span>
                                             )}
                                         </div>

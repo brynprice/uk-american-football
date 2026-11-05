@@ -35,6 +35,7 @@ export default function AddGamePage() {
     const [playoffRound, setPlayoffRound] = useState("");
     const [finalType, setFinalType] = useState("none"); // none, title, bowl
     const [titleName, setTitleName] = useState("");
+    const [nickname, setNickname] = useState("");
     const [isDoubleHeader, setIsDoubleHeader] = useState(false);
     const [notes, setNotes] = useState("");
 
@@ -122,6 +123,7 @@ export default function AddGamePage() {
                 playoffRound,
                 finalType,
                 titleName,
+                nickname,
                 isDoubleHeader,
                 notes
             };
@@ -143,6 +145,7 @@ export default function AddGamePage() {
             setPlayoffRound("");
             setFinalType("none");
             setTitleName("");
+            setNickname("");
             setIsDoubleHeader(false);
 
             setMessage({ text: "Game added successfully!", type: "success" });
@@ -381,6 +384,17 @@ export default function AddGamePage() {
                                     />
                                 </div>
                             )}
+
+                            <div>
+                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Special Event / Game Nickname <span className="font-normal normal-case italic text-slate-400">(optional, e.g. xpLosION)</span></label>
+                                <input
+                                    type="text"
+                                    value={nickname}
+                                    onChange={(e) => setNickname(e.target.value)}
+                                    placeholder='e.g. xpLosION, Varsity'
+                                    className="w-full border border-slate-300 rounded p-2 text-sm text-black"
+                                />
+                            </div>
                         </div>
 
                         <div className="pt-4 border-t border-slate-100">
