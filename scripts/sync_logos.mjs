@@ -30,7 +30,7 @@ const LOGO_DIR = './public/images/logos';
 const slugify = (text) => 
     text.toLowerCase()
         .trim()
-        .replace(/ /g, '-')
+        .replace(/[ _]/g, '-')
         .replace(/[^\w-]+/g, '')
         .replace(/--+/g, '-');
 
@@ -57,7 +57,8 @@ async function syncLogos() {
 
     const MANUAL_SLUG_MAP = {
         'aberdeen-roughnecks-university-team': 'aberdeen-roughnecks-uni.jpg',
-        'carlisle-kestrels': 'carlisle-kestrals.png'
+        'carlisle-kestrels': 'carlisle-kestrals.png',
+        'teesside-steelers-women': 'teeside_steelers_women.jpg'
     };
     for (const [slug, fileName] of Object.entries(MANUAL_SLUG_MAP)) {
         if (files.includes(fileName)) {
@@ -68,7 +69,7 @@ async function syncLogos() {
     // 2. Fetch all teams and aliases
     const { data: teams, error: teamError } = await supabase
         .from('teams')
-        .select('id, name, logo_url');
+        .select('id, name, team_type, logo_url');
 
     const { data: aliases, error: aliasError } = await supabase
         .from('team_aliases')
@@ -80,23 +81,48 @@ async function syncLogos() {
     }
 
     const stats = { matchedTeams: 0, matchedAliases: 0, updated: 0, skipped: 0 };
-    const matchedSlugs = new Set();
+    const matchedFiles = new Set();
 
     console.log("\n--- Processing Teams ---");
     for (const team of teams) {
-        const slug = slugify(team.name);
-        if (logoMap.has(slug)) {
-            const fileName = logoMap.get(slug);
-            const logoPath = `/images/logos/${fileName}`;
-            matchedSlugs.add(slug);
+        const baseSlug = slugify(team.name);
+        let matchedFileName = null;
+
+        if (team.team_type === 'Womens') {
+            // Priority 1: Specific women's team logo
+            const womenCandidates = [
+                `${baseSlug}-women`,
+                `${baseSlug}-womens`
+            ];
+            for (const cand of womenCandidates) {
+                if (logoMap.has(cand)) {
+                    matchedFileName = logoMap.get(cand);
+                    break;
+                }
+            }
+
+            // Priority 2: Fallback to club crest if no specific women's logo exists
+            if (!matchedFileName && logoMap.has(baseSlug)) {
+                matchedFileName = logoMap.get(baseSlug);
+            }
+        } else {
+            // Adult, University, Flag, U19s use base club logo
+            if (logoMap.has(baseSlug)) {
+                matchedFileName = logoMap.get(baseSlug);
+            }
+        }
+
+        if (matchedFileName) {
+            const logoPath = `/images/logos/${matchedFileName}`;
+            matchedFiles.add(matchedFileName);
             stats.matchedTeams++;
 
             if (team.logo_url === logoPath) {
-                console.log(`  [Match] ${team.name} already has correct logo.`);
+                console.log(`  [Match] ${team.name} (${team.team_type || 'Adult'}) already has correct logo.`);
                 continue;
             }
 
-            console.log(`  [Update] ${team.name}: ${team.logo_url || 'NONE'} -> ${logoPath}`);
+            console.log(`  [Update] ${team.name} (${team.team_type || 'Adult'}): ${team.logo_url || 'NONE'} -> ${logoPath}`);
             stats.updated++;
 
             if (!isDryRun) {
@@ -115,7 +141,7 @@ async function syncLogos() {
         if (logoMap.has(slug)) {
             const fileName = logoMap.get(slug);
             const logoPath = `/images/logos/${fileName}`;
-            matchedSlugs.add(slug);
+            matchedFiles.add(fileName);
             stats.matchedAliases++;
 
             if (alias.logo_url === logoPath) {
@@ -137,10 +163,10 @@ async function syncLogos() {
     }
 
     // 3. Check for orphans
-    const orphans = Array.from(logoMap.keys()).filter(s => !matchedSlugs.has(s));
+    const orphans = files.filter(f => !matchedFiles.has(f));
     if (orphans.length > 0) {
         console.log("\n--- Orphaned Logos (No match in DB) ---");
-        orphans.forEach(s => console.log(`  - ${logoMap.get(s)} (${s})`));
+        orphans.forEach(f => console.log(`  - ${f}`));
     }
 
     console.log("\n--- Final Summary ---");
