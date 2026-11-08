@@ -441,9 +441,9 @@ function generateHtml(facts) {
           <div class="card-title">Early Season Form Watch</div>
         </div>
         <ul class="fact-list">
-          ${standingsMomentum.perfectStarts.length > 0 ? `<li>🟢 <strong>Unblemished (2-0 Starts)</strong>: ${standingsMomentum.perfectStarts.map(t => `${escapeHtml(t.team)} (+${escapeHtml(t.pointDiff)})`).join(', ')}</li>` : ''}
-          ${standingsMomentum.bounceBacks.length > 0 ? `<li>🔄 <strong>Bounce-Back Wins (1-1)</strong>: ${standingsMomentum.bounceBacks.map(b => `${escapeHtml(b.team)} (${escapeHtml(b.score)} vs ${escapeHtml(b.opponent)})`).join(', ')}</li>` : ''}
-          ${standingsMomentum.winlessStarts.length > 0 ? `<li>🔴 <strong>Seeking 1st Win (0-2)</strong>: ${standingsMomentum.winlessStarts.map(t => escapeHtml(t.team)).join(', ')}</li>` : ''}
+          ${standingsMomentum.perfectStarts.length > 0 ? `<li>🟢 <strong>Unblemished</strong>: ${standingsMomentum.perfectStarts.map(t => `${escapeHtml(t.team)} (${escapeHtml(t.record || '2-0')}, +${escapeHtml(t.pointDiff)})`).join(', ')}</li>` : ''}
+          ${standingsMomentum.bounceBacks.length > 0 ? `<li>🔄 <strong>Bounce-Back Wins</strong>: ${standingsMomentum.bounceBacks.map(b => `${escapeHtml(b.team)} (${escapeHtml(b.record ? `${b.record}, ` : '')}${escapeHtml(b.score)} vs ${escapeHtml(b.opponent)})`).join(', ')}</li>` : ''}
+          ${standingsMomentum.winlessStarts.length > 0 ? `<li>🔴 <strong>Seeking 1st Win</strong>: ${standingsMomentum.winlessStarts.map(t => `${escapeHtml(t.team)} (${escapeHtml(t.record || '0-2')})`).join(', ')}</li>` : ''}
         </ul>
       </div>
 

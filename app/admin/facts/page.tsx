@@ -557,19 +557,19 @@ export default function AdminFactsPage() {
                     <ul className="space-y-2 text-xs text-slate-700">
                       {defendingPerfection.map((u: any, idx: number) => (
                         <li key={idx} className="p-2 bg-slate-50 border border-slate-200 rounded font-medium text-slate-900">
-                          <strong>{u.team}</strong> ({u.record}, {u.pointDiff > 0 ? `+${u.pointDiff}` : u.pointDiff} diff) aims to improve to 3-0.
+                          <strong>{u.team}</strong> ({u.record}, {u.pointDiff > 0 ? `+${u.pointDiff}` : u.pointDiff} diff) aims to improve to {u.nextWin ? `${u.nextWin}-0` : 'stay unblemished'}.
                         </li>
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-xs text-slate-400 italic">No 2-0 teams fighting for 3-0.</p>
+                    <p className="text-xs text-slate-400 italic">No undefeated teams in action.</p>
                   )}
                 </div>
 
                 {/* Winless Seeking 1st Win */}
                 <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
                   <h3 className="text-xs font-extrabold text-slate-900 uppercase tracking-wide flex items-center gap-1.5 mb-2">
-                    🔴 Seeking 1st Win (0-2)
+                    🔴 Seeking 1st Win
                   </h3>
                   {(winlessTeams?.length ?? 0) > 0 ? (
                     <ul className="space-y-2 text-xs text-slate-700">
@@ -580,7 +580,7 @@ export default function AdminFactsPage() {
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-xs text-slate-400 italic">No winless 0-2 programs in action.</p>
+                    <p className="text-xs text-slate-400 italic">No winless programs in action.</p>
                   )}
                 </div>
               </div>
@@ -911,20 +911,20 @@ export default function AdminFactsPage() {
                   <ul className="space-y-2 text-xs text-slate-700">
                     {(standingsMomentum?.perfectStarts?.length ?? 0) > 0 && (
                       <li>
-                        <span className="font-bold text-emerald-700">🟢 Unblemished (2-0):</span>{" "}
-                        {standingsMomentum.perfectStarts.map((t: any) => `${t.team} (+${t.pointDiff})`).join(", ")}
+                        <span className="font-bold text-emerald-700">🟢 Unblemished:</span>{" "}
+                        {standingsMomentum.perfectStarts.map((t: any) => `${t.team} (${t.record || '2-0'}, +${t.pointDiff})`).join(", ")}
                       </li>
                     )}
                     {(standingsMomentum?.bounceBacks?.length ?? 0) > 0 && (
                       <li>
-                        <span className="font-bold text-sky-700">🔄 Bounce-Back Wins (1-1):</span>{" "}
-                        {standingsMomentum.bounceBacks.map((b: any) => `${b.team} (${b.score} vs ${b.opponent})`).join(", ")}
+                        <span className="font-bold text-sky-700">🔄 Bounce-Back Wins:</span>{" "}
+                        {standingsMomentum.bounceBacks.map((b: any) => `${b.team} (${b.record ? `${b.record}, ` : ''}${b.score} vs ${b.opponent})`).join(", ")}
                       </li>
                     )}
                     {(standingsMomentum?.winlessStarts?.length ?? 0) > 0 && (
                       <li>
-                        <span className="font-bold text-rose-700">🔴 Seeking 1st Win (0-2):</span>{" "}
-                        {standingsMomentum.winlessStarts.map((t: any) => t.team).join(", ")}
+                        <span className="font-bold text-rose-700">🔴 Seeking 1st Win:</span>{" "}
+                        {standingsMomentum.winlessStarts.map((t: any) => `${t.team} (${t.record || '0-2'})`).join(", ")}
                       </li>
                     )}
                   </ul>
