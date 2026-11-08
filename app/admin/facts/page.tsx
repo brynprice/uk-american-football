@@ -909,24 +909,40 @@ export default function AdminFactsPage() {
                     📈 Season Form & Momentum
                   </h2>
                   <ul className="space-y-2 text-xs text-slate-700">
-                    {(standingsMomentum?.perfectStarts?.length ?? 0) > 0 && (
-                      <li>
-                        <span className="font-bold text-emerald-700">🟢 Unblemished:</span>{" "}
-                        {standingsMomentum.perfectStarts.map((t: any) => `${t.team} (${t.record || '2-0'}, +${t.pointDiff})`).join(", ")}
-                      </li>
-                    )}
+                    {(() => {
+                      const pGroups: Record<string, any[]> = {};
+                      for (const t of standingsMomentum?.perfectStarts || []) {
+                        const rec = t.record || '2-0';
+                        if (!pGroups[rec]) pGroups[rec] = [];
+                        pGroups[rec].push(t);
+                      }
+                      return Object.entries(pGroups).map(([rec, teams]) => (
+                        <li key={rec}>
+                          <span className="font-bold text-emerald-700">🟢 Unblemished ({rec}):</span>{" "}
+                          {teams.map((t: any) => `${t.team} (+${t.pointDiff})`).join(", ")}
+                        </li>
+                      ));
+                    })()}
                     {(standingsMomentum?.bounceBacks?.length ?? 0) > 0 && (
                       <li>
                         <span className="font-bold text-sky-700">🔄 Bounce-Back Wins:</span>{" "}
                         {standingsMomentum.bounceBacks.map((b: any) => `${b.team} (${b.record ? `${b.record}, ` : ''}${b.score} vs ${b.opponent})`).join(", ")}
                       </li>
                     )}
-                    {(standingsMomentum?.winlessStarts?.length ?? 0) > 0 && (
-                      <li>
-                        <span className="font-bold text-rose-700">🔴 Seeking 1st Win:</span>{" "}
-                        {standingsMomentum.winlessStarts.map((t: any) => `${t.team} (${t.record || '0-2'})`).join(", ")}
-                      </li>
-                    )}
+                    {(() => {
+                      const wGroups: Record<string, any[]> = {};
+                      for (const t of standingsMomentum?.winlessStarts || []) {
+                        const rec = t.record || '0-2';
+                        if (!wGroups[rec]) wGroups[rec] = [];
+                        wGroups[rec].push(t);
+                      }
+                      return Object.entries(wGroups).map(([rec, teams]) => (
+                        <li key={rec}>
+                          <span className="font-bold text-rose-700">🔴 Seeking 1st Win ({rec}):</span>{" "}
+                          {teams.map((t: any) => t.team).join(", ")}
+                        </li>
+                      ));
+                    })()}
                   </ul>
                 </div>
 

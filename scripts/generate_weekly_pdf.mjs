@@ -441,9 +441,33 @@ function generateHtml(facts) {
           <div class="card-title">Early Season Form Watch</div>
         </div>
         <ul class="fact-list">
-          ${standingsMomentum.perfectStarts.length > 0 ? `<li>🟢 <strong>Unblemished</strong>: ${standingsMomentum.perfectStarts.map(t => `${escapeHtml(t.team)} (${escapeHtml(t.record || '2-0')}, +${escapeHtml(t.pointDiff)})`).join(', ')}</li>` : ''}
+          ${(() => {
+            const pGroups = new Map();
+            for (const t of (standingsMomentum.perfectStarts || [])) {
+              const rec = t.record || '2-0';
+              if (!pGroups.has(rec)) pGroups.set(rec, []);
+              pGroups.get(rec).push(`${escapeHtml(t.team)} (+${escapeHtml(t.pointDiff)})`);
+            }
+            let out = '';
+            for (const [rec, teams] of pGroups.entries()) {
+              out += `<li>🟢 <strong>Unblemished (${escapeHtml(rec)})</strong>: ${teams.join(', ')}</li>`;
+            }
+            return out;
+          })()}
           ${standingsMomentum.bounceBacks.length > 0 ? `<li>🔄 <strong>Bounce-Back Wins</strong>: ${standingsMomentum.bounceBacks.map(b => `${escapeHtml(b.team)} (${escapeHtml(b.record ? `${b.record}, ` : '')}${escapeHtml(b.score)} vs ${escapeHtml(b.opponent)})`).join(', ')}</li>` : ''}
-          ${standingsMomentum.winlessStarts.length > 0 ? `<li>🔴 <strong>Seeking 1st Win</strong>: ${standingsMomentum.winlessStarts.map(t => `${escapeHtml(t.team)} (${escapeHtml(t.record || '0-2')})`).join(', ')}</li>` : ''}
+          ${(() => {
+            const wGroups = new Map();
+            for (const t of (standingsMomentum.winlessStarts || [])) {
+              const rec = t.record || '0-2';
+              if (!wGroups.has(rec)) wGroups.set(rec, []);
+              wGroups.get(rec).push(escapeHtml(t.team));
+            }
+            let out = '';
+            for (const [rec, teams] of wGroups.entries()) {
+              out += `<li>🔴 <strong>Seeking 1st Win (${escapeHtml(rec)})</strong>: ${teams.join(', ')}</li>`;
+            }
+            return out;
+          })()}
         </ul>
       </div>
 
