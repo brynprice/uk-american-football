@@ -1,0 +1,9 @@
+competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal,format
+Sapphire Series,2018,Division One,Tier,,high,0,7v7
+Sapphire Series,2018,Playoffs,Playoffs,Division One,high,0,7v7
+Sapphire Series,2018,Division One North,Division,Division One,high,1,7v7
+Sapphire Series,2018,Division One South,Division,Division One,high,2,7v7
+Sapphire Series,2018,Division Two A,Tier,,high,0,7v7
+Sapphire Series,2018,Playoffs,Playoffs,Division Two A,high,0,7v7
+Sapphire Series,2018,Division Two A North,Division,Division Two A,high,1,7v7
+Sapphire Series,2018,Division Two A South,Division,Division Two A,high,2,7v7

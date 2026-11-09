@@ -1,0 +1,7 @@
+competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal,format
+NWFL,2025,Premiership,Tier,,high,0,9v9
+NWFL,2025,Playoffs,Playoffs,Premiership,high,0,9v9
+NWFL,2025,Regular Season,Division,Premiership,high,1,9v9
+NWFL,2025,7s,Tier,,high,1,7v7
+NWFL,2025,Playoffs,Playoffs,7s,high,0,7v7
+NWFL,2025,Regular Season,Division,7s,high,1,7v7

@@ -103,11 +103,11 @@ async function recompute() {
       continue;
     }
 
-    // Fetch completed or awarded league games for this phase
+    // Fetch completed or awarded league games for this phase (including cross-phase games where this phase was away_phase)
     const { data: games, error: gameErr } = await supabase
       .from('games')
-      .select('id, home_team_id, away_team_id, home_score, away_score, status, is_double_header, game_type, is_playoff')
-      .eq('phase_id', phase.id)
+      .select('id, home_team_id, away_team_id, home_score, away_score, status, is_double_header, game_type, is_playoff, phase_id, away_phase_id')
+      .or(`phase_id.eq.${phase.id},away_phase_id.eq.${phase.id}`)
       .in('status', ['completed', 'awarded'])
       .eq('is_playoff', false);
 

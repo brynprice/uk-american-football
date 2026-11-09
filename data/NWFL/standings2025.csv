@@ -1,0 +1,13 @@
+competition_name,parent_phase,phase,year,team,position,games_played,wins,losses,ties,points_for,points_against,streak,is_champion,notes,head_coach
+NWFL,Premiership,Regular Season,2025,London Warriors,1,6,5,1,0,198,74,W 4,TRUE,Source: BAFA NWFL LeagueRepublic official standings (https://bafanwfl.leaguerepublic.com/standingsForDate/904453562/2/-1/-1.html),
+NWFL,Premiership,Regular Season,2025,Birmingham Lions,2,6,4,2,0,118,80,L 2,FALSE,Source: BAFA NWFL LeagueRepublic official standings (https://bafanwfl.leaguerepublic.com/standingsForDate/904453562/2/-1/-1.html),
+NWFL,Premiership,Regular Season,2025,Teesside Steelers,3,5,2,3,0,126,114,L 2,FALSE,Source: BAFA NWFL LeagueRepublic official standings (https://bafanwfl.leaguerepublic.com/standingsForDate/904453562/2/-1/-1.html),
+NWFL,Premiership,Regular Season,2025,Solent Thrashers,4,5,2,3,0,157,133,W 1,FALSE,Source: BAFA NWFL LeagueRepublic official standings (https://bafanwfl.leaguerepublic.com/standingsForDate/904453562/2/-1/-1.html),Adam McClure
+NWFL,Premiership,Regular Season,2025,Manchester Titans,5,4,0,4,0,0,198,L 4,FALSE,Source: BAFA NWFL LeagueRepublic official standings (https://bafanwfl.leaguerepublic.com/standingsForDate/904453562/2/-1/-1.html),
+NWFL,7s,Regular Season,2025,Peterborough Royals,1,8,7,1,0,118,31,W 3,TRUE,Source: BAFA NWFL LeagueRepublic official standings (https://bafanwfl.leaguerepublic.com/standingsForDate/442201555/2/-1/-1.html),
+NWFL,7s,Regular Season,2025,Kent Exiles,2,8,6,2,0,149,69,W 5,FALSE,Source: BAFA NWFL LeagueRepublic official standings (https://bafanwfl.leaguerepublic.com/standingsForDate/442201555/2/-1/-1.html),
+NWFL,7s,Regular Season,2025,Hertfordshire Cheetahs,3,8,5,3,0,47,49,L 2,FALSE,Source: BAFA NWFL LeagueRepublic official standings (https://bafanwfl.leaguerepublic.com/standingsForDate/442201555/2/-1/-1.html),
+NWFL,7s,Regular Season,2025,Cheshire Bears,4,8,4,4,0,76,79,W 2,FALSE,Source: BAFA NWFL LeagueRepublic official standings (https://bafanwfl.leaguerepublic.com/standingsForDate/442201555/2/-1/-1.html),
+NWFL,7s,Regular Season,2025,Cardiff Valkyries,5,8,4,4,0,80,160,L 1,FALSE,Source: BAFA NWFL LeagueRepublic official standings (https://bafanwfl.leaguerepublic.com/standingsForDate/442201555/2/-1/-1.html),
+NWFL,7s,Regular Season,2025,Newcastle Shieldmaidens,6,8,2,6,0,18,92,W 1,FALSE,Source: BAFA NWFL LeagueRepublic official standings (https://bafanwfl.leaguerepublic.com/standingsForDate/442201555/2/-1/-1.html),
+NWFL,7s,Regular Season,2025,Caledonia Chaos,7,8,0,8,0,0,8,L 8,FALSE,Source: BAFA NWFL LeagueRepublic official standings (https://bafanwfl.leaguerepublic.com/standingsForDate/442201555/2/-1/-1.html),

@@ -25,7 +25,8 @@ Bilston Apaches,Bilston,Adult,1987,1990
 Birmingham Bulls,Birmingham,Adult,1985,
 Birmingham Huskies,Birmingham,Adult,1988,1988
 Birmingham Lions,Birmingham,University,1989,
-Birmingham Lions,Birmingham,Womens,2026,
+Birmingham Lions,Birmingham,Womens,,
+Birmingham Lions B,Birmingham,Womens,,
 Black Country Nailers,Dudley,Adult,1987,1988
 Black Country Steelers,,Adult,2026,
 Blackpool Falcons,Blackpool,Adult,1991,1992
@@ -56,6 +57,7 @@ Burton Barons,Burton-on-Trent,Adult,1988,1989
 Bury Pumas,Bury,Adult,1988,1989
 Bury Saints,Bury St Edmunds,Adult,2013,2020
 Caernarfon Centurions,Caernarfon,Adult,1987,1987
+Caledonia Chaos,,Womens,,
 Caledonian Roughriders,Glasgow,University,2003,2008
 Cambridge Pythons,Cambridge,University,1992,
 Cambridgeshire Cats,,Adult,1985,
@@ -66,14 +68,14 @@ Capital Tigers,London,Adult,1986,1988
 Cardiff Cobras,Cardiff,University,1987,
 Cardiff Mets,Cardiff,Adult,1987,1993
 Cardiff Tigers,Cardiff,Adult,1987,1992
-Cardiff Valkyries,Cardiff,Womens,2026,
+Cardiff Valkyries,Cardiff,Womens,,
 Carlisle Border Reivers,Carlisle,Adult,2009,2013
 Carlisle Kestrels,Carlisle,Adult,2020,2021
 Carterton Wildcats,Carterton,Adult,1990,1997
 Charnwood Beacons,Loughborough,Adult,1987,1993
 Chelmsford Cherokee,Chelmsford,Adult,1985,1990
 Cheltenham Chieftains,Cheltenham,Adult,1987,1991
-Cheshire Bears,Chester,Womens,2026,
+Cheshire Bears,Chester,Womens,,
 Cheshire Cats,Cheshire,Adult,1987,1989
 Chester Legion,Chester,University,2016,
 Chester Romans,Chester,Adult,1987,
@@ -104,6 +106,7 @@ Darlington Dragons,Darlington,Adult,1987,1987
 Darlington Steam,,Adult,2019,
 DC Presidents,Durham,Adult,2014,2023
 Derby Braves,Derby,University,1996,
+Derby Braves,Derby,Womens,,
 Derbyshire Braves,Derby,Adult,1989,1994
 DMU Lions,Leicester,University,2011,
 Don Valley Bears,Doncaster,Adult,1989,1993
@@ -126,6 +129,7 @@ East Coast Leopards,Grimsby,Adult,1989,1989
 East Essex Sabres,Rayleigh,Adult,2016,2023
 East Kent Mavericks,,Adult,2006,
 East Kilbride Pirates,,Adult,1986,
+East Kilbride Pirates,,Womens,,
 Eastbourne Crusaders,Eastbourne,Adult,1985,1991
 Eastleigh Britannia Royals,Eastleigh,Adult,1987,1987
 Eastleigh Royals,Eastleigh,Adult,1988,1993
@@ -137,6 +141,7 @@ Edinburgh Phoenix,Edinburgh,Adult,1989,1992
 Edinburgh Timberwolves,Edinburgh,University,2004,2007
 Edinburgh Wildcats,Edinburgh,University,2010,
 Edinburgh Wolves,Edinburgh,Adult,2002,
+Edinburgh Wolves,Edinburgh,Womens,,
 Enfield Bullets,Enfield,Adult,1986,1994
 Essex Blades,Colchester,University,2003,
 Essex Buccaneers,Essex,Adult,1989,1992
@@ -184,7 +189,7 @@ Heathrow Jets,Hillingdon,Adult,1984,1994
 Hereford Chargers,Hereford,Adult,1986,1994
 Hereford Stampede,,Adult,2021,
 Hertfordshire Cheetahs,,Adult,1987,
-Hertfordshire Cheetahs,Watford,Womens,2026,
+Hertfordshire Cheetahs,Watford,Womens,,
 Hertfordshire Hurricanes,Hatfield,University,1994,
 Hertfordshire Stags,Hertfordshire,Adult,1996,2000
 Herts Phantoms,Hertfordshire,Adult,1986,1990
@@ -212,7 +217,7 @@ KCL Regents,London,University,2011,
 Keele Crusaders,Keele,University,2012,
 Kent Cougars,Folkestone,Adult,1986,1993
 Kent Exiles,,Adult,1992,
-Kent Exiles,Bromley,Womens,2026,
+Kent Exiles,Bromley,Womens,,
 Kent Falcons,Canterbury,University,1998,
 Kent Mustangs,Medway,Adult,1986,1993
 Kent Rams,Kent,Adult,1987,1990
@@ -230,12 +235,14 @@ Lancaster Bombers,Lancaster,University,1991,
 Lee Valley Warriors,Lee Valley,Adult,1986,1986
 Leeds Beckett Carnegie,Leeds,University,2008,
 Leeds Bobcats,Leeds,Adult,2008,2021
+Leeds Chargers,Leeds,Womens,,
 Leeds Cobras,Leeds,Adult,1988,1991
 Leeds Cougars,Leeds,Adult,1984,1995
 Leeds Gryphons,Leeds,University,1990,
 Leicester Huntsmen,Leicester,Adult,1987,1998
 Leicester Longhorns,Leicester,University,1986,
 Leicester Panthers,,Adult,1985,
+Leicester Panthers,,Womens,,
 Leigh Miners,,Adult,2021,
 Leigh Razorbacks,Leigh,Adult,1985,1986
 Lichfield AFC,Lichfield,Adult,1989,1989
@@ -262,7 +269,7 @@ London Ravens,London,Adult,1983,1994
 London Rockets,London,Adult,1990,1994
 London Thunder,London,Adult,1993,1994
 London Warriors,,Adult,2008,
-London Warriors,London,Womens,2026,
+London Warriors,London,Womens,,
 Lothian Chieftains,Lothian,Adult,1988,1988
 Lothian Raiders,Edinburgh,Adult,1995,1998
 Loughborough Students,Loughborough,University,1988,
@@ -277,7 +284,7 @@ Manchester Heroes,Manchester,Adult,1989,1990
 Manchester MPs,Manchester,University,1985,1988
 Manchester Spartans,Manchester,Adult,1984,1994
 Manchester Titans,,Adult,2003,
-Manchester Titans,Manchester,Womens,2026,
+Manchester Titans,Manchester,Womens,,
 Manchester Tyrants,Manchester,University,2011,
 Mancunian Colts,Manchester,Adult,1989,1992
 Mansfield Express,Mansfield,Adult,1984,1988
@@ -301,7 +308,7 @@ Newark Vulcans,Newark,Adult,1986,1992
 Newbury Bandits,Newbury,Adult,1990,1993
 Newcastle Browns,Newcastle,Adult,1985,1985
 Newcastle Raiders,Newcastle,University,1985,
-Newcastle Shieldmaidens,Newcastle,Womens,2026,
+Newcastle Shieldmaidens,Newcastle,Womens,,
 Newcastle Vikings,,Adult,2015,
 Newmarket Hornets,Newmarket,Adult,1985,1993
 Newport Mustangs,Newport,Adult,1987,1989
@@ -316,6 +323,7 @@ Northants Storm,Northampton,Adult,1985,1997
 Northumberland Lightning,Ashington,Adult,2012,2017
 Northumbria Mustangs,Newcastle,University,2009,
 Norwich Devils,,Adult,1986,
+Norwich Devils,Norwich,Womens,,
 Nottingham Caesars,,Adult,1995,
 Nottingham Gold,Nottingham,University,1995,
 Nottingham Green,Nottingham,University,2026,
@@ -333,7 +341,8 @@ Oxford Brookes University,Oxford,University,2010,
 Oxford Cavaliers,Oxford,University,1991,2010
 Oxford Lancers,Oxford,University,2010,
 Oxford Saints,,Adult,1985,
-Peterborough Royals,Peterborough,Womens,2026,
+Oxford Saints,Oxford,Womens,,
+Peterborough Royals,Peterborough,Womens,,
 Peterborough Saxons,Peterborough,Adult,2001,2016
 Plymouth Admirals,Plymouth,Adult,1984,2010
 Plymouth Blitz,Plymouth,University,2001,
@@ -341,6 +350,7 @@ Plymouth Vanguard,,Adult,2025,
 Poole Bay Panthers,Poole,Adult,1989,1989
 Portsmouth Destroyers,Portsmouth,University,2006,
 Portsmouth Dreadnoughts,,Adult,2014,
+Portsmouth Dreadnoughts,Portsmouth,Womens,,
 Portsmouth Tridents,Portsmouth,Adult,1995,1996
 Prestatyn Panthers,Prestatyn,Adult,1987,1988
 Preston Pirates,Preston,Adult,1988,1990
@@ -359,6 +369,7 @@ Runcorn Lynx,Runcorn,Adult,1986,1986
 Rushmoor Knights,,Adult,1986,
 Salford Storm,Salford,University,2018,
 Sandwell Steelers,,Adult,2014,
+Sandwell Steelers,Tipton,Womens,,
 Scarborough Warlords,Scarborough,Adult,1988,1989
 Scunthorpe Alphas,,Adult,2021,
 Scunthorpe Steelers,Scunthorpe,Adult,1984,1992
@@ -377,7 +388,7 @@ SMC Admirals,Merton,Adult,1990,1991
 Solent Redhawks,Southampton,University,2009,
 Solent Scorpions,Solent,Adult,1989,1990
 Solent Thrashers,,Adult,2005,
-Solent Thrashers,Southampton,Womens,2026,
+Solent Thrashers,Southampton,Womens,,
 Solent Warriors,Portsmouth,Adult,1984,1991
 Somerset Wolfpack,Somerset,Adult,1988,1990
 Somerset Wyverns,,Adult,2018,
@@ -426,12 +437,13 @@ Swansea Dragons,Swansea,Adult,1987,1990
 Swansea Titans,Swansea,University,2010,
 Swindon Steelers,Swindon,Adult,1985,1994
 Swindon Storm,,Adult,2013,
+Swindon Storm,Swindon,Womens,,
 Tamworth Trojans,Tamworth,Adult,1988,1990
 Tarannau Aberystwyth,Aberystwyth,University,1991,
 Taunton Wyverns,Taunton,Adult,1983,1994
 Tees Valley Cougars,Darlington,Adult,2002,2003
 Teesside Cougars,Middlesborough,University,1985,
-Teesside Steelers,Middlesbrough,Womens,2026,
+Teesside Steelers,Middlesbrough,Womens,,
 Thames Valley Aces,Reading,Adult,1987,1994
 Thames Valley Chargers,Reading,Adult,1983,1993
 Thanet Vikings,Thanet,Adult,1986,1989
@@ -459,6 +471,7 @@ Warwick Wolves,Warwick,University,1989,
 Washington Presidents,Washington,Adult,1985,1997
 Watford Scorpions,Watford,Adult,1989,1991
 Wembley Stallions,,Adult,2015,
+Wembley Stallions,London,Womens,,
 Wessex Buccaneers,Bournemouth,Adult,1992,1995
 West Bromwich Fireballs,West Bromwich,Adult,1988,1988
 West Coast Trojans,Irvine,Adult,2004,2018
@@ -488,3 +501,5 @@ York Centurions,York,University,2009,
 York Vikings,York,Adult,1988,1990
 Yorkshire Rams,,Adult,1987,
 YSJ Jaguars,York,University,2016,
+Staffordshire Surge,Staffordshire,Womens,,
+Iceni Spears,Norwich,Womens,2016,

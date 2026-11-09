@@ -1,0 +1,10 @@
+competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal,format
+NWFL,2022,Premiership,Tier,,high,0,9v9
+NWFL,2022,Playoffs,Playoffs,Premiership,high,0,9v9
+NWFL,2022,Premiership North,Division,Premiership,high,1,9v9
+NWFL,2022,Premiership South,Division,Premiership,high,2,9v9
+NWFL,2022,Division 1,Tier,,high,1,7v7
+NWFL,2022,Playoffs,Playoffs,Division 1,high,0,7v7
+NWFL,2022,Division 1 North,Division,Division 1,high,1,7v7
+NWFL,2022,Division 1 Central,Division,Division 1,high,2,7v7
+NWFL,2022,Division 1 South,Division,Division 1,high,3,7v7

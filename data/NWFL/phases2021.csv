@@ -1,0 +1,7 @@
+competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal,format
+NWFL,2021,Regular Season,Tier,,high,0,7v7
+NWFL,2021,Northern Conference,Conference,Regular Season,high,1,7v7
+NWFL,2021,Central West Conference,Conference,Regular Season,high,2,7v7
+NWFL,2021,Central East Conference,Conference,Regular Season,high,3,7v7
+NWFL,2021,South East Conference,Conference,Regular Season,high,4,7v7
+NWFL,2021,South West Conference,Conference,Regular Season,high,5,7v7

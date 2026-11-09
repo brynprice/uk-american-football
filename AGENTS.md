@@ -18,6 +18,8 @@
 
 ## 5. Strict Data Integrity & Verification Principles
 - **NEVER invent, assume, or extrapolate data**: Do not carry over head coaches, personnel, game scores, or dates from adjacent seasons based on assumptions.
+- **"Unknown is Better Than False" Rule**: It is strictly forbidden to invent, approximate, or fabricate scores, opponents, or game results to "complete" a list, table, or dossier. If a game, score, opponent, or date is not confirmed in primary archives or the database, the agent MUST explicitly state "Unknown / Unconfirmed in contemporary archives" or leave the field null/blank. Serving fabricated data is a catastrophic failure.
+- **Dynamic Retrieval Mandate for Reports & Dossiers**: Any script or tool that compiles a dossier, preview, summary, or PDF report (e.g., `generate_xplosion_pdf.mjs`, `weekly_preview.mjs`, etc.) MUST dynamically query or verify historical fixtures and scores against the database (`games` table) or the source CSVs (`data/BUAFL/games*.csv`). Hardcoding standalone unverified fixture arrays (e.g., `const GAMES = [ ... ]`) without checking primary sources or the database is strictly prohibited.
 - If a head coach, venue, score, or exact date cannot be confirmed via primary or contemporary sources (e.g. Britball Wiki, contemporary news coverage, official league documents), leave the field blank/empty (`null` in DB).
 - When fixture dates are unconfirmed or defaulted by league administrative systems (e.g., BUCS end-of-term deadline dates like `11/04/2012`), set `date` to empty with `date_precision = 'season'` rather than recording placeholder dates as factual match days.
 

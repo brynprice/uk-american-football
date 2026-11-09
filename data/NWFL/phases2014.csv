@@ -1,0 +1,5 @@
+competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal,format
+Sapphire Series,2014,Division One,Tier,,high,0,5v5
+Sapphire Series,2014,Playoffs,Playoffs,Division One,high,0,5v5
+Sapphire Series,2014,North Conference,Conference,Division One,high,1,5v5
+Sapphire Series,2014,South Conference,Conference,Division One,high,2,5v5

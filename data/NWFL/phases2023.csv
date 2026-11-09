@@ -1,0 +1,9 @@
+competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal,format
+NWFL,2023,Premiership,Tier,,high,0,9v9
+NWFL,2023,Playoffs,Playoffs,Premiership,high,0,9v9
+NWFL,2023,Regular Season,Division,Premiership,high,1,9v9
+NWFL,2023,7s,Tier,,high,1,7v7
+NWFL,2023,Playoffs,Playoffs,7s,high,0,7v7
+NWFL,2023,NWFL 7's,Division,7s,high,1,7v7
+NWFL,2023,Regional Central,Division,7s,high,2,7v7
+NWFL,2023,Regional East,Division,7s,high,3,7v7

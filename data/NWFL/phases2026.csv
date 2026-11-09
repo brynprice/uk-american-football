@@ -1,5 +1,7 @@
 competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal,format
-NWFL,2026,NWFL Premiership,Division,,high,1,9v9
-NWFL,2026,NWFL Premiership Playoffs,Playoffs,,high,2,9v9
-NWFL,2026,NWFL 7s,Division,,high,3,7v7
-NWFL,2026,NWFL 7s Playoffs,Playoffs,,high,4,7v7
+NWFL,2026,Premiership,Tier,,high,0,9v9
+NWFL,2026,Playoffs,Playoffs,Premiership,high,0,9v9
+NWFL,2026,Regular Season,Division,Premiership,high,1,9v9
+NWFL,2026,7s,Tier,,high,1,7v7
+NWFL,2026,Playoffs,Playoffs,7s,high,0,7v7
+NWFL,2026,Regular Season,Division,7s,high,1,7v7

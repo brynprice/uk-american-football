@@ -1,0 +1,8 @@
+competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal,format
+NWFL,2024,Premiership,Tier,,high,0,9v9
+NWFL,2024,Playoffs,Playoffs,Premiership,high,0,9v9
+NWFL,2024,Regular Season,Division,Premiership,high,1,9v9
+NWFL,2024,7s,Tier,,high,1,7v7
+NWFL,2024,Playoffs,Playoffs,7s,high,0,7v7
+NWFL,2024,Development North,Division,7s,high,1,7v7
+NWFL,2024,Development South,Division,7s,high,2,7v7

@@ -400,16 +400,18 @@ async function runAudit() {
         });
       }
 
-      // Date year boundary check (season.year to season.year + 1)
+      // Date year boundary check (respecting season.start_date / end_date if present, otherwise season.year to season.year + 1)
       if (g.date) {
         const gameYear = parseInt(g.date.split('-')[0], 10);
-        if (gameYear < season.year || gameYear > season.year + 1) {
+        const minYear = season.start_date ? Math.min(season.year, parseInt(season.start_date.split('-')[0], 10)) : season.year;
+        const maxYear = season.end_date ? Math.max(season.year + 1, parseInt(season.end_date.split('-')[0], 10)) : season.year + 1;
+        if (gameYear < minYear || gameYear > maxYear) {
           addIssue({
             season,
             phase: gPhase,
             category: 'DATE_OUT_OF_BOUNDS',
             severity: 'CRITICAL',
-            message: `Game on ${g.date} (${g.away?.name} @ ${g.home?.name}) has year ${gameYear} which is outside season ${season.year} (${season.year}-${season.year + 1}).`,
+            message: `Game on ${g.date} (${g.away?.name} @ ${g.home?.name}) has year ${gameYear} which is outside season ${season.year} (${minYear}-${maxYear}).`,
             details: { game_id: g.id, date: g.date }
           });
         }

@@ -1,5 +1,80 @@
 competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal,format
-NWFL,2026,NWFL Premiership,Division,,high,1,9v9
-NWFL,2026,NWFL Premiership Playoffs,Playoffs,,high,2,9v9
-NWFL,2026,NWFL 7s,Division,,high,3,7v7
-NWFL,2026,NWFL 7s Playoffs,Playoffs,,high,4,7v7
+NWFL,2026,Premiership,Tier,,high,0,9v9
+NWFL,2026,Playoffs,Playoffs,Premiership,high,0,9v9
+NWFL,2026,Regular Season,Division,Premiership,high,1,9v9
+NWFL,2026,7s,Tier,,high,1,7v7
+NWFL,2026,Playoffs,Playoffs,7s,high,0,7v7
+NWFL,2026,Regular Season,Division,7s,high,1,7v7
+NWFL,2025,Premiership,Tier,,high,0,9v9
+NWFL,2025,Playoffs,Playoffs,Premiership,high,0,9v9
+NWFL,2025,Regular Season,Division,Premiership,high,1,9v9
+NWFL,2025,7s,Tier,,high,1,7v7
+NWFL,2025,Playoffs,Playoffs,7s,high,0,7v7
+NWFL,2025,Regular Season,Division,7s,high,1,7v7
+NWFL,2024,Premiership,Tier,,high,0,9v9
+NWFL,2024,Playoffs,Playoffs,Premiership,high,0,9v9
+NWFL,2024,Regular Season,Division,Premiership,high,1,9v9
+NWFL,2024,7s,Tier,,high,1,7v7
+NWFL,2024,Playoffs,Playoffs,7s,high,0,7v7
+NWFL,2024,Development North,Division,7s,high,1,7v7
+NWFL,2024,Development South,Division,7s,high,2,7v7
+NWFL,2023,Premiership,Tier,,high,0,9v9
+NWFL,2023,Playoffs,Playoffs,Premiership,high,0,9v9
+NWFL,2023,Regular Season,Division,Premiership,high,1,9v9
+NWFL,2023,7s,Tier,,high,1,7v7
+NWFL,2023,Playoffs,Playoffs,7s,high,0,7v7
+NWFL,2023,NWFL 7's,Division,7s,high,1,7v7
+NWFL,2023,Regional Central,Division,7s,high,2,7v7
+NWFL,2023,Regional East,Division,7s,high,3,7v7
+NWFL,2022,Premiership,Tier,,high,0,9v9
+NWFL,2022,Playoffs,Playoffs,Premiership,high,0,9v9
+NWFL,2022,Premiership North,Division,Premiership,high,1,9v9
+NWFL,2022,Premiership South,Division,Premiership,high,2,9v9
+NWFL,2022,Division 1,Tier,,high,1,7v7
+NWFL,2022,Playoffs,Playoffs,Division 1,high,0,7v7
+NWFL,2022,Division 1 North,Division,Division 1,high,1,7v7
+NWFL,2022,Division 1 Central,Division,Division 1,high,2,7v7
+NWFL,2022,Division 1 South,Division,Division 1,high,3,7v7
+NWFL,2021,Regular Season,Tier,,high,0,7v7
+NWFL,2021,Northern Conference,Conference,Regular Season,high,1,7v7
+NWFL,2021,Central West Conference,Conference,Regular Season,high,2,7v7
+NWFL,2021,Central East Conference,Conference,Regular Season,high,3,7v7
+NWFL,2021,South East Conference,Conference,Regular Season,high,4,7v7
+NWFL,2021,South West Conference,Conference,Regular Season,high,5,7v7
+Sapphire Series,2019,Division One,Tier,,high,0,7v7
+Sapphire Series,2019,Playoffs,Playoffs,Division One,high,0,7v7
+Sapphire Series,2019,Division One North,Division,Division One,high,1,7v7
+Sapphire Series,2019,Division One South,Division,Division One,high,2,7v7
+Sapphire Series,2019,Division Two,Tier,,high,1,7v7
+Sapphire Series,2019,Playoffs,Playoffs,Division Two,high,0,7v7
+Sapphire Series,2019,Division Two North,Division,Division Two,high,1,7v7
+Sapphire Series,2019,Division Two South,Division,Division Two,high,2,7v7
+Sapphire Series,2018,Division One,Tier,,high,0,7v7
+Sapphire Series,2018,Playoffs,Playoffs,Division One,high,0,7v7
+Sapphire Series,2018,Division One North,Division,Division One,high,1,7v7
+Sapphire Series,2018,Division One South,Division,Division One,high,2,7v7
+Sapphire Series,2018,Division Two A,Tier,,high,0,7v7
+Sapphire Series,2018,Playoffs,Playoffs,Division Two A,high,0,7v7
+Sapphire Series,2018,Division Two A North,Division,Division Two A,high,1,7v7
+Sapphire Series,2018,Division Two A South,Division,Division Two A,high,2,7v7
+Sapphire Series,2017,Division One,Tier,,high,0,7v7
+Sapphire Series,2017,Playoffs,Playoffs,Division One,high,0,7v7
+Sapphire Series,2017,Division One North,Division,Division One,high,1,7v7
+Sapphire Series,2017,Division One South,Division,Division One,high,2,7v7
+Sapphire Series,2017,Division Two,Tier,,high,1,5v5
+Sapphire Series,2017,Division Two North & West,Division,Division Two,high,1,5v5
+Sapphire Series,2017,Division Two South & East,Division,Division Two,high,2,5v5
+Sapphire Series,2016,Division One,Tier,,high,0,7v7
+Sapphire Series,2016,Playoffs,Playoffs,Division One,high,0,7v7
+Sapphire Series,2016,Regular Season,Division,Division One,high,1,7v7
+Sapphire Series,2016,Division Two,Tier,,high,1,5v5
+Sapphire Series,2016,Playoffs,Playoffs,Division Two,high,0,5v5
+Sapphire Series,2016,Division Two North,Division,Division Two,high,1,5v5
+Sapphire Series,2016,Division Two South,Division,Division Two,high,2,5v5
+Sapphire Series,2015,Division One,Tier,,high,0,5v5
+Sapphire Series,2015,Playoffs,Playoffs,Division One,high,0,5v5
+Sapphire Series,2015,Regular Season,Division,Division One,high,1,5v5
+Sapphire Series,2014,Division One,Tier,,high,0,5v5
+Sapphire Series,2014,Playoffs,Playoffs,Division One,high,0,5v5
+Sapphire Series,2014,North Conference,Conference,Division One,high,1,5v5
+Sapphire Series,2014,South Conference,Conference,Division One,high,2,5v5

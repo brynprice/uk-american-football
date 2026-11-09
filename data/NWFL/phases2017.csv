@@ -1,0 +1,8 @@
+competition_name,year,phase_name,type,parent_phase,confidence_level,ordinal,format
+Sapphire Series,2017,Division One,Tier,,high,0,7v7
+Sapphire Series,2017,Playoffs,Playoffs,Division One,high,0,7v7
+Sapphire Series,2017,Division One North,Division,Division One,high,1,7v7
+Sapphire Series,2017,Division One South,Division,Division One,high,2,7v7
+Sapphire Series,2017,Division Two,Tier,,high,1,5v5
+Sapphire Series,2017,Division Two North & West,Division,Division Two,high,1,5v5
+Sapphire Series,2017,Division Two South & East,Division,Division Two,high,2,5v5
