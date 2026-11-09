@@ -104,6 +104,7 @@ export default function AdminFactsPage() {
         ? `BUCS_${selectedSeason}_Week_${selectedWeek}_Insights.pdf`
         : `BUCS_${selectedSeason}_Week_${selectedWeek}_Preview.pdf`;
     const staticUrl = `/reports/${filename}`;
+    const printUrl = `/admin/facts/print?week=${selectedWeek}&season=${selectedSeason}&mode=${activeTab}&auto=true`;
 
     try {
       // 1. Fast path: check if static pre-generated PDF is available on CDN
@@ -111,34 +112,19 @@ export default function AdminFactsPage() {
         const headCheck = await fetch(staticUrl, { method: "HEAD" });
         if (headCheck.ok) {
           window.open(staticUrl, "_blank");
-          setSuccessMessage(`Opened ${filename}`);
+          setSuccessMessage(`Opened pre-built ${filename}`);
           setIsPdfLoading(false);
           return;
         }
       } catch {
-        // Fall back to server action
+        // Fall back to on-demand browser print view
       }
 
-      // 2. Server action path (handles local dev generation or status response)
-      if (activeTab === "recap") {
-        const res = await generateWeeklyPdfAction({ week: selectedWeek, season: selectedSeason });
-        if (res.success && res.pdfUrl) {
-          setSuccessMessage(`Report available: ${res.filename}`);
-          window.open(res.pdfUrl, "_blank");
-        } else {
-          setErrorMessage(res.error || `Report ${filename} is not published yet.`);
-        }
-      } else {
-        const res = await generateWeeklyPreviewPdfAction({ week: selectedWeek, season: selectedSeason });
-        if (res.success && res.pdfUrl) {
-          setSuccessMessage(`Report available: ${res.filename}`);
-          window.open(res.pdfUrl, "_blank");
-        } else {
-          setErrorMessage(res.error || `Report ${filename} is not published yet.`);
-        }
-      }
+      // 2. On-demand browser print view (instant PDF export without console commands)
+      window.open(printUrl, "_blank");
+      setSuccessMessage(`Opened printable report for Week ${selectedWeek}. Select 'Save as PDF' to save your file.`);
     } catch (err: any) {
-      setErrorMessage(err.message || "Failed to download PDF.");
+      setErrorMessage(err.message || "Failed to open PDF export.");
     } finally {
       setIsPdfLoading(false);
     }
@@ -236,12 +222,26 @@ export default function AdminFactsPage() {
               💬 {copiedType === "brief" ? "Copied Summary!" : "Copy Summary"}
             </button>
 
+            <Link
+              href={`/admin/facts/print?week=${selectedWeek}&season=${selectedSeason}&mode=${activeTab}`}
+              target="_blank"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md border border-slate-300 bg-white text-slate-700 shadow-sm hover:bg-slate-50 transition"
+              title="Open print-formatted A4 preview in a new tab"
+            >
+              🖨️ Print View
+            </Link>
+
             <button
               onClick={handleDownloadPdf}
               disabled={isLoading || isPdfLoading}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md bg-sky-600 text-white shadow-sm hover:bg-sky-700 disabled:opacity-50 transition"
+              title="Export report as PDF via on-demand print view"
             >
-              {isPdfLoading ? "⏳ Generating PDF..." : activeTab === "recap" ? "📥 Download Recap PDF" : "📥 Download Preview PDF"}
+              {isPdfLoading
+                ? "⏳ Preparing PDF..."
+                : activeTab === "recap"
+                ? "📥 Export / Save Recap PDF"
+                : "📥 Export / Save Preview PDF"}
             </button>
           </div>
         </div>
