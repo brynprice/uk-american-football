@@ -160,12 +160,19 @@ export function calculatePhaseCompleteness(participation: any, phaseGames: any[]
     const phase = participation?.phase || {};
     const isPlayoff = isPlayoffPhase(phase);
 
+    const hasManualStandings =
+        participation?.wins !== null &&
+        participation?.wins !== undefined &&
+        participation?.losses !== null &&
+        participation?.losses !== undefined;
+
     let recordedGames = 0;
     let unscoredGames = 0;
 
     (phaseGames || []).forEach((g: any) => {
         const status = (g.status || '').toLowerCase();
         if (status === 'cancelled' || status === 'postponed' || status === 'anomaly') return;
+        if (hasManualStandings && status === 'scheduled') return;
         const mult = g.is_double_header ? 2 : 1;
         recordedGames += mult;
 
@@ -173,12 +180,6 @@ export function calculatePhaseCompleteness(participation: any, phaseGames: any[]
             unscoredGames += mult;
         }
     });
-
-    const hasManualStandings =
-        participation?.wins !== null &&
-        participation?.wins !== undefined &&
-        participation?.losses !== null &&
-        participation?.losses !== undefined;
 
     let expectedGames: number | null = null;
 

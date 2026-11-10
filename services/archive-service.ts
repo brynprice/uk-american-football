@@ -333,7 +333,7 @@ export const ArchiveService = {
                 .from("games")
                 .select(`
                     id, date, date_display, date_precision, time, home_team_id, away_team_id, home_score, away_score,
-                    status, is_playoff, playoff_round, final_type, title_name, is_title_game, is_double_header,
+                    status, is_playoff, playoff_round, final_type, title_name, is_double_header,
                     is_unique_score, is_totally_unique, game_level, nickname, notes, phase_id, away_phase_id, season_id, venue_id,
                     phase:phases!games_phase_id_fkey (id, name, type, ordinal, parent_phase_id, season:seasons (year, id, name, competition:competitions (id, name, slug, level))),
                     away_phase:phases!away_phase_id (id, name, type, ordinal, parent_phase_id, season:seasons (year, id, name, competition:competitions (id, name, slug, level))),
@@ -351,6 +351,7 @@ export const ArchiveService = {
         ]);
 
         if (teamRes.error) throw teamRes.error;
+        if (gamesRes.error) throw gamesRes.error;
         if (!teamRes.data) throw new Error("Team not found");
 
         const champPhaseIds = new Set(((champNotesRes as any).data || []).map((n: any) => n.entity_id));
