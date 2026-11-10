@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
-import { isPlayoffPhase } from '@/lib/utils/phase-utils';
+import { isPlayoffPhase, calculatePhaseCompleteness } from '@/lib/utils/phase-utils';
 
 interface TeamSeasonHistoryProps {
     teamId?: string;
@@ -94,6 +94,8 @@ export default function TeamSeasonHistory({
                 }
             }
 
+            const completeness = !isPersonMode ? calculatePhaseCompleteness(p, phaseGames) : null;
+
             return {
                 phaseId,
                 teamId: currentTeamId,
@@ -101,7 +103,8 @@ export default function TeamSeasonHistory({
                 wins: wins || 0,
                 losses: losses || 0,
                 ties: ties || 0,
-                hasStats: isManual
+                hasStats: isManual,
+                completeness
             };
         };
 
@@ -184,6 +187,27 @@ export default function TeamSeasonHistory({
                 }
             });
 
+            let seasonExpectedGames = 0;
+            let seasonRecordedGames = 0;
+            let seasonMissingGames = 0;
+            let seasonUnscoredGames = 0;
+
+            if (!isPersonMode) {
+                [...regDetails, ...playoffDetails].forEach(({ details }) => {
+                    const comp = details.completeness;
+                    if (!comp) return;
+                    if (comp.expectedGames !== null) {
+                        seasonExpectedGames += Math.max(comp.expectedGames, comp.recordedGames);
+                        seasonRecordedGames += comp.recordedGames;
+                        seasonMissingGames += comp.missingGames;
+                    } else if (comp.recordedGames > 0) {
+                        seasonExpectedGames += comp.recordedGames;
+                        seasonRecordedGames += comp.recordedGames;
+                    }
+                    seasonUnscoredGames += comp.unscoredGames;
+                });
+            }
+
             const allSeasonGames = [
                 ...regDetails.flatMap(d => d.details.phaseGames),
                 ...playoffDetails.flatMap(d => d.details.phaseGames)
@@ -221,6 +245,10 @@ export default function TeamSeasonHistory({
                 playoffLosses,
                 playoffTies,
                 playoffHasStats,
+                seasonExpectedGames,
+                seasonRecordedGames,
+                seasonMissingGames,
+                seasonUnscoredGames,
                 uniqueSeasonGames
             };
         });
@@ -253,6 +281,10 @@ export default function TeamSeasonHistory({
                 playoffLosses,
                 playoffTies,
                 playoffHasStats,
+                seasonExpectedGames,
+                seasonRecordedGames,
+                seasonMissingGames,
+                seasonUnscoredGames,
                 uniqueSeasonGames
             }) => {
                 const isExpanded = !!expandedSeasons[seasonKey];
@@ -285,6 +317,41 @@ export default function TeamSeasonHistory({
 
                                 {/* Record Badges */}
                                 <div className="flex flex-wrap items-center gap-2 shrink-0">
+                                    {/* Missing Games / Completeness Badge (Team Mode only) */}
+                                    {teamId && seasonMissingGames > 0 && (
+                                        <div
+                                            className="flex items-center gap-1.5 bg-amber-50 px-2.5 py-1 rounded border border-amber-300 text-xs shadow-2xs"
+                                            title={`${seasonRecordedGames} of ${seasonExpectedGames} expected games recorded`}
+                                        >
+                                            <span className="text-[10px] font-black uppercase text-amber-700 font-sans tracking-wider">Missing:</span>
+                                            <span className="font-mono font-black text-amber-900">
+                                                {seasonMissingGames} {seasonMissingGames === 1 ? 'Game' : 'Games'}
+                                            </span>
+                                            <span className="text-[10px] font-mono text-amber-700">
+                                                ({seasonRecordedGames}/{seasonExpectedGames})
+                                            </span>
+                                        </div>
+                                    )}
+                                    {teamId && seasonMissingGames === 0 && seasonUnscoredGames > 0 && (
+                                        <div
+                                            className="flex items-center gap-1.5 bg-amber-50 px-2.5 py-1 rounded border border-amber-300 text-xs shadow-2xs"
+                                            title={`${seasonUnscoredGames} recorded game(s) missing final scores`}
+                                        >
+                                            <span className="text-[10px] font-black uppercase text-amber-700 font-sans tracking-wider">Unscored:</span>
+                                            <span className="font-mono font-black text-amber-900">
+                                                {seasonUnscoredGames} {seasonUnscoredGames === 1 ? 'Game' : 'Games'}
+                                            </span>
+                                        </div>
+                                    )}
+                                    {teamId && seasonMissingGames === 0 && seasonUnscoredGames === 0 && seasonExpectedGames > 0 && (
+                                        <div
+                                            className="flex items-center gap-1 bg-emerald-50 text-emerald-700 px-2 py-1 rounded border border-emerald-200 text-[10px] font-black uppercase tracking-wider font-sans"
+                                            title={`All ${seasonExpectedGames} expected games recorded`}
+                                        >
+                                            <span>✓ {seasonRecordedGames}/{seasonExpectedGames} Games</span>
+                                        </div>
+                                    )}
+
                                     {/* Regular Season Record Badge */}
                                     {regHasStats ? (
                                         <div className="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded border border-slate-300 text-xs shadow-2xs">
@@ -419,11 +486,18 @@ export default function TeamSeasonHistory({
                                                         </h4>
                                                     )}
                                                 </div>
-                                                {details.hasStats && (
-                                                    <span className="text-xs font-mono font-bold bg-slate-100 px-2 py-0.5 border border-slate-200 rounded text-slate-800">
-                                                        {details.wins}-{details.losses}{details.ties > 0 ? `-${details.ties}` : ''}
-                                                    </span>
-                                                )}
+                                                <div className="flex items-center gap-2 flex-wrap">
+                                                    {details.completeness && details.completeness.missingGames > 0 && (
+                                                        <span className="text-[10px] font-black uppercase tracking-wider bg-amber-100 text-amber-900 px-2 py-0.5 border border-amber-300 rounded font-sans">
+                                                            {details.completeness.missingGames} {details.completeness.missingGames === 1 ? 'Game' : 'Games'} Missing ({details.completeness.recordedGames}/{details.completeness.expectedGames})
+                                                        </span>
+                                                    )}
+                                                    {details.hasStats && (
+                                                        <span className="text-xs font-mono font-bold bg-slate-100 px-2 py-0.5 border border-slate-200 rounded text-slate-800">
+                                                            {details.wins}-{details.losses}{details.ties > 0 ? `-${details.ties}` : ''}
+                                                        </span>
+                                                    )}
+                                                </div>
                                             </div>
 
                                             {p.notes && <p className="text-xs text-slate-500 mb-3 italic font-serif">{p.notes}</p>}
@@ -434,9 +508,23 @@ export default function TeamSeasonHistory({
                                                     {details.phaseGames.map((game: any) => (
                                                         <GameRow key={game.id} game={game} teamId={currentTeamId} seasonYear={season?.year} />
                                                     ))}
+                                                    {details.completeness && details.completeness.missingGames > 0 && (
+                                                        <div className="bg-amber-50 border border-amber-200 text-amber-800 px-3 py-2 rounded text-xs font-sans flex items-center justify-between">
+                                                            <span>
+                                                                <strong>{details.completeness.missingGames}</strong> of {details.completeness.expectedGames} expected {details.completeness.expectedGames === 1 ? 'game' : 'games'} in this phase still missing from the archive.
+                                                            </span>
+                                                            <span className="font-mono font-bold text-[11px]">
+                                                                {details.completeness.recordedGames}/{details.completeness.expectedGames} Recorded
+                                                            </span>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             ) : (
-                                                <p className="text-xs text-slate-400 italic font-sans">No detailed game logs recorded for this phase.</p>
+                                                <p className="text-xs text-slate-400 italic font-sans">
+                                                    {details.completeness && details.completeness.missingGames > 0
+                                                        ? `No individual game logs recorded yet — ${details.completeness.missingGames} expected ${details.completeness.missingGames === 1 ? 'game is' : 'games are'} missing from the archive.`
+                                                        : 'No detailed game logs recorded for this phase.'}
+                                                </p>
                                             )}
                                         </div>
                                     );

@@ -3,7 +3,7 @@ import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import H2HSelector from '@/components/archive/H2HSelector';
 import TeamSeasonHistory from '@/components/archive/TeamSeasonHistory';
-import { isPlayoffPhase } from '@/lib/utils/phase-utils';
+import { isPlayoffPhase, calculateTeamCompleteness } from '@/lib/utils/phase-utils';
 export const revalidate = 3600; // 1 hour
 
 export default async function TeamPage({ params }: { params: Promise<{ id: string }> }) {
@@ -148,6 +148,8 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
     const playoffStats = calculatePlayoffStats();
     const playoffWinPct = playoffStats.gp > 0 ? (playoffStats.wins / playoffStats.gp + (1 - playoffStats.losses / playoffStats.gp)) / 2 : 0;
 
+    const completeness = calculateTeamCompleteness(id, team.participations || [], team.games || []);
+
     return (
         <ArchiveLayout>
             <div className="mb-12">
@@ -249,6 +251,63 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                                     </div>
                                 </div>
                             )}
+
+                            {/* Archive Completeness / Missing Games Banner */}
+                            {completeness.totalExpectedGames > 0 && (
+                                <div
+                                    className={`px-4 py-2 rounded-sm shadow-lg flex items-center gap-6 ${
+                                        completeness.totalMissingGames > 0
+                                            ? 'bg-amber-950 text-white border border-amber-700/60'
+                                            : 'bg-emerald-950 text-white border border-emerald-700/60'
+                                    }`}
+                                >
+                                    <div className="flex flex-col">
+                                        <span
+                                            className={`text-[10px] uppercase font-black tracking-tighter ${
+                                                completeness.totalMissingGames > 0 ? 'text-amber-300' : 'text-emerald-300'
+                                            }`}
+                                        >
+                                            Missing Games
+                                        </span>
+                                        <span className="text-xl font-black tabular-nums">
+                                            {completeness.totalMissingGames}
+                                        </span>
+                                    </div>
+                                    <div
+                                        className={`w-px h-8 ${
+                                            completeness.totalMissingGames > 0 ? 'bg-amber-800' : 'bg-emerald-800'
+                                        }`}
+                                    />
+                                    <div className="flex flex-col">
+                                        <span
+                                            className={`text-[10px] uppercase font-black tracking-tighter ${
+                                                completeness.totalMissingGames > 0 ? 'text-amber-300' : 'text-emerald-300'
+                                            }`}
+                                        >
+                                            Recorded
+                                        </span>
+                                        <span className="text-xl font-black tabular-nums">
+                                            {completeness.totalRecordedGames}/{completeness.totalExpectedGames}
+                                        </span>
+                                    </div>
+                                    <div className="hidden sm:flex flex-col">
+                                        <span
+                                            className={`text-[10px] uppercase font-black tracking-tighter ${
+                                                completeness.totalMissingGames > 0 ? 'text-amber-300' : 'text-emerald-300'
+                                            }`}
+                                        >
+                                            Completeness
+                                        </span>
+                                        <span
+                                            className={`text-xl font-black tabular-nums ${
+                                                completeness.totalMissingGames > 0 ? 'text-amber-400' : 'text-emerald-400'
+                                            }`}
+                                        >
+                                            {completeness.completenessPct}%
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -340,6 +399,63 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
 
                 {/* Right Column: Metadata & Honours */}
                 <div className="space-y-8">
+                    {/* Missing Games Breakdown Card */}
+                    {completeness.incompleteSeasons.length > 0 && (
+                        <section className="bg-amber-50/70 p-6 border-2 border-amber-200 shadow-sm rounded-lg">
+                            <div className="flex items-center justify-between gap-2 mb-3">
+                                <h4 className="text-xs font-black uppercase text-amber-900 tracking-tighter flex items-center gap-2 font-sans">
+                                    📋 Missing Games by Season
+                                </h4>
+                                <span className="text-[10px] font-black uppercase bg-amber-200 text-amber-900 px-2 py-0.5 rounded font-mono">
+                                    {completeness.totalMissingGames} Missing
+                                </span>
+                            </div>
+                            <p className="text-xs text-amber-800/90 mb-4 font-sans leading-relaxed">
+                                {completeness.incompleteSeasons.length} {completeness.incompleteSeasons.length === 1 ? 'season has' : 'seasons have'} fewer recorded game logs than expected from official standings or league schedules.
+                            </p>
+                            <div className="space-y-2.5 max-h-80 overflow-y-auto pr-1">
+                                {completeness.incompleteSeasons.map((s) => (
+                                    <div
+                                        key={s.seasonKey}
+                                        className="bg-white p-3 rounded border border-amber-200 flex items-center justify-between gap-3 text-xs shadow-2xs"
+                                    >
+                                        <div className="min-w-0">
+                                            <div className="font-bold text-slate-900 truncate">
+                                                {s.seasonId ? (
+                                                    <Link href={`/seasons/${s.seasonId}`} className="hover:text-blue-700 hover:underline">
+                                                        {s.seasonName}
+                                                    </Link>
+                                                ) : (
+                                                    s.seasonName
+                                                )}
+                                            </div>
+                                            {s.competitionName && (
+                                                <div className="text-[10px] text-slate-500 uppercase font-sans font-bold tracking-wide truncate">
+                                                    {s.competitionName}
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="flex items-center gap-2 shrink-0">
+                                            <span className="text-[10px] font-mono text-slate-500">
+                                                {s.recordedGames}/{s.expectedGames} rec
+                                            </span>
+                                            {s.missingGames > 0 && (
+                                                <span className="bg-amber-100 text-amber-900 border border-amber-300 font-mono font-black text-[10px] px-2 py-0.5 rounded">
+                                                    -{s.missingGames}
+                                                </span>
+                                            )}
+                                            {s.unscoredGames > 0 && (
+                                                <span className="bg-rose-100 text-rose-800 border border-rose-200 font-mono font-bold text-[10px] px-1.5 py-0.5 rounded">
+                                                    {s.unscoredGames} unscored
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
+
                     {/* Honours Section */}
                     {(() => {
                         const finalGames = team.games?.filter((g: any) =>

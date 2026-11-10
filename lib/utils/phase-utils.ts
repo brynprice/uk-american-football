@@ -144,3 +144,183 @@ export function sortPhasesInTreeOrder(phases: any[], parentId: string | null = n
     }
     return result;
 }
+
+export interface PhaseCompleteness {
+    expectedGames: number | null;
+    recordedGames: number;
+    missingGames: number;
+    unscoredGames: number;
+}
+
+/**
+ * Calculates expected, recorded, and missing games for a single team participation in a phase.
+ * Accounts for double-headers (counting as 2 games in standings) and ignores cancelled/postponed/anomaly games.
+ */
+export function calculatePhaseCompleteness(participation: any, phaseGames: any[]): PhaseCompleteness {
+    const phase = participation?.phase || {};
+    const isPlayoff = isPlayoffPhase(phase);
+
+    let recordedGames = 0;
+    let unscoredGames = 0;
+
+    (phaseGames || []).forEach((g: any) => {
+        const status = (g.status || '').toLowerCase();
+        if (status === 'cancelled' || status === 'postponed' || status === 'anomaly') return;
+        const mult = g.is_double_header ? 2 : 1;
+        recordedGames += mult;
+
+        if (status !== 'scheduled' && (g.home_score === null || g.away_score === null || g.home_score === undefined || g.away_score === undefined)) {
+            unscoredGames += mult;
+        }
+    });
+
+    const hasManualStandings =
+        participation?.wins !== null &&
+        participation?.wins !== undefined &&
+        participation?.losses !== null &&
+        participation?.losses !== undefined;
+
+    let expectedGames: number | null = null;
+
+    if (hasManualStandings) {
+        expectedGames = (participation.wins || 0) + (participation.losses || 0) + (participation.ties || 0);
+    } else if (!isPlayoff && typeof phase.max_games_per_team === 'number' && phase.max_games_per_team > 0) {
+        const notes = (participation?.notes || '').toLowerCase();
+        const seasonYear = phase.season?.year;
+        const withdrewWithNoGames = (notes.includes('withdrew') || notes.includes('folded')) && recordedGames === 0;
+        const cancelledCovidSeason = seasonYear === 2020 && recordedGames === 0;
+
+        if (withdrewWithNoGames || cancelledCovidSeason) {
+            expectedGames = 0;
+        } else {
+            expectedGames = phase.max_games_per_team;
+        }
+    }
+
+    const missingGames = expectedGames !== null ? Math.max(0, expectedGames - recordedGames) : 0;
+
+    return {
+        expectedGames,
+        recordedGames,
+        missingGames,
+        unscoredGames
+    };
+}
+
+export interface SeasonCompletenessSummary {
+    seasonKey: string;
+    seasonId?: string;
+    year: number;
+    seasonName: string;
+    competitionName: string;
+    expectedGames: number;
+    recordedGames: number;
+    missingGames: number;
+    unscoredGames: number;
+}
+
+export interface TeamCompletenessSummary {
+    totalExpectedGames: number;
+    totalRecordedGames: number;
+    totalMissingGames: number;
+    totalUnscoredGames: number;
+    completenessPct: number;
+    incompleteSeasons: SeasonCompletenessSummary[];
+}
+
+/**
+ * Calculates aggregate missing-game metrics across a team's entire participation and game history.
+ */
+export function calculateTeamCompleteness(
+    teamId: string,
+    participations: any[],
+    games: any[]
+): TeamCompletenessSummary {
+    const seasonMap = new Map<string, { season: any; participations: any[] }>();
+
+    (participations || []).forEach((p: any) => {
+        if (!p.phase || !p.phase.season) return;
+        const seasonKey = p.phase.season.id || `year-${p.phase.season.year}`;
+        if (!seasonMap.has(seasonKey)) {
+            seasonMap.set(seasonKey, {
+                season: p.phase.season,
+                participations: []
+            });
+        }
+        seasonMap.get(seasonKey)!.participations.push(p);
+    });
+
+    let totalExpectedGames = 0;
+    let totalRecordedGames = 0;
+    let totalMissingGames = 0;
+    let totalUnscoredGames = 0;
+    const incompleteSeasons: SeasonCompletenessSummary[] = [];
+
+    const sortedSeasons = Array.from(seasonMap.entries()).sort((a, b) => {
+        const yearA = a[1].season?.year || 0;
+        const yearB = b[1].season?.year || 0;
+        return yearB - yearA;
+    });
+
+    for (const [seasonKey, { season, participations: seasonParts }] of sortedSeasons) {
+        let seasonExpected = 0;
+        let seasonRecorded = 0;
+        let seasonMissing = 0;
+        let seasonUnscored = 0;
+
+        for (const p of seasonParts) {
+            const phaseId = p.phase_id || p.phase?.id;
+            const phaseGames = (games || []).filter((g: any) => {
+                if (g.home_team_id !== teamId && g.away_team_id !== teamId) return false;
+                const isHome = g.home_team_id === teamId;
+                const teamPhaseId = isHome ? g.phase_id : (g.away_phase_id || g.phase_id);
+                return teamPhaseId === phaseId;
+            });
+
+            const comp = calculatePhaseCompleteness(p, phaseGames);
+            if (comp.expectedGames !== null) {
+                seasonExpected += Math.max(comp.expectedGames, comp.recordedGames);
+                seasonRecorded += comp.recordedGames;
+                seasonMissing += comp.missingGames;
+            } else if (comp.recordedGames > 0) {
+                seasonExpected += comp.recordedGames;
+                seasonRecorded += comp.recordedGames;
+            }
+            seasonUnscored += comp.unscoredGames;
+        }
+
+        totalExpectedGames += seasonExpected;
+        totalRecordedGames += seasonRecorded;
+        totalMissingGames += seasonMissing;
+        totalUnscoredGames += seasonUnscored;
+
+        if (seasonMissing > 0 || seasonUnscored > 0) {
+            incompleteSeasons.push({
+                seasonKey,
+                seasonId: season?.id,
+                year: season?.year || 0,
+                seasonName: season?.name || (season?.year ? `${season.year} Season` : 'Season'),
+                competitionName: season?.competition?.name || '',
+                expectedGames: seasonExpected,
+                recordedGames: seasonRecorded,
+                missingGames: seasonMissing,
+                unscoredGames: seasonUnscored
+            });
+        }
+    }
+
+    const completenessPct =
+        totalExpectedGames > 0
+            ? Math.round(((totalExpectedGames - totalMissingGames) / totalExpectedGames) * 100)
+            : 100;
+
+    return {
+        totalExpectedGames,
+        totalRecordedGames,
+        totalMissingGames,
+        totalUnscoredGames,
+        completenessPct,
+        incompleteSeasons
+    };
+}
+
