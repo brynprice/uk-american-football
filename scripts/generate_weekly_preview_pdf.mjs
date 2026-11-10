@@ -284,7 +284,7 @@ function generateHtml(preview) {
           <div class="card-title">Early Season Momentum</div>
         </div>
         <ul class="fact-list">
-          ${formWatch.defendingPerfection.length > 0 ? `<li>🟢 <strong>Perfection on the Line (Chasing 3-0)</strong>: ${formWatch.defendingPerfection.map(t => `${t.team} (${t.record})`).join(', ')}</li>` : ''}
+          ${formWatch.defendingPerfection.length > 0 ? `<li>🟢 <strong>Perfection on the Line</strong>: ${formWatch.defendingPerfection.map(t => `${t.team} (${t.record}) aiming for ${t.nextWin || (t.wins + 1)}-0`).join(', ')}</li>` : ''}
           ${formWatch.shutoutStreaks.map(s => `<li>🛡️ <strong>Iron Curtain Watch</strong>: ${s.description}</li>`).join('')}
           ${formWatch.winlessTeams.length > 0 ? `<li>🔴 <strong>Desperation Bowls (Hunting Win #1)</strong>: ${formWatch.winlessTeams.map(t => `${t.team} (${t.record})`).join(', ')}</li>` : ''}
         </ul>
