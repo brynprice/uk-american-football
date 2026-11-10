@@ -8,9 +8,10 @@ export const revalidate = 3600; // 1 hour
 
 export default async function PersonPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const person = await ArchiveService.getPersonDetails(id);
-
-    const gamesCoached = await ArchiveService.getPersonGamesAsCoach(id);
+    const [person, gamesCoached] = await Promise.all([
+        ArchiveService.getPersonDetails(id),
+        ArchiveService.getPersonGamesAsCoach(id)
+    ]);
 
     // Calculate Regular Season Coaching Record
     const calculateCoachingStats = () => {

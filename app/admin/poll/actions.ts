@@ -122,38 +122,16 @@ export async function fetchPollBuilderData(seasonId?: string) {
         };
     }
 
-    // 2. Fetch phases for activeSeasonId
-    const { data: phasesData, error: phasesErr } = await supabase
-        .from("phases")
-        .select("id, name, type, ordinal, parent_phase_id")
-        .eq("season_id", activeSeason.id);
-
-    if (phasesErr) {
-        throw new Error(`Failed to fetch phases: ${phasesErr.message}`);
-    }
-
-    const phases = phasesData || [];
-    const phaseMap = new Map<string, any>(phases.map((p: any) => [p.id, p]));
-    const phaseIds = phases.map((p: any) => p.id);
-
-    if (phaseIds.length === 0) {
-        return {
-            seasons: seasonsList,
-            activeSeasonId: activeSeason.id,
-            activeSeasonYear: activeSeason.year,
-            divisions: [] as PollDivisionGroup[],
-            savedBallots: [] as SavedPollBallot[],
-            allBallots: [] as SavedPollBallot[],
-            currentUserId: user.id,
-        };
-    }
-
-    // 3. Fetch participations, games, and saved poll ballots in parallel
-    const [partRes, gamesRes, notesRes] = await Promise.all([
+    // 2. Fetch phases, participations, games, and saved poll ballots for activeSeason.id in a single parallel batch
+    const [phasesRes, partRes, gamesRes, notesRes] = await Promise.all([
+        supabase
+            .from("phases")
+            .select("id, name, type, ordinal, parent_phase_id")
+            .eq("season_id", activeSeason.id),
         supabase
             .from("participations")
-            .select("*, person:people(display_name), team:teams(id, name, logo_url, team_aliases(*))")
-            .in("phase_id", phaseIds),
+            .select("*, person:people(display_name), team:teams(id, name, logo_url, team_aliases(id, name, start_year, end_year, logo_url)), phases!inner(season_id)")
+            .eq("phases.season_id", activeSeason.id),
         supabase
             .from("games")
             .select(`
@@ -169,10 +147,11 @@ export async function fetchPollBuilderData(seasonId?: string) {
                 is_playoff,
                 is_double_header,
                 game_type,
-                home_team:teams!home_team_id(id, name, logo_url, team_aliases(*)),
-                away_team:teams!away_team_id(id, name, logo_url, team_aliases(*))
+                home_team:teams!home_team_id(id, name, logo_url, team_aliases(id, name, start_year, end_year, logo_url)),
+                away_team:teams!away_team_id(id, name, logo_url, team_aliases(id, name, start_year, end_year, logo_url)),
+                phases!games_phase_id_fkey!inner(season_id)
             `)
-            .in("phase_id", phaseIds)
+            .eq("phases.season_id", activeSeason.id)
             .neq("status", "anomaly")
             .order("date", { ascending: true }),
         supabase
@@ -182,6 +161,26 @@ export async function fetchPollBuilderData(seasonId?: string) {
             .eq("entity_id", activeSeason.id)
             .order("created_at", { ascending: false }),
     ]);
+
+    if (phasesRes.error) {
+        throw new Error(`Failed to fetch phases: ${phasesRes.error.message}`);
+    }
+
+    const phases = phasesRes.data || [];
+    const phaseMap = new Map<string, any>(phases.map((p: any) => [p.id, p]));
+    const phaseIds = phases.map((p: any) => p.id);
+
+    if (phaseIds.length === 0) {
+        return {
+            seasons: seasonsList,
+            activeSeasonId: activeSeason.id,
+            activeSeasonYear: activeSeason.year,
+            divisions: [] as PollDivisionGroup[],
+            savedBallots: [] as SavedPollBallot[],
+            allBallots: [] as SavedPollBallot[],
+            currentUserId: user.id,
+        };
+    }
 
     if (partRes.error) {
         throw new Error(`Failed to fetch participations: ${partRes.error.message}`);

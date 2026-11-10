@@ -15,8 +15,8 @@ export default async function H2HPage({ params }: H2HPageProps) {
     const { id, opponentId } = await params;
 
     const [team1, team2, games] = await Promise.all([
-        ArchiveService.getTeamHistory(id),
-        ArchiveService.getTeamHistory(opponentId),
+        ArchiveService.getTeamBasic(id),
+        ArchiveService.getTeamBasic(opponentId),
         ArchiveService.getH2HGames(id, opponentId)
     ]);
 

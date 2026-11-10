@@ -55,32 +55,49 @@ export async function getTotallyUniqueScoreKeys(): Promise<Set<string>> {
         return totallyUniqueKeysCache;
     }
     const scoreCounts = new Map<string, number>();
-    let page = 0;
     const pageSize = 1000;
-    while (true) {
-        const { data, error } = await supabase
-            .from('games')
-            .select('home_score, away_score')
-            .not('home_score', 'is', null)
-            .not('away_score', 'is', null)
-            .neq('status', 'anomaly')
-            .neq('status', 'cancelled')
-            .range(page * pageSize, (page + 1) * pageSize - 1);
-        if (error || !data) break;
-        const rows = data as any[];
-        if (rows.length === 0) break;
-        for (const row of rows) {
-            const high = Math.max(row.home_score, row.away_score);
-            const low = Math.min(row.home_score, row.away_score);
-            const key = `${high}-${low}`;
-            scoreCounts.set(key, (scoreCounts.get(key) || 0) + 1);
+
+    const { data: firstPage, count, error } = await supabase
+        .from('games')
+        .select('home_score, away_score', { count: 'exact' })
+        .not('home_score', 'is', null)
+        .not('away_score', 'is', null)
+        .neq('status', 'anomaly')
+        .neq('status', 'cancelled')
+        .range(0, pageSize - 1);
+
+    const allRows: any[] = [...((firstPage as any[] | null) || [])];
+    if (!error && count && count > pageSize) {
+        const totalPages = Math.ceil(count / pageSize);
+        const pagePromises = [];
+        for (let p = 1; p < totalPages; p++) {
+            pagePromises.push(
+                supabase
+                    .from('games')
+                    .select('home_score, away_score')
+                    .not('home_score', 'is', null)
+                    .not('away_score', 'is', null)
+                    .neq('status', 'anomaly')
+                    .neq('status', 'cancelled')
+                    .range(p * pageSize, (p + 1) * pageSize - 1)
+            );
         }
-        if (rows.length < pageSize) break;
-        page++;
+        const pageResults = await Promise.all(pagePromises);
+        for (const res of pageResults) {
+            if (res.data) allRows.push(...(res.data as any[]));
+        }
     }
+
+    for (const row of allRows) {
+        const high = Math.max(row.home_score, row.away_score);
+        const low = Math.min(row.home_score, row.away_score);
+        const key = `${high}-${low}`;
+        scoreCounts.set(key, (scoreCounts.get(key) || 0) + 1);
+    }
+
     const uniqueKeys = new Set<string>();
-    for (const [key, count] of scoreCounts.entries()) {
-        if (count === 1) uniqueKeys.add(key);
+    for (const [key, cnt] of scoreCounts.entries()) {
+        if (cnt === 1) uniqueKeys.add(key);
     }
     totallyUniqueKeysCache = uniqueKeys;
     lastCacheTime = Date.now();
@@ -286,6 +303,18 @@ export const ArchiveService = {
     },
 
 
+    async getTeamBasic(teamId: string): Promise<any> {
+        if (!isValidUuid(teamId)) throw new Error("Invalid team ID");
+        const { data, error } = await supabase
+            .from("teams")
+            .select("id, name, logo_url, team_type, location, founded_year, folded_year, notes, team_aliases (id, name, start_year, end_year, logo_url)")
+            .eq("id", teamId)
+            .single();
+        if (error) throw error;
+        if (!data) throw new Error("Team not found");
+        return data;
+    },
+
     async getTeamHistory(teamId: string): Promise<any> {
         if (!isValidUuid(teamId)) throw new Error("Invalid team ID");
         const [teamRes, gamesRes, champNotesRes] = await Promise.all([
@@ -303,11 +332,13 @@ export const ArchiveService = {
             supabase
                 .from("games")
                 .select(`
-                    *,
-                    phase:phases!games_phase_id_fkey (*, season:seasons (year, id, competition:competitions (*))),
-                    away_phase:phases!away_phase_id (*, season:seasons (year, id, competition:competitions (*))),
-                    home_team:teams!home_team_id (*, team_aliases (*)),
-                    away_team:teams!away_team_id (*, team_aliases (*))
+                    id, date, date_display, date_precision, time, home_team_id, away_team_id, home_score, away_score,
+                    status, is_playoff, playoff_round, final_type, title_name, is_title_game, is_double_header,
+                    is_unique_score, is_totally_unique, game_level, nickname, notes, phase_id, away_phase_id, season_id, venue_id,
+                    phase:phases!games_phase_id_fkey (id, name, type, ordinal, parent_phase_id, season:seasons (year, id, name, competition:competitions (id, name, slug, level))),
+                    away_phase:phases!away_phase_id (id, name, type, ordinal, parent_phase_id, season:seasons (year, id, name, competition:competitions (id, name, slug, level))),
+                    home_team:teams!home_team_id (id, name, logo_url, team_type, team_aliases (id, name, start_year, end_year, logo_url)),
+                    away_team:teams!away_team_id (id, name, logo_url, team_type, team_aliases (id, name, start_year, end_year, logo_url))
                 `)
                 .or(`home_team_id.eq.${teamId},away_team_id.eq.${teamId}`)
                 .neq("status", "anomaly")
@@ -353,20 +384,30 @@ export const ArchiveService = {
         // Query games where (home = scoreA AND away = scoreB) OR (home = scoreB AND away = scoreA)
         const { data, error } = await supabase
             .from('games')
-            .select('*, phase:phases!games_phase_id_fkey(*, season:seasons(*, competition:competitions(*))), home_team:teams!home_team_id(*, team_aliases(*)), away_team:teams!away_team_id(*, team_aliases(*)), venue:venues(*)')
+            .select(`
+                id, date, date_display, time, home_score, away_score, status, is_unique_score, is_totally_unique,
+                game_level, final_type, title_name, nickname, is_playoff, playoff_round, is_double_header,
+                phase_id, away_phase_id, home_team_id, away_team_id,
+                phase:phases!games_phase_id_fkey(id, name, season:seasons(id, year, competition:competitions(id, name, level, slug))),
+                away_phase:phases!away_phase_id(name),
+                home_team:teams!home_team_id(id, name, logo_url, team_type, team_aliases(id, name, start_year, end_year, logo_url)),
+                away_team:teams!away_team_id(id, name, logo_url, team_type, team_aliases(id, name, start_year, end_year, logo_url))
+            `)
             .or(`and(home_score.eq.${cleanScoreA},away_score.eq.${cleanScoreB}),and(home_score.eq.${cleanScoreB},away_score.eq.${cleanScoreA})`)
             .neq("status", "anomaly")
             .order('date', { ascending: false, nullsFirst: false });
 
         if (error) throw error;
         
-        const totallyUniqueKeys = await getTotallyUniqueScoreKeys();
-        const games: any[] = (data || []).map((g: any) => {
+        const rows: any[] = data || [];
+        const needsFallback = rows.some((g: any) => g.is_totally_unique === undefined || g.is_totally_unique === null);
+        const totallyUniqueKeys = needsFallback ? await getTotallyUniqueScoreKeys() : null;
+        const games: any[] = rows.map((g: any) => {
             const high = Math.max(g.home_score ?? 0, g.away_score ?? 0);
             const low = Math.min(g.home_score ?? 0, g.away_score ?? 0);
             const isTotallyUnique = g.is_totally_unique !== undefined && g.is_totally_unique !== null
                 ? g.is_totally_unique
-                : totallyUniqueKeys.has(`${high}-${low}`);
+                : (totallyUniqueKeys ? totallyUniqueKeys.has(`${high}-${low}`) : false);
             return {
                 ...g,
                 game_level: g.game_level || resolveGameLevel(g),
@@ -387,32 +428,54 @@ export const ArchiveService = {
     },
 
     async getUniqueScoreGames(): Promise<any[]> {
-        const { data, error } = await supabase
-            .from('games')
-            .select(`
-                *,
-                phase:phases!games_phase_id_fkey(*, season:seasons(*, competition:competitions(*))),
-                away_phase:phases!away_phase_id(name),
-                home_team:teams!home_team_id(*, team_aliases(*)),
-                away_team:teams!away_team_id(*, team_aliases(*)),
-                venue:venues(*)
-            `)
-            .eq('is_unique_score', true)
-            .neq('status', 'anomaly')
-            .neq('status', 'cancelled')
-            .order('date', { ascending: false, nullsFirst: false });
+        const [gamesRes, teamsRes, phasesRes] = await Promise.all([
+            supabase
+                .from('games')
+                .select(`
+                    id, date, date_display, time, home_score, away_score, status, is_unique_score, is_totally_unique,
+                    game_level, final_type, title_name, nickname, is_playoff, playoff_round, is_double_header,
+                    phase_id, away_phase_id, home_team_id, away_team_id
+                `)
+                .eq('is_unique_score', true)
+                .neq('status', 'anomaly')
+                .neq('status', 'cancelled')
+                .order('date', { ascending: false, nullsFirst: false }),
+            supabase
+                .from('teams')
+                .select('id, name, logo_url, team_type, team_aliases(id, name, start_year, end_year, logo_url)'),
+            supabase
+                .from('phases')
+                .select('id, name, season:seasons(id, year, competition:competitions(name, level))')
+                .limit(5000)
+        ]);
 
+        const { data, error } = gamesRes;
         if (!error && data) {
-            const totallyUniqueKeys = await getTotallyUniqueScoreKeys();
+            const teamMap = new Map<string, any>(((teamsRes.data as any[]) || []).map(t => [t.id, t]));
+            const phaseMap = new Map<string, any>(((phasesRes.data as any[]) || []).map(p => [p.id, p]));
+            const needsFallback = data.some((g: any) => g.is_totally_unique === undefined || g.is_totally_unique === null);
+            const totallyUniqueKeys = needsFallback ? await getTotallyUniqueScoreKeys() : null;
             const games: any[] = data.map((g: any) => {
+                const home_team = teamMap.get(g.home_team_id) || null;
+                const away_team = teamMap.get(g.away_team_id) || null;
+                const phase = g.phase_id ? (phaseMap.get(g.phase_id) || null) : null;
+                const awayPh = g.away_phase_id ? phaseMap.get(g.away_phase_id) : null;
+                const away_phase = awayPh ? { name: awayPh.name } : null;
                 const high = Math.max(g.home_score ?? 0, g.away_score ?? 0);
                 const low = Math.min(g.home_score ?? 0, g.away_score ?? 0);
                 const isTotallyUnique = g.is_totally_unique !== undefined && g.is_totally_unique !== null
                     ? g.is_totally_unique
-                    : totallyUniqueKeys.has(`${high}-${low}`);
-                return {
+                    : (totallyUniqueKeys ? totallyUniqueKeys.has(`${high}-${low}`) : false);
+                const enriched = {
                     ...g,
-                    game_level: g.game_level || resolveGameLevel(g),
+                    phase,
+                    away_phase,
+                    home_team,
+                    away_team
+                };
+                return {
+                    ...enriched,
+                    game_level: g.game_level || resolveGameLevel(enriched),
                     is_totally_unique: isTotallyUnique
                 };
             });
@@ -526,18 +589,18 @@ export const ArchiveService = {
 
     async getPersonGamesAsCoach(personId: string): Promise<any[]> {
         if (!isValidUuid(personId)) return [];
-        // 1. Get all participations where they are the head coach
-        const { data: participations } = await supabase
-            .from('participations')
-            .select('team_id, phase_id')
-            .eq('head_coach_id', personId) as { data: any[] | null };
-
-        // 2. Fetch explicit game_staff where they were assigned as head coach
-        const { data: staffGames } = await supabase
-            .from('game_staff')
-            .select('game_id, team_id')
-            .eq('person_id', personId)
-            .eq('role', 'head_coach') as { data: any[] | null };
+        // 1 & 2. Fetch participations and explicit game_staff concurrently
+        const [{ data: participations }, { data: staffGames }] = await Promise.all([
+            supabase
+                .from('participations')
+                .select('team_id, phase_id')
+                .eq('head_coach_id', personId) as unknown as Promise<{ data: any[] | null }>,
+            supabase
+                .from('game_staff')
+                .select('game_id, team_id')
+                .eq('person_id', personId)
+                .eq('role', 'head_coach') as unknown as Promise<{ data: any[] | null }>
+        ]);
 
         const phaseIds = participations?.map(p => p.phase_id) || [];
         const explicitGameIds = staffGames?.map(s => s.game_id) || [];
@@ -661,8 +724,10 @@ export const ArchiveService = {
     },
 
     async getTeamOpponents(teamId: string): Promise<Team[]> {
-        const { data: homeGames } = await supabase.from("games").select("away_team_id").eq("home_team_id", teamId) as { data: any[] | null };
-        const { data: awayGames } = await supabase.from("games").select("home_team_id").eq("away_team_id", teamId) as { data: any[] | null };
+        const [{ data: homeGames }, { data: awayGames }] = await Promise.all([
+            supabase.from("games").select("away_team_id").eq("home_team_id", teamId) as unknown as Promise<{ data: any[] | null }>,
+            supabase.from("games").select("home_team_id").eq("away_team_id", teamId) as unknown as Promise<{ data: any[] | null }>
+        ]);
 
         const opponentIds = new Set([
             ...(homeGames?.map(g => g.away_team_id) || []),
@@ -686,11 +751,13 @@ export const ArchiveService = {
         const { data, error } = await supabase
             .from("games")
             .select(`
-                *,
-                home_team:teams!home_team_id (*, team_aliases (*)),
-                away_team:teams!away_team_id (*, team_aliases (*)),
-                phase:phases!games_phase_id_fkey (*, season:seasons (year, id, competition:competitions (name))),
-                venue:venues (*)
+                id, date, date_display, time, home_score, away_score, status, is_playoff, playoff_round,
+                final_type, title_name, is_double_header, is_unique_score, is_totally_unique, game_level,
+                nickname, notes, home_team_id, away_team_id, phase_id, away_phase_id,
+                home_team:teams!home_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)),
+                away_team:teams!away_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)),
+                phase:phases!games_phase_id_fkey (id, name, type, season:seasons (year, id, competition:competitions (name))),
+                venue:venues (id, name, city)
             `)
             .or(`and(home_team_id.eq.${team1Id},away_team_id.eq.${team2Id}),and(home_team_id.eq.${team2Id},away_team_id.eq.${team1Id})`)
             .neq("status", "anomaly")
@@ -717,28 +784,36 @@ export const ArchiveService = {
     async getChampions(options: { competitionId?: string; level?: string } = {}): Promise<any> {
         const { competitionId, level } = options;
 
-        let selectedCompetitions: Competition[] = [];
-        if (competitionId) {
-            const comp = await this.getCompetitionById(competitionId);
-            if (comp) selectedCompetitions = [comp];
-        } else if (level) {
-            const { data } = await supabase.from("competitions").select("*").eq("level", level);
-            selectedCompetitions = data || [];
-        } else {
-            const { data } = await supabase.from("competitions").select("*");
-            selectedCompetitions = data || [];
-        }
+        const compPromise = competitionId
+            ? this.getCompetitionById(competitionId).then(c => (c ? [c] : []))
+            : level
+                ? supabase.from("competitions").select("*").eq("level", level).then(r => (r.data || []) as Competition[])
+                : supabase.from("competitions").select("*").then(r => (r.data || []) as Competition[]);
 
-        // Fetch all seasons for these competitions
-        const compIds = selectedCompetitions.map(c => c.id);
-        let seasonQuery = supabase.from("seasons").select("id, year, competition_id");
-        if (compIds.length > 0) {
-            seasonQuery = seasonQuery.in("competition_id", compIds);
-        }
-        const { data: seasonsData } = await seasonQuery;
-        const seasonIds = (seasonsData as any[])?.map((s: any) => s.id) || [];
+        const gamesPromise = supabase
+            .from("games")
+            .select(`
+                id, title_name, final_type, date, home_score, away_score, season_id, phase_id, home_team_id, away_team_id,
+                home_team:teams!home_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)),
+                away_team:teams!away_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)),
+                phase:phases!games_phase_id_fkey (
+                    id, name, type,
+                    season:seasons (
+                        id, year, name, competition_id,
+                        competition:competitions (id, name, level, slug)
+                    )
+                ),
+                venue:venues (id, name, city)
+            `)
+            .in("final_type", ["title", "bowl"])
+            .neq("status", "anomaly")
+            .order("date", { ascending: false });
 
-        if (seasonIds.length === 0) {
+        const [selectedCompetitions, { data: gamesData, error }] = await Promise.all([compPromise, gamesPromise]);
+
+        if (error) throw error;
+        const compIds = new Set(selectedCompetitions.map(c => c.id));
+        if (compIds.size === 0) {
             return {
                 selectedCompetition: competitionId ? selectedCompetitions[0] : null,
                 selectedLevel: level || null,
@@ -748,28 +823,10 @@ export const ArchiveService = {
             };
         }
 
-        const { data: gamesData, error } = await supabase
-            .from("games")
-            .select(`
-                *,
-                home_team:teams!home_team_id (*, team_aliases (*)),
-                away_team:teams!away_team_id (*, team_aliases (*)),
-                phase:phases!games_phase_id_fkey (
-                    id, name, type,
-                    season:seasons (
-                        id, year, name,
-                        competition:competitions (id, name, level, slug)
-                    )
-                ),
-                venue:venues (*)
-            `)
-            .in("season_id", seasonIds)
-            .in("final_type", ["title", "bowl"])
-            .neq("status", "anomaly")
-            .order("date", { ascending: false });
-
-        if (error) throw error;
-        const games = gamesData || [];
+        const games = ((gamesData as any[]) || []).filter(g => {
+            const gCompId = g.phase?.season?.competition?.id || g.phase?.season?.competition_id;
+            return !gCompId || compIds.has(gCompId);
+        });
 
         const processedChampions = games.map((game: any) => {
             const seasonYear = game.phase?.season?.year || (game.date ? new Date(game.date).getFullYear() : 0);
@@ -875,30 +932,28 @@ export const ArchiveService = {
         avgCompleteness: number;
     }> {
         const [
-            gamesResult,
-            seasonsResult,
+            totalGamesResult,
+            anomalyGamesResult,
             teamsResult,
             titleGamesResult,
+            seasonScoresResult,
         ] = await Promise.all([
-            supabase.from('games').select('*', { count: 'exact', head: true }).neq('status', 'anomaly'),
-            supabase.from('seasons').select('*', { count: 'exact', head: true }),
+            supabase.from('games').select('*', { count: 'exact', head: true }),
+            supabase.from('games').select('*', { count: 'exact', head: true }).eq('status', 'anomaly'),
             supabase.from('teams').select('*', { count: 'exact', head: true }),
-            supabase.from('games').select('*', { count: 'exact', head: true }).not('title_name', 'is', null),
+            supabase.from('games').select('*', { count: 'exact', head: true }).not('final_type', 'is', null).not('title_name', 'is', null),
+            supabase.from('seasons').select('completeness_score'),
         ]);
 
-        const { data: seasonScores } = await supabase
-            .from('seasons')
-            .select('completeness_score')
-            .not('completeness_score', 'is', null);
-
-        const scores = (seasonScores || []).map((s: any) => s.completeness_score as number).filter((n: number) => n > 0);
+        const seasonRows = (seasonScoresResult.data || []) as any[];
+        const scores = seasonRows.map((s: any) => s.completeness_score as number).filter((n: number) => n !== null && n > 0);
         const avgCompleteness = scores.length > 0
             ? Math.round(scores.reduce((a: number, b: number) => a + b, 0) / scores.length)
             : 0;
 
         return {
-            totalGames: gamesResult.count ?? 0,
-            totalSeasons: seasonsResult.count ?? 0,
+            totalGames: Math.max(0, (totalGamesResult.count ?? 0) - (anomalyGamesResult.count ?? 0)),
+            totalSeasons: seasonRows.length,
             totalTeams: teamsResult.count ?? 0,
             titleGames: titleGamesResult.count ?? 0,
             avgCompleteness,
@@ -906,16 +961,21 @@ export const ArchiveService = {
     },
 
     async getUniballTimelineData(): Promise<UniballTimelineData> {
-        const { data: compsData, error: compsError } = await supabase
-            .from("competitions")
-            .select("id, name, slug, level")
-            .in("slug", ["bcafl", "buafl"]);
-        if (compsError) throw compsError;
-        const comps: any[] = (compsData as any[]) || [];
-        const compMap = new Map<string, any>(comps.map(c => [c.id, c]));
-        const compIds = comps.map(c => c.id);
+        // Round Trip 1: Fetch Uniball seasons (joined with competitions), notes, and canonical teams in parallel
+        const [seasonsRes, seasonNotesRes, champNotesRes, teamsRes] = await Promise.all([
+            supabase
+                .from("seasons")
+                .select("id, year, name, competition_id, completeness_score, competition:competitions!inner(id, name, slug, level)")
+                .in("competition.slug", ["bcafl", "buafl"])
+                .order("year", { ascending: true }),
+            supabase.from("notes").select("entity_id, content").eq("entity_type", "seasons"),
+            supabase.from("notes").select("entity_id, content").eq("entity_type", "divisional_champion"),
+            supabase.from("teams").select("id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)")
+        ]);
 
-        if (compIds.length === 0) {
+        if (seasonsRes.error) throw seasonsRes.error;
+        const seasons: any[] = (seasonsRes.data as any[]) || [];
+        if (seasons.length === 0) {
             return {
                 seasons: [],
                 stats: {
@@ -931,75 +991,71 @@ export const ArchiveService = {
             };
         }
 
-        const { data: seasonsData, error: seasonsError } = await supabase
-            .from("seasons")
-            .select("id, year, name, competition_id, completeness_score")
-            .in("competition_id", compIds)
-            .order("year", { ascending: true });
-        if (seasonsError) throw seasonsError;
-        const seasons: any[] = (seasonsData as any[]) || [];
+        const compMap = new Map<string, any>();
+        for (const s of seasons) {
+            const c = Array.isArray(s.competition) ? s.competition[0] : s.competition;
+            if (c && !compMap.has(c.id)) compMap.set(c.id, c);
+        }
         const seasonIds = seasons.map(s => s.id);
 
-        // Fetch phases for all Uniball seasons
-        const { data: phasesData, error: phasesError } = await supabase
-            .from("phases")
-            .select("id, season_id, name, type, ordinal, parent_phase_id")
-            .in("season_id", seasonIds)
-            .limit(5000);
-        if (phasesError) throw phasesError;
-        const phases: any[] = (phasesData as any[]) || [];
-        const phaseMap = new Map<string, any>(phases.map(p => [p.id, p]));
+        // Helper to fetch Uniball participations concurrently (scoped to Uniball seasons via phases!inner)
+        const fetchUniballParticipationsScalar = async () => {
+            const pageSize = 1000;
+            const initialPages = [0, 1, 2, 3].map(p =>
+                supabase
+                    .from("participations")
+                    .select("id, team_id, phase_id, is_champion, wins, losses, ties, points_for, points_against, phases!inner(season_id)")
+                    .in("phases.season_id", seasonIds)
+                    .range(p * pageSize, (p + 1) * pageSize - 1)
+            );
+            const results = await Promise.all(initialPages);
+            const allRows: any[] = [];
+            for (const res of results) {
+                if (res.error) throw res.error;
+                if (res.data) allRows.push(...(res.data as any[]));
+            }
+            return allRows;
+        };
 
-        // Fetch all title and bowl games across Uniball seasons
-        const { data: gamesData, error: gamesError } = await supabase
-            .from("games")
-            .select(`
-                id, season_id, date, home_score, away_score, final_type, title_name, notes,
-                home_team:teams!home_team_id (id, name, logo_url, team_aliases (*)),
-                away_team:teams!away_team_id (id, name, logo_url, team_aliases (*)),
-                venue:venues (id, name, city)
-            `)
-            .in("season_id", seasonIds)
-            .or("final_type.in.(title,bowl),title_name.ilike.%College Bowl%")
-            .neq("status", "anomaly")
-            .order("date", { ascending: true });
-        if (gamesError) throw gamesError;
-        const games: any[] = (gamesData as any[]) || [];
-
-        // Paginate fetch all participations
-        let allParticipations: any[] = [];
-        let from = 0;
-        const pageSize = 1000;
-        while (true) {
-            const { data, error } = await supabase
-                .from("participations")
+        // Round Trip 2: Fetch phases, title/bowl games, and Uniball participations concurrently
+        const [phasesRes, gamesRes, allParticipations] = await Promise.all([
+            supabase
+                .from("phases")
+                .select("id, season_id, name, type, ordinal, parent_phase_id")
+                .in("season_id", seasonIds)
+                .limit(5000),
+            supabase
+                .from("games")
                 .select(`
-                    id, team_id, phase_id, is_champion, wins, losses, ties, points_for, points_against,
-                    team:teams (id, name, logo_url, team_aliases (*))
+                    id, season_id, date, home_score, away_score, final_type, title_name, notes,
+                    home_team:teams!home_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)),
+                    away_team:teams!away_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)),
+                    venue:venues (id, name, city)
                 `)
-                .range(from, from + pageSize - 1);
-            if (error) throw error;
-            if (!data || data.length === 0) break;
-            allParticipations = allParticipations.concat(data);
-            if (data.length < pageSize) break;
-            from += pageSize;
-        }
-
-        // Fetch season level notes, divisional champion notes, and all team definitions with aliases
-        const [seasonNotesRes, champNotesRes, teamsRes] = await Promise.all([
-            supabase.from("notes").select("entity_id, content").eq("entity_type", "seasons"),
-            supabase.from("notes").select("entity_id, content").eq("entity_type", "divisional_champion"),
-            supabase.from("teams").select("id, name, logo_url, team_aliases (*)")
+                .in("season_id", seasonIds)
+                .or("final_type.in.(title,bowl),title_name.ilike.%College Bowl%")
+                .neq("status", "anomaly")
+                .order("date", { ascending: true }),
+            fetchUniballParticipationsScalar()
         ]);
+
+        if (phasesRes.error) throw phasesRes.error;
+        if (gamesRes.error) throw gamesRes.error;
+
+        const phases: any[] = (phasesRes.data as any[]) || [];
+        const phaseMap = new Map<string, any>(phases.map(p => [p.id, p]));
+        const games: any[] = (gamesRes.data as any[]) || [];
 
         const seasonNotesMap = new Map(((seasonNotesRes.data || []) as any[]).map(n => [n.entity_id, n.content]));
         const champNotesSet = new Set(((champNotesRes.data || []) as any[]).map(n => `${n.entity_id}:${n.content}`));
         const dbTeams: any[] = (teamsRes.data || []) as any[];
         const dbTeamMap = new Map<string, any>(dbTeams.map(t => [t.id, t]));
 
-        // Filter participations belonging to Uniball phases
+        // Filter participations belonging to Uniball phases and attach canonical team lookup
         const uniballPhaseIds = new Set(phases.map(p => p.id));
-        const uniballParts = allParticipations.filter(p => uniballPhaseIds.has(p.phase_id));
+        const uniballParts = allParticipations
+            .filter(p => uniballPhaseIds.has(p.phase_id))
+            .map(p => ({ ...p, team: dbTeamMap.get(p.team_id) || null }));
 
         // Global team accumulator using CURRENT canonical program identities
         const allTeamsMap = new Map<string, TimelineTeamEntry>();

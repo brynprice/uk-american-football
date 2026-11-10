@@ -39,7 +39,7 @@ export default function GameCountsPage() {
     async function loadFlaggedPhases() {
         setLoading(true);
 
-        // 1. Get all phases with max_games_per_team set
+        // 1. Get all phases with max_games_per_team set and all team names in parallel
         let query = supabase
             .from('phases')
             .select('id, name, max_games_per_team, games_validated, season:seasons(id, year, competition:competitions(name))')
@@ -49,7 +49,10 @@ export default function GameCountsPage() {
             query = query.eq('games_validated', false);
         }
 
-        const { data: phases, error: phaseError } = await query;
+        const [{ data: phases, error: phaseError }, { data: teamsData }] = await Promise.all([
+            query,
+            supabase.from('teams').select('id, name')
+        ]);
 
         if (phaseError || !phases) {
             console.error('Error loading phases:', phaseError);
@@ -57,16 +60,39 @@ export default function GameCountsPage() {
             return;
         }
 
-        // 2. For each phase, count games per team
+        const teamNameMap = new Map<string, string>(
+            ((teamsData || []) as any[]).map(t => [t.id, t.name])
+        );
+
+        // 2. Batch-fetch scalar game IDs for all candidate phases instead of N+1 sequential queries
         const results: FlaggedPhase[] = [];
+        const phaseList = phases as any[];
+        const phaseIds = phaseList.map(p => p.id);
+        const gamesByPhase = new Map<string, any[]>();
 
-        for (const phase of phases as any[]) {
-            const { data: games } = await supabase
-                .from('games')
-                .select('home_team_id, away_team_id, home_team:teams!home_team_id(name), away_team:teams!away_team_id(name)')
-                .eq('phase_id', phase.id)
-                .neq('status', 'anomaly');
+        const chunkSize = 50;
+        const batchPromises = [];
+        for (let i = 0; i < phaseIds.length; i += chunkSize) {
+            const chunk = phaseIds.slice(i, i + chunkSize);
+            batchPromises.push(
+                supabase
+                    .from('games')
+                    .select('phase_id, home_team_id, away_team_id')
+                    .in('phase_id', chunk)
+                    .neq('status', 'anomaly')
+            );
+        }
+        const batchResults = await Promise.all(batchPromises);
+        for (const res of batchResults) {
+            for (const g of (res.data || []) as any[]) {
+                const list = gamesByPhase.get(g.phase_id) || [];
+                list.push(g);
+                gamesByPhase.set(g.phase_id, list);
+            }
+        }
 
+        for (const phase of phaseList) {
+            const games = gamesByPhase.get(phase.id);
             if (!games || games.length === 0) continue;
 
             // Count games per team
@@ -75,8 +101,8 @@ export default function GameCountsPage() {
             for (const game of games as any[]) {
                 const homeId = game.home_team_id;
                 const awayId = game.away_team_id;
-                const homeName = game.home_team?.name || 'Unknown';
-                const awayName = game.away_team?.name || 'Unknown';
+                const homeName = teamNameMap.get(homeId) || 'Unknown';
+                const awayName = teamNameMap.get(awayId) || 'Unknown';
 
                 if (!teamCounts.has(homeId)) teamCounts.set(homeId, { name: homeName, count: 0 });
                 if (!teamCounts.has(awayId)) teamCounts.set(awayId, { name: awayName, count: 0 });
