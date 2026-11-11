@@ -14,6 +14,7 @@ from datetime import datetime
 
 ALIAS_MAP = {
     'Brighton Panthers': 'Brighton Tsunami',
+    'Nottingham Outlaws': 'Nottingham Gold',
     'Anglia Ruskin Phantoms': 'Anglia Ruskin Siege',
     'Anglia Ruskin Rhinos': 'Anglia Ruskin Siege',
     'Royal Holloway Vikings': 'Royal Holloway Bears',
@@ -23,7 +24,6 @@ ALIAS_MAP = {
     'Aberdeen Bulls': 'Aberdeen Roughnecks University Team',
     'Leeds Carnegie Chargers': 'Leeds Chargers',
     'Hertfordshire Tornadoes': 'Hertfordshire Cheetahs',
-    'Portsmouth Destroyers': 'Portsmouth Dreadnoughts',
     'Chester Romans Ladies': 'Cheshire Bears',
     'London Cobras': 'London Warriors',
     'Coventry Cassidy Jets': 'Coventry Jets',
@@ -205,6 +205,10 @@ def sense_check_season(csv_path):
     first_comp = (games[0].get('competition') or '').strip().upper() if games else ''
     norm_path = csv_path.replace('\\', '/')
     is_womens = any(kw in first_comp for kw in ['NWFL', 'SAPPHIRE', 'WAFN', 'WOMEN']) or any(p in norm_path for p in ['data/NWFL', 'data/Sapphire', 'data/Womens'])
+    active_alias_map = dict(ALIAS_MAP)
+    if is_womens:
+        active_alias_map['Portsmouth Destroyers'] = 'Portsmouth Dreadnoughts'
+
     is_adult_contact = (not is_womens) and ('BAFA' in first_comp or 'BAFL' in first_comp or 'BRITISH AMERICAN FOOTBALL LEAGUE' in first_comp or 'BRITISH INDEPENDENT GRIDIRON CONFERENCE' in first_comp or 'BIG C' in first_comp or 'SCOTTISH GRIDIRON ASSOCIATION' in first_comp or 'SGA' in first_comp or 'ADULT' in first_comp or 'data/BAFANL' in norm_path or 'data/BAFL' in norm_path or 'data/BIGC' in norm_path or 'data/SGA' in norm_path)
 
     season_year = ''
@@ -238,8 +242,8 @@ def sense_check_season(csv_path):
     for idx, g in enumerate(games, 1):
         for side in ['away_team', 'home_team']:
             team = g.get(side, '')
-            if team in ALIAS_MAP:
-                issues.append(f"Row {idx}: Non-canonical team alias '{team}' should be '{ALIAS_MAP[team]}'")
+            if team in active_alias_map:
+                issues.append(f"Row {idx}: Non-canonical team alias '{team}' should be '{active_alias_map[team]}'")
 
     # 3b. Team Type vs Competition Level Classification Checks
     teams_csv_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'teams.csv')
@@ -331,17 +335,18 @@ def sense_check_season(csv_path):
                 for srow in csv.DictReader(sf):
                     t = srow.get('team', '').strip()
                     # Resolve aliases in standings just in case
-                    canonical_t = ALIAS_MAP.get(t, t)
+                    canonical_t = active_alias_map.get(t, t)
                     p = (srow.get('phase') or srow.get('phase_name') or '').strip()
                     pp = (srow.get('parent_phase') or '').strip()
-                    if canonical_t and p:
+                    is_playoff_phase = pp.lower() in ('playoffs', 'postseason') or any(kw in p.lower() for kw in ['playoff', 'bowl', 'trophy', 'championship', 'knockout'])
+                    if canonical_t and p and not is_playoff_phase:
                         team_phase_map[canonical_t] = {'phase': p, 'parent_phase': pp}
 
             for idx, g in enumerate(games, 1):
                 if g.get('is_playoff', '').upper() == 'TRUE':
                     continue
-                a_team = ALIAS_MAP.get(g.get('away_team', '').strip(), g.get('away_team', '').strip())
-                h_team = ALIAS_MAP.get(g.get('home_team', '').strip(), g.get('home_team', '').strip())
+                a_team = active_alias_map.get(g.get('away_team', '').strip(), g.get('away_team', '').strip())
+                h_team = active_alias_map.get(g.get('home_team', '').strip(), g.get('home_team', '').strip())
                 game_phase = g.get('phase', '').strip()
                 away_phase = g.get('away_phase', '').strip()
 
@@ -381,8 +386,8 @@ def sense_check_season(csv_path):
         g_year = int(g.get('year') or 0)
         ac = (g.get('away_coach') or '').strip()
         hc = (g.get('home_coach') or '').strip()
-        a_team = ALIAS_MAP.get(g.get('away_team', '').strip(), g.get('away_team', '').strip())
-        h_team = ALIAS_MAP.get(g.get('home_team', '').strip(), g.get('home_team', '').strip())
+        a_team = active_alias_map.get(g.get('away_team', '').strip(), g.get('away_team', '').strip())
+        h_team = active_alias_map.get(g.get('home_team', '').strip(), g.get('home_team', '').strip())
 
         if ac and (a_team, g_year, ac) not in verified_coaches:
             issues.append(
@@ -402,7 +407,7 @@ def sense_check_season(csv_path):
             for s_idx, srow in enumerate(csv.DictReader(sf), 1):
                 coach = (srow.get('head_coach') or '').strip()
                 t = srow.get('team', '').strip()
-                canonical_t = ALIAS_MAP.get(t, t)
+                canonical_t = active_alias_map.get(t, t)
                 if coach and (canonical_t, s_year, coach) not in verified_coaches:
                     issues.append(
                         f"Standings Row {s_idx}: Unverified head coach '{coach}' for '{canonical_t}' ({s_year}). "
@@ -464,7 +469,7 @@ def sense_check_season(csv_path):
                         f"Must be canonically styled as 'Britbowl <Roman Numerals>' (e.g. 'Britbowl XXXVIII')."
                     )
         else:
-            if final_type == 'title' or (is_title and ('college bowl' in title_name.lower() or 'national championship' in title_name.lower() or 'buafl' in title_name.lower() or 'bcafl' in title_name.lower())):
+            if final_type == 'title' or (is_title and final_type != 'bowl' and ('college bowl' in title_name.lower() or 'national championship' in title_name.lower() or 'buafl' in title_name.lower() or 'bcafl' in title_name.lower())):
                 if not re.match(r'^College Bowl [IVXLCDM]+$', title_name):
                     issues.append(
                         f"Row {idx}: Invalid National Championship Title Game name '{title_name}'. "
@@ -478,8 +483,13 @@ def sense_check_season(csv_path):
             'wildcard': 1,
             'wildcard round': 1,
             'first round': 1,
+            'round 1': 1,
+            'quarter final': 2,
+            'quarter finals': 2,
             'quarter-final': 2,
             'quarter-finals': 2,
+            'semi final': 3,
+            'semi finals': 3,
             'semi-final': 3,
             'semi-finals': 3,
             'third-place playoff': 4,
