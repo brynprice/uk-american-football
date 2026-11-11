@@ -235,6 +235,39 @@ export async function getWeeklySlateAction(params: {
 }
 
 /**
+ * Runs the tier-adjusted prediction engine for a single matchup.
+ */
+export async function simulateSingleMatchupAction(params: {
+  homeTeamId: string;
+  awayTeamId: string;
+  seasonYear?: number;
+}): Promise<{
+  success: boolean;
+  prediction?: PredictionResult;
+  error?: string;
+}> {
+  try {
+    await assertPermission("predictions");
+
+    if (!params.homeTeamId || !params.awayTeamId) {
+      return { success: false, error: "Please select both a home and away team." };
+    }
+
+    const supabase = getAdminClient();
+    const prediction = await predictMatchup(supabase, {
+      homeTeamId: params.homeTeamId,
+      awayTeamId: params.awayTeamId,
+      seasonYear: params.seasonYear || 2026,
+    });
+
+    return { success: true, prediction };
+  } catch (err: any) {
+    console.error("simulateSingleMatchupAction error:", err);
+    return { success: false, error: err.message || "Failed to simulate matchup." };
+  }
+}
+
+/**
  * Runs the prediction engine across all games in a weekly slate.
  */
 export async function generateSlatePredictionsAction(params: {

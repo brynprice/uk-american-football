@@ -8,13 +8,12 @@ import {
   getWeeklySlateAction,
   generateSlatePredictionsAction,
   saveBatchPredictionsAction,
+  simulateSingleMatchupAction,
 } from "./actions";
 import {
   BUCS_2026_WEEKS,
   SlateGame,
   PredictionResult,
-  sanitizePredictedScore,
-  isWalkoverScoreline,
 } from "@/lib/predictions/engine";
 import { supabase } from "@/lib/supabase/client";
 import { isValidUuid } from "@/lib/utils/validation";
@@ -122,7 +121,7 @@ export default function PredictionsPage() {
         setSlatePredictions(newMap);
         setStatusMessage({
           type: "success",
-          text: `Generated predictions for ${res.predictions.length} fixtures in Week ${selectedWeek}!`,
+          text: `Generated tier-adjusted predictions for ${res.predictions.length} fixtures in Week ${selectedWeek}!`,
         });
       } else {
         setStatusMessage({ type: "error", text: res.error || "Failed to generate predictions." });
@@ -174,141 +173,35 @@ export default function PredictionsPage() {
     }
   };
 
-  // Single matchup calculation
+  // Single matchup calculation (uses server-side tier-adjusted engine)
   const calculateSinglePrediction = async () => {
     if (!homeTeamId || !awayTeamId || !isValidUuid(homeTeamId) || !isValidUuid(awayTeamId)) return;
     setIsSingleLoading(true);
     setSinglePrediction(null);
 
     try {
-      // 1. Fetch H2H Games
-      const { data: h2hGames } = await supabase
-        .from("games")
-        .select(`*, phase:phases!games_phase_id_fkey(season:seasons(year))`)
-        .or(`and(home_team_id.eq.${homeTeamId},away_team_id.eq.${awayTeamId}),and(home_team_id.eq.${awayTeamId},away_team_id.eq.${homeTeamId})`)
-        .eq("status", "completed");
-
-      const currentYear = new Date().getFullYear();
-      const startYear = currentYear - 2;
-
-      const [homeHistory, awayHistory] = await Promise.all([
-        supabase
-          .from("games")
-          .select("*, phase:phases!games_phase_id_fkey(season:seasons(year))")
-          .or(`home_team_id.eq.${homeTeamId},away_team_id.eq.${homeTeamId}`)
-          .eq("status", "completed")
-          .filter("phase.season.year", "gte", startYear),
-        supabase
-          .from("games")
-          .select("*, phase:phases!games_phase_id_fkey(season:seasons(year))")
-          .or(`home_team_id.eq.${awayTeamId},away_team_id.eq.${awayTeamId}`)
-          .eq("status", "completed")
-          .filter("phase.season.year", "gte", startYear),
-      ]);
-
-      const hGames = ((homeHistory.data || []) as any[]).filter(
-        (g) => !isWalkoverScoreline(g.home_score, g.away_score)
-      );
-      const aGames = ((awayHistory.data || []) as any[]).filter(
-        (g) => !isWalkoverScoreline(g.home_score, g.away_score)
-      );
-      const h2h = ((h2hGames || []) as any[]).filter(
-        (g) => !isWalkoverScoreline(g.home_score, g.away_score)
-      );
-
-      const homeOpponents = new Set(hGames.map((g) => (g.home_team_id === homeTeamId ? g.away_team_id : g.home_team_id)));
-      const awayOpponents = new Set(aGames.map((g) => (g.home_team_id === awayTeamId ? g.away_team_id : g.home_team_id)));
-      const commonOpponentIds = Array.from(homeOpponents).filter(
-        (id) => awayOpponents.has(id) && id !== homeTeamId && id !== awayTeamId
-      );
-
-      let h2hHomeScore = 0;
-      let h2hAwayScore = 0;
-      let h2hWeightTotal = 0;
-      let h2hWins = 0;
-
-      h2h.forEach((g) => {
-        const isHome = g.home_team_id === homeTeamId;
-        const weight = (g as any).phase?.season?.year >= currentYear - 2 ? 1.5 : 1;
-
-        if (isHome) {
-          h2hHomeScore += g.home_score * weight;
-          h2hAwayScore += g.away_score * weight;
-          if (g.home_score > g.away_score) h2hWins += 1;
-        } else {
-          h2hHomeScore += g.away_score * weight;
-          h2hAwayScore += g.home_score * weight;
-          if (g.away_score > g.home_score) h2hWins += 1;
-        }
-        h2hWeightTotal += weight;
+      const res = await simulateSingleMatchupAction({
+        homeTeamId,
+        awayTeamId,
+        seasonYear: 2026,
       });
 
-      const h2hAvgHome = h2hWeightTotal > 0 ? h2hHomeScore / h2hWeightTotal : 20;
-      const h2hAvgAway = h2hWeightTotal > 0 ? h2hAwayScore / h2hWeightTotal : 20;
-      const h2hWinPct = h2h.length > 0 ? h2hWins / h2h.length : 0.5;
+      if (!res.success || !res.prediction) {
+        throw new Error(res.error || "Failed to calculate prediction.");
+      }
 
-      let commonHomeDelta = 0;
-      let commonAwayDelta = 0;
-      let commonWeight = 0;
-
-      commonOpponentIds.forEach((oppId) => {
-        const homeVsOpp = hGames.filter((g) => g.home_team_id === oppId || g.away_team_id === oppId);
-        const awayVsOpp = aGames.filter((g) => g.home_team_id === oppId || g.away_team_id === oppId);
-
-        const avgHomeFor =
-          homeVsOpp.reduce((acc, g) => acc + (g.home_team_id === homeTeamId ? g.home_score : g.away_score), 0) /
-          homeVsOpp.length;
-        const avgHomeAgainst =
-          homeVsOpp.reduce((acc, g) => acc + (g.home_team_id === homeTeamId ? g.away_score : g.home_score), 0) /
-          homeVsOpp.length;
-
-        const avgAwayFor =
-          awayVsOpp.reduce((acc, g) => acc + (g.home_team_id === awayTeamId ? g.home_score : g.away_score), 0) /
-          awayVsOpp.length;
-        const avgAwayAgainst =
-          awayVsOpp.reduce((acc, g) => acc + (g.home_team_id === awayTeamId ? g.away_score : g.home_score), 0) /
-          awayVsOpp.length;
-
-        commonHomeDelta += avgHomeFor - avgAwayAgainst;
-        commonAwayDelta += avgAwayFor - avgHomeAgainst;
-        commonWeight++;
-      });
-
-      const commonAvgHome = commonWeight > 0 ? commonHomeDelta / commonWeight : 0;
-      const commonAvgAway = commonWeight > 0 ? commonAwayDelta / commonWeight : 0;
-
-      const finalHome =
-        h2h.length > 0
-          ? h2hAvgHome * 0.6 + Math.max(0, h2hAvgHome + commonAvgHome) * 0.4
-          : Math.max(0, 20 + commonAvgHome);
-
-      const finalAway =
-        h2h.length > 0
-          ? h2hAvgAway * 0.6 + Math.max(0, h2hAvgAway + commonAvgAway) * 0.4
-          : Math.max(0, 20 + commonAvgAway);
-
-      const confidence =
-        h2h.length > 10 || commonWeight > 5
-          ? "High"
-          : h2h.length > 3
-          ? "Medium"
-          : "Low";
-
-      const homeName = teams.find((t) => t.id === homeTeamId)?.name;
-      const awayName = teams.find((t) => t.id === awayTeamId)?.name;
-
+      const p = res.prediction;
       setSinglePrediction({
-        homeName,
-        awayName,
-        homeScore: sanitizePredictedScore(finalHome + 3), // +3 home advantage
-        awayScore: sanitizePredictedScore(finalAway),
-        h2hCount: h2h.length,
-        commonCount: commonWeight,
-        confidence,
-        winProbability: Math.min(
-          95,
-          Math.max(5, Math.round(h2hWinPct * 100 + (commonAvgHome - commonAvgAway)))
-        ),
+        homeName: p.homeTeamName,
+        awayName: p.awayTeamName,
+        homeScore: p.predictedHomeScore,
+        awayScore: p.predictedAwayScore,
+        h2hCount: p.h2hCount,
+        commonCount: p.commonOpponentsCount,
+        confidence: p.confidence,
+        winProbability: p.winProbability,
+        tierContext: p.tierContext,
+        weights: p.weights,
       });
     } catch (err: any) {
       console.error(err);
@@ -329,12 +222,13 @@ export default function PredictionsPage() {
         predictedAwayScore: singlePrediction.awayScore,
         winProbability: singlePrediction.winProbability,
         confidence: singlePrediction.confidence,
-        weights: {
-          h2hWeight: 0.6,
-          commonWeight: 0.4,
+        weights: singlePrediction.weights || {
+          h2hWeight: 0.25,
+          commonWeight: 0.25,
           recencyModifier: 1.5,
           homeAdvantage: 3,
-          baseline: 20,
+          baseline: 18,
+          pointsPerTier: 10,
         },
       });
 
@@ -367,7 +261,7 @@ export default function PredictionsPage() {
               Score Predictor
             </h1>
             <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mt-1">
-              BUAFL 2026/27 Weekly Match Predictor & Adaptive Model Engine
+              BUAFL 2026/27 Weekly Match Predictor & Tier-Adjusted Adaptive Engine
             </p>
           </div>
           <div className="flex items-center gap-4">
@@ -500,8 +394,8 @@ export default function PredictionsPage() {
                   </span>
                 </div>
                 <div>
-                  Adaptive Learning:{" "}
-                  <span className="text-blue-400 font-black">Active (Residual Calibration Enabled)</span>
+                  Model Engine:{" "}
+                  <span className="text-blue-400 font-black">Tier-Adjusted + In-Season Residual Calibration</span>
                 </div>
               </div>
             </div>
@@ -628,7 +522,10 @@ export default function PredictionsPage() {
                                 {pred.confidence} Conf.
                               </span>
                               {pred.inSeasonAdjustment.description !== "Stored in DB" && (
-                                <span className="text-[9px] font-bold text-slate-400 truncate max-w-[120px]">
+                                <span
+                                  title={pred.inSeasonAdjustment.description}
+                                  className="text-[10px] font-bold text-slate-500 truncate max-w-[180px]"
+                                >
                                   {pred.inSeasonAdjustment.description}
                                 </span>
                               )}
@@ -749,6 +646,12 @@ export default function PredictionsPage() {
                         <span className="font-bold text-slate-500">Common Opponents:</span>
                         <span className="font-black">{singlePrediction.commonCount}</span>
                       </div>
+                      {singlePrediction.tierContext && (
+                        <div className="pt-2 border-t border-slate-200 text-[11px] text-slate-600">
+                          <div className="font-black uppercase text-slate-500 mb-0.5">Tier Adjustment:</div>
+                          <div className="font-semibold">{singlePrediction.tierContext.summary}</div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
