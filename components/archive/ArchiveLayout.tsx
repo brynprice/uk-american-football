@@ -51,6 +51,8 @@ export default function ArchiveLayout({
                         <span>&bull;</span>
                         <Link href="/timeline" className="text-slate-700 font-semibold hover:text-blue-700">Uniball Timeline</Link>
                         <span>&bull;</span>
+                        <Link href="/timeline?league=womens" className="text-slate-700 font-semibold hover:text-blue-700">Women&apos;s Timeline</Link>
+                        <span>&bull;</span>
                         <Link href="/propose-game" className="text-slate-700 font-semibold hover:text-blue-700">Contribute Data</Link>
                         <span>&bull;</span>
                         <a href="mailto:ukaffootballproject@gmail.com" className="text-slate-700 font-semibold hover:text-blue-700">Contact</a>

@@ -6,16 +6,19 @@ import { ArchiveService } from '@/services/archive-service';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-    title: 'The Uniball Timeline (1985–Present) | Britball.io',
-    description: 'The definitive historical timeline of British University American Football (Uniball). Explore four decades of collegiate football across BCAFL and BUAFL/BUCS, featuring College Bowls I through XXXVIII, national dynasties, and regional champions.',
+    title: "Interactive Historical Timelines (Uniball & Women's Game) | Britball.io",
+    description: "Explore the definitive historical timelines of British American Football — spanning four decades of Uniball (BCAFL & BUAFL/BUCS, 1985–Present) and the complete history of the Women's Game (Sapphire Series & NWFL, 2014–Present).",
 };
 
 export default async function TimelinePage() {
-    const data = await ArchiveService.getUniballTimelineData();
+    const [uniballData, womensData] = await Promise.all([
+        ArchiveService.getUniballTimelineData(),
+        ArchiveService.getWomensTimelineData(),
+    ]);
 
     return (
         <ArchiveLayout>
-            <UniballTimelineView data={data} />
+            <UniballTimelineView data={uniballData} womensData={womensData} />
         </ArchiveLayout>
     );
 }

@@ -65,25 +65,33 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Featured Showcase: Uniball Interactive Timeline */}
-      <section className="mb-14 p-6 sm:p-8 bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white border-2 border-slate-900 shadow-[8px_8px_0px_0px_rgba(59,130,246,1)] rounded-lg flex flex-col md:flex-row md:items-center justify-between gap-6">
+      {/* Featured Showcase: Interactive League Timelines */}
+      <section className="mb-14 p-6 sm:p-8 bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white border-2 border-slate-900 shadow-[8px_8px_0px_0px_rgba(59,130,246,1)] rounded-lg flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div className="max-w-2xl">
           <span className="bg-amber-400 text-slate-950 font-mono text-[10px] font-black px-2 py-0.5 uppercase tracking-widest rounded mb-3 inline-block">
-            FEATURED ARCHIVAL EXHIBIT
+            FEATURED ARCHIVAL EXHIBITS
           </span>
           <h2 className="text-2xl sm:text-4xl font-black uppercase italic tracking-tight text-white mb-2">
-            The Uniball Timeline: 1985 &rarr; Present
+            Interactive League Timelines
           </h2>
           <p className="text-sm sm:text-base text-slate-300 font-sans leading-relaxed">
-            Trace four decades of British university football across all 41 seasons. Featuring College Bowls I through XXXVIII, national dynasties, conference crowns, and searchable records for over 80 university programs.
+            Explore four decades of British university football (1985&ndash;Present) and the complete history of the British Women&apos;s Game from the inaugural Sapphire Series to the modern NWFL (2014&ndash;Present).
           </p>
         </div>
-        <Link
-          href="/timeline"
-          className="self-start md:self-center px-6 py-3.5 bg-amber-400 text-slate-950 font-black uppercase text-xs tracking-widest hover:bg-white transition-colors rounded shadow-md shrink-0"
-        >
-          Launch Interactive Timeline &rarr;
-        </Link>
+        <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
+          <Link
+            href="/timeline"
+            className="px-6 py-3 bg-amber-400 text-slate-950 font-black uppercase text-xs tracking-widest hover:bg-white transition-colors rounded shadow-md text-center"
+          >
+            🏈 Uniball Timeline (1985&ndash;Present) &rarr;
+          </Link>
+          <Link
+            href="/timeline?league=womens"
+            className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/30 font-black uppercase text-xs tracking-widest transition-colors rounded shadow-md text-center"
+          >
+            👑 Women&apos;s Timeline (2014&ndash;Present) &rarr;
+          </Link>
+        </div>
       </section>
 
       <section className="mb-20 grid grid-cols-1 md:grid-cols-2 gap-12">

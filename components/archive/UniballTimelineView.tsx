@@ -10,18 +10,24 @@ import {
     TimelineGameTeam,
     TimelineSeasonTeam,
     TimelineRebrandEvent,
-    TimelineTeamEntry
+    TimelineTeamEntry,
+    TimelineEraId
 } from '@/services/archive-service';
 
 interface UniballTimelineViewProps {
     data: UniballTimelineData;
+    womensData?: UniballTimelineData;
 }
 
-export default function UniballTimelineView({ data }: { data: UniballTimelineData }) {
-    const { seasons, stats, allTeams } = data;
+export default function UniballTimelineView({ data, womensData }: UniballTimelineViewProps) {
+    // Active discipline state ('uniball' vs 'womens')
+    const [activeLeague, setActiveLeague] = useState<'uniball' | 'womens'>('uniball');
+    const isWomens = activeLeague === 'womens' && !!womensData;
+    const activeData = isWomens && womensData ? womensData : data;
+    const { seasons, stats, allTeams } = activeData;
 
     // Filter and display states
-    const [selectedEra, setSelectedEra] = useState<'all' | 'pioneer' | 'golden-age' | 'buafl-era' | 'modern-bucs'>('all');
+    const [selectedEra, setSelectedEra] = useState<'all' | TimelineEraId>('all');
     const [selectedTeamId, setSelectedTeamId] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
@@ -39,14 +45,26 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
         setExpandedTeams(prev => ({ ...prev, [seasonId]: !prev[seasonId] }));
     };
 
-    // Sync with URL query parameter ?team=...
+    // Sync with URL query parameters (?league=... & ?team=...)
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const params = new URLSearchParams(window.location.search);
+            const leagueParam = (params.get('league') || '').toLowerCase();
+            let targetLeague: 'uniball' | 'womens' = activeLeague;
+
+            if ((leagueParam === 'womens' || leagueParam === 'women' || leagueParam === 'nwfl' || leagueParam === 'sapphire') && womensData) {
+                targetLeague = 'womens';
+                setActiveLeague('womens');
+            } else if (leagueParam === 'uniball') {
+                targetLeague = 'uniball';
+                setActiveLeague('uniball');
+            }
+
             const teamParam = params.get('team');
             if (teamParam) {
                 const paramLower = teamParam.toLowerCase();
-                const matched = allTeams.find(t =>
+                const currentPool = targetLeague === 'womens' && womensData ? womensData.allTeams : data.allTeams;
+                const matched = currentPool.find(t =>
                     t.id === teamParam ||
                     t.displayName.toLowerCase() === paramLower ||
                     t.name.toLowerCase() === paramLower ||
@@ -54,10 +72,41 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
                 );
                 if (matched) {
                     setSelectedTeamId(matched.id);
+                } else if (!leagueParam && womensData) {
+                    // Check if team ID/name belongs to the Women's dataset
+                    const womensMatched = womensData.allTeams.find(t =>
+                        t.id === teamParam ||
+                        t.displayName.toLowerCase() === paramLower ||
+                        t.name.toLowerCase() === paramLower ||
+                        t.aliases.some(a => a.name.toLowerCase() === paramLower)
+                    );
+                    if (womensMatched) {
+                        setActiveLeague('womens');
+                        setSelectedTeamId(womensMatched.id);
+                    }
                 }
             }
         }
-    }, [allTeams]);
+    }, [data.allTeams, womensData]);
+
+    const handleSwitchLeague = (league: 'uniball' | 'womens') => {
+        if (league === activeLeague) return;
+        setActiveLeague(league);
+        setSelectedEra('all');
+        setSelectedTeamId('');
+        setSearchQuery('');
+        setTitleGamesOnly(false);
+        if (typeof window !== 'undefined') {
+            const url = new URL(window.location.href);
+            if (league === 'womens') {
+                url.searchParams.set('league', 'womens');
+            } else {
+                url.searchParams.delete('league');
+            }
+            url.searchParams.delete('team');
+            window.history.replaceState({}, '', url.toString());
+        }
+    };
 
     const handleSelectTeam = (teamId: string) => {
         setSelectedTeamId(teamId);
@@ -207,6 +256,53 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
 
     return (
         <div className="space-y-10 pb-16">
+            {/* Top League / Discipline Switcher */}
+            {womensData && (
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-2 bg-slate-900 text-white rounded-lg border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(59,130,246,1)] font-sans">
+                    <div className="px-3 py-1 flex items-center gap-2">
+                        <span className="text-[10px] font-mono font-black uppercase tracking-widest text-amber-400">
+                            Select Archive Timeline:
+                        </span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 flex-1 max-w-2xl">
+                        <button
+                            type="button"
+                            onClick={() => handleSwitchLeague('uniball')}
+                            className={`px-4 py-2.5 rounded text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                                !isWomens
+                                    ? 'bg-amber-400 text-slate-950 shadow-sm'
+                                    : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
+                            }`}
+                        >
+                            <span>🏈</span>
+                            <span>Uniball (1985–Present)</span>
+                            <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono ${
+                                !isWomens ? 'bg-slate-950 text-amber-400' : 'bg-slate-900 text-slate-400'
+                            }`}>
+                                {data.stats.totalSeasons} Seasons
+                            </span>
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => handleSwitchLeague('womens')}
+                            className={`px-4 py-2.5 rounded text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                                isWomens
+                                    ? 'bg-amber-400 text-slate-950 shadow-sm'
+                                    : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
+                            }`}
+                        >
+                            <span>👑</span>
+                            <span>Women&apos;s Football (2014–Present)</span>
+                            <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono ${
+                                isWomens ? 'bg-slate-950 text-amber-400' : 'bg-slate-900 text-slate-400'
+                            }`}>
+                                {womensData.stats.totalSeasons} Seasons
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            )}
+
             {/* Header Hero */}
             <div className="border-b-8 border-slate-900 pb-8">
                 <div className="max-w-4xl">
@@ -215,14 +311,16 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
                             Official Archival Chronicle
                         </span>
                         <span className="text-slate-500 font-sans text-xs uppercase tracking-widest font-black">
-                            1985 – 2025 • 41 Seasons
+                            {stats.startYear} – {stats.endYear} • {stats.totalSeasons} Seasons
                         </span>
                     </div>
                     <h1 className="text-4xl sm:text-6xl font-black uppercase italic tracking-tighter leading-none mb-4">
-                        The Uniball Timeline
+                        {isWomens ? "The Women's Football Timeline" : 'The Uniball Timeline'}
                     </h1>
                     <p className="text-base sm:text-lg text-slate-600 font-sans leading-relaxed">
-                        The comprehensive historical record of British University American Football. Follow the journey from the four pioneer teams of the 1985 inaugural season through the legendary College Bowl era, national multi-conference expansions, and modern tiered BUCS Premiership championships.
+                        {isWomens
+                            ? "The definitive historical chronicle of Women's Contact American Football in Great Britain. Follow the growth of the game from the pioneering 2014 BAFA Sapphire Series tournaments and the Birmingham Lions' six-peat dynasty to the modern National Women's Football League (NWFL) Premiership and 7s championships."
+                            : 'The comprehensive historical record of British University American Football. Follow the journey from the four pioneer teams of the 1985 inaugural season through the legendary College Bowl era, national multi-conference expansions, and modern tiered BUCS Premiership championships.'}
                     </p>
                 </div>
 
@@ -246,18 +344,18 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
                     </div>
                     <div className="p-4 sm:p-5 bg-white border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
                         <span className="text-3xl sm:text-4xl font-black tabular-nums leading-none block mb-1">
-                            {stats.totalTeamsDocumented}+
+                            {stats.totalTeamsDocumented}{isWomens ? '' : '+'}
                         </span>
                         <span className="text-[11px] font-black uppercase tracking-wider text-slate-500 font-sans">
-                            University Programs
+                            {isWomens ? 'Clubs & Programs' : 'University Programs'}
                         </span>
                     </div>
                     <div className="p-4 sm:p-5 bg-slate-900 text-white border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(59,130,246,1)]">
                         <span className="text-3xl sm:text-4xl font-black tabular-nums leading-none block mb-1">
-                            1985 &rarr; 2025
+                            {stats.startYear} &rarr; {stats.endYear}
                         </span>
                         <span className="text-[11px] font-black uppercase tracking-wider text-blue-400 font-sans">
-                            BCAFL to Modern BUCS
+                            {isWomens ? 'Sapphire Series to NWFL' : 'BCAFL to Modern BUCS'}
                         </span>
                     </div>
                 </div>
@@ -353,7 +451,11 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
                         <div className="relative flex-1">
                             <input
                                 type="text"
-                                placeholder="Search year, champion, bowl (e.g. 'College Bowl XXIV'), venue..."
+                                placeholder={
+                                    isWomens
+                                        ? "Search year, champion, final (e.g. 'Sapphire Series', 'London Warriors'), venue..."
+                                        : "Search year, champion, bowl (e.g. 'College Bowl XXIV'), venue..."
+                                }
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="w-full pl-3 pr-8 py-2 text-xs font-sans border-2 border-slate-300 rounded focus:border-slate-900 focus:outline-none"
@@ -375,7 +477,7 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
                                 onChange={(e) => handleSelectTeam(e.target.value)}
                                 className={`w-full py-2 pl-3 ${selectedTeamId ? 'pr-8 bg-blue-50 border-blue-600 font-bold text-blue-900 shadow-sm' : 'pr-3 bg-white border-slate-300'} text-xs font-sans border-2 rounded focus:border-slate-900 focus:outline-none transition-colors`}
                             >
-                                <option value="">Filter by University Program...</option>
+                                <option value="">{isWomens ? 'Filter by Club / Program...' : 'Filter by University Program...'}</option>
                                 {allTeams.map(t => {
                                     const formerAliases = t.aliases && t.aliases.length > 0
                                         ? Array.from(new Set(t.aliases.map(a => a.name))).join(', ')
@@ -460,7 +562,7 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
                                 {selectedTeam.displayName}
                             </h2>
                             <p className="text-xs text-slate-600 font-sans mt-0.5">
-                                Active in Uniball {teamSummary.firstYear} &ndash; {teamSummary.lastYear} &bull; {teamSummary.totalSeasons} Seasons Documented
+                                Active in {isWomens ? "Women's League" : 'Uniball'} {teamSummary.firstYear} &ndash; {teamSummary.lastYear} &bull; {teamSummary.totalSeasons} Seasons Documented
                             </p>
                             {selectedTeam.aliases && selectedTeam.aliases.length > 0 && (
                                 <div className="mt-2 flex flex-wrap items-center gap-1.5 text-xs font-sans">
@@ -484,7 +586,7 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
                         <div className="grid grid-cols-3 gap-3 text-center shrink-0 w-full sm:w-auto">
                             <div className="bg-white p-3 border border-blue-200 rounded min-w-[70px]">
                                 <span className="text-2xl font-black text-blue-900 block leading-tight">{teamSummary.titlesWon}</span>
-                                <span className="text-[10px] uppercase font-bold text-slate-500 font-sans">Bowls Won</span>
+                                <span className="text-[10px] uppercase font-bold text-slate-500 font-sans">{isWomens ? 'Titles Won' : 'Bowls Won'}</span>
                             </div>
                             <div className="bg-white p-3 border border-blue-200 rounded min-w-[70px]">
                                 <span className="text-2xl font-black text-slate-900 block leading-tight">{teamSummary.runnerUpCount}</span>
@@ -586,15 +688,21 @@ export default function UniballTimelineView({ data }: { data: UniballTimelineDat
                                 <div className="p-4 sm:p-5 border-b-2 border-slate-900 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                                     <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                                         <span className="text-2xl sm:text-3xl font-black italic tracking-tight font-sans text-slate-900">
-                                             {season.year}&ndash;{String((season.year + 1) % 100).padStart(2, '0')}
+                                            {isWomens
+                                                ? season.year
+                                                : `${season.year}\u2013${String((season.year + 1) % 100).padStart(2, '0')}`}
                                         </span>
                                         <span className="px-2.5 py-0.5 rounded text-[11px] font-black uppercase tracking-wider bg-slate-900 text-white font-sans">
-                                            {season.competitionSlug.toUpperCase()}
+                                            {isWomens && season.name.toLowerCase().includes('sapphire')
+                                                ? season.name.toUpperCase()
+                                                : season.competitionSlug.toUpperCase()}
                                         </span>
                                         <span className={`px-2.5 py-0.5 rounded text-[11px] font-black uppercase tracking-wider font-sans ${
                                             season.era === 'pioneer' ? 'bg-amber-100 text-amber-900 border border-amber-300' :
                                             season.era === 'golden-age' ? 'bg-indigo-100 text-indigo-900 border border-indigo-300' :
                                             season.era === 'buafl-era' ? 'bg-sky-100 text-sky-900 border border-sky-300' :
+                                            season.era === 'sapphire-era' ? 'bg-blue-100 text-blue-900 border border-blue-300' :
+                                            season.era === 'nwfl-era' ? 'bg-fuchsia-100 text-fuchsia-900 border border-fuchsia-300' :
                                             'bg-emerald-100 text-emerald-900 border border-emerald-300'
                                         }`}>
                                             {season.eraLabel}
@@ -1091,9 +1199,15 @@ function ChampionshipCard({
                                 )}
                             </div>
                         </div>
-                        <div className="text-3xl sm:text-4xl font-black font-mono text-amber-400 shrink-0 pl-3">
-                            {game.winner?.score}
-                        </div>
+                        {game.winner?.score !== null && game.winner?.score !== undefined ? (
+                            <div className="text-3xl sm:text-4xl font-black font-mono text-amber-400 shrink-0 pl-3">
+                                {game.winner.score}
+                            </div>
+                        ) : (
+                            <div className="px-2.5 py-1 bg-amber-400/20 border border-amber-400/50 rounded text-[10px] font-black uppercase tracking-widest text-amber-300 shrink-0 ml-3 font-sans">
+                                Won Final
+                            </div>
+                        )}
                     </div>
 
                     {/* Runner-Up Block */}
@@ -1120,9 +1234,15 @@ function ChampionshipCard({
                                 )}
                             </div>
                         </div>
-                        <div className="text-2xl sm:text-3xl font-black font-mono text-slate-400 shrink-0 pl-3">
-                            {game.runnerUp?.score}
-                        </div>
+                        {game.runnerUp?.score !== null && game.runnerUp?.score !== undefined ? (
+                            <div className="text-2xl sm:text-3xl font-black font-mono text-slate-400 shrink-0 pl-3">
+                                {game.runnerUp.score}
+                            </div>
+                        ) : (
+                            <div className="px-2.5 py-1 bg-slate-800 border border-slate-700 rounded text-[10px] font-bold uppercase tracking-widest text-slate-400 shrink-0 ml-3 font-sans">
+                                Runner-Up
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
@@ -1137,7 +1257,7 @@ function ChampionshipCard({
     );
 }
 
-// Subcomponent: Secondary Bowl Game Card (e.g. Challenge Trophy)
+// Subcomponent: Secondary Bowl Game Card (e.g. Challenge Trophy, NWFL 7s Final)
 function SecondaryBowlCard({
     bowl,
     highlightedTeamId
@@ -1171,7 +1291,15 @@ function SecondaryBowlCard({
                         )}
                     </span>
                 </span>
-                <span className="font-mono font-black shrink-0">{bowl.winner?.score} &ndash; {bowl.runnerUp?.score}</span>
+                <span className="font-mono font-black shrink-0">
+                    {bowl.winner?.score !== null && bowl.winner?.score !== undefined ? (
+                        <>{bowl.winner.score} &ndash; {bowl.runnerUp?.score}</>
+                    ) : (
+                        <span className="text-[10px] font-sans uppercase px-1.5 py-0.5 bg-amber-100 text-amber-900 rounded">
+                            Champions
+                        </span>
+                    )}
+                </span>
             </div>
             <div className={`text-[10px] pl-4 truncate ${isRunnerUpHighlighted ? 'text-blue-800 font-bold' : 'text-slate-500'}`}>
                 def. {bowl.runnerUp?.displayName}

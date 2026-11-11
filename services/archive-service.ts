@@ -834,10 +834,11 @@ export const ArchiveService = {
             const homeIdentity = resolveTeamIdentity(game.home_team, seasonYear);
             const awayIdentity = resolveTeamIdentity(game.away_team, seasonYear);
 
-            const homeScore = game.home_score ?? 0;
-            const awayScore = game.away_score ?? 0;
+            const hasScores = game.home_score !== null && game.away_score !== null;
+            const homeScore = game.home_score;
+            const awayScore = game.away_score;
 
-            const isTie = game.home_score !== null && game.away_score !== null && homeScore === awayScore;
+            const isTie = hasScores && homeScore === awayScore;
 
             const homeTeamObj = {
                 ...game.home_team,
@@ -853,7 +854,16 @@ export const ArchiveService = {
                 score: awayScore
             };
 
-            const isHomeWinner = homeScore > awayScore;
+            let isHomeWinner = true;
+            if (hasScores) {
+                isHomeWinner = homeScore > awayScore;
+            } else {
+                const notesLower = (game.notes || '').toLowerCase();
+                const awayDefeated =
+                    (game.away_team?.name && notesLower.includes(`${game.away_team.name.toLowerCase()} defeated`)) ||
+                    (awayIdentity.name && notesLower.includes(`${awayIdentity.name.toLowerCase()} defeated`));
+                isHomeWinner = !awayDefeated;
+            }
             const winner = isTie ? homeTeamObj : (isHomeWinner ? homeTeamObj : awayTeamObj);
             const runnerUp = isTie ? awayTeamObj : (isHomeWinner ? awayTeamObj : homeTeamObj);
             const coChampions = isTie ? [homeTeamObj, awayTeamObj] : [];
@@ -962,522 +972,607 @@ export const ArchiveService = {
     },
 
     async getUniballTimelineData(): Promise<UniballTimelineData> {
-        // Round Trip 1: Fetch Uniball seasons (joined with competitions), notes, and canonical teams in parallel
-        const [seasonsRes, seasonNotesRes, champNotesRes, teamsRes] = await Promise.all([
+        return buildLeagueTimelineData({
+            slugs: ["bcafl", "buafl"],
+            defaultStartYear: 1985,
+            defaultEndYear: 2025,
+            eras: ERAS_METADATA,
+            getEra: getSeasonEra,
+            milestones: UNIBALL_HISTORICAL_MILESTONES,
+            isWomens: false
+        });
+    },
+
+    async getWomensTimelineData(): Promise<UniballTimelineData> {
+        return buildLeagueTimelineData({
+            slugs: ["sapphire-series", "nwfl"],
+            defaultStartYear: 2014,
+            defaultEndYear: 2026,
+            eras: WOMENS_ERAS_METADATA,
+            getEra: getWomensSeasonEra,
+            milestones: WOMENS_HISTORICAL_MILESTONES,
+            isWomens: true
+        });
+    },
+};
+
+async function buildLeagueTimelineData(options: {
+    slugs: string[];
+    defaultStartYear: number;
+    defaultEndYear: number;
+    eras: TimelineStats['eras'];
+    getEra: (year: number) => { era: TimelineEraId; eraLabel: string };
+    milestones: Record<number, string>;
+    isWomens: boolean;
+}): Promise<UniballTimelineData> {
+    const { slugs, defaultStartYear, defaultEndYear, eras, getEra, milestones, isWomens } = options;
+
+    // Round Trip 1: Fetch seasons (joined with competitions), notes, and canonical teams in parallel
+    const [seasonsRes, seasonNotesRes, champNotesRes, teamsRes] = await Promise.all([
+        supabase
+            .from("seasons")
+            .select("id, year, name, competition_id, completeness_score, competition:competitions!inner(id, name, slug, level)")
+            .in("competition.slug", slugs)
+            .order("year", { ascending: true }),
+        supabase.from("notes").select("entity_id, content").eq("entity_type", "seasons"),
+        supabase.from("notes").select("entity_id, content").eq("entity_type", "divisional_champion"),
+        supabase.from("teams").select("id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)")
+    ]);
+
+    if (seasonsRes.error) throw seasonsRes.error;
+    const seasons: any[] = (seasonsRes.data as any[]) || [];
+    if (seasons.length === 0) {
+        return {
+            seasons: [],
+            stats: {
+                totalSeasons: 0,
+                startYear: defaultStartYear,
+                endYear: defaultEndYear,
+                totalTeamsDocumented: 0,
+                totalTitleGames: 0,
+                championshipRollOfHonor: [],
+                eras
+            },
+            allTeams: []
+        };
+    }
+
+    const compMap = new Map<string, any>();
+    for (const s of seasons) {
+        const c = Array.isArray(s.competition) ? s.competition[0] : s.competition;
+        if (c && !compMap.has(c.id)) compMap.set(c.id, c);
+    }
+    const seasonIds = seasons.map(s => s.id);
+
+    // Helper to fetch participations concurrently (scoped to target seasons via phases!inner)
+    const fetchParticipationsScalar = async () => {
+        const pageSize = 1000;
+        const pageIndices = isWomens ? [0] : [0, 1, 2, 3];
+        const initialPages = pageIndices.map(p =>
             supabase
-                .from("seasons")
-                .select("id, year, name, competition_id, completeness_score, competition:competitions!inner(id, name, slug, level)")
-                .in("competition.slug", ["bcafl", "buafl"])
-                .order("year", { ascending: true }),
-            supabase.from("notes").select("entity_id, content").eq("entity_type", "seasons"),
-            supabase.from("notes").select("entity_id, content").eq("entity_type", "divisional_champion"),
-            supabase.from("teams").select("id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)")
-        ]);
-
-        if (seasonsRes.error) throw seasonsRes.error;
-        const seasons: any[] = (seasonsRes.data as any[]) || [];
-        if (seasons.length === 0) {
-            return {
-                seasons: [],
-                stats: {
-                    totalSeasons: 0,
-                    startYear: 1985,
-                    endYear: 2025,
-                    totalTeamsDocumented: 0,
-                    totalTitleGames: 0,
-                    championshipRollOfHonor: [],
-                    eras: ERAS_METADATA
-                },
-                allTeams: []
-            };
+                .from("participations")
+                .select("id, team_id, phase_id, is_champion, wins, losses, ties, points_for, points_against, phases!inner(season_id)")
+                .in("phases.season_id", seasonIds)
+                .range(p * pageSize, (p + 1) * pageSize - 1)
+        );
+        const results = await Promise.all(initialPages);
+        const allRows: any[] = [];
+        for (const res of results) {
+            if (res.error) throw res.error;
+            if (res.data) allRows.push(...(res.data as any[]));
         }
+        return allRows;
+    };
 
-        const compMap = new Map<string, any>();
-        for (const s of seasons) {
-            const c = Array.isArray(s.competition) ? s.competition[0] : s.competition;
-            if (c && !compMap.has(c.id)) compMap.set(c.id, c);
+    // Round Trip 2: Fetch phases, title/bowl games, and participations concurrently
+    const [phasesRes, gamesRes, allParticipations] = await Promise.all([
+        supabase
+            .from("phases")
+            .select("id, season_id, name, type, ordinal, parent_phase_id")
+            .in("season_id", seasonIds)
+            .limit(5000),
+        supabase
+            .from("games")
+            .select(`
+                id, season_id, date, home_score, away_score, final_type, title_name, notes,
+                home_team:teams!home_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)),
+                away_team:teams!away_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)),
+                venue:venues (id, name, city)
+            `)
+            .in("season_id", seasonIds)
+            .or("final_type.in.(title,bowl),title_name.ilike.%College Bowl%")
+            .neq("status", "anomaly")
+            .order("date", { ascending: true }),
+        fetchParticipationsScalar()
+    ]);
+
+    if (phasesRes.error) throw phasesRes.error;
+    if (gamesRes.error) throw gamesRes.error;
+
+    const phases: any[] = (phasesRes.data as any[]) || [];
+    const phaseMap = new Map<string, any>(phases.map(p => [p.id, p]));
+    const games: any[] = (gamesRes.data as any[]) || [];
+
+    const seasonNotesMap = new Map(((seasonNotesRes.data || []) as any[]).map(n => [n.entity_id, n.content]));
+    const champNotesSet = new Set(((champNotesRes.data || []) as any[]).map(n => `${n.entity_id}:${n.content}`));
+    const dbTeams: any[] = (teamsRes.data || []) as any[];
+    const dbTeamMap = new Map<string, any>(dbTeams.map(t => [t.id, t]));
+
+    // Filter participations belonging to target phases and attach canonical team lookup
+    const targetPhaseIds = new Set(phases.map(p => p.id));
+    const targetParts = allParticipations
+        .filter(p => targetPhaseIds.has(p.phase_id))
+        .map(p => ({ ...p, team: dbTeamMap.get(p.team_id) || null }));
+
+    // Track active years per team to accurately place post-hiatus/post-COVID rebrand events
+    const teamActiveYearsMap = new Map<string, Set<number>>();
+    for (const p of targetParts) {
+        const ph = phaseMap.get(p.phase_id);
+        const sYear = seasons.find(s => s.id === ph?.season_id)?.year;
+        if (p.team_id && sYear) {
+            if (!teamActiveYearsMap.has(p.team_id)) teamActiveYearsMap.set(p.team_id, new Set());
+            teamActiveYearsMap.get(p.team_id)!.add(sYear);
         }
-        const seasonIds = seasons.map(s => s.id);
+    }
 
-        // Helper to fetch Uniball participations concurrently (scoped to Uniball seasons via phases!inner)
-        const fetchUniballParticipationsScalar = async () => {
-            const pageSize = 1000;
-            const initialPages = [0, 1, 2, 3].map(p =>
-                supabase
-                    .from("participations")
-                    .select("id, team_id, phase_id, is_champion, wins, losses, ties, points_for, points_against, phases!inner(season_id)")
-                    .in("phases.season_id", seasonIds)
-                    .range(p * pageSize, (p + 1) * pageSize - 1)
-            );
-            const results = await Promise.all(initialPages);
-            const allRows: any[] = [];
-            for (const res of results) {
-                if (res.error) throw res.error;
-                if (res.data) allRows.push(...(res.data as any[]));
+    // Helper to deduplicate overlapping alias entries for the same start/end year span
+    const normalizeAliases = (rawAliases: any[]): TimelineTeamAliasEntry[] => {
+        const seenSpans = new Set<string>();
+        const result: TimelineTeamAliasEntry[] = [];
+        for (const a of rawAliases || []) {
+            const spanKey = `${a.start_year || ''}-${a.end_year || ''}`;
+            if (seenSpans.has(spanKey)) continue;
+            seenSpans.add(spanKey);
+            result.push({
+                id: a.id,
+                name: a.name,
+                startYear: a.start_year,
+                endYear: a.end_year,
+                logoUrl: a.logo_url || null
+            });
+        }
+        return result;
+    };
+
+    // Global team accumulator using CURRENT canonical program identities
+    const allTeamsMap = new Map<string, TimelineTeamEntry>();
+
+    for (const p of targetParts) {
+        if (p.team?.id) {
+            const t = dbTeamMap.get(p.team.id) || p.team;
+            if (!allTeamsMap.has(t.id)) {
+                allTeamsMap.set(t.id, {
+                    id: t.id,
+                    name: t.name,
+                    displayName: t.name,
+                    logoUrl: t.logo_url || null,
+                    aliases: normalizeAliases(t.team_aliases)
+                });
             }
-            return allRows;
+        }
+    }
+
+    for (const g of games) {
+        for (const gTeam of [g.home_team, g.away_team]) {
+            if (gTeam?.id && !allTeamsMap.has(gTeam.id)) {
+                const t = dbTeamMap.get(gTeam.id) || gTeam;
+                allTeamsMap.set(t.id, {
+                    id: t.id,
+                    name: t.name,
+                    displayName: t.name,
+                    logoUrl: t.logo_url || null,
+                    aliases: normalizeAliases(t.team_aliases)
+                });
+            }
+        }
+    }
+
+    // Precompute all program re-branding events across seasons
+    const rebrandEventsMap = new Map<number, TimelineRebrandEvent[]>();
+
+    for (const team of allTeamsMap.values()) {
+        if (!team.aliases || team.aliases.length === 0) continue;
+        const activeYears = Array.from(teamActiveYearsMap.get(team.id) || []).sort((a, b) => a - b);
+
+        const resolveNameForYear = (yr: number): string => {
+            const match = team.aliases.find(a => {
+                const start = a.startYear || 0;
+                const end = a.endYear || 9999;
+                return yr >= start && yr <= end;
+            });
+            return match ? match.name : team.name;
         };
 
-        // Round Trip 2: Fetch phases, title/bowl games, and Uniball participations concurrently
-        const [phasesRes, gamesRes, allParticipations] = await Promise.all([
-            supabase
-                .from("phases")
-                .select("id, season_id, name, type, ordinal, parent_phase_id")
-                .in("season_id", seasonIds)
-                .limit(5000),
-            supabase
-                .from("games")
-                .select(`
-                    id, season_id, date, home_score, away_score, final_type, title_name, notes,
-                    home_team:teams!home_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)),
-                    away_team:teams!away_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)),
-                    venue:venues (id, name, city)
-                `)
-                .in("season_id", seasonIds)
-                .or("final_type.in.(title,bowl),title_name.ilike.%College Bowl%")
-                .neq("status", "anomaly")
-                .order("date", { ascending: true }),
-            fetchUniballParticipationsScalar()
-        ]);
-
-        if (phasesRes.error) throw phasesRes.error;
-        if (gamesRes.error) throw gamesRes.error;
-
-        const phases: any[] = (phasesRes.data as any[]) || [];
-        const phaseMap = new Map<string, any>(phases.map(p => [p.id, p]));
-        const games: any[] = (gamesRes.data as any[]) || [];
-
-        const seasonNotesMap = new Map(((seasonNotesRes.data || []) as any[]).map(n => [n.entity_id, n.content]));
-        const champNotesSet = new Set(((champNotesRes.data || []) as any[]).map(n => `${n.entity_id}:${n.content}`));
-        const dbTeams: any[] = (teamsRes.data || []) as any[];
-        const dbTeamMap = new Map<string, any>(dbTeams.map(t => [t.id, t]));
-
-        // Filter participations belonging to Uniball phases and attach canonical team lookup
-        const uniballPhaseIds = new Set(phases.map(p => p.id));
-        const uniballParts = allParticipations
-            .filter(p => uniballPhaseIds.has(p.phase_id))
-            .map(p => ({ ...p, team: dbTeamMap.get(p.team_id) || null }));
-
-        // Global team accumulator using CURRENT canonical program identities
-        const allTeamsMap = new Map<string, TimelineTeamEntry>();
-
-        for (const p of uniballParts) {
-            if (p.team?.id) {
-                const t = dbTeamMap.get(p.team.id) || p.team;
-                if (!allTeamsMap.has(t.id)) {
-                    allTeamsMap.set(t.id, {
-                        id: t.id,
-                        name: t.name,
-                        displayName: t.name,
-                        logoUrl: t.logo_url || null,
-                        aliases: (t.team_aliases || []).map((a: any) => ({
-                            id: a.id,
-                            name: a.name,
-                            startYear: a.start_year,
-                            endYear: a.end_year,
-                            logoUrl: a.logo_url || null
-                        }))
-                    });
-                }
-            }
-        }
-
-        for (const g of games) {
-            for (const gTeam of [g.home_team, g.away_team]) {
-                if (gTeam?.id && !allTeamsMap.has(gTeam.id)) {
-                    const t = dbTeamMap.get(gTeam.id) || gTeam;
-                    allTeamsMap.set(t.id, {
-                        id: t.id,
-                        name: t.name,
-                        displayName: t.name,
-                        logoUrl: t.logo_url || null,
-                        aliases: (t.team_aliases || []).map((a: any) => ({
-                            id: a.id,
-                            name: a.name,
-                            startYear: a.start_year,
-                            endYear: a.end_year,
-                            logoUrl: a.logo_url || null
-                        }))
-                    });
-                }
-            }
-        }
-
-        // Precompute all program re-branding events across Uniball seasons
-        const rebrandEventsMap = new Map<number, TimelineRebrandEvent[]>();
-
-        for (const team of allTeamsMap.values()) {
-            if (!team.aliases || team.aliases.length === 0) continue;
-
-            const resolveNameForYear = (yr: number): string => {
-                const match = team.aliases.find(a => {
-                    const start = a.startYear || 0;
-                    const end = a.endYear || 9999;
-                    return yr >= start && yr <= end;
-                });
-                return match ? match.name : team.name;
-            };
-
-            for (const alias of team.aliases) {
-                // Event 1: Team transitions into this alias identity
-                if (alias.startYear && alias.startYear > 1985) {
-                    const prevName = resolveNameForYear(alias.startYear - 1);
-                    if (prevName !== alias.name) {
-                        const list = rebrandEventsMap.get(alias.startYear) || [];
-                        if (!list.some(e => e.teamId === team.id && e.toName === alias.name)) {
-                            list.push({
-                                teamId: team.id,
-                                currentName: team.name,
-                                fromName: prevName,
-                                toName: alias.name,
-                                year: alias.startYear,
-                                logoUrl: alias.logoUrl || team.logoUrl || null
-                            });
-                            rebrandEventsMap.set(alias.startYear, list);
-                        }
-                    }
-                }
-
-                // Event 2: Team concludes this alias period and transitions to next moniker / canonical name
-                if (alias.endYear && alias.endYear < 2026) {
-                    const nextYear = alias.endYear + 1;
-                    const nextName = resolveNameForYear(nextYear);
-                    if (nextName !== alias.name) {
-                        const list = rebrandEventsMap.get(nextYear) || [];
-                        if (!list.some(e => e.teamId === team.id && e.toName === nextName)) {
-                            list.push({
-                                teamId: team.id,
-                                currentName: team.name,
-                                fromName: alias.name,
-                                toName: nextName,
-                                year: nextYear,
-                                logoUrl: team.logoUrl || null
-                            });
-                            rebrandEventsMap.set(nextYear, list);
-                        }
-                    }
-                }
-            }
-        }
-
-        function mapGame(game: any, seasonYear: number): TimelineBowlGame {
-            const homeDb = dbTeamMap.get(game.home_team?.id) || game.home_team;
-            const awayDb = dbTeamMap.get(game.away_team?.id) || game.away_team;
-
-            const homeIdentity = resolveTeamIdentity(homeDb, seasonYear);
-            const awayIdentity = resolveTeamIdentity(awayDb, seasonYear);
-
-            const homeScore = game.home_score ?? null;
-            const awayScore = game.away_score ?? null;
-            const isTie = homeScore !== null && awayScore !== null && homeScore === awayScore;
-
-            const homeCanonical = homeDb?.name || game.home_team?.name || '';
-            const awayCanonical = awayDb?.name || game.away_team?.name || '';
-
-            const homeTeamObj: TimelineGameTeam = {
-                id: game.home_team?.id || '',
-                name: homeCanonical,
-                displayName: homeIdentity.name,
-                canonicalName: homeCanonical,
-                logoUrl: homeIdentity.logo_url || homeDb?.logo_url || null,
-                isRebranded: homeIdentity.name !== homeCanonical,
-                score: homeScore
-            };
-
-            const awayTeamObj: TimelineGameTeam = {
-                id: game.away_team?.id || '',
-                name: awayCanonical,
-                displayName: awayIdentity.name,
-                canonicalName: awayCanonical,
-                logoUrl: awayIdentity.logo_url || awayDb?.logo_url || null,
-                isRebranded: awayIdentity.name !== awayCanonical,
-                score: awayScore
-            };
-
-            let winner: TimelineGameTeam | null = null;
-            let runnerUp: TimelineGameTeam | null = null;
-            let coChampions: TimelineGameTeam[] = [];
-
-            if (isTie) {
-                coChampions = [homeTeamObj, awayTeamObj];
-            } else if (homeScore !== null && awayScore !== null) {
-                if (homeScore > awayScore) {
-                    winner = homeTeamObj;
-                    runnerUp = awayTeamObj;
-                } else {
-                    winner = awayTeamObj;
-                    runnerUp = homeTeamObj;
-                }
-            }
-
-            return {
-                id: game.id,
-                titleName: game.title_name || (game.final_type === 'title' ? 'National Championship' : 'Bowl Final'),
-                finalType: game.final_type || 'title',
-                date: game.date,
-                venue: game.venue || null,
-                isTie,
-                coChampions,
-                winner,
-                runnerUp,
-                notes: game.notes || null
-            };
-        }
-
-        // Build enriched season records
-        const enrichedSeasons: TimelineSeason[] = seasons.map(season => {
-            const comp = compMap.get(season.competition_id);
-            const eraObj = getSeasonEra(season.year);
-            const sGames = games.filter(g => g.season_id === season.id);
-            const sPhases = phases.filter(p => p.season_id === season.id);
-            const sPhaseIds = new Set(sPhases.map(p => p.id));
-            const sParts = uniballParts.filter(p => sPhaseIds.has(p.phase_id));
-
-            // Teams participating in this season
-            const seasonTeamMap = new Map<string, TimelineSeasonTeam>();
-            for (const p of sParts) {
-                if (p.team) {
-                    const dbTeam = dbTeamMap.get(p.team.id) || p.team;
-                    const idObj = resolveTeamIdentity(dbTeam, season.year);
-                    const ph = phaseMap.get(p.phase_id);
-                    const parentPhase = ph?.parent_phase_id ? phaseMap.get(ph.parent_phase_id) : null;
-                    const isChamp = p.is_champion || champNotesSet.has(`${p.phase_id}:${p.team_id}`);
-                    const canonicalName = dbTeam.name;
-                    const isRebranded = idObj.name !== canonicalName;
-
-                    const existing = seasonTeamMap.get(dbTeam.id);
-                    const hasRecord = p.wins !== null || p.losses !== null;
-
-                    if (!existing || (!existing.wins && !existing.losses && hasRecord)) {
-                        seasonTeamMap.set(dbTeam.id, {
-                            id: dbTeam.id,
-                            name: canonicalName,
-                            displayName: idObj.name,
-                            canonicalName,
-                            canonicalLogoUrl: dbTeam.logo_url || null,
-                            isRebranded,
-                            historicalAlias: isRebranded ? idObj.name : null,
-                            logoUrl: idObj.logo_url || dbTeam.logo_url || null,
-                            phaseId: p.phase_id,
-                            phaseName: ph?.name || null,
-                            parentPhaseName: parentPhase?.name || null,
-                            wins: p.wins,
-                            losses: p.losses,
-                            ties: p.ties,
-                            pointsFor: p.points_for,
-                            pointsAgainst: p.points_against,
-                            isChampion: isChamp
+        for (const alias of team.aliases) {
+            // Event 1: Team transitions into this alias identity after inaugural season
+            if (alias.startYear && alias.startYear > defaultStartYear) {
+                const prevName = resolveNameForYear(alias.startYear - 1);
+                if (prevName !== alias.name) {
+                    const list = rebrandEventsMap.get(alias.startYear) || [];
+                    if (!list.some(e => e.teamId === team.id && e.toName === alias.name)) {
+                        list.push({
+                            teamId: team.id,
+                            currentName: team.name,
+                            fromName: prevName,
+                            toName: alias.name,
+                            year: alias.startYear,
+                            logoUrl: alias.logoUrl || team.logoUrl || null
                         });
-                    } else if (isChamp && !existing.isChampion) {
-                        existing.isChampion = true;
+                        rebrandEventsMap.set(alias.startYear, list);
                     }
                 }
             }
 
-            // Also check games for participating teams (in case friendly/unphased games exist)
-            for (const g of sGames) {
-                if (g.home_team && !seasonTeamMap.has(g.home_team.id)) {
-                    const dbTeam = dbTeamMap.get(g.home_team.id) || g.home_team;
-                    const idObj = resolveTeamIdentity(dbTeam, season.year);
-                    const isRebranded = idObj.name !== dbTeam.name;
-                    seasonTeamMap.set(dbTeam.id, {
-                        id: dbTeam.id,
-                        name: dbTeam.name,
-                        displayName: idObj.name,
-                        canonicalName: dbTeam.name,
-                        canonicalLogoUrl: dbTeam.logo_url || null,
-                        isRebranded,
-                        historicalAlias: isRebranded ? idObj.name : null,
-                        logoUrl: idObj.logo_url || dbTeam.logo_url || null
-                    });
-                }
-                if (g.away_team && !seasonTeamMap.has(g.away_team.id)) {
-                    const dbTeam = dbTeamMap.get(g.away_team.id) || g.away_team;
-                    const idObj = resolveTeamIdentity(dbTeam, season.year);
-                    const isRebranded = idObj.name !== dbTeam.name;
-                    seasonTeamMap.set(dbTeam.id, {
-                        id: dbTeam.id,
-                        name: dbTeam.name,
-                        displayName: idObj.name,
-                        canonicalName: dbTeam.name,
-                        canonicalLogoUrl: dbTeam.logo_url || null,
-                        isRebranded,
-                        historicalAlias: isRebranded ? idObj.name : null,
-                        logoUrl: idObj.logo_url || dbTeam.logo_url || null
-                    });
+            // Event 2: Team concludes this alias period and transitions to next moniker / canonical name
+            if (alias.endYear && alias.endYear < 2026) {
+                const nextActiveYear = activeYears.find(y => y > alias.endYear!) || (alias.endYear + 1);
+                const nextName = resolveNameForYear(nextActiveYear);
+                if (nextName !== alias.name) {
+                    const list = rebrandEventsMap.get(nextActiveYear) || [];
+                    if (!list.some(e => e.teamId === team.id && e.toName === nextName)) {
+                        list.push({
+                            teamId: team.id,
+                            currentName: team.name,
+                            fromName: alias.name,
+                            toName: nextName,
+                            year: nextActiveYear,
+                            logoUrl: team.logoUrl || null
+                        });
+                        rebrandEventsMap.set(nextActiveYear, list);
+                    }
                 }
             }
+        }
+    }
 
-            const seasonTeams = Array.from(seasonTeamMap.values()).sort((a, b) => a.displayName.localeCompare(b.displayName));
+    function mapGame(game: any, seasonYear: number): TimelineBowlGame {
+        const homeDb = dbTeamMap.get(game.home_team?.id) || game.home_team;
+        const awayDb = dbTeamMap.get(game.away_team?.id) || game.away_team;
 
-            // Divisional / Conference champions
-            const divisionalChampions: TimelineDivisionalChampion[] = [];
-            for (const p of sParts) {
+        const homeIdentity = resolveTeamIdentity(homeDb, seasonYear);
+        const awayIdentity = resolveTeamIdentity(awayDb, seasonYear);
+
+        const homeScore = game.home_score ?? null;
+        const awayScore = game.away_score ?? null;
+        const isTie = homeScore !== null && awayScore !== null && homeScore === awayScore;
+
+        const homeCanonical = homeDb?.name || game.home_team?.name || '';
+        const awayCanonical = awayDb?.name || game.away_team?.name || '';
+
+        const homeTeamObj: TimelineGameTeam = {
+            id: game.home_team?.id || '',
+            name: homeCanonical,
+            displayName: homeIdentity.name,
+            canonicalName: homeCanonical,
+            logoUrl: homeIdentity.logo_url || homeDb?.logo_url || null,
+            isRebranded: homeIdentity.name !== homeCanonical,
+            score: homeScore
+        };
+
+        const awayTeamObj: TimelineGameTeam = {
+            id: game.away_team?.id || '',
+            name: awayCanonical,
+            displayName: awayIdentity.name,
+            canonicalName: awayCanonical,
+            logoUrl: awayIdentity.logo_url || awayDb?.logo_url || null,
+            isRebranded: awayIdentity.name !== awayCanonical,
+            score: awayScore
+        };
+
+        let winner: TimelineGameTeam | null = null;
+        let runnerUp: TimelineGameTeam | null = null;
+        let coChampions: TimelineGameTeam[] = [];
+
+        if (isTie) {
+            coChampions = [homeTeamObj, awayTeamObj];
+        } else if (homeScore !== null && awayScore !== null) {
+            if (homeScore > awayScore) {
+                winner = homeTeamObj;
+                runnerUp = awayTeamObj;
+            } else {
+                winner = awayTeamObj;
+                runnerUp = homeTeamObj;
+            }
+        } else {
+            // Completed final with unrecorded numerical score in primary archives
+            const notesLower = (game.notes || '').toLowerCase();
+            const awayDefeated =
+                (awayCanonical && notesLower.includes(`${awayCanonical.toLowerCase()} defeated`)) ||
+                (awayIdentity.name && notesLower.includes(`${awayIdentity.name.toLowerCase()} defeated`));
+            if (awayDefeated) {
+                winner = awayTeamObj;
+                runnerUp = homeTeamObj;
+            } else {
+                winner = homeTeamObj;
+                runnerUp = awayTeamObj;
+            }
+        }
+
+        return {
+            id: game.id,
+            titleName: game.title_name || (game.final_type === 'title' ? 'National Championship' : 'Bowl Final'),
+            finalType: game.final_type || 'title',
+            date: game.date,
+            venue: game.venue || null,
+            isTie,
+            coChampions,
+            winner,
+            runnerUp,
+            notes: game.notes || null
+        };
+    }
+
+    // Build enriched season records
+    const enrichedSeasons: TimelineSeason[] = seasons.map(season => {
+        const comp = compMap.get(season.competition_id);
+        const eraObj = getEra(season.year);
+        const sGames = games.filter(g => g.season_id === season.id);
+        const sPhases = phases.filter(p => p.season_id === season.id);
+        const sPhaseIds = new Set(sPhases.map(p => p.id));
+        const sParts = targetParts.filter(p => sPhaseIds.has(p.phase_id));
+
+        // Teams participating in this season
+        const seasonTeamMap = new Map<string, TimelineSeasonTeam>();
+        for (const p of sParts) {
+            if (p.team) {
+                const dbTeam = dbTeamMap.get(p.team.id) || p.team;
+                const idObj = resolveTeamIdentity(dbTeam, season.year);
+                const ph = phaseMap.get(p.phase_id);
+                const parentPhase = ph?.parent_phase_id ? phaseMap.get(ph.parent_phase_id) : null;
                 const isChamp = p.is_champion || champNotesSet.has(`${p.phase_id}:${p.team_id}`);
-                if (isChamp && p.team) {
-                    const dbTeam = dbTeamMap.get(p.team.id) || p.team;
-                    const ph = phaseMap.get(p.phase_id);
-                    const parentPhase = ph?.parent_phase_id ? phaseMap.get(ph.parent_phase_id) : null;
-                    const idObj = resolveTeamIdentity(dbTeam, season.year);
-                    const isRebranded = idObj.name !== dbTeam.name;
-                    divisionalChampions.push({
-                        teamId: dbTeam.id,
-                        teamName: dbTeam.name,
+                const canonicalName = dbTeam.name;
+                const isRebranded = idObj.name !== canonicalName;
+
+                const existing = seasonTeamMap.get(dbTeam.id);
+                const hasRecord = p.wins !== null || p.losses !== null;
+                const isCurrentPlayoff = ph ? isPlayoffPhase(ph) : false;
+                const isExistingPlayoff = existing?.phaseName ? isPlayoffPhase({ name: existing.phaseName } as any) : false;
+
+                if (!existing || (!existing.wins && !existing.losses && hasRecord) || (isExistingPlayoff && !isCurrentPlayoff)) {
+                    seasonTeamMap.set(dbTeam.id, {
+                        id: dbTeam.id,
+                        name: canonicalName,
                         displayName: idObj.name,
-                        canonicalName: dbTeam.name,
+                        canonicalName,
+                        canonicalLogoUrl: dbTeam.logo_url || null,
                         isRebranded,
+                        historicalAlias: isRebranded ? idObj.name : null,
                         logoUrl: idObj.logo_url || dbTeam.logo_url || null,
                         phaseId: p.phase_id,
-                        phaseName: ph?.name || 'Conference',
+                        phaseName: ph?.name || null,
                         parentPhaseName: parentPhase?.name || null,
                         wins: p.wins,
                         losses: p.losses,
-                        ties: p.ties
+                        ties: p.ties,
+                        pointsFor: p.points_for,
+                        pointsAgainst: p.points_against,
+                        isChampion: isChamp || existing?.isChampion || false
                     });
+                } else if (isChamp && !existing.isChampion) {
+                    existing.isChampion = true;
                 }
             }
-            divisionalChampions.sort((a, b) => {
-                const parentDiff = (a.parentPhaseName || '').localeCompare(b.parentPhaseName || '');
-                if (parentDiff !== 0) return parentDiff;
-                return a.phaseName.localeCompare(b.phaseName);
-            });
+        }
 
-            // Identify National Championship Game
-            const titleCandidates = sGames.filter(g =>
-                g.final_type === 'title' || (g.title_name && g.title_name.toLowerCase().includes('college bowl'))
-            );
-            let nationalChampionship: TimelineBowlGame | null = null;
-            if (titleCandidates.length > 0) {
-                // If multiple candidates, prioritize one explicitly tagged with College Bowl or final_type='title'
-                const exactCB = titleCandidates.find(g => g.title_name && g.title_name.toLowerCase().includes('college bowl'));
-                const chosen = exactCB || titleCandidates[0];
-                nationalChampionship = mapGame(chosen, season.year);
+        // Also check games for participating teams (in case friendly/unphased games exist)
+        for (const g of sGames) {
+            if (g.home_team && !seasonTeamMap.has(g.home_team.id)) {
+                const dbTeam = dbTeamMap.get(g.home_team.id) || g.home_team;
+                const idObj = resolveTeamIdentity(dbTeam, season.year);
+                const isRebranded = idObj.name !== dbTeam.name;
+                seasonTeamMap.set(dbTeam.id, {
+                    id: dbTeam.id,
+                    name: dbTeam.name,
+                    displayName: idObj.name,
+                    canonicalName: dbTeam.name,
+                    canonicalLogoUrl: dbTeam.logo_url || null,
+                    isRebranded,
+                    historicalAlias: isRebranded ? idObj.name : null,
+                    logoUrl: idObj.logo_url || dbTeam.logo_url || null
+                });
             }
+            if (g.away_team && !seasonTeamMap.has(g.away_team.id)) {
+                const dbTeam = dbTeamMap.get(g.away_team.id) || g.away_team;
+                const idObj = resolveTeamIdentity(dbTeam, season.year);
+                const isRebranded = idObj.name !== dbTeam.name;
+                seasonTeamMap.set(dbTeam.id, {
+                    id: dbTeam.id,
+                    name: dbTeam.name,
+                    displayName: idObj.name,
+                    canonicalName: dbTeam.name,
+                    canonicalLogoUrl: dbTeam.logo_url || null,
+                    isRebranded,
+                    historicalAlias: isRebranded ? idObj.name : null,
+                    logoUrl: idObj.logo_url || dbTeam.logo_url || null
+                });
+            }
+        }
 
-            // Identify Secondary Bowls (Challenge Trophy, National Trophy, Conference Cups)
-            const secondaryBowls: TimelineBowlGame[] = sGames
-                .filter(g => g.final_type === 'bowl' && g.id !== nationalChampionship?.id)
-                .map(g => mapGame(g, season.year));
+        const seasonTeams = Array.from(seasonTeamMap.values()).sort((a, b) => a.displayName.localeCompare(b.displayName));
 
-            // Special Case: 1985 (Inaugural season, no bowl game held; Hull Sharks crowned undefeated regular season champions)
-            if (season.year === 1985 && !nationalChampionship) {
-                const hullChamp = divisionalChampions.find(d => d.teamName.toLowerCase().includes('hull') || d.displayName.toLowerCase().includes('hull'));
-                if (hullChamp) {
-                    nationalChampionship = {
-                        id: '1985-inaugural-champion',
-                        titleName: 'Inaugural League Champion',
-                        finalType: 'title',
-                        date: '1986-04-01',
-                        venue: null,
-                        isTie: false,
-                        coChampions: [],
-                        winner: {
-                            id: hullChamp.teamId,
-                            name: hullChamp.canonicalName || hullChamp.teamName,
-                            displayName: hullChamp.displayName,
-                            canonicalName: hullChamp.canonicalName || hullChamp.teamName,
-                            logoUrl: hullChamp.logoUrl,
-                            isRebranded: hullChamp.isRebranded,
-                            score: null
-                        },
-                        runnerUp: null,
-                        notes: 'No playoff or bowl game was held in the inaugural 1985 season. Hull Sharks were awarded the championship title with an undefeated 5-0 record.'
-                    };
+        // Divisional / Conference champions
+        const divisionalChampions: TimelineDivisionalChampion[] = [];
+        for (const p of sParts) {
+            const isChamp = p.is_champion || champNotesSet.has(`${p.phase_id}:${p.team_id}`);
+            if (isChamp && p.team) {
+                const dbTeam = dbTeamMap.get(p.team.id) || p.team;
+                const ph = phaseMap.get(p.phase_id);
+                const parentPhase = ph?.parent_phase_id ? phaseMap.get(ph.parent_phase_id) : null;
+                const idObj = resolveTeamIdentity(dbTeam, season.year);
+                const isRebranded = idObj.name !== dbTeam.name;
+                divisionalChampions.push({
+                    teamId: dbTeam.id,
+                    teamName: dbTeam.name,
+                    displayName: idObj.name,
+                    canonicalName: dbTeam.name,
+                    isRebranded,
+                    logoUrl: idObj.logo_url || dbTeam.logo_url || null,
+                    phaseId: p.phase_id,
+                    phaseName: ph?.name || 'Conference',
+                    parentPhaseName: parentPhase?.name || null,
+                    wins: p.wins,
+                    losses: p.losses,
+                    ties: p.ties
+                });
+            }
+        }
+        divisionalChampions.sort((a, b) => {
+            const parentDiff = (a.parentPhaseName || '').localeCompare(b.parentPhaseName || '');
+            if (parentDiff !== 0) return parentDiff;
+            return a.phaseName.localeCompare(b.phaseName);
+        });
+
+        // Identify National Championship Game
+        const titleCandidates = sGames.filter(g =>
+            g.final_type === 'title' || (g.title_name && g.title_name.toLowerCase().includes('college bowl'))
+        );
+        let nationalChampionship: TimelineBowlGame | null = null;
+        if (titleCandidates.length > 0) {
+            const exactCB = titleCandidates.find(g => g.title_name && g.title_name.toLowerCase().includes('college bowl'));
+            const chosen = exactCB || titleCandidates[0];
+            nationalChampionship = mapGame(chosen, season.year);
+        }
+
+        // Identify Secondary Bowls (Challenge Trophy, National Trophy, NWFL 7s, D1 BritBowl, Division 2 Finals)
+        const secondaryBowls: TimelineBowlGame[] = sGames
+            .filter(g => g.final_type === 'bowl' && g.id !== nationalChampionship?.id)
+            .map(g => mapGame(g, season.year));
+
+        // Special Case: 1985 Uniball (Inaugural season, no bowl game held; Hull Sharks crowned undefeated regular season champions)
+        if (!isWomens && season.year === 1985 && !nationalChampionship) {
+            const hullChamp = divisionalChampions.find(d => d.teamName.toLowerCase().includes('hull') || d.displayName.toLowerCase().includes('hull'));
+            if (hullChamp) {
+                nationalChampionship = {
+                    id: '1985-inaugural-champion',
+                    titleName: 'Inaugural League Champion',
+                    finalType: 'title',
+                    date: '1986-04-01',
+                    venue: null,
+                    isTie: false,
+                    coChampions: [],
+                    winner: {
+                        id: hullChamp.teamId,
+                        name: hullChamp.canonicalName || hullChamp.teamName,
+                        displayName: hullChamp.displayName,
+                        canonicalName: hullChamp.canonicalName || hullChamp.teamName,
+                        logoUrl: hullChamp.logoUrl,
+                        isRebranded: hullChamp.isRebranded,
+                        score: null
+                    },
+                    runnerUp: null,
+                    notes: 'No playoff or bowl game was held in the inaugural 1985 season. Hull Sharks were awarded the championship title with an undefeated 5-0 record.'
+                };
+            }
+        }
+
+        // Status notes (COVID cancellations / suspensions)
+        let statusNote = seasonNotesMap.get(season.id) || null;
+        if (!statusNote) {
+            if (isWomens) {
+                if (season.year === 2020) {
+                    statusNote = 'The 2020 season was cancelled nationwide due to the COVID-19 pandemic. Competitive play resumed in 2021 under the newly formed National Women\'s Football League (NWFL).';
+                } else if (season.year === 2021) {
+                    statusNote = 'Competitive women\'s football returned post-lockdown across five regional conferences (Northern, Central West, Central East, South East, and South West) without a central national championship playoff.';
                 }
-            }
-
-            // Status notes (COVID cancellations / suspensions)
-            let statusNote = seasonNotesMap.get(season.id) || null;
-            if (!statusNote) {
+            } else {
                 if (season.year === 2019) {
                     statusNote = 'The 2019/20 season was interrupted by the COVID-19 pandemic during the playoff stages. While the regular season was completed, the postseason was suspended and no champion was crowned.';
                 } else if (season.year === 2020) {
                     statusNote = 'The 2020/21 season was cancelled nationwide due to the COVID-19 pandemic. No competitive games were played.';
                 }
             }
-
-            const seasonRebrandEvents = (rebrandEventsMap.get(season.year) || [])
-                .sort((a, b) => a.currentName.localeCompare(b.currentName));
-
-            return {
-                id: season.id,
-                year: season.year,
-                name: season.name,
-                competitionId: season.competition_id,
-                competitionName: comp?.name || (season.year <= 2006 ? 'British Collegiate American Football League' : 'British Universities American Football League'),
-                competitionSlug: comp?.slug || (season.year <= 2006 ? 'bcafl' : 'buafl'),
-                completenessScore: season.completeness_score,
-                era: eraObj.era,
-                eraLabel: eraObj.eraLabel,
-                milestone: UNIBALL_HISTORICAL_MILESTONES[season.year] || null,
-                statusNote,
-                teamCount: seasonTeams.length,
-                teams: seasonTeams,
-                nationalChampionship,
-                secondaryBowls,
-                divisionalChampions,
-                rebrandEvents: seasonRebrandEvents
-            };
-        });
-
-        // Calculate Roll of Honour (National Champions leaderboard) credited to current canonical program name
-        const rollMap = new Map<string, TimelineRollOfHonorEntry>();
-
-        for (const season of enrichedSeasons) {
-            if (season.nationalChampionship) {
-                const nc = season.nationalChampionship;
-                const teamsToCredit = nc.isTie && nc.coChampions.length > 0 ? nc.coChampions : (nc.winner ? [nc.winner] : []);
-                for (const t of teamsToCredit) {
-                    if (!t || !t.id) continue;
-                    const teamInfo = allTeamsMap.get(t.id);
-                    const canonicalName = teamInfo?.name || t.canonicalName || t.name || t.displayName;
-                    const canonicalLogo = teamInfo?.logoUrl || t.logoUrl;
-
-                    const existing = rollMap.get(t.id) || {
-                        teamId: t.id,
-                        teamName: canonicalName,
-                        displayName: canonicalName,
-                        logoUrl: canonicalLogo,
-                        titlesCount: 0,
-                        years: [],
-                        historicalAliasesWonAs: []
-                    };
-                    existing.titlesCount += 1;
-                    existing.years.push(season.year);
-                    if (t.displayName && t.displayName !== canonicalName && !existing.historicalAliasesWonAs?.includes(t.displayName)) {
-                        existing.historicalAliasesWonAs = existing.historicalAliasesWonAs || [];
-                        existing.historicalAliasesWonAs.push(t.displayName);
-                    }
-                    if (canonicalLogo) existing.logoUrl = canonicalLogo;
-                    rollMap.set(t.id, existing);
-                }
-            }
         }
 
-        const championshipRollOfHonor: TimelineRollOfHonorEntry[] = Array.from(rollMap.values())
-            .sort((a, b) => {
-                if (b.titlesCount !== a.titlesCount) return b.titlesCount - a.titlesCount;
-                return a.displayName.localeCompare(b.displayName);
-            });
+        const seasonRebrandEvents = (rebrandEventsMap.get(season.year) || [])
+            .sort((a, b) => a.currentName.localeCompare(b.currentName));
 
-        const allTeams = Array.from(allTeamsMap.values()).sort((a, b) => a.displayName.localeCompare(b.displayName));
-        const totalTitleGames = enrichedSeasons.filter(s => s.nationalChampionship !== null).length;
+        const defaultCompName = isWomens
+            ? (season.year <= 2019 ? 'Sapphire Series' : 'NWFL')
+            : (season.year <= 2006 ? 'British Collegiate American Football League' : 'British Universities American Football League');
+        const defaultCompSlug = isWomens
+            ? (season.year <= 2019 ? 'sapphire-series' : 'nwfl')
+            : (season.year <= 2006 ? 'bcafl' : 'buafl');
 
         return {
-            seasons: enrichedSeasons,
-            stats: {
-                totalSeasons: enrichedSeasons.length,
-                startYear: enrichedSeasons[0]?.year || 1985,
-                endYear: enrichedSeasons[enrichedSeasons.length - 1]?.year || 2025,
-                totalTeamsDocumented: allTeams.length,
-                totalTitleGames,
-                championshipRollOfHonor,
-                eras: ERAS_METADATA
-            },
-            allTeams
+            id: season.id,
+            year: season.year,
+            name: season.name,
+            competitionId: season.competition_id,
+            competitionName: comp?.name || defaultCompName,
+            competitionSlug: comp?.slug || defaultCompSlug,
+            completenessScore: season.completeness_score,
+            era: eraObj.era,
+            eraLabel: eraObj.eraLabel,
+            milestone: milestones[season.year] || null,
+            statusNote,
+            teamCount: seasonTeams.length,
+            teams: seasonTeams,
+            nationalChampionship,
+            secondaryBowls,
+            divisionalChampions,
+            rebrandEvents: seasonRebrandEvents
         };
-    },
-};
+    });
+
+    // Calculate Roll of Honour (National Champions leaderboard) credited to current canonical program name
+    const rollMap = new Map<string, TimelineRollOfHonorEntry>();
+
+    for (const season of enrichedSeasons) {
+        if (season.nationalChampionship) {
+            const nc = season.nationalChampionship;
+            const teamsToCredit = nc.isTie && nc.coChampions.length > 0 ? nc.coChampions : (nc.winner ? [nc.winner] : []);
+            for (const t of teamsToCredit) {
+                if (!t || !t.id) continue;
+                const teamInfo = allTeamsMap.get(t.id);
+                const canonicalName = teamInfo?.name || t.canonicalName || t.name || t.displayName;
+                const canonicalLogo = teamInfo?.logoUrl || t.logoUrl;
+
+                const existing = rollMap.get(t.id) || {
+                    teamId: t.id,
+                    teamName: canonicalName,
+                    displayName: canonicalName,
+                    logoUrl: canonicalLogo,
+                    titlesCount: 0,
+                    years: [],
+                    historicalAliasesWonAs: []
+                };
+                existing.titlesCount += 1;
+                existing.years.push(season.year);
+                if (t.displayName && t.displayName !== canonicalName && !existing.historicalAliasesWonAs?.includes(t.displayName)) {
+                    existing.historicalAliasesWonAs = existing.historicalAliasesWonAs || [];
+                    existing.historicalAliasesWonAs.push(t.displayName);
+                }
+                if (canonicalLogo) existing.logoUrl = canonicalLogo;
+                rollMap.set(t.id, existing);
+            }
+        }
+    }
+
+    const championshipRollOfHonor: TimelineRollOfHonorEntry[] = Array.from(rollMap.values())
+        .sort((a, b) => {
+            if (b.titlesCount !== a.titlesCount) return b.titlesCount - a.titlesCount;
+            return a.displayName.localeCompare(b.displayName);
+        });
+
+    const allTeams = Array.from(allTeamsMap.values()).sort((a, b) => a.displayName.localeCompare(b.displayName));
+    const totalTitleGames = enrichedSeasons.filter(s => s.nationalChampionship !== null).length;
+
+    return {
+        seasons: enrichedSeasons,
+        stats: {
+            totalSeasons: enrichedSeasons.length,
+            startYear: enrichedSeasons[0]?.year || defaultStartYear,
+            endYear: enrichedSeasons[enrichedSeasons.length - 1]?.year || defaultEndYear,
+            totalTeamsDocumented: allTeams.length,
+            totalTitleGames,
+            championshipRollOfHonor,
+            eras
+        },
+        allTeams
+    };
+}
+
+export type TimelineEraId = 'pioneer' | 'golden-age' | 'buafl-era' | 'modern-bucs' | 'sapphire-era' | 'nwfl-era';
 
 export interface TimelineGameTeam {
     id: string;
@@ -1558,7 +1653,7 @@ export interface TimelineSeason {
     competitionName: string;
     competitionSlug: string;
     completenessScore: number | null;
-    era: 'pioneer' | 'golden-age' | 'buafl-era' | 'modern-bucs';
+    era: TimelineEraId;
     eraLabel: string;
     milestone: string | null;
     statusNote: string | null;
@@ -1604,7 +1699,7 @@ export interface TimelineStats {
     totalTitleGames: number;
     championshipRollOfHonor: TimelineRollOfHonorEntry[];
     eras: {
-        id: 'pioneer' | 'golden-age' | 'buafl-era' | 'modern-bucs';
+        id: TimelineEraId;
         name: string;
         range: string;
         seasonCount: number;
@@ -1662,6 +1757,22 @@ export const UNIBALL_HISTORICAL_MILESTONES: Record<number, string> = {
     2025: "Durham Saints capture the national championship in College Bowl XXXVIII, defeating UWE Bullets 14-6.",
 };
 
+export const WOMENS_HISTORICAL_MILESTONES: Record<number, string> = {
+    2014: "Inaugural BAFA Sapphire Series tournament (5v5) with six pioneering programs across North and South conferences. Birmingham Lions defeat Hertfordshire Tornadoes in the I Championship Final to become the first national champions.",
+    2015: "The Sapphire Series expands to 13 teams across North and South conferences. Birmingham Lions defend their crown, defeating Hertfordshire Tornadoes in the II Championship Final.",
+    2016: "Introduction of a two-tier national structure (Division One and Division Two). Birmingham Lions defeat Leeds Carnegie Chargers 49-18 in the III Championship Final for a three-peat, while Edinburgh Wolves win the Division Two North Final.",
+    2017: "Transition to 7v7 contact football with 18 competing clubs. Birmingham Lions dominate the IV Championship Final, defeating Leeds Carnegie Chargers 56-6 for their fourth consecutive national title.",
+    2018: "Birmingham Lions secure their fifth consecutive national championship in Sapphire Series V, defeating Leeds Carnegie Chargers 40-22. Portsmouth Dreadnoughts capture the Division 2A Final 18-14 over Sandwell Steelers.",
+    2019: "Final edition of the Sapphire Series (Sapphire Series VI). Birmingham Lions complete an unprecedented six-peat dynasty, defeating London Warriors 26-12 in the National Championship Final.",
+    2020: "The 2020 season was cancelled nationwide due to the COVID-19 pandemic ahead of the league's planned rebrand to the National Women's Football League (NWFL).",
+    2021: "Return to competitive action under the newly launched BAFA National Women's Football League (NWFL) across five regional conferences. Birmingham Lions (8-0) and London Warriors (8-0) post unblemished conference campaigns.",
+    2022: "First full NWFL postseason championship era. London Warriors end Birmingham's unbeaten dynasty, winning 33-14 in the NWFL National Championship. Edinburgh Wolves cap a 10-0 campaign by winning the Division One BritBowl 27-21 over Peterborough Royals.",
+    2023: "London Warriors repeat as national champions in a 43-38 classic over Birmingham Lions at Britbowl XXXV weekend. Teesside Steelers defeat Manchester Titans to claim the inaugural NWFL 7s National Championship.",
+    2024: "Birmingham Lions reclaim the national crown in an 8-6 defensive battle against London Warriors at Britbowl XXXVI. Caledonia Chaos defeat Hertfordshire Cheetahs in overtime to win the NWFL 7s Championship.",
+    2025: "Solent Thrashers make history in the NWFL Premiership Final, edging Birmingham Lions 21-20 to capture their maiden national championship. Kent Exiles defeat Cardiff Valkyries 19-13 to win the NWFL 7s Final.",
+    2026: "Birmingham Lions capture their eighth national title in a dramatic 8-7 victory over London Warriors in the NWFL Premiership Final. Hertfordshire Cheetahs defeat Cheshire Bears 21-13 to win the NWFL 7s Final.",
+};
+
 const ERAS_METADATA = [
     {
         id: 'pioneer' as const,
@@ -1693,9 +1804,31 @@ const ERAS_METADATA = [
     }
 ];
 
-function getSeasonEra(year: number): { era: 'pioneer' | 'golden-age' | 'buafl-era' | 'modern-bucs'; eraLabel: string } {
+const WOMENS_ERAS_METADATA = [
+    {
+        id: 'sapphire-era' as const,
+        name: 'The Sapphire Series Era',
+        range: '2014–2019',
+        seasonCount: 6,
+        description: 'The pioneering tournament era of British women\'s contact football (Sapphire Series I–VI), growing from 6 clubs in 5v5 play to multi-tier 7v7 divisions and defined by the Birmingham Lions\' six-peat dynasty.'
+    },
+    {
+        id: 'nwfl-era' as const,
+        name: 'The NWFL Era',
+        range: '2020–Present',
+        seasonCount: 7,
+        description: 'Rebranded as the BAFA National Women\'s Football League (NWFL), introducing 9v9 Premiership football alongside national 7s divisions and an intense championship rivalry between Birmingham Lions, London Warriors, and Solent Thrashers.'
+    }
+];
+
+function getSeasonEra(year: number): { era: TimelineEraId; eraLabel: string } {
     if (year <= 1991) return { era: 'pioneer', eraLabel: 'The Pioneer Years' };
     if (year <= 2006) return { era: 'golden-age', eraLabel: 'The Golden Age' };
     if (year <= 2014) return { era: 'buafl-era', eraLabel: 'BUAFL Rebrand & Expansion' };
     return { era: 'modern-bucs', eraLabel: 'Modern BUCS Era' };
+}
+
+function getWomensSeasonEra(year: number): { era: TimelineEraId; eraLabel: string } {
+    if (year <= 2019) return { era: 'sapphire-era', eraLabel: 'The Sapphire Series Era' };
+    return { era: 'nwfl-era', eraLabel: 'The NWFL Era' };
 }
