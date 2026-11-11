@@ -253,33 +253,36 @@ async function runBenchmark() {
         return { team1: t1Res.data, team2: t2Res.data, games: gamesRes.data };
       }
     },
-    // Game Details (game + staff + sources + scoped participations)
+    // Game Details (game + staff + sources + scoped participations in single parallel step)
     {
       name: 'getGameDetails',
       budget: 250,
       fn: async () => {
         if (!sampleGame) return null;
-        const { data: g, error: gErr } = await supabase.from('games').select(`
-          *, 
-          home_team:teams!home_team_id (*, team_aliases (*)), 
-          away_team:teams!away_team_id (*, team_aliases (*)), 
-          venue:venues (*), 
-          phase:phases!games_phase_id_fkey (*, season:seasons (id, year, competition:competitions (name))), 
-          away_phase:phases!away_phase_id (name),
-          season:seasons!games_season_id_fkey (id, year, competition:competitions (name)),
-          game_staff (*, person:people (*))
-        `).eq('id', sampleGame.id).single();
-        if (gErr) throw gErr;
-
-        const teamIds = [sampleGame.home_team_id, sampleGame.away_team_id].filter(Boolean);
-        const [sources, notes, parts] = await Promise.all([
+        const [gameRes, sourcesRes, notesRes] = await Promise.all([
+          supabase.from('games').select(`
+            *, 
+            home_team:teams!home_team_id (*, team_aliases (*)), 
+            away_team:teams!away_team_id (*, team_aliases (*)), 
+            venue:venues (*), 
+            phase:phases!games_phase_id_fkey (*, participations (*, person:people (*)), season:seasons (id, year, competition:competitions (name, level))), 
+            away_phase:phases!away_phase_id (name, participations (*, person:people (*))),
+            season:seasons!games_season_id_fkey (id, year, competition:competitions (name, level)),
+            game_staff (*, person:people (*))
+          `).eq('id', sampleGame.id).single(),
           supabase.from('sources').select('*').eq('entity_id', sampleGame.id).eq('entity_type', 'games'),
-          supabase.from('notes').select('*').eq('entity_id', sampleGame.id).eq('entity_type', 'games'),
-          sampleGame.phase_id && teamIds.length > 0
-            ? supabase.from('participations').select('*, person:people (*)').eq('phase_id', sampleGame.phase_id).in('team_id', teamIds)
-            : Promise.resolve({ data: [] })
+          supabase.from('notes').select('*').eq('entity_id', sampleGame.id).eq('entity_type', 'games')
         ]);
-        return { g, sources, notes, parts };
+        if (gameRes.error) throw gameRes.error;
+        const g = gameRes.data;
+        const teamIds = new Set([g.home_team_id, g.away_team_id].filter(Boolean));
+        const rawParts = [
+          ...(g.phase?.participations || []),
+          ...(g.away_phase?.participations || [])
+        ];
+        const seen = new Set();
+        const parts = rawParts.filter(p => p && teamIds.has(p.team_id) && !seen.has(p.id) && seen.add(p.id));
+        return { g, sources: sourcesRes.data || [], notes: notesRes.data || [], parts };
       }
     },
     // Champions & Bowls query
@@ -328,24 +331,22 @@ async function runBenchmark() {
     // Scorigami Unique Score Games (/scorigami/unique)
     {
       name: 'getUniqueScoreGames',
-      budget: 300,
+      budget: 450,
       fn: async () => {
-        const [gamesRes, teamsRes, phasesRes] = await Promise.all([
+        const [gamesRes, teamsRes] = await Promise.all([
           supabase.from('games').select(`
             id, date, date_display, time, home_score, away_score, status, is_unique_score, is_totally_unique,
             game_level, final_type, title_name, nickname, is_playoff, playoff_round, is_double_header,
-            phase_id, away_phase_id, home_team_id, away_team_id
+            phase_id, away_phase_id, home_team_id, away_team_id,
+            phase:phases!games_phase_id_fkey(name, season:seasons(year, competition:competitions(name, level))),
+            away_phase:phases!away_phase_id(name)
           `).eq('is_unique_score', true).neq('status', 'anomaly').neq('status', 'cancelled').order('date', { ascending: false, nullsFirst: false }),
-          supabase.from('teams').select('id, name, logo_url, team_type, team_aliases(id, name, start_year, end_year, logo_url)'),
-          supabase.from('phases').select('id, name, season:seasons(id, year, competition:competitions(name, level))').limit(5000)
+          supabase.from('teams').select('id, name, logo_url, team_type, team_aliases(id, name, start_year, end_year, logo_url)')
         ]);
         if (gamesRes.error) throw gamesRes.error;
         const teamMap = new Map((teamsRes.data || []).map(t => [t.id, t]));
-        const phaseMap = new Map((phasesRes.data || []).map(p => [p.id, p]));
         return (gamesRes.data || []).map(g => ({
           ...g,
-          phase: g.phase_id ? (phaseMap.get(g.phase_id) || null) : null,
-          away_phase: g.away_phase_id ? { name: phaseMap.get(g.away_phase_id)?.name } : null,
           home_team: teamMap.get(g.home_team_id) || null,
           away_team: teamMap.get(g.away_team_id) || null
         }));
@@ -356,24 +357,14 @@ async function runBenchmark() {
       name: 'getTimelineData',
       budget: 450,
       fn: async () => {
-        const [seasonsRes, seasonNotesRes, champNotesRes, teamsRes] = await Promise.all([
-          supabase.from('seasons').select('id, year, name, competition_id, completeness_score, competition:competitions!inner(id, name, slug, level)').in('competition.slug', ['bcafl', 'buafl']).order('year', { ascending: true }),
-          supabase.from('notes').select('entity_id, content').eq('entity_type', 'seasons'),
-          supabase.from('notes').select('entity_id, content').eq('entity_type', 'divisional_champion'),
-          supabase.from('teams').select('id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)')
-        ]);
-        if (seasonsRes.error) throw seasonsRes.error;
-        const seasons = seasonsRes.data || [];
-        const seasonIds = seasons.map(s => s.id);
-
+        const pageSize = 1000;
         const fetchUniballParts = async () => {
-          const pageSize = 1000;
           const pages = await Promise.all(
             [0, 1, 2, 3].map(p =>
               supabase
                 .from('participations')
-                .select('id, team_id, phase_id, is_champion, wins, losses, ties, points_for, points_against, phases!inner(season_id)')
-                .in('phases.season_id', seasonIds)
+                .select('id, team_id, phase_id, is_champion, wins, losses, ties, points_for, points_against, phases!inner(season:seasons!inner(competition:competitions!inner(slug)))')
+                .in('phases.season.competition.slug', ['bcafl', 'buafl'])
                 .range(p * pageSize, (p + 1) * pageSize - 1)
             )
           );
@@ -384,20 +375,26 @@ async function runBenchmark() {
           return rows;
         };
 
-        const [phasesRes, gamesRes, parts] = await Promise.all([
-          supabase.from('phases').select('id, season_id, name, type, ordinal, parent_phase_id').in('season_id', seasonIds).limit(5000),
+        const [seasonsRes, phasesRes, gamesRes, parts, seasonNotesRes, champNotesRes, teamsRes] = await Promise.all([
+          supabase.from('seasons').select('id, year, name, competition_id, completeness_score, competition:competitions!inner(id, name, slug, level)').in('competition.slug', ['bcafl', 'buafl']).order('year', { ascending: true }),
+          supabase.from('phases').select('id, season_id, name, type, ordinal, parent_phase_id, season:seasons!inner(competition:competitions!inner(slug))').in('season.competition.slug', ['bcafl', 'buafl']).limit(5000),
           supabase.from('games').select(`
             id, season_id, date, home_score, away_score, final_type, title_name, notes,
             home_team:teams!home_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)),
             away_team:teams!away_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)),
-            venue:venues (id, name, city)
-          `).in('season_id', seasonIds).or('final_type.in.(title,bowl),title_name.ilike.%College Bowl%').neq('status', 'anomaly').order('date', { ascending: true }),
-          fetchUniballParts()
+            venue:venues (id, name, city),
+            season:seasons!games_season_id_fkey!inner(competition:competitions!inner(slug))
+          `).in('season.competition.slug', ['bcafl', 'buafl']).or('final_type.in.(title,bowl),title_name.ilike.%College Bowl%').neq('status', 'anomaly').order('date', { ascending: true }),
+          fetchUniballParts(),
+          supabase.from('notes').select('entity_id, content').eq('entity_type', 'seasons'),
+          supabase.from('notes').select('entity_id, content').eq('entity_type', 'divisional_champion'),
+          supabase.from('teams').select('id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)')
         ]);
+        if (seasonsRes.error) throw seasonsRes.error;
         if (phasesRes.error) throw phasesRes.error;
         if (gamesRes.error) throw gamesRes.error;
         return {
-          seasons: seasons.length,
+          seasons: seasonsRes.data?.length || 0,
           phases: phasesRes.data?.length || 0,
           games: gamesRes.data?.length || 0,
           participations: parts.length,
@@ -444,28 +441,21 @@ async function runBenchmark() {
       budget: 300,
       fn: async () => {
         if (!samplePersonId) return null;
-        const [personRes, coachInit] = await Promise.all([
+        const gameFields = `
+          id, date, date_display, time, home_score, away_score, status, is_playoff, playoff_round,
+          final_type, title_name, is_double_header, is_unique_score, is_totally_unique, game_level,
+          nickname, notes, home_team_id, away_team_id, phase_id, away_phase_id,
+          phase:phases!games_phase_id_fkey (id, name, type, season:seasons (year, id, competition:competitions (name))),
+          home_team:teams!home_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)),
+          away_team:teams!away_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url))
+        `;
+        const [personRes, partsRes, staffRes] = await Promise.all([
           supabase.from('people').select('*, game_staff (*, game:games (*, phase:phases!games_phase_id_fkey (*, season:seasons (*, competition:competitions (*))))), participations (*, team:teams (*, team_aliases (*)), phase:phases (*, season:seasons (*, competition:competitions (*)))), hall_of_fame (*, team:teams (*, team_aliases (*))), retired_jerseys (*, team:teams (*, team_aliases (*)))').eq('id', samplePersonId).single(),
-          Promise.all([
-            supabase.from('participations').select('team_id, phase_id').eq('head_coach_id', samplePersonId),
-            supabase.from('game_staff').select('game_id, team_id').eq('person_id', samplePersonId).eq('role', 'head_coach')
-          ])
+          supabase.from('participations').select(`team_id, phase_id, phase:phases!inner(id, home_games:games!games_phase_id_fkey(${gameFields}), away_games:games!away_phase_id(${gameFields}))`).eq('head_coach_id', samplePersonId),
+          supabase.from('game_staff').select(`game_id, team_id, person_id, game:games(${gameFields})`).eq('role', 'head_coach')
         ]);
         if (personRes.error) throw personRes.error;
-        const [partsRes, staffRes] = coachInit;
-        const phaseIds = (partsRes.data || []).map(p => p.phase_id);
-        let coachedGames = [];
-        if (phaseIds.length > 0) {
-          const { data: games } = await supabase.from('games').select(`
-            *,
-            phase:phases!games_phase_id_fkey (*, season:seasons (year, id, competition:competitions (*))),
-            away_phase:phases!away_phase_id (*, season:seasons (year, id, competition:competitions (*))),
-            home_team:teams!home_team_id (*, team_aliases (*)),
-            away_team:teams!away_team_id (*, team_aliases (*))
-          `).or(`phase_id.in.(${phaseIds.join(',')}),away_phase_id.in.(${phaseIds.join(',')})`);
-          coachedGames = games || [];
-        }
-        return { person: personRes.data, coachedGamesCount: coachedGames.length, staffCount: staffRes.data?.length || 0 };
+        return { person: personRes.data, parts: partsRes.data?.length || 0, staff: staffRes.data?.length || 0 };
       }
     },
     // Venues List

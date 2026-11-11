@@ -257,20 +257,26 @@ export const ArchiveService = {
     },
 
     async getGameDetails(gameId: string): Promise<any> {
-        const { data, error } = await supabase
-            .from("games")
-            .select(`
-                *, 
-                home_team:teams!home_team_id (*, team_aliases (*)), 
-                away_team:teams!away_team_id (*, team_aliases (*)), 
-                venue:venues (*), 
-                phase:phases!games_phase_id_fkey (*, season:seasons (id, year, competition:competitions (name, level))), 
-                away_phase:phases!away_phase_id (name),
-                season:seasons!games_season_id_fkey (id, year, competition:competitions (name, level)),
-                game_staff (*, person:people (*))
-            `)
-            .eq("id", gameId)
-            .single();
+        const [gameRes, sources, archivalNotes] = await Promise.all([
+            supabase
+                .from("games")
+                .select(`
+                    *, 
+                    home_team:teams!home_team_id (*, team_aliases (*)), 
+                    away_team:teams!away_team_id (*, team_aliases (*)), 
+                    venue:venues (*), 
+                    phase:phases!games_phase_id_fkey (*, participations (*, person:people (*)), season:seasons (id, year, competition:competitions (name, level))), 
+                    away_phase:phases!away_phase_id (name, participations (*, person:people (*))),
+                    season:seasons!games_season_id_fkey (id, year, competition:competitions (name, level)),
+                    game_staff (*, person:people (*))
+                `)
+                .eq("id", gameId)
+                .single(),
+            supabase.from("sources").select("*").eq("entity_id", gameId).eq("entity_type", "games"),
+            supabase.from("notes").select("*").eq("entity_id", gameId).eq("entity_type", "games")
+        ]);
+
+        const { data, error } = gameRes;
         if (error) throw error;
         if (!data) throw new Error("Game not found");
 
@@ -284,21 +290,23 @@ export const ArchiveService = {
             gameData.is_totally_unique = totallyUniqueKeys.has(`${high}-${low}`);
         }
 
-        // Fetch polymorphic relations separately to avoid PostgREST relationship errors
-        const teamIds = [gameData.home_team_id, gameData.away_team_id].filter(Boolean);
-        const [sources, archivalNotes, participations] = await Promise.all([
-            supabase.from("sources").select("*").eq("entity_id", gameId).eq("entity_type", "games"),
-            supabase.from("notes").select("*").eq("entity_id", gameId).eq("entity_type", "games"),
-            gameData.phase_id && teamIds.length > 0
-                ? supabase.from("participations").select("*, person:people (*)").eq("phase_id", gameData.phase_id).in("team_id", teamIds)
-                : Promise.resolve({ data: [] } as { data: any[] | null })
-        ]);
+        const teamIds = new Set([gameData.home_team_id, gameData.away_team_id].filter(Boolean));
+        const rawParts = [
+            ...(gameData.phase?.participations || []),
+            ...(gameData.away_phase?.participations || [])
+        ];
+        const seenPartIds = new Set<string>();
+        const participations = rawParts.filter((p: any) => {
+            if (!p || !teamIds.has(p.team_id) || seenPartIds.has(p.id)) return false;
+            seenPartIds.add(p.id);
+            return true;
+        });
 
         return {
             ...gameData,
             sources: sources.data || [],
             archival_notes: archivalNotes.data || [],
-            participations: participations.data || []
+            participations
         };
     },
 
@@ -313,6 +321,17 @@ export const ArchiveService = {
         if (error) throw error;
         if (!data) throw new Error("Team not found");
         return data;
+    },
+
+    async getTeamsBasic(teamIds: string[]): Promise<any[]> {
+        const validIds = teamIds.filter(isValidUuid);
+        if (validIds.length === 0) return [];
+        const { data, error } = await supabase
+            .from("teams")
+            .select("id, name, logo_url, team_type, location, founded_year, folded_year, notes, team_aliases (id, name, start_year, end_year, logo_url)")
+            .in("id", validIds);
+        if (error) throw error;
+        return data || [];
     },
 
     async getTeamHistory(teamId: string): Promise<any> {
@@ -590,60 +609,60 @@ export const ArchiveService = {
 
     async getPersonGamesAsCoach(personId: string): Promise<any[]> {
         if (!isValidUuid(personId)) return [];
-        // 1 & 2. Fetch participations and explicit game_staff concurrently
-        const [{ data: participations }, { data: staffGames }] = await Promise.all([
+        const gameSelectFields = `
+            id, date, date_display, date_precision, time, home_team_id, away_team_id, home_score, away_score,
+            status, is_playoff, playoff_round, final_type, title_name, is_title_game, is_double_header,
+            is_unique_score, is_totally_unique, game_level, nickname, notes, phase_id, away_phase_id, season_id,
+            phase:phases!games_phase_id_fkey (id, name, type, ordinal, parent_phase_id, season:seasons (year, id, competition:competitions (id, name, slug, level))),
+            away_phase:phases!away_phase_id (id, name, type, ordinal, parent_phase_id, season:seasons (year, id, competition:competitions (id, name, slug, level))),
+            home_team:teams!home_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)),
+            away_team:teams!away_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url))
+        `;
+
+        // Single round-trip: fetch coached participations (with nested phase games) and all head_coach game_staff overrides concurrently
+        const [{ data: participations }, { data: allHeadCoachStaff }] = await Promise.all([
             supabase
                 .from('participations')
-                .select('team_id, phase_id')
+                .select(`
+                    team_id,
+                    phase_id,
+                    phase:phases!inner (
+                        id,
+                        home_games:games!games_phase_id_fkey (${gameSelectFields}),
+                        away_games:games!away_phase_id (${gameSelectFields})
+                    )
+                `)
                 .eq('head_coach_id', personId) as unknown as Promise<{ data: any[] | null }>,
             supabase
                 .from('game_staff')
-                .select('game_id, team_id')
-                .eq('person_id', personId)
+                .select(`game_id, team_id, person_id, game:games (${gameSelectFields})`)
                 .eq('role', 'head_coach') as unknown as Promise<{ data: any[] | null }>
         ]);
 
-        const phaseIds = participations?.map(p => p.phase_id) || [];
-        const explicitGameIds = staffGames?.map(s => s.game_id) || [];
+        const staffGames = (allHeadCoachStaff || []).filter(s => s.person_id === personId);
+        const explicitGameIds = staffGames.map(s => s.game_id);
 
-        let queryRows: any[] = [];
-
-        // 3. Fetch all games for the phases the coach was active in, PLUS the games they were explicitly staff for
-        if (phaseIds.length > 0 || explicitGameIds.length > 0) {
-            let q = supabase.from('games').select(`
-                *,
-                phase:phases!games_phase_id_fkey (*, season:seasons (year, id, competition:competitions (*))),
-                away_phase:phases!away_phase_id (*, season:seasons (year, id, competition:competitions (*))),
-                home_team:teams!home_team_id (*, team_aliases (*)),
-                away_team:teams!away_team_id (*, team_aliases (*))
-            `);
-
-            if (phaseIds.length > 0 && explicitGameIds.length > 0) {
-                q = q.or(`phase_id.in.(${phaseIds.join(',')}),away_phase_id.in.(${phaseIds.join(',')}),id.in.(${explicitGameIds.join(',')})`);
-            } else if (phaseIds.length > 0) {
-                q = q.or(`phase_id.in.(${phaseIds.join(',')}),away_phase_id.in.(${phaseIds.join(',')})`);
-            } else {
-                q = q.in('id', explicitGameIds);
-            }
-
-            const { data: games } = await q as { data: any[] | null };
-            if (games) queryRows = games;
+        const overrideMap = new Map<string, string>();
+        for (const s of allHeadCoachStaff || []) {
+            overrideMap.set(`${s.game_id}_${s.team_id}`, s.person_id);
         }
 
-        // 4. Fetch head coach overrides ONLY for these candidate games
-        const candidateGameIds = queryRows.map(g => g.id);
-        const overrideMap = new Map(); // gameId_teamId -> personId
-        if (candidateGameIds.length > 0) {
-            const { data: relevantOverrides } = await supabase
-                .from('game_staff')
-                .select('game_id, team_id, person_id')
-                .in('game_id', candidateGameIds)
-                .eq('role', 'head_coach') as { data: any[] | null };
-
-            if (relevantOverrides) {
-                relevantOverrides.forEach(o => overrideMap.set(`${o.game_id}_${o.team_id}`, o.person_id));
+        const gameMap = new Map<string, any>();
+        for (const p of participations || []) {
+            const ph = Array.isArray(p.phase) ? p.phase[0] : p.phase;
+            for (const g of ph?.home_games || []) {
+                if (g && g.status !== 'anomaly') gameMap.set(g.id, g);
+            }
+            for (const g of ph?.away_games || []) {
+                if (g && g.status !== 'anomaly') gameMap.set(g.id, g);
             }
         }
+        for (const s of staffGames) {
+            const g = Array.isArray(s.game) ? s.game[0] : s.game;
+            if (g && g.status !== 'anomaly') gameMap.set(g.id, g);
+        }
+
+        const queryRows = Array.from(gameMap.values());
 
         // 4. Filter games where this person was ACTUALLY the head coach
         const actualGames = queryRows.filter(game => {
@@ -1007,19 +1026,69 @@ async function buildLeagueTimelineData(options: {
 }): Promise<UniballTimelineData> {
     const { slugs, defaultStartYear, defaultEndYear, eras, getEra, milestones, isWomens } = options;
 
-    // Round Trip 1: Fetch seasons (joined with competitions), notes, and canonical teams in parallel
-    const [seasonsRes, seasonNotesRes, champNotesRes, teamsRes] = await Promise.all([
+    const pageSize = 1000;
+    const fetchParticipationsScalar = async () => {
+        const pageIndices = isWomens ? [0] : [0, 1, 2, 3];
+        const pages = await Promise.all(
+            pageIndices.map(p =>
+                supabase
+                    .from("participations")
+                    .select("id, team_id, phase_id, is_champion, wins, losses, ties, points_for, points_against, phases!inner(season:seasons!inner(competition:competitions!inner(slug)))")
+                    .in("phases.season.competition.slug", slugs)
+                    .range(p * pageSize, (p + 1) * pageSize - 1)
+            )
+        );
+        const allRows: any[] = [];
+        for (const res of pages) {
+            if (res.error) throw res.error;
+            if (res.data) allRows.push(...(res.data as any[]));
+        }
+        return allRows;
+    };
+
+    // Single parallel round-trip: fetch seasons, phases, games, participations, notes, and canonical teams concurrently
+    const [
+        seasonsRes,
+        phasesRes,
+        gamesRes,
+        allParticipations,
+        seasonNotesRes,
+        champNotesRes,
+        teamsRes
+    ] = await Promise.all([
         supabase
             .from("seasons")
             .select("id, year, name, competition_id, completeness_score, competition:competitions!inner(id, name, slug, level)")
             .in("competition.slug", slugs)
             .order("year", { ascending: true }),
+        supabase
+            .from("phases")
+            .select("id, season_id, name, type, ordinal, parent_phase_id, season:seasons!inner(competition:competitions!inner(slug))")
+            .in("season.competition.slug", slugs)
+            .limit(5000),
+        supabase
+            .from("games")
+            .select(`
+                id, season_id, date, home_score, away_score, final_type, title_name, notes,
+                home_team:teams!home_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)),
+                away_team:teams!away_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)),
+                venue:venues (id, name, city),
+                season:seasons!games_season_id_fkey!inner(competition:competitions!inner(slug))
+            `)
+            .in("season.competition.slug", slugs)
+            .or("final_type.in.(title,bowl),title_name.ilike.%College Bowl%")
+            .neq("status", "anomaly")
+            .order("date", { ascending: true }),
+        fetchParticipationsScalar(),
         supabase.from("notes").select("entity_id, content").eq("entity_type", "seasons"),
         supabase.from("notes").select("entity_id, content").eq("entity_type", "divisional_champion"),
         supabase.from("teams").select("id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)")
     ]);
 
     if (seasonsRes.error) throw seasonsRes.error;
+    if (phasesRes.error) throw phasesRes.error;
+    if (gamesRes.error) throw gamesRes.error;
+
     const seasons: any[] = (seasonsRes.data as any[]) || [];
     if (seasons.length === 0) {
         return {
@@ -1042,52 +1111,6 @@ async function buildLeagueTimelineData(options: {
         const c = Array.isArray(s.competition) ? s.competition[0] : s.competition;
         if (c && !compMap.has(c.id)) compMap.set(c.id, c);
     }
-    const seasonIds = seasons.map(s => s.id);
-
-    // Helper to fetch participations concurrently (scoped to target seasons via phases!inner)
-    const fetchParticipationsScalar = async () => {
-        const pageSize = 1000;
-        const pageIndices = isWomens ? [0] : [0, 1, 2, 3];
-        const initialPages = pageIndices.map(p =>
-            supabase
-                .from("participations")
-                .select("id, team_id, phase_id, is_champion, wins, losses, ties, points_for, points_against, phases!inner(season_id)")
-                .in("phases.season_id", seasonIds)
-                .range(p * pageSize, (p + 1) * pageSize - 1)
-        );
-        const results = await Promise.all(initialPages);
-        const allRows: any[] = [];
-        for (const res of results) {
-            if (res.error) throw res.error;
-            if (res.data) allRows.push(...(res.data as any[]));
-        }
-        return allRows;
-    };
-
-    // Round Trip 2: Fetch phases, title/bowl games, and participations concurrently
-    const [phasesRes, gamesRes, allParticipations] = await Promise.all([
-        supabase
-            .from("phases")
-            .select("id, season_id, name, type, ordinal, parent_phase_id")
-            .in("season_id", seasonIds)
-            .limit(5000),
-        supabase
-            .from("games")
-            .select(`
-                id, season_id, date, home_score, away_score, final_type, title_name, notes,
-                home_team:teams!home_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)),
-                away_team:teams!away_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)),
-                venue:venues (id, name, city)
-            `)
-            .in("season_id", seasonIds)
-            .or("final_type.in.(title,bowl),title_name.ilike.%College Bowl%")
-            .neq("status", "anomaly")
-            .order("date", { ascending: true }),
-        fetchParticipationsScalar()
-    ]);
-
-    if (phasesRes.error) throw phasesRes.error;
-    if (gamesRes.error) throw gamesRes.error;
 
     const phases: any[] = (phasesRes.data as any[]) || [];
     const phaseMap = new Map<string, any>(phases.map(p => [p.id, p]));

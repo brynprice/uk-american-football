@@ -14,11 +14,15 @@ interface H2HPageProps {
 export default async function H2HPage({ params }: H2HPageProps) {
     const { id, opponentId } = await params;
 
-    const [team1, team2, games] = await Promise.all([
-        ArchiveService.getTeamBasic(id),
-        ArchiveService.getTeamBasic(opponentId),
+    const [basicTeams, games] = await Promise.all([
+        ArchiveService.getTeamsBasic([id, opponentId]),
         ArchiveService.getH2HGames(id, opponentId)
     ]);
+    const team1 = basicTeams.find((t: any) => t.id === id);
+    const team2 = basicTeams.find((t: any) => t.id === opponentId);
+    if (!team1 || !team2) {
+        throw new Error('Team not found');
+    }
 
     return (
         <ArchiveLayout>

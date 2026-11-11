@@ -39,10 +39,14 @@ export default function GameCountsPage() {
     async function loadFlaggedPhases() {
         setLoading(true);
 
-        // 1. Get all phases with max_games_per_team set and all team names in parallel
+        // 1. Get all phases (with nested scalar games) and all team names in a single parallel round-trip
         let query = supabase
             .from('phases')
-            .select('id, name, max_games_per_team, games_validated, season:seasons(id, year, competition:competitions(name))')
+            .select(`
+                id, name, max_games_per_team, games_validated,
+                season:seasons(id, year, competition:competitions(name)),
+                games:games!games_phase_id_fkey(home_team_id, away_team_id, status)
+            `)
             .not('max_games_per_team', 'is', null);
 
         if (!showValidated) {
@@ -64,36 +68,12 @@ export default function GameCountsPage() {
             ((teamsData || []) as any[]).map(t => [t.id, t.name])
         );
 
-        // 2. Batch-fetch scalar game IDs for all candidate phases instead of N+1 sequential queries
         const results: FlaggedPhase[] = [];
         const phaseList = phases as any[];
-        const phaseIds = phaseList.map(p => p.id);
-        const gamesByPhase = new Map<string, any[]>();
-
-        const chunkSize = 50;
-        const batchPromises = [];
-        for (let i = 0; i < phaseIds.length; i += chunkSize) {
-            const chunk = phaseIds.slice(i, i + chunkSize);
-            batchPromises.push(
-                supabase
-                    .from('games')
-                    .select('phase_id, home_team_id, away_team_id')
-                    .in('phase_id', chunk)
-                    .neq('status', 'anomaly')
-            );
-        }
-        const batchResults = await Promise.all(batchPromises);
-        for (const res of batchResults) {
-            for (const g of (res.data || []) as any[]) {
-                const list = gamesByPhase.get(g.phase_id) || [];
-                list.push(g);
-                gamesByPhase.set(g.phase_id, list);
-            }
-        }
 
         for (const phase of phaseList) {
-            const games = gamesByPhase.get(phase.id);
-            if (!games || games.length === 0) continue;
+            const games = ((phase.games || []) as any[]).filter(g => g.status !== 'anomaly');
+            if (games.length === 0) continue;
 
             // Count games per team
             const teamCounts = new Map<string, { name: string; count: number }>();
