@@ -144,7 +144,7 @@ async function runAudit() {
     ['Napier Mavericks', 'Edinburgh Napier Knights'],
     ['GCU Roughriders', 'Caledonian Roughriders'],
     ['Liverpool Fury', 'LJMU Fury'],
-    ['Bristol Bullets', 'Bristol Barracuda'],
+    ['Bristol Bullets', 'UWE Bullets'],
   ];
 
   function getAllTeamNames(teamId, teamName) {

@@ -1,6 +1,6 @@
 competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase,away_phase,away_parent_phase
-bcafl,1995,Western Division,,Bristol Bullets,Bath Killer Bees,0,12,,https://britball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,Southern Conference,,
-bcafl,1995,Western Division,,Bath Killer Bees,Bristol Bullets,13,0,,https://britball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,Southern Conference,,
+bcafl,1995,Western Division,,UWE Bullets,Bath Killer Bees,0,12,,https://britball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,Southern Conference,,
+bcafl,1995,Western Division,,Bath Killer Bees,UWE Bullets,13,0,,https://britball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,Southern Conference,,
 bcafl,1995,Western Division,,Bath Killer Bees,Cardiff Cobras,0,12,,https://britball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,Southern Conference,,
 bcafl,1995,Western Division,,Cardiff Cobras,Bath Killer Bees,0,0,,https://britball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,Southern Conference,,
 bcafl,1995,Eastern Division,,Bath Killer Bees,Reading Knights,29,6,,https://britball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,Southern Conference,Western Division,Southern Conference

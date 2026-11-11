@@ -1,7 +1,7 @@
 competition,year,phase,date,away_team,home_team,away_score,home_score,venue,notes,away_coach,home_coach,is_double_header,date_precision,date_display,time,status,confidence_level,is_playoff,is_title_game,final_type,title_name,playoff_round,parent_phase,away_phase
 bcafl,1993,Southern Conference,,Tarannau Aberystwyth,Bath Killer Bees,0,1,,https://britball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,Southern Conference,
-bcafl,1993,Southern Conference,,Bath Killer Bees,Bristol Bullets,22,24,,https://britball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,Southern Conference,
-bcafl,1993,Southern Conference,,Bristol Bullets,Bath Killer Bees,6,0,,https://britball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,Southern Conference,
+bcafl,1993,Southern Conference,,Bath Killer Bees,UWE Bullets,22,24,,https://britball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,Southern Conference,
+bcafl,1993,Southern Conference,,UWE Bullets,Bath Killer Bees,6,0,,https://britball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,Southern Conference,
 bcafl,1993,Southern Conference,,Aston Rhinos,Bath Killer Bees,6,14,,https://britball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,Southern Conference,
 bcafl,1993,Southern Conference,,Cardiff Cobras,Bath Killer Bees,28,12,,https://britball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,Southern Conference,
 bcafl,1993,Southern Conference,,Bath Killer Bees,Oxford Cavaliers,8,16,,https://britball.fandom.com/wiki/Bath_Killer_Bees,,,FALSE,day,,,completed,high,FALSE,FALSE,,,,Southern Conference,

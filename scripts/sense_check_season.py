@@ -20,7 +20,7 @@ ALIAS_MAP = {
     'Royal Holloway Vikings': 'Royal Holloway Bears',
     'Napier Mavericks': 'Edinburgh Napier Knights',
     'GCU Roughriders': 'Caledonian Roughriders',
-    'Bristol Bullets': 'Bristol Barracuda',
+    'Bristol Bullets': 'UWE Bullets',
     'Aberdeen Bulls': 'Aberdeen Roughnecks University Team',
     'Leeds Carnegie Chargers': 'Leeds Chargers',
     'Hertfordshire Tornadoes': 'Hertfordshire Cheetahs',
