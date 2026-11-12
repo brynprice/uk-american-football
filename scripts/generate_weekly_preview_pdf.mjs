@@ -134,11 +134,13 @@ function generateHtml(preview) {
     }
     .card-purple { background: #faf5ff; border: 1.5px solid #c084fc; }
     .card-blue { background: #f0f9ff; border: 1px solid #bae6fd; }
+    .card-panthers { background: #faf5f8; border: 1.5px solid #633063; }
     .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
     .card-title { font-weight: 700; font-size: 10.5pt; color: #0f172a; }
     .tag { font-size: 7pt; font-weight: 800; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; }
     .tag-purple { background: #9333ea; color: #ffffff; }
     .tag-blue { background: #0284c7; color: #ffffff; }
+    .tag-panthers { background: #633063; color: #B3A066; border: 1px solid #B3A066; }
     .tag-green { background: #16a34a; color: #ffffff; }
     .tag-amber { background: #d97706; color: #ffffff; }
     .card-desc { font-size: 9pt; color: #334155; }
@@ -235,14 +237,14 @@ function generateHtml(preview) {
       `).join('')}
 
       ${brightonPreview ? `
-        <div class="card card-blue">
+        <div class="card card-panthers">
           <div class="card-header">
-            <div class="card-title">${brightonPreview.matchup}</div>
-            <span class="tag tag-blue">BRIGHTON SPOTLIGHT</span>
+            <div class="card-title" style="color: #252E30;">🐾 ${brightonPreview.matchup}</div>
+            <span class="tag tag-panthers">PANTHERS SPOTLIGHT</span>
           </div>
-          <div class="card-desc">
+          <div class="card-desc" style="color: #252E30;">
             ${brightonPreview.notes}
-            ${brightonPreview.predictedScore ? `<br><strong>Model Projection:</strong> ${brightonPreview.predictedScore} (${brightonPreview.winProb}% prob)` : ''}
+            ${brightonPreview.predictedScore ? `<br><strong style="color: #633063;">Model Projection:</strong> ${brightonPreview.predictedScore} (${brightonPreview.winProb}% prob)` : ''}
           </div>
         </div>
       ` : ''}

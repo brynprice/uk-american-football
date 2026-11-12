@@ -178,6 +178,10 @@ function generateHtml(facts) {
       background: #f0f9ff;
       border: 1px solid #bae6fd;
     }
+    .card-panthers {
+      background: #faf5f8;
+      border: 1.5px solid #633063;
+    }
     .card-green {
       background: #f0fdf4;
       border: 1px solid #bbf7d0;
@@ -207,6 +211,11 @@ function generateHtml(facts) {
     .tag-blue {
       background: #0284c7;
       color: #ffffff;
+    }
+    .tag-panthers {
+      background: #633063;
+      color: #B3A066;
+      border: 1px solid #B3A066;
     }
     .tag-green {
       background: #16a34a;
@@ -434,7 +443,7 @@ function generateHtml(facts) {
 
   <!-- Section: Standings & Brighton Spotlight -->
   <div class="section">
-    <div class="section-title">🌊 Momentum & Brighton Spotlight</div>
+    <div class="section-title">🐾 Momentum & Brighton Spotlight</div>
     <div class="grid-2">
       <div class="card">
         <div class="card-header">
@@ -444,7 +453,7 @@ function generateHtml(facts) {
           ${(() => {
             const pGroups = new Map();
             for (const t of (standingsMomentum.perfectStarts || [])) {
-              const rec = t.record || '2-0';
+              const rec = t.record || `${t.wins}-0`;
               if (!pGroups.has(rec)) pGroups.set(rec, []);
               pGroups.get(rec).push(`${escapeHtml(t.team)} (+${escapeHtml(t.pointDiff)})`);
             }
@@ -458,7 +467,7 @@ function generateHtml(facts) {
           ${(() => {
             const wGroups = new Map();
             for (const t of (standingsMomentum.winlessStarts || [])) {
-              const rec = t.record || '0-2';
+              const rec = t.record || `0-${t.losses}`;
               if (!wGroups.has(rec)) wGroups.set(rec, []);
               wGroups.get(rec).push(escapeHtml(t.team));
             }
@@ -472,15 +481,15 @@ function generateHtml(facts) {
       </div>
 
       ${brightonSpotlight ? `
-        <div class="card card-blue">
+        <div class="card card-panthers">
           <div class="card-header">
-            <div class="card-title">Brighton Historical Records Spotlight</div>
-            <span class="tag tag-blue">${escapeHtml(brightonSpotlight.result.toUpperCase())}</span>
+            <div class="card-title" style="color: #252E30;">🐾 Brighton Panthers Historical Spotlight</div>
+            <span class="tag tag-panthers">${escapeHtml(brightonSpotlight.result.toUpperCase())}</span>
           </div>
-          <div style="font-size: 11pt; font-weight: 700; color: #0284c7; margin-bottom: 4px;">
+          <div style="font-size: 11pt; font-weight: 700; color: #633063; margin-bottom: 4px;">
             ${escapeHtml(brightonSpotlight.team)} ${escapeHtml(brightonSpotlight.score)} ${escapeHtml(brightonSpotlight.opponent)}
           </div>
-          <div class="card-desc">${escapeHtml(brightonSpotlight.note)}</div>
+          <div class="card-desc" style="color: #252E30; border-left: 2px solid #B3A066; padding-left: 6px;">${escapeHtml(brightonSpotlight.note)}</div>
         </div>
       ` : ''}
     </div>

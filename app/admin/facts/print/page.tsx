@@ -500,19 +500,21 @@ function PrintPageContent() {
                   </div>
 
                   {brightonSpotlight && (
-                    <div className="bg-sky-50 border border-sky-200 rounded-md p-2.5">
+                    <div className="bg-[#633063]/5 border-2 border-[#633063] rounded-md p-2.5">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-[10px] font-black uppercase text-sky-950">
-                          🌊 Brighton Panthers Historical Spotlight
+                        <span className="text-[10px] font-black uppercase text-[#252E30] flex items-center gap-1">
+                          🐾 Brighton Panthers Historical Spotlight
                         </span>
-                        <span className="bg-sky-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded">
+                        <span className="bg-[#633063] text-[#B3A066] border border-[#B3A066]/40 text-[8px] font-black uppercase px-1.5 py-0.5 rounded tracking-wider">
                           {brightonSpotlight.result.toUpperCase()}
                         </span>
                       </div>
-                      <div className="text-xs font-bold text-sky-900 mb-0.5">
+                      <div className="text-xs font-black text-[#633063] mb-0.5">
                         {brightonSpotlight.team} {brightonSpotlight.score} {brightonSpotlight.opponent}
                       </div>
-                      <p className="text-[10px] text-sky-800 leading-normal">{brightonSpotlight.note}</p>
+                      <p className="text-[10px] text-[#252E30] leading-normal border-l-2 border-[#B3A066] pl-2 font-medium">
+                        {brightonSpotlight.note}
+                      </p>
                     </div>
                   )}
                 </section>
@@ -526,47 +528,47 @@ function PrintPageContent() {
               <>
                 {/* 1. Brighton Preview Spotlight */}
                 {brightonPreview && (
-                  <section className="avoid-break bg-gradient-to-br from-sky-50 to-indigo-50 border-2 border-sky-300 rounded-lg p-3">
+                  <section className="avoid-break bg-[#633063]/5 border-2 border-[#633063] rounded-lg p-3">
                     <div className="flex items-center justify-between mb-2">
-                      <h2 className="text-xs font-black text-sky-950 uppercase tracking-wide flex items-center gap-1.5">
-                        🌊 Brighton Panthers Spotlight Preview
+                      <h2 className="text-xs font-black text-[#252E30] uppercase tracking-wide flex items-center gap-1.5">
+                        🐾 Brighton Panthers Spotlight Preview
                       </h2>
-                      <span className="bg-sky-600 text-white text-[9px] font-bold px-2 py-0.5 rounded">
+                      <span className="bg-[#633063] text-[#B3A066] border border-[#B3A066]/40 text-[9px] font-black uppercase px-2 py-0.5 rounded tracking-wider">
                         {brightonPreview.opponent || "Upcoming"}
                       </span>
                     </div>
 
                     <div className="grid grid-cols-3 gap-2 mb-2 text-[11px]">
-                      <div className="bg-white/80 p-2 rounded border border-sky-200">
-                        <div className="text-[8px] font-bold text-slate-500 uppercase">Matchup</div>
-                        <div className="font-bold text-slate-900 mt-0.5">{brightonPreview.matchup}</div>
-                        <div className="text-[9px] text-slate-500">{brightonPreview.venue || "TBD"}</div>
+                      <div className="bg-white p-2 rounded border border-[#633063]/20 shadow-xs">
+                        <div className="text-[8px] font-extrabold text-[#633063] uppercase">Matchup</div>
+                        <div className="font-bold text-[#252E30] mt-0.5">{brightonPreview.matchup}</div>
+                        <div className="text-[9px] text-[#252E30]/70">{brightonPreview.venue || "TBD"}</div>
                       </div>
-                      <div className="bg-white/80 p-2 rounded border border-sky-200">
-                        <div className="text-[8px] font-bold text-slate-500 uppercase">All-Time Series</div>
-                        <div className="font-bold text-sky-900 mt-0.5">
+                      <div className="bg-white p-2 rounded border border-[#633063]/20 shadow-xs">
+                        <div className="text-[8px] font-extrabold text-[#633063] uppercase">All-Time Series</div>
+                        <div className="font-bold text-[#A52C87] mt-0.5">
                           {brightonPreview.allTimeSeries || `${brightonPreview.priorMeetingsCount} prior meetings`}
                         </div>
                       </div>
-                      <div className="bg-white/80 p-2 rounded border border-sky-200">
-                        <div className="text-[8px] font-bold text-slate-500 uppercase">Model Projected Score</div>
+                      <div className="bg-white p-2 rounded border border-[#633063]/20 shadow-xs">
+                        <div className="text-[8px] font-extrabold text-[#633063] uppercase">Model Projected Score</div>
                         {brightonPreview.prediction ? (
                           <div>
-                            <div className="font-black text-slate-900 mt-0.5">
+                            <div className="font-black text-[#252E30] mt-0.5">
                               {brightonPreview.prediction.homeScore} - {brightonPreview.prediction.awayScore}
                             </div>
-                            <div className="text-[9px] text-sky-700 font-bold">
+                            <div className="text-[9px] text-[#A52C87] font-bold">
                               {brightonPreview.prediction.projectedWinner} ({brightonPreview.prediction.winProb}%)
                             </div>
                           </div>
                         ) : brightonPreview.predictedScore ? (
-                          <div className="font-black text-slate-900 mt-0.5">{brightonPreview.predictedScore}</div>
+                          <div className="font-black text-[#252E30] mt-0.5">{brightonPreview.predictedScore}</div>
                         ) : (
                           <div className="text-slate-400 italic">Pending</div>
                         )}
                       </div>
                     </div>
-                    <p className="text-[10px] text-sky-950 font-medium leading-normal bg-white/60 p-2 rounded border border-sky-200/60">
+                    <p className="text-[10px] text-[#252E30] font-medium leading-normal bg-white p-2 rounded border-l-2 border-[#B3A066] border border-[#633063]/10">
                       📖 {brightonPreview.notes}
                     </p>
                   </section>

@@ -383,53 +383,53 @@ export default function AdminFactsPage() {
 
               {/* Brighton Historical Spotlight Preview */}
               {brightonPreview && (
-                <div className="bg-gradient-to-br from-sky-50 via-sky-100/50 to-indigo-50 border-2 border-sky-300 rounded-xl p-5 shadow-sm">
+                <div className="relative overflow-hidden rounded-xl border-2 border-[#633063] bg-gradient-to-br from-[#633063]/10 via-white to-[#A52C87]/10 p-5 shadow-sm">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
                     <div className="flex items-center gap-2">
-                      <span className="text-xl">🌊</span>
-                      <h2 className="text-base font-black text-sky-950 uppercase tracking-wide">
+                      <span className="text-xl">🐾</span>
+                      <h2 className="text-base font-black text-[#252E30] uppercase tracking-wide">
                         Brighton Panthers Spotlight Preview
                       </h2>
                     </div>
-                    <span className="bg-sky-600 text-white text-xs font-extrabold px-2.5 py-1 rounded-md self-start sm:self-auto">
+                    <span className="bg-[#633063] text-[#B3A066] border border-[#B3A066]/50 text-xs font-black uppercase px-2.5 py-1 rounded-md self-start sm:self-auto shadow-sm tracking-wider">
                       {brightonPreview.opponent || "Brighton Fixture"}
                     </span>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
-                    <div className="bg-white/80 backdrop-blur rounded-lg p-3 border border-sky-200">
-                      <div className="text-[10px] font-bold text-slate-500 uppercase">Matchup Details</div>
-                      <div className="text-sm font-extrabold text-slate-900 mt-0.5">{brightonPreview.matchup}</div>
-                      <div className="text-xs text-slate-600 mt-1">
+                    <div className="bg-white/90 backdrop-blur rounded-lg p-3 border border-[#633063]/20 shadow-xs">
+                      <div className="text-[10px] font-extrabold uppercase tracking-wider text-[#633063]">Matchup Details</div>
+                      <div className="text-sm font-extrabold text-[#252E30] mt-0.5">{brightonPreview.matchup}</div>
+                      <div className="text-xs text-[#252E30]/70 mt-1">
                         📍 {brightonPreview.venue || "TBD"} · 📅 {brightonPreview.date || brightonPreview.kickoffDate || "Upcoming"}
                       </div>
                     </div>
 
-                    <div className="bg-white/80 backdrop-blur rounded-lg p-3 border border-sky-200">
-                      <div className="text-[10px] font-bold text-slate-500 uppercase">All-Time Series Record</div>
-                      <div className="text-sm font-extrabold text-sky-900 mt-0.5">
+                    <div className="bg-white/90 backdrop-blur rounded-lg p-3 border border-[#633063]/20 shadow-xs">
+                      <div className="text-[10px] font-extrabold uppercase tracking-wider text-[#633063]">All-Time Series Record</div>
+                      <div className="text-sm font-extrabold text-[#A52C87] mt-0.5">
                         {brightonPreview.allTimeSeries || (brightonPreview.priorMeetingsCount ? `${brightonPreview.priorMeetingsCount} Prior Meetings` : "First-ever Meeting")}
                       </div>
-                      <div className="text-xs text-slate-600 mt-1">Definitive Brighton Archive</div>
+                      <div className="text-xs text-[#252E30]/70 mt-1">Definitive Brighton Archive</div>
                     </div>
 
-                    <div className="bg-white/80 backdrop-blur rounded-lg p-3 border border-sky-200">
-                      <div className="text-[10px] font-bold text-slate-500 uppercase">Model Projected Score</div>
+                    <div className="bg-white/90 backdrop-blur rounded-lg p-3 border border-[#633063]/20 shadow-xs">
+                      <div className="text-[10px] font-extrabold uppercase tracking-wider text-[#633063]">Model Projected Score</div>
                       {brightonPreview.prediction ? (
                         <div>
-                          <div className="text-sm font-black text-slate-900 mt-0.5">
+                          <div className="text-sm font-black text-[#252E30] mt-0.5">
                             {brightonPreview.prediction.homeScore} - {brightonPreview.prediction.awayScore}
                           </div>
-                          <div className="text-xs text-sky-700 font-semibold mt-1">
+                          <div className="text-xs text-[#A52C87] font-bold mt-1">
                             {brightonPreview.prediction.projectedWinner} ({brightonPreview.prediction.winProb}% Win Prob)
                           </div>
                         </div>
                       ) : brightonPreview.predictedScore ? (
                         <div>
-                          <div className="text-sm font-black text-slate-900 mt-0.5">
+                          <div className="text-sm font-black text-[#252E30] mt-0.5">
                             {brightonPreview.predictedScore}
                           </div>
-                          <div className="text-xs text-sky-700 font-semibold mt-1">
+                          <div className="text-xs text-[#A52C87] font-bold mt-1">
                             {brightonPreview.winProb ? `${brightonPreview.winProb}% Win Prob` : "Projected"}
                           </div>
                         </div>
@@ -439,7 +439,7 @@ export default function AdminFactsPage() {
                     </div>
                   </div>
 
-                  <p className="text-xs text-sky-950 leading-relaxed bg-white/60 p-3 rounded-lg border border-sky-200/60 font-medium">
+                  <p className="text-xs text-[#252E30] leading-relaxed bg-white/90 p-3 rounded-lg border-l-4 border-[#B3A066] border border-t-[#633063]/10 border-r-[#633063]/10 border-b-[#633063]/10 font-medium shadow-xs">
                     📖 {brightonPreview.notes}
                   </p>
                 </div>
@@ -948,19 +948,19 @@ export default function AdminFactsPage() {
 
                 {/* Brighton Spotlight */}
                 {brightonSpotlight && (
-                  <div className="bg-gradient-to-br from-sky-50 to-indigo-50 border border-sky-200 rounded-xl p-5 shadow-sm">
+                  <div className="rounded-xl border-2 border-[#633063] bg-gradient-to-br from-[#633063]/10 via-white to-[#A52C87]/10 p-5 shadow-sm">
                     <div className="flex items-center justify-between mb-2">
-                      <h2 className="text-base font-extrabold text-sky-950 uppercase tracking-wide">
-                        🌊 Brighton Panthers Historical Spotlight
+                      <h2 className="text-base font-black text-[#252E30] uppercase tracking-wide flex items-center gap-1.5">
+                        🐾 Brighton Panthers Historical Spotlight
                       </h2>
-                      <span className="bg-sky-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">
+                      <span className="bg-[#633063] text-[#B3A066] border border-[#B3A066]/50 text-[10px] font-black uppercase px-2 py-0.5 rounded tracking-wider shadow-xs">
                         {brightonSpotlight.result.toUpperCase()}
                       </span>
                     </div>
-                    <div className="text-sm font-bold text-sky-900 mb-1">
+                    <div className="text-sm font-black text-[#633063] mb-1">
                       {brightonSpotlight.team} {brightonSpotlight.score} {brightonSpotlight.opponent}
                     </div>
-                    <p className="text-xs text-sky-800 leading-relaxed">
+                    <p className="text-xs text-[#252E30] leading-relaxed bg-white/80 p-3 rounded-lg border-l-4 border-[#B3A066] border border-t-[#633063]/10 border-r-[#633063]/10 border-b-[#633063]/10 font-medium">
                       {brightonSpotlight.note}
                     </p>
                   </div>
