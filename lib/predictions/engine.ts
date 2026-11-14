@@ -1,4 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
+import { isWalkoverScoreline } from '../utils/team-records';
+
+export { isWalkoverScoreline };
 
 export interface PredictionResult {
   gameId?: string;
@@ -150,16 +153,6 @@ export function getCompetitiveTierInfo(
 export function sanitizePredictedScore(rawScore: number): number {
   const rounded = Math.max(0, Math.round(rawScore));
   return rounded === 1 ? 0 : rounded;
-}
-
-/**
- * Returns true if a scoreline is a 1-0 or 0-1 walkover forfeit rather than an on-field score.
- */
-export function isWalkoverScoreline(
-  homeScore: number | null | undefined,
-  awayScore: number | null | undefined
-): boolean {
-  return (homeScore === 1 && awayScore === 0) || (homeScore === 0 && awayScore === 1);
 }
 
 /**

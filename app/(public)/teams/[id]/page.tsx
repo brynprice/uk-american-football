@@ -3,7 +3,9 @@ import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import H2HSelector from '@/components/archive/H2HSelector';
 import TeamSeasonHistory from '@/components/archive/TeamSeasonHistory';
+import TeamTopResults from '@/components/archive/TeamTopResults';
 import { isPlayoffPhase, calculateTeamCompleteness } from '@/lib/utils/phase-utils';
+import { getTopTeamWinsAndLosses } from '@/lib/utils/team-records';
 export const revalidate = 3600; // 1 hour
 
 export default async function TeamPage({ params }: { params: Promise<{ id: string }> }) {
@@ -149,6 +151,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
     const playoffWinPct = playoffStats.gp > 0 ? (playoffStats.wins / playoffStats.gp + (1 - playoffStats.losses / playoffStats.gp)) / 2 : 0;
 
     const completeness = calculateTeamCompleteness(id, team.participations || [], team.games || []);
+    const { topWins, topLosses } = getTopTeamWinsAndLosses(id, team.games || []);
 
     return (
         <ArchiveLayout>
@@ -312,6 +315,8 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                     </div>
                 </div>
             </div>
+
+            <TeamTopResults topWins={topWins} topLosses={topLosses} />
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                 {/* Left Column: History Timeline */}

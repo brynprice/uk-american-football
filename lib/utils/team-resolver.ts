@@ -3,6 +3,10 @@ import { Database } from "../supabase/types";
 type Team = Database["public"]["Tables"]["teams"]["Row"];
 type TeamAlias = Database["public"]["Tables"]["team_aliases"]["Row"];
 
+export type ResolvableTeam = Pick<Team, "name" | "logo_url"> & {
+    team_aliases?: Array<Pick<TeamAlias, "name" | "start_year" | "end_year" | "logo_url">>;
+};
+
 export interface TeamIdentity {
     name: string;
     logo_url: string | null;
@@ -13,7 +17,7 @@ export interface TeamIdentity {
  * If seasonYear is provided (preferred), it uses that. Otherwise, it falls back to gameDate.
  */
 export function resolveTeamIdentity(
-    team: Team & { team_aliases?: TeamAlias[] },
+    team: ResolvableTeam,
     gameDateOrYear: string | number | null
 ): TeamIdentity {
     if (!gameDateOrYear || !team.team_aliases || team.team_aliases.length === 0) {
