@@ -154,7 +154,7 @@ export default async function HomePage() {
             </ul>
             <div className="pt-6 border-t border-slate-700">
               <p className="text-sm italic text-slate-400">
-                Spotted an error? Have a lead on old records? Email us at <a href="mailto:ukaffootballproject@gmail.com" className="text-blue-400 font-bold hover:underline">ukaffootballproject@gmail.com</a>
+                Spotted an error? Have a lead on old records? Email us at <a href="mailto:britball.io@gmail.com" className="text-blue-400 font-bold hover:underline">britball.io@gmail.com</a>
               </p>
             </div>
           </div>

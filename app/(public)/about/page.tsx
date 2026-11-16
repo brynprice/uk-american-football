@@ -147,7 +147,7 @@ export default function AboutPage() {
                 Submit Missing Scores &rarr;
               </Link>
               <a
-                href="mailto:ukaffootballproject@gmail.com"
+                href="mailto:britball.io@gmail.com"
                 className="border-2 border-white text-white px-6 py-3 font-black uppercase tracking-widest text-xs hover:bg-white hover:text-slate-950 transition-colors"
               >
                 Email Archival Material

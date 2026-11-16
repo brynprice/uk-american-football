@@ -55,7 +55,7 @@ export default function ArchiveLayout({
                         <span>&bull;</span>
                         <Link href="/propose-game" prefetch={false} className="text-slate-700 font-semibold hover:text-blue-700">Contribute Data</Link>
                         <span>&bull;</span>
-                        <a href="mailto:ukaffootballproject@gmail.com" className="text-slate-700 font-semibold hover:text-blue-700">Contact</a>
+                        <a href="mailto:britball.io@gmail.com" className="text-slate-700 font-semibold hover:text-blue-700">Contact</a>
                     </div>
                     <p>&copy; {new Date().getFullYear()} Britball.io</p>
                     <p className="mt-1 italic">Preserving the history of American Football in Great Britain — founded by Bryn Price.</p>
