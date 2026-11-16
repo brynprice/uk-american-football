@@ -6,14 +6,16 @@ import { TeamExtremeGame, TeamTopWinsAndLosses } from '@/lib/utils/team-records'
 
 interface TeamTopResultsProps {
     allTime: TeamTopWinsAndLosses;
+    last5Years?: TeamTopWinsAndLosses;
     last10Years: TeamTopWinsAndLosses;
 }
 
 type ResultVariant = 'win' | 'loss';
-type TimeframeOption = 'all-time' | 'last-10-years';
+type TimeframeOption = 'all-time' | 'last-5-years' | 'last-10-years';
 
 const TIMEFRAME_OPTIONS: Array<{ value: TimeframeOption; label: string }> = [
     { value: 'all-time', label: 'All-Time' },
+    { value: 'last-5-years', label: 'Last 5 Years' },
     { value: 'last-10-years', label: 'Last 10 Years' },
 ];
 
@@ -36,6 +38,7 @@ const VARIANT_CONFIG: Record<
         subtitle: 'Biggest Margins',
         emptyMessages: {
             'all-time': 'No recorded competitive wins yet.',
+            'last-5-years': 'No recorded competitive wins in the last 5 years.',
             'last-10-years': 'No recorded competitive wins in the last 10 years.',
         },
         headerBg: 'bg-emerald-950 border-emerald-900',
@@ -50,6 +53,7 @@ const VARIANT_CONFIG: Record<
         subtitle: 'Heaviest Defeats',
         emptyMessages: {
             'all-time': 'No recorded competitive losses.',
+            'last-5-years': 'No recorded competitive losses in the last 5 years.',
             'last-10-years': 'No recorded competitive losses in the last 10 years.',
         },
         headerBg: 'bg-rose-950 border-rose-900',
@@ -206,14 +210,18 @@ function ResultsPanel({
 
 /**
  * Displays a team's top 3 competitive wins and top 3 competitive losses by margin,
- * with a toggle between all-time and the last 10 years.
+ * with a toggle between all-time, the last 5 years, and the last 10 years.
  */
-export default function TeamTopResults({ allTime, last10Years }: TeamTopResultsProps) {
+export default function TeamTopResults({ allTime, last5Years, last10Years }: TeamTopResultsProps) {
     const [timeframe, setTimeframe] = useState<TimeframeOption>('all-time');
+
+    const effectiveLast5 = last5Years || { topWins: [], topLosses: [] };
 
     const hasAnyResults =
         allTime.topWins.length > 0 ||
         allTime.topLosses.length > 0 ||
+        effectiveLast5.topWins.length > 0 ||
+        effectiveLast5.topLosses.length > 0 ||
         last10Years.topWins.length > 0 ||
         last10Years.topLosses.length > 0;
 
@@ -221,14 +229,26 @@ export default function TeamTopResults({ allTime, last10Years }: TeamTopResultsP
         return null;
     }
 
-    const activeResults = timeframe === 'all-time' ? allTime : last10Years;
+    const activeResults =
+        timeframe === 'all-time'
+            ? allTime
+            : timeframe === 'last-5-years'
+            ? effectiveLast5
+            : last10Years;
+
+    const timeframeTitle =
+        timeframe === 'all-time'
+            ? 'All-Time Top Results'
+            : timeframe === 'last-5-years'
+            ? 'Last 5 Years Top Results'
+            : 'Last 10 Years Top Results';
 
     return (
         <section className="mb-12" aria-label="Top Wins and Losses">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b-2 border-slate-900 pb-3 mb-6">
                 <div>
                     <h2 className="text-xl font-black uppercase font-sans">
-                        {timeframe === 'all-time' ? 'All-Time Top Results' : 'Last 10 Years Top Results'}
+                        {timeframeTitle}
                     </h2>
                     <span className="text-[10px] font-bold text-slate-400 font-sans uppercase tracking-wider">
                         Largest Margins &bull; Competitive League &amp; Playoffs

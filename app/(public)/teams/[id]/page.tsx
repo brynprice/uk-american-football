@@ -5,7 +5,11 @@ import H2HSelector from '@/components/archive/H2HSelector';
 import TeamSeasonHistory from '@/components/archive/TeamSeasonHistory';
 import TeamTopResults from '@/components/archive/TeamTopResults';
 import { isPlayoffPhase, calculateTeamCompleteness } from '@/lib/utils/phase-utils';
-import { getTenYearCutoff, getTopTeamWinsAndLosses } from '@/lib/utils/team-records';
+import {
+    getFiveYearCutoff,
+    getTenYearCutoff,
+    getTopTeamWinsAndLosses,
+} from '@/lib/utils/team-records';
 import { assertValidUuidOrNotFound, fetchOrNotFound } from '@/lib/utils/route-helpers';
 export const revalidate = 604800; // 7 days
 
@@ -157,10 +161,15 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
 
     const completeness = calculateTeamCompleteness(id, team.participations || [], team.games || []);
     const allTimeResults = getTopTeamWinsAndLosses(id, team.games || []);
-    const { minDate, minSeasonYear } = getTenYearCutoff();
+    const fiveYearCutoff = getFiveYearCutoff();
+    const last5YearsResults = getTopTeamWinsAndLosses(id, team.games || [], {
+        minDate: fiveYearCutoff.minDate,
+        minSeasonYear: fiveYearCutoff.minSeasonYear,
+    });
+    const tenYearCutoff = getTenYearCutoff();
     const last10YearsResults = getTopTeamWinsAndLosses(id, team.games || [], {
-        minDate,
-        minSeasonYear,
+        minDate: tenYearCutoff.minDate,
+        minSeasonYear: tenYearCutoff.minSeasonYear,
     });
 
     return (
@@ -326,7 +335,11 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                 </div>
             </div>
 
-            <TeamTopResults allTime={allTimeResults} last10Years={last10YearsResults} />
+            <TeamTopResults
+                allTime={allTimeResults}
+                last5Years={last5YearsResults}
+                last10Years={last10YearsResults}
+            />
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                 {/* Left Column: History Timeline */}

@@ -87,20 +87,40 @@ export function isWalkoverScoreline(
 }
 
 /**
+ * Returns the inclusive rolling year date and undated season-year cutoffs in UTC for N years.
+ */
+export function getRollingYearCutoff(years: number, referenceDate: Date = new Date()): {
+    minDate: string;
+    minSeasonYear: number;
+} {
+    const referenceYear = referenceDate.getUTCFullYear();
+    const cutoff = new Date(
+        Date.UTC(referenceYear - years, referenceDate.getUTCMonth(), referenceDate.getUTCDate())
+    );
+    return {
+        minDate: cutoff.toISOString().slice(0, 10),
+        minSeasonYear: referenceYear - (years - 1),
+    };
+}
+
+/**
+ * Returns the inclusive rolling 5-year date and undated season-year cutoffs in UTC.
+ */
+export function getFiveYearCutoff(referenceDate: Date = new Date()): {
+    minDate: string;
+    minSeasonYear: number;
+} {
+    return getRollingYearCutoff(5, referenceDate);
+}
+
+/**
  * Returns the inclusive rolling 10-year date and undated season-year cutoffs in UTC.
  */
 export function getTenYearCutoff(referenceDate: Date = new Date()): {
     minDate: string;
     minSeasonYear: number;
 } {
-    const referenceYear = referenceDate.getUTCFullYear();
-    const cutoff = new Date(
-        Date.UTC(referenceYear - 10, referenceDate.getUTCMonth(), referenceDate.getUTCDate())
-    );
-    return {
-        minDate: cutoff.toISOString().slice(0, 10),
-        minSeasonYear: referenceYear - 9,
-    };
+    return getRollingYearCutoff(10, referenceDate);
 }
 
 function parseDateYear(date?: string | null): number | null {
