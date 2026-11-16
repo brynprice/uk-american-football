@@ -3,6 +3,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
 import { assertPermission } from "@/lib/auth/admin-guard";
+import { isValidUuid } from "@/lib/utils/validation";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY!;
@@ -13,6 +14,10 @@ export async function setDivisionalChampion(
     isChampion: boolean
 ) {
     await assertPermission("champions");
+
+    if (!isValidUuid(phaseId) || !isValidUuid(teamId)) {
+        throw new Error("Invalid phase or team ID.");
+    }
 
     if (!supabaseUrl || !supabaseKey) {
         throw new Error("Supabase service role credentials not configured.");

@@ -19,6 +19,7 @@ import fs from 'fs';
 import path from 'path';
 import playwright from 'playwright';
 import { generateWeeklyFacts } from '../lib/facts/weekly-facts-core.mjs';
+import { escapeHtml, createIsolatedPdfPage } from '../lib/facts/html-utils.mjs';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY;
@@ -49,16 +50,6 @@ if (!weekArg) {
 
 const seasonArg = getArg('--season') || getArg('-s');
 const outputArg = getArg('--output') || getArg('-o');
-
-function escapeHtml(val) {
-  if (val === null || val === undefined) return '';
-  return String(val)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
 
 function generateHtml(facts) {
   const { window, overview, scorigamis, rivalries, extremes, recordsAndMilestones, standingsMomentum, brightonSpotlight, postponements } = facts;
@@ -524,14 +515,17 @@ async function main() {
     }
 
     const defaultFilename = `BUCS_${options.season}_Week_${options.week}_Insights.pdf`;
+    const workspaceRoot = path.resolve(process.cwd());
     const outputPath = outputArg ? path.resolve(outputArg) : path.join(reportsDir, defaultFilename);
+    if (!outputPath.startsWith(workspaceRoot + path.sep)) {
+      throw new Error('Output path must remain inside the repository directory.');
+    }
 
     console.log(`[INFO] Launching Chromium to render PDF...`);
     const browser = await playwright.chromium.launch();
-    const context = await browser.newContext();
-    const page = await context.newPage();
+    const { page } = await createIsolatedPdfPage(browser);
 
-    await page.setContent(html, { waitUntil: 'networkidle' });
+    await page.setContent(html, { waitUntil: 'load' });
 
     await page.pdf({
       path: outputPath,

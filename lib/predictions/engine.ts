@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { isWalkoverScoreline } from '../utils/team-records';
+import { isValidIsoDate, isValidUuid } from '@/lib/utils/validation';
 
 export { isWalkoverScoreline };
 
@@ -327,6 +328,16 @@ export async function predictMatchup(
     gameDate,
     seasonYear = 2026,
   } = params;
+
+  if (!isValidUuid(homeTeamId) || !isValidUuid(awayTeamId)) {
+    throw new Error('Invalid team ID.');
+  }
+  if (gameDate && !isValidIsoDate(gameDate)) {
+    throw new Error('Invalid game date.');
+  }
+  if (!Number.isInteger(seasonYear) || seasonYear < 1980 || seasonYear > 2100) {
+    throw new Error('Invalid season year.');
+  }
 
   // 1. Fetch team names if not provided
   let homeName = params.teamNames?.home || '';

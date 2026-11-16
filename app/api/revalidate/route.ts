@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import crypto from "crypto";
+import { isSafeInternalPath, isValidUuid } from "@/lib/utils/validation";
 
 function timingSafeSecretMatch(provided: string | null, expected: string | undefined): boolean {
     if (!provided || !expected) return false;
@@ -28,15 +29,28 @@ async function handleRevalidation(request: NextRequest) {
     }
 
     const path = searchParams.get("path");
-    const season = searchParams.get("season");
+    const season = searchParams.get("season")?.trim() || null;
     const phaseId = searchParams.get("phaseId");
     const teamId = searchParams.get("teamId");
+
+    if (path && !isSafeInternalPath(path)) {
+        return NextResponse.json({ message: "Invalid path parameter" }, { status: 400 });
+    }
+    if (season && !/^\d{4}$/.test(season) && !isValidUuid(season)) {
+        return NextResponse.json({ message: "Invalid season parameter" }, { status: 400 });
+    }
+    if (phaseId && !isValidUuid(phaseId)) {
+        return NextResponse.json({ message: "Invalid phaseId parameter" }, { status: 400 });
+    }
+    if (teamId && !isValidUuid(teamId)) {
+        return NextResponse.json({ message: "Invalid teamId parameter" }, { status: 400 });
+    }
 
     const revalidatedPaths: string[] = [];
 
     if (path) {
-        revalidatePath(path);
-        revalidatedPaths.push(path);
+        revalidatePath(path.trim());
+        revalidatedPaths.push(path.trim());
     }
 
     if (season) {

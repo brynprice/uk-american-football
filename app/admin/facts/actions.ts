@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@supabase/supabase-js";
-import { assertPermission } from "@/lib/auth/admin-guard";
+import { assertPermission, UnauthorizedError } from "@/lib/auth/admin-guard";
 import {
   generateWeeklyFacts,
   formatFactsMarkdown,
@@ -33,6 +33,19 @@ export async function fetchWeeklyFactsAction(options: {
   try {
     await assertPermission("facts");
 
+    if (options.week !== undefined) {
+      const w = Number(options.week);
+      if (!Number.isInteger(w) || w < 1 || w > 25) {
+        return { success: false, error: "Invalid week number." };
+      }
+    }
+    if (options.season !== undefined) {
+      const s = Number(options.season);
+      if (!Number.isInteger(s) || s < 1980 || s > 2100) {
+        return { success: false, error: "Invalid season year." };
+      }
+    }
+
     const supabase = getAdminClient();
     const facts = await generateWeeklyFacts(supabase, {
       week: options.week,
@@ -51,9 +64,12 @@ export async function fetchWeeklyFactsAction(options: {
     };
   } catch (err: any) {
     console.error("fetchWeeklyFactsAction error:", err);
+    if (err instanceof UnauthorizedError) {
+      return { success: false, error: err.message };
+    }
     return {
       success: false,
-      error: err.message || "Failed to generate weekly facts."
+      error: "Failed to generate weekly facts."
     };
   }
 }
@@ -143,6 +159,19 @@ export async function fetchWeeklyPreviewAction(options: {
   try {
     await assertPermission("facts");
 
+    if (options.week !== undefined) {
+      const w = Number(options.week);
+      if (!Number.isInteger(w) || w < 1 || w > 25) {
+        return { success: false, error: "Invalid week number." };
+      }
+    }
+    if (options.season !== undefined) {
+      const s = Number(options.season);
+      if (!Number.isInteger(s) || s < 1980 || s > 2100) {
+        return { success: false, error: "Invalid season year." };
+      }
+    }
+
     const supabase = getAdminClient();
     const preview = await generateWeeklyPreview(supabase, {
       week: options.week,
@@ -160,9 +189,12 @@ export async function fetchWeeklyPreviewAction(options: {
     };
   } catch (err: any) {
     console.error("fetchWeeklyPreviewAction error:", err);
+    if (err instanceof UnauthorizedError) {
+      return { success: false, error: err.message };
+    }
     return {
       success: false,
-      error: err.message || "Failed to generate weekly preview."
+      error: "Failed to generate weekly preview."
     };
   }
 }

@@ -87,6 +87,7 @@ export async function syncUniqueScores() {
             .not("away_score", "is", null)
             .neq("status", "anomaly")
             .neq("status", "cancelled")
+            .order("id", { ascending: true })
             .range(page * pageSize, (page + 1) * pageSize - 1);
 
         if (error) {

@@ -34,6 +34,12 @@ async function findOrCreatePerson(supabase: any, name: string): Promise<string |
 
 export async function updateGameCoach(gameId: string, teamId: string, coachName: string, phaseId: string) {
     await assertPermission("set_coach");
+    if (!isValidUuid(gameId) || !isValidUuid(teamId) || (phaseId && !isValidUuid(phaseId))) {
+        throw new Error("Invalid game, team, or phase ID.");
+    }
+    if (coachName && coachName.trim().length > 120) {
+        throw new Error("Coach name must be under 120 characters.");
+    }
     const supabase = createClient(supabaseUrl, supabaseKey);
     const coachId = await findOrCreatePerson(supabase, coachName);
 
@@ -84,6 +90,9 @@ export async function updateSeasonCoach(seasonId: string, teamId: string, coachN
     await assertPermission("set_coach");
     if (!isValidUuid(seasonId) || !isValidUuid(teamId)) {
         throw new Error("Invalid season or team ID.");
+    }
+    if (coachName && coachName.trim().length > 120) {
+        throw new Error("Coach name must be under 120 characters.");
     }
     const supabase = createClient(supabaseUrl, supabaseKey);
     const coachId = await findOrCreatePerson(supabase, coachName);

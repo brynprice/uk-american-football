@@ -16,6 +16,7 @@ import fs from 'fs';
 import path from 'path';
 import playwright from 'playwright';
 import { createClient } from '@supabase/supabase-js';
+import { escapeHtml, createIsolatedPdfPage } from '../lib/facts/html-utils.mjs';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY;
@@ -504,19 +505,19 @@ function buildHtml(data) {
   <!-- Snapshot Bar -->
   <div class="snapshot-bar">
     <div class="stat-box">
-      <div class="stat-val amber">${stats.wins} – ${stats.losses}</div>
-      <div class="stat-label">Lions Confirmed xpLosION Record (${stats.winPct}%)</div>
+      <div class="stat-val amber">${escapeHtml(stats.wins)} – ${escapeHtml(stats.losses)}</div>
+      <div class="stat-label">Lions Confirmed xpLosION Record (${escapeHtml(stats.winPct)}%)</div>
     </div>
     <div class="stat-box">
-      <div class="stat-val">${stats.totalPF} – ${stats.totalPA}</div>
-      <div class="stat-label">Total Points (${stats.avgPF} – ${stats.avgPA} Avg)</div>
+      <div class="stat-val">${escapeHtml(stats.totalPF)} – ${escapeHtml(stats.totalPA)}</div>
+      <div class="stat-label">Total Points (${escapeHtml(stats.avgPF)} – ${escapeHtml(stats.avgPA)} Avg)</div>
     </div>
     <div class="stat-box">
-      <div class="stat-val">${stats.shutouts} / ${stats.completedCount}</div>
-      <div class="stat-label">Shutouts Pitched by Birmingham (${((stats.shutouts / stats.completedCount) * 100).toFixed(1)}%)</div>
+      <div class="stat-val">${escapeHtml(stats.shutouts)} / ${escapeHtml(stats.completedCount)}</div>
+      <div class="stat-label">Shutouts Pitched by Birmingham (${escapeHtml(((stats.shutouts / stats.completedCount) * 100).toFixed(1))}%)</div>
     </div>
     <div class="stat-box">
-      <div class="stat-val green">${stats.completedCount} / ${stats.totalFixtures}</div>
+      <div class="stat-val green">${escapeHtml(stats.completedCount)} / ${escapeHtml(stats.totalFixtures)}</div>
       <div class="stat-label">Confirmed Completed Fixtures in DB</div>
     </div>
   </div>
@@ -526,7 +527,7 @@ function buildHtml(data) {
     <div style="font-size: 7pt; font-weight: 900; text-transform: uppercase; color: #b45309; letter-spacing: 0.4px; margin-bottom: 1px;">
       🎆 THIS SATURDAY’S SHOWCASE FIXTURE · SATURDAY, 7 NOVEMBER 2026 · 16:10 GMT
     </div>
-    <div class="matchup-teams">Reading Knights (${read2026Rec.w}–${read2026Rec.l}) at Birmingham Lions (${bham2026Rec.w}–${bham2026Rec.l}–${bham2026Rec.t})</div>
+    <div class="matchup-teams">Reading Knights (${escapeHtml(read2026Rec.w)}–${escapeHtml(read2026Rec.l)}) at Birmingham Lions (${escapeHtml(bham2026Rec.w)}–${escapeHtml(bham2026Rec.l)}–${escapeHtml(bham2026Rec.t)})</div>
     <div class="matchup-meta">
       Competition: BUCS Division 1 Southern · Venue: Bournbrook Pitch, University of Birmingham · All-Time Series: 0 Previous Meetings (Inaugural Clash)
     </div>
@@ -542,10 +543,10 @@ function buildHtml(data) {
           <span class="tag tag-green">Saturday Preview</span>
         </div>
         <ul class="fact-list">
-          <li><strong>First-Ever Meeting in Recorded History:</strong> Despite Birmingham Lions (founded ${bhamTeam.founded_year}; <strong>${bhamArchive.total} recorded games</strong>) and Reading Knights (founded ${readTeam.founded_year}; <strong>${readArchive.total} recorded games</strong>) possessing over 75 combined years of football history, Saturday is their <strong>first-ever meeting in archive history</strong>.</li>
-          <li><strong>Birmingham's 2026 Season Form:</strong> The Lions enter Saturday at <strong>${bham2026Rec.w}–${bham2026Rec.l}–${bham2026Rec.t}</strong> after opening their campaign on 24 Oct 2026 with a 6–6 road tie against Oxford Brookes.</li>
-          <li><strong>Reading's 2026 Season Form:</strong> The Knights travel to Birmingham for their <strong>2026–27 season opener</strong> (${read2026Rec.w}–${read2026Rec.l}), having earned promotion to Division 1 Southern.</li>
-          <li><strong>Dominant Home Defense:</strong> In confirmed xpLosION games, Birmingham's defense has conceded an average of just <strong>${stats.avgPA} points per game</strong>, pitching <strong>${stats.shutouts} clean sheets</strong> across ${stats.completedCount} completed fixtures.</li>
+          <li><strong>First-Ever Meeting in Recorded History:</strong> Despite Birmingham Lions (founded ${escapeHtml(bhamTeam.founded_year)}; <strong>${escapeHtml(bhamArchive.total)} recorded games</strong>) and Reading Knights (founded ${escapeHtml(readTeam.founded_year)}; <strong>${escapeHtml(readArchive.total)} recorded games</strong>) possessing over 75 combined years of football history, Saturday is their <strong>first-ever meeting in archive history</strong>.</li>
+          <li><strong>Birmingham's 2026 Season Form:</strong> The Lions enter Saturday at <strong>${escapeHtml(bham2026Rec.w)}–${escapeHtml(bham2026Rec.l)}–${escapeHtml(bham2026Rec.t)}</strong> after opening their campaign on 24 Oct 2026 with a 6–6 road tie against Oxford Brookes.</li>
+          <li><strong>Reading's 2026 Season Form:</strong> The Knights travel to Birmingham for their <strong>2026–27 season opener</strong> (${escapeHtml(read2026Rec.w)}–${escapeHtml(read2026Rec.l)}), having earned promotion to Division 1 Southern.</li>
+          <li><strong>Dominant Home Defense:</strong> In confirmed xpLosION games, Birmingham's defense has conceded an average of just <strong>${escapeHtml(stats.avgPA)} points per game</strong>, pitching <strong>${escapeHtml(stats.shutouts)} clean sheets</strong> across ${escapeHtml(stats.completedCount)} completed fixtures.</li>
         </ul>
       </div>
 
@@ -556,7 +557,7 @@ function buildHtml(data) {
         </div>
         <ul class="fact-list">
           <li><strong>Name Provenance:</strong> Founded in November 2005 around Guy Fawkes Night, the four capital letters in <strong>xpLosION</strong> spell out <strong>L-I-O-N</strong>. It is the longest-running regular season campus night showcase in British university football.</li>
-          <li><strong>Bournbrook Fortress (${stats.wins}–${stats.losses} in Confirmed Games):</strong> Birmingham have won <strong>${stats.winPct}%</strong> of confirmed xpLosION games, including seven consecutive verified wins from 2005 to 2015.</li>
+          <li><strong>Bournbrook Fortress (${escapeHtml(stats.wins)}–${escapeHtml(stats.losses)} in Confirmed Games):</strong> Birmingham have won <strong>${escapeHtml(stats.winPct)}%</strong> of confirmed xpLosION games, including seven consecutive verified wins from 2005 to 2015.</li>
           <li><strong>Only 3 Visiting Teams Have Won:</strong> In the archive's confirmed records, only Bath Killer Bees (10–7 in 2016), Swansea Titans (20–16 in 2018), and Oxford Brookes (6–0 in 2025) have ever won an xpLosION game—each by 6 points or fewer.</li>
           <li><strong>Data Provenance Notice:</strong> The archive includes <strong>only verified contemporary fixtures</strong> from BCAFL/BUAFL/BUCS official records, BAFRA bulletins, and Double Coverage contemporary reports. Gaps where regular season fixtures were unrecorded (such as 2009 and 2010) are strictly omitted.</li>
         </ul>
@@ -578,33 +579,33 @@ function buildHtml(data) {
       <tbody>
         <tr>
           <td><strong>Program Founded</strong></td>
-          <td style="text-align: center;">${bhamTeam.founded_year} · University of Birmingham</td>
-          <td style="text-align: center;">${readTeam.founded_year} · University of Reading</td>
+          <td style="text-align: center;">${escapeHtml(bhamTeam.founded_year)} · University of Birmingham</td>
+          <td style="text-align: center;">${escapeHtml(readTeam.founded_year)} · University of Reading</td>
         </tr>
         <tr>
           <td><strong>All-Time Recorded Record</strong></td>
-          <td style="text-align: center;"><strong>${bhamArchive.w} – ${bhamArchive.l} – ${bhamArchive.t}</strong> (${bhamArchive.pct}) across ${bhamArchive.total} games</td>
-          <td style="text-align: center;"><strong>${readArchive.w} – ${readArchive.l} – ${readArchive.t}</strong> (${readArchive.pct}) across ${readArchive.total} games</td>
+          <td style="text-align: center;"><strong>${escapeHtml(bhamArchive.w)} – ${escapeHtml(bhamArchive.l)} – ${escapeHtml(bhamArchive.t)}</strong> (${escapeHtml(bhamArchive.pct)}) across ${escapeHtml(bhamArchive.total)} games</td>
+          <td style="text-align: center;"><strong>${escapeHtml(readArchive.w)} – ${escapeHtml(readArchive.l)} – ${escapeHtml(readArchive.t)}</strong> (${escapeHtml(readArchive.pct)}) across ${escapeHtml(readArchive.total)} games</td>
         </tr>
         <tr>
           <td><strong>All-Time Points For / Against</strong></td>
-          <td style="text-align: center;">${bhamArchive.pf.toLocaleString()} PF / ${bhamArchive.pa.toLocaleString()} PA (+${bhamArchive.pf - bhamArchive.pa})</td>
-          <td style="text-align: center;">${readArchive.pf.toLocaleString()} PF / ${readArchive.pa.toLocaleString()} PA (${readArchive.pf - readArchive.pa})</td>
+          <td style="text-align: center;">${escapeHtml(bhamArchive.pf.toLocaleString())} PF / ${escapeHtml(bhamArchive.pa.toLocaleString())} PA (+${escapeHtml(bhamArchive.pf - bhamArchive.pa)})</td>
+          <td style="text-align: center;">${escapeHtml(readArchive.pf.toLocaleString())} PF / ${escapeHtml(readArchive.pa.toLocaleString())} PA (${escapeHtml(readArchive.pf - readArchive.pa)})</td>
         </tr>
         <tr>
           <td><strong>All-Time Shutouts Pitched</strong></td>
-          <td style="text-align: center;"><strong>${bhamArchive.shutouts} Shutouts</strong></td>
-          <td style="text-align: center;"><strong>${readArchive.shutouts} Shutouts</strong></td>
+          <td style="text-align: center;"><strong>${escapeHtml(bhamArchive.shutouts)} Shutouts</strong></td>
+          <td style="text-align: center;"><strong>${escapeHtml(readArchive.shutouts)} Shutouts</strong></td>
         </tr>
         <tr>
           <td><strong>Current 2026–27 Record Entering Saturday</strong></td>
-          <td style="text-align: center;"><strong>${bham2026Rec.w} – ${bham2026Rec.l} – ${bham2026Rec.t}</strong> (Tied 6–6 at Oxford Brookes)</td>
-          <td style="text-align: center;"><strong>${read2026Rec.w} – ${read2026Rec.l}</strong> (Season Opener)</td>
+          <td style="text-align: center;"><strong>${escapeHtml(bham2026Rec.w)} – ${escapeHtml(bham2026Rec.l)} – ${escapeHtml(bham2026Rec.t)}</strong> (Tied 6–6 at Oxford Brookes)</td>
+          <td style="text-align: center;"><strong>${escapeHtml(read2026Rec.w)} – ${escapeHtml(read2026Rec.l)}</strong> (Season Opener)</td>
         </tr>
         <tr>
           <td><strong>Head-to-Head History</strong></td>
           <td colspan="2" style="text-align: center; font-weight: 700; color: #b45309;">
-            ${h2hCount === 0 ? '0 previous meetings in 40+ years · First-Ever Clash' : `${h2hCount} previous meetings`}
+            ${h2hCount === 0 ? '0 previous meetings in 40+ years · First-Ever Clash' : `${escapeHtml(h2hCount)} previous meetings`}
           </td>
         </tr>
       </tbody>
@@ -621,7 +622,7 @@ function buildHtml(data) {
   <div class="page-break"></div>
 
   <div class="section">
-    <div class="section-title">📜 Verified All-Time xpLosION Fixtures in Database (${rawGames.length} Total Fixtures)</div>
+    <div class="section-title">📜 Verified All-Time xpLosION Fixtures in Database (${escapeHtml(rawGames.length)} Total Fixtures)</div>
     <table class="ledger">
       <thead>
         <tr>
@@ -647,9 +648,9 @@ function buildHtml(data) {
             const lost = g.home_score < g.away_score;
             const res = won ? 'W' : (lost ? 'L' : 'T');
             resBadge = `<span class="res-badge res-${res}">${res}</span>`;
-            scoreText = `${g.home_score} – ${g.away_score}`;
+            scoreText = `${escapeHtml(g.home_score)} – ${escapeHtml(g.away_score)}`;
           } else if (is2026) {
-            scoreText = g.time ? `${g.time.slice(0, 5)} KO` : 'TBD';
+            scoreText = g.time ? `${escapeHtml(String(g.time).slice(0, 5))} KO` : 'TBD';
             resBadge = '<span class="res-badge" style="background:#fef3c7;color:#92400e;">UPCOMING</span>';
           }
           const tier = g.phase?.name || g.season?.competition?.name || 'BUCS';
@@ -657,13 +658,13 @@ function buildHtml(data) {
 
           return `<tr class="${rowClass}">
             <td><strong>#${idx + 1}</strong></td>
-            <td><strong>${g.season?.year || '—'}</strong></td>
-            <td>${cleanDate}</td>
-            <td><strong>${g.away_team?.name || 'Unknown'}</strong></td>
+            <td><strong>${escapeHtml(g.season?.year || '—')}</strong></td>
+            <td>${escapeHtml(cleanDate)}</td>
+            <td><strong>${escapeHtml(g.away_team?.name || 'Unknown')}</strong></td>
             <td><strong>${scoreText}</strong></td>
             <td style="text-align: center;">${resBadge}</td>
-            <td>${tier}</td>
-            <td class="notes-cell">${g.notes || 'Source: Official archive records'}</td>
+            <td>${escapeHtml(tier)}</td>
+            <td class="notes-cell">${escapeHtml(g.notes || 'Source: Official archive records')}</td>
           </tr>`;
         }).join('')}
       </tbody>
@@ -681,7 +682,7 @@ function buildHtml(data) {
         </div>
         <ul class="fact-list">
           ${frequentOpps.slice(0, 5).map(([opp, data]) => `
-            <li><strong>${opp} (${data.played}×):</strong> Birmingham is <strong>${data.w}–${data.l}</strong> (Outscored ${data.pf}–${data.pa}) · Seasons: ${data.years.join(', ')}</li>
+            <li><strong>${escapeHtml(opp)} (${escapeHtml(data.played)}×):</strong> Birmingham is <strong>${escapeHtml(data.w)}–${escapeHtml(data.l)}</strong> (Outscored ${escapeHtml(data.pf)}–${escapeHtml(data.pa)}) · Seasons: ${escapeHtml(data.years.join(', '))}</li>
           `).join('')}
         </ul>
       </div>
@@ -705,7 +706,7 @@ function buildHtml(data) {
   <!-- Footer Page 2 -->
   <div class="footer">
     <div>UK American Football Archive · <strong>xpLosION Historical Dossier (Page 2 of 2)</strong> · Strictly Confirmed Data</div>
-    <div>All ${rawGames.length} fixtures queried dynamically from Supabase database · Zero Hallucinations · Generated Nov 2026</div>
+    <div>All ${escapeHtml(rawGames.length)} fixtures queried dynamically from Supabase database · Zero Hallucinations · Generated Nov 2026</div>
   </div>
 
 </body>
@@ -728,10 +729,9 @@ async function main() {
 
   console.log('[INFO] Launching Chromium to render verified xpLosION PDF...');
   const browser = await playwright.chromium.launch();
-  const context = await browser.newContext();
-  const page = await context.newPage();
+  const { page } = await createIsolatedPdfPage(browser);
 
-  await page.setContent(html, { waitUntil: 'networkidle' });
+  await page.setContent(html, { waitUntil: 'load' });
   await page.pdf({
     path: outputPath,
     format: 'A4',

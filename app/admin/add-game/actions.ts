@@ -2,6 +2,13 @@
 
 import { createClient } from "@supabase/supabase-js";
 import { assertPermission } from "@/lib/auth/admin-guard";
+import {
+    isValidFinalType,
+    isValidGameStatus,
+    isValidIsoDate,
+    isValidUuid,
+    parseOptionalScore,
+} from "@/lib/utils/validation";
 
 export async function submitGameAction(payload: {
     homeTeam: string;
@@ -24,6 +31,31 @@ export async function submitGameAction(payload: {
 }) {
     try {
         await assertPermission("add_game");
+
+        if (!isValidUuid(payload.selectedPhase)) {
+            throw new Error("Invalid phase ID.");
+        }
+        if (payload.date && payload.date.trim() && !isValidIsoDate(payload.date)) {
+            throw new Error("Date must be in YYYY-MM-DD format.");
+        }
+        if (!isValidGameStatus(payload.status)) {
+            throw new Error("Invalid game status.");
+        }
+        const finalType = payload.finalType || "none";
+        if (!isValidFinalType(finalType)) {
+            throw new Error("Invalid final type.");
+        }
+        const cleanHomeScore = parseOptionalScore(payload.homeScore);
+        const cleanAwayScore = parseOptionalScore(payload.awayScore);
+        if (payload.notes && payload.notes.length > 2000) {
+            throw new Error("Notes must be under 2,000 characters.");
+        }
+        if (payload.titleName && payload.titleName.length > 150) {
+            throw new Error("Title name must be under 150 characters.");
+        }
+        if (payload.playoffRound && payload.playoffRound.length > 100) {
+            throw new Error("Playoff round must be under 100 characters.");
+        }
 
         // Determine the environment variables. Use process.env on the server.
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -97,15 +129,15 @@ export async function submitGameAction(payload: {
             date_precision: "EXACT",
             home_team_id: homeTeamId,
             away_team_id: awayTeamId,
-            home_score: payload.homeScore ? parseInt(payload.homeScore) : null,
-            away_score: payload.awayScore ? parseInt(payload.awayScore) : null,
+            home_score: cleanHomeScore,
+            away_score: cleanAwayScore,
             status: payload.status,
             venue_id: venueId,
-            is_playoff: payload.isPlayoff,
-            playoff_round: payload.isPlayoff && payload.playoffRound ? payload.playoffRound : null,
-            final_type: payload.finalType !== "none" ? payload.finalType : null,
-            title_name: payload.finalType !== "none" && payload.titleName ? payload.titleName : null,
-            is_double_header: payload.isDoubleHeader
+            is_playoff: Boolean(payload.isPlayoff),
+            playoff_round: payload.isPlayoff && payload.playoffRound ? payload.playoffRound.trim() : null,
+            final_type: finalType !== "none" ? finalType : null,
+            title_name: finalType !== "none" && payload.titleName ? payload.titleName.trim() : null,
+            is_double_header: Boolean(payload.isDoubleHeader)
         };
 
         if (payload.nickname?.trim()) {

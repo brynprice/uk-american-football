@@ -17,6 +17,11 @@ export default function H2HStats({ team1, team2, games }: H2HStatsProps) {
         const type = game.is_playoff ? 'playoff' : 'regular';
 
         if (score1 !== null && score2 !== null) {
+            // Do not count non-league games (e.g. associate process, friendlies, exhibitions) in official H2H records
+            if (game.game_type && game.game_type !== 'league') {
+                return acc;
+            }
+
             acc.overall.points1 += score1;
             acc.overall.points2 += score2;
             if (score1 > score2) acc.overall.wins1++;

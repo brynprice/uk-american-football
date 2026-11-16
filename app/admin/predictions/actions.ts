@@ -3,6 +3,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { assertPermission } from "@/lib/auth/admin-guard";
 import { revalidatePath } from "next/cache";
+import { isValidUuid } from "@/lib/utils/validation";
 import {
   predictBatchSlate,
   predictMatchup,
@@ -11,6 +12,22 @@ import {
   SlateGame,
   BUCS_2026_WEEKS,
 } from "@/lib/predictions/engine";
+
+const VALID_CONFIDENCE_LEVELS = new Set(["High", "Medium", "Low"]);
+
+function validatePredictionMetrics(winProbability: number, confidence: string) {
+  if (
+    typeof winProbability !== "number" ||
+    !Number.isFinite(winProbability) ||
+    winProbability < 0 ||
+    winProbability > 100
+  ) {
+    throw new Error("Win probability must be a finite number between 0 and 100.");
+  }
+  if (!VALID_CONFIDENCE_LEVELS.has(confidence)) {
+    throw new Error("Invalid confidence level.");
+  }
+}
 
 function getAdminClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -34,9 +51,13 @@ export async function recordPredictionAction(payload: {
   try {
     await assertPermission("predictions");
 
-    if (!payload.homeTeamId || !payload.awayTeamId) {
-      return { success: false, error: "Missing required team IDs." };
+    if (!isValidUuid(payload.homeTeamId) || !isValidUuid(payload.awayTeamId)) {
+      return { success: false, error: "Invalid team ID." };
     }
+    if (payload.gameId && !isValidUuid(payload.gameId)) {
+      return { success: false, error: "Invalid game ID." };
+    }
+    validatePredictionMetrics(payload.winProbability, payload.confidence);
 
     const supabase = getAdminClient();
     const cleanHomeScore = sanitizePredictedScore(payload.predictedHomeScore);
@@ -110,7 +131,13 @@ export async function getWeeklySlateAction(params: {
   try {
     await assertPermission("predictions");
 
-    const seasonYear = params.seasonYear || 2026;
+    const seasonYear = params.seasonYear ?? 2026;
+    if (!Number.isInteger(seasonYear) || seasonYear < 1980 || seasonYear > 2100) {
+      return { success: false, error: "Invalid season year." };
+    }
+    if (!Number.isInteger(params.weekNumber) || params.weekNumber < 1 || params.weekNumber > 25) {
+      return { success: false, error: "Invalid week number." };
+    }
     const weekDef = BUCS_2026_WEEKS.find((w) => w.weekNumber === params.weekNumber);
     if (!weekDef) {
       return { success: false, error: `Invalid week number: ${params.weekNumber}` };
@@ -249,15 +276,19 @@ export async function simulateSingleMatchupAction(params: {
   try {
     await assertPermission("predictions");
 
-    if (!params.homeTeamId || !params.awayTeamId) {
-      return { success: false, error: "Please select both a home and away team." };
+    if (!isValidUuid(params.homeTeamId) || !isValidUuid(params.awayTeamId)) {
+      return { success: false, error: "Please select valid home and away teams." };
+    }
+    const seasonYear = params.seasonYear ?? 2026;
+    if (!Number.isInteger(seasonYear) || seasonYear < 1980 || seasonYear > 2100) {
+      return { success: false, error: "Invalid season year." };
     }
 
     const supabase = getAdminClient();
     const prediction = await predictMatchup(supabase, {
       homeTeamId: params.homeTeamId,
       awayTeamId: params.awayTeamId,
-      seasonYear: params.seasonYear || 2026,
+      seasonYear,
     });
 
     return { success: true, prediction };
@@ -281,12 +312,21 @@ export async function generateSlatePredictionsAction(params: {
   try {
     await assertPermission("predictions");
 
-    if (!params.games || params.games.length === 0) {
-      return { success: false, error: "No games provided to predict." };
+    if (!Array.isArray(params.games) || params.games.length === 0 || params.games.length > 200) {
+      return { success: false, error: "Invalid games slate provided." };
+    }
+    for (const g of params.games) {
+      if (!isValidUuid(g.homeTeamId) || !isValidUuid(g.awayTeamId)) {
+        return { success: false, error: "Slate contains an invalid team ID." };
+      }
+    }
+    const seasonYear = params.seasonYear ?? 2026;
+    if (!Number.isInteger(seasonYear) || seasonYear < 1980 || seasonYear > 2100) {
+      return { success: false, error: "Invalid season year." };
     }
 
     const supabase = getAdminClient();
-    const predictions = await predictBatchSlate(supabase, params.games, params.seasonYear || 2026);
+    const predictions = await predictBatchSlate(supabase, params.games, seasonYear);
 
     return { success: true, predictions };
   } catch (err: any) {
@@ -313,8 +353,14 @@ export async function saveBatchPredictionsAction(
   try {
     await assertPermission("predictions");
 
-    if (!predictions || predictions.length === 0) {
-      return { success: false, error: "No predictions to save." };
+    if (!Array.isArray(predictions) || predictions.length === 0 || predictions.length > 200) {
+      return { success: false, error: "Invalid predictions batch." };
+    }
+    for (const p of predictions) {
+      if (!isValidUuid(p.gameId) || !isValidUuid(p.homeTeamId) || !isValidUuid(p.awayTeamId)) {
+        return { success: false, error: "Batch contains invalid game or team IDs." };
+      }
+      validatePredictionMetrics(p.winProbability, p.confidence);
     }
 
     const supabase = getAdminClient();

@@ -2,13 +2,26 @@
 
 import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
-import { assertAdmin } from "@/lib/auth/admin-guard";
+import { assertAdmin, UnauthorizedError } from "@/lib/auth/admin-guard";
+import { isValidUuid } from "@/lib/utils/validation";
 import {
   ALL_PERMISSIONS,
   PermissionKey,
   UserRole,
   getUserAccess,
 } from "@/lib/auth/permissions";
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function validateAdminPassword(password: string): string | null {
+  if (!password || password.length < 12) {
+    return "Password must be at least 12 characters long.";
+  }
+  if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/\d/.test(password)) {
+    return "Password must include uppercase, lowercase, and numeric characters.";
+  }
+  return null;
+}
 
 function getServiceClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -94,9 +107,12 @@ export async function listManagedUsersAction(): Promise<{
     };
   } catch (err: any) {
     console.error("listManagedUsersAction error:", err);
+    if (err instanceof UnauthorizedError) {
+      return { success: false, error: err.message };
+    }
     return {
       success: false,
-      error: err.message || "Failed to fetch users.",
+      error: "Failed to fetch users.",
     };
   }
 }
@@ -115,14 +131,18 @@ export async function createManagedUserAction(payload: {
     const cleanEmail = (payload.email || "").trim().toLowerCase();
     const password = payload.password || "";
 
-    if (!cleanEmail || !cleanEmail.includes("@")) {
+    if (!cleanEmail || cleanEmail.length > 254 || !EMAIL_REGEX.test(cleanEmail)) {
       return { success: false, error: "Please provide a valid email address." };
     }
-    if (password.length < 10) {
-      return {
-        success: false,
-        error: "Password must be at least 10 characters long.",
-      };
+    if (payload.role !== "admin" && payload.role !== "member") {
+      return { success: false, error: "Invalid user role." };
+    }
+    if (payload.displayName && payload.displayName.trim().length > 100) {
+      return { success: false, error: "Display name must be under 100 characters." };
+    }
+    const pwError = validateAdminPassword(password);
+    if (pwError) {
+      return { success: false, error: pwError };
     }
 
     const sanitizedPerms =
@@ -132,7 +152,7 @@ export async function createManagedUserAction(payload: {
             (ALL_PERMISSIONS as readonly string[]).includes(p)
           );
 
-    const { data, error } = await supabase.auth.admin.createUser({
+    const { error } = await supabase.auth.admin.createUser({
       email: cleanEmail,
       password,
       email_confirm: true,
@@ -153,9 +173,12 @@ export async function createManagedUserAction(payload: {
     return { success: true };
   } catch (err: any) {
     console.error("createManagedUserAction error:", err);
+    if (err instanceof UnauthorizedError) {
+      return { success: false, error: err.message };
+    }
     return {
       success: false,
-      error: err.message || "Failed to create user account.",
+      error: "Failed to create user account. Verify the email is not already registered.",
     };
   }
 }
@@ -168,6 +191,17 @@ export async function updateUserPermissionsAction(payload: {
 }): Promise<{ success: boolean; error?: string }> {
   try {
     const currentAdmin = await assertAdmin();
+
+    if (!isValidUuid(payload.userId)) {
+      return { success: false, error: "Invalid user ID." };
+    }
+    if (payload.role !== "admin" && payload.role !== "member") {
+      return { success: false, error: "Invalid user role." };
+    }
+    if (payload.displayName && payload.displayName.trim().length > 100) {
+      return { success: false, error: "Display name must be under 100 characters." };
+    }
+
     const supabase = getServiceClient();
 
     if (payload.userId === currentAdmin.id && payload.role !== "admin") {
@@ -211,9 +245,12 @@ export async function updateUserPermissionsAction(payload: {
     return { success: true };
   } catch (err: any) {
     console.error("updateUserPermissionsAction error:", err);
+    if (err instanceof UnauthorizedError) {
+      return { success: false, error: err.message };
+    }
     return {
       success: false,
-      error: err.message || "Failed to update user permissions.",
+      error: "Failed to update user permissions.",
     };
   }
 }
@@ -224,14 +261,16 @@ export async function resetUserPasswordAction(payload: {
 }): Promise<{ success: boolean; error?: string }> {
   try {
     await assertAdmin();
-    const supabase = getServiceClient();
 
-    if (!payload.newPassword || payload.newPassword.length < 10) {
-      return {
-        success: false,
-        error: "New password must be at least 10 characters long.",
-      };
+    if (!isValidUuid(payload.userId)) {
+      return { success: false, error: "Invalid user ID." };
     }
+    const pwError = validateAdminPassword(payload.newPassword);
+    if (pwError) {
+      return { success: false, error: pwError };
+    }
+
+    const supabase = getServiceClient();
 
     const { error } = await supabase.auth.admin.updateUserById(payload.userId, {
       password: payload.newPassword,
@@ -244,9 +283,12 @@ export async function resetUserPasswordAction(payload: {
     return { success: true };
   } catch (err: any) {
     console.error("resetUserPasswordAction error:", err);
+    if (err instanceof UnauthorizedError) {
+      return { success: false, error: err.message };
+    }
     return {
       success: false,
-      error: err.message || "Failed to reset password.",
+      error: "Failed to reset password.",
     };
   }
 }
@@ -256,6 +298,11 @@ export async function deleteManagedUserAction(
 ): Promise<{ success: boolean; error?: string }> {
   try {
     const currentAdmin = await assertAdmin();
+
+    if (!isValidUuid(userId)) {
+      return { success: false, error: "Invalid user ID." };
+    }
+
     const supabase = getServiceClient();
 
     if (userId === currentAdmin.id) {
@@ -274,9 +321,12 @@ export async function deleteManagedUserAction(
     return { success: true };
   } catch (err: any) {
     console.error("deleteManagedUserAction error:", err);
+    if (err instanceof UnauthorizedError) {
+      return { success: false, error: err.message };
+    }
     return {
       success: false,
-      error: err.message || "Failed to delete user.",
+      error: "Failed to delete user.",
     };
   }
 }

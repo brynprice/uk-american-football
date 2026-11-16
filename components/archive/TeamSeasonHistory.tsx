@@ -7,6 +7,7 @@ import { isPlayoffPhase, calculatePhaseCompleteness } from '@/lib/utils/phase-ut
 
 interface TeamSeasonHistoryProps {
     teamId?: string;
+    teamName?: string;
     personId?: string;
     participations: any[];
     games: any[];
@@ -15,6 +16,7 @@ interface TeamSeasonHistoryProps {
 
 export default function TeamSeasonHistory({
     teamId,
+    teamName,
     personId,
     participations,
     games,
@@ -463,6 +465,14 @@ export default function TeamSeasonHistory({
                                 {regDetails.map(({ p, details }) => {
                                     const currentTeamId = details.teamId;
                                     const teamIdentity = p.team ? resolveTeamIdentity(p.team, season?.year) : null;
+                                    const canonicalTeamName = teamName || p.team?.name || teamIdentity?.name || '';
+                                    const proposeParams = new URLSearchParams();
+                                    if (canonicalTeamName) proposeParams.set('team', canonicalTeamName);
+                                    if (season?.competition?.name) proposeParams.set('competition', season.competition.name);
+                                    if (season?.year) proposeParams.set('year', String(season.year));
+                                    if (p.phase?.name) proposeParams.set('phase', p.phase.name);
+                                    const proposeHref = `/propose-game?${proposeParams.toString()}`;
+
                                     return (
                                         <div key={p.id} className="bg-white p-4 border border-slate-200 border-l-4 border-l-slate-800 rounded-r shadow-xs">
                                             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
@@ -509,22 +519,40 @@ export default function TeamSeasonHistory({
                                                         <GameRow key={game.id} game={game} teamId={currentTeamId} seasonYear={season?.year} />
                                                     ))}
                                                     {details.completeness && details.completeness.missingGames > 0 && (
-                                                        <div className="bg-amber-50 border border-amber-200 text-amber-800 px-3 py-2 rounded text-xs font-sans flex items-center justify-between">
+                                                        <div className="bg-amber-50 border border-amber-200 text-amber-800 px-3 py-2 rounded text-xs font-sans flex flex-wrap items-center justify-between gap-2">
                                                             <span>
                                                                 <strong>{details.completeness.missingGames}</strong> of {details.completeness.expectedGames} expected {details.completeness.expectedGames === 1 ? 'game' : 'games'} in this phase still missing from the archive.
                                                             </span>
-                                                            <span className="font-mono font-bold text-[11px]">
-                                                                {details.completeness.recordedGames}/{details.completeness.expectedGames} Recorded
-                                                            </span>
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="font-mono font-bold text-[11px]">
+                                                                    {details.completeness.recordedGames}/{details.completeness.expectedGames} Recorded
+                                                                </span>
+                                                                <Link
+                                                                    href={proposeHref}
+                                                                    className="bg-slate-900 hover:bg-blue-600 text-white font-sans font-black uppercase text-[10px] tracking-wider px-2.5 py-1 rounded transition-colors"
+                                                                >
+                                                                    + Report Missing Game
+                                                                </Link>
+                                                            </div>
                                                         </div>
                                                     )}
                                                 </div>
                                             ) : (
-                                                <p className="text-xs text-slate-400 italic font-sans">
-                                                    {details.completeness && details.completeness.missingGames > 0
-                                                        ? `No individual game logs recorded yet — ${details.completeness.missingGames} expected ${details.completeness.missingGames === 1 ? 'game is' : 'games are'} missing from the archive.`
-                                                        : 'No detailed game logs recorded for this phase.'}
-                                                </p>
+                                                <div className="flex flex-wrap items-center justify-between gap-2">
+                                                    <p className="text-xs text-slate-400 italic font-sans">
+                                                        {details.completeness && details.completeness.missingGames > 0
+                                                            ? `No individual game logs recorded yet — ${details.completeness.missingGames} expected ${details.completeness.missingGames === 1 ? 'game is' : 'games are'} missing from the archive.`
+                                                            : 'No detailed game logs recorded for this phase.'}
+                                                    </p>
+                                                    {details.completeness && details.completeness.missingGames > 0 && (
+                                                        <Link
+                                                            href={proposeHref}
+                                                            className="bg-slate-900 hover:bg-blue-600 text-white font-sans font-black uppercase text-[10px] tracking-wider px-2.5 py-1 rounded transition-colors shrink-0"
+                                                        >
+                                                            + Report Missing Game
+                                                        </Link>
+                                                    )}
+                                                </div>
                                             )}
                                         </div>
                                     );

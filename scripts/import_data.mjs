@@ -549,10 +549,10 @@ async function importData(filePath) {
             const awayCoachId = await getOrCreatePerson(away_coach);
             const venueId = await getOrCreateVenue(venue);
 
-            // 4. Ensure Team Participations (For Standings) - Only for non-anomaly games
+            // 4. Ensure Team Participations (For Standings) - Only for non-anomaly league games with a valid phase
             let homePart = null;
             let awayPart = null;
-            if (status !== 'anomaly') {
+            if (status !== 'anomaly' && (!game_type || game_type === 'league') && phaseId) {
                 homePart = await ensureTeamParticipation(phaseId, homeTeamId, homeCoachId);
                 // Away team participates in their own phase (awayPhaseId if inter-phase, else phaseId)
                 awayPart = await ensureTeamParticipation(awayPhaseId || phaseId, awayTeamId, awayCoachId);

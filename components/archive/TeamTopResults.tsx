@@ -1,19 +1,28 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
-import { TeamExtremeGame } from '@/lib/utils/team-records';
+import { TeamExtremeGame, TeamTopWinsAndLosses } from '@/lib/utils/team-records';
 
 interface TeamTopResultsProps {
-    topWins: TeamExtremeGame[];
-    topLosses: TeamExtremeGame[];
+    allTime: TeamTopWinsAndLosses;
+    last10Years: TeamTopWinsAndLosses;
 }
 
 type ResultVariant = 'win' | 'loss';
+type TimeframeOption = 'all-time' | 'last-10-years';
+
+const TIMEFRAME_OPTIONS: Array<{ value: TimeframeOption; label: string }> = [
+    { value: 'all-time', label: 'All-Time' },
+    { value: 'last-10-years', label: 'Last 10 Years' },
+];
 
 const VARIANT_CONFIG: Record<
     ResultVariant,
     {
         title: string;
         subtitle: string;
-        emptyMessage: string;
+        emptyMessages: Record<TimeframeOption, string>;
         headerBg: string;
         headerTitle: string;
         headerSubtitle: string;
@@ -25,7 +34,10 @@ const VARIANT_CONFIG: Record<
     win: {
         title: 'Top 3 Wins',
         subtitle: 'Biggest Margins',
-        emptyMessage: 'No recorded competitive wins yet.',
+        emptyMessages: {
+            'all-time': 'No recorded competitive wins yet.',
+            'last-10-years': 'No recorded competitive wins in the last 10 years.',
+        },
         headerBg: 'bg-emerald-950 border-emerald-900',
         headerTitle: 'text-emerald-300',
         headerSubtitle: 'text-emerald-200/80',
@@ -36,7 +48,10 @@ const VARIANT_CONFIG: Record<
     loss: {
         title: 'Top 3 Losses',
         subtitle: 'Heaviest Defeats',
-        emptyMessage: 'No recorded competitive losses.',
+        emptyMessages: {
+            'all-time': 'No recorded competitive losses.',
+            'last-10-years': 'No recorded competitive losses in the last 10 years.',
+        },
         headerBg: 'bg-rose-950 border-rose-900',
         headerTitle: 'text-rose-300',
         headerSubtitle: 'text-rose-200/80',
@@ -65,9 +80,11 @@ function formatGameDate(entry: TeamExtremeGame): string {
 function ResultsPanel({
     variant,
     entries,
+    timeframe,
 }: {
     variant: ResultVariant;
     entries: TeamExtremeGame[];
+    timeframe: TimeframeOption;
 }) {
     const style = VARIANT_CONFIG[variant];
 
@@ -84,7 +101,7 @@ function ResultsPanel({
 
             {entries.length === 0 ? (
                 <div className="p-6 text-xs text-slate-400 italic font-sans">
-                    {style.emptyMessage}
+                    {style.emptyMessages[timeframe]}
                 </div>
             ) : (
                 <div className="divide-y divide-slate-100">
@@ -187,27 +204,65 @@ function ResultsPanel({
 }
 
 /**
- * Displays a team's top 3 competitive wins and top 3 competitive losses by margin.
+ * Displays a team's top 3 competitive wins and top 3 competitive losses by margin,
+ * with a toggle between all-time and the last 10 years.
  */
-export default function TeamTopResults({ topWins, topLosses }: TeamTopResultsProps) {
-    if (topWins.length === 0 && topLosses.length === 0) {
+export default function TeamTopResults({ allTime, last10Years }: TeamTopResultsProps) {
+    const [timeframe, setTimeframe] = useState<TimeframeOption>('all-time');
+
+    const hasAnyResults =
+        allTime.topWins.length > 0 ||
+        allTime.topLosses.length > 0 ||
+        last10Years.topWins.length > 0 ||
+        last10Years.topLosses.length > 0;
+
+    if (!hasAnyResults) {
         return null;
     }
 
+    const activeResults = timeframe === 'all-time' ? allTime : last10Years;
+
     return (
-        <section className="mb-12" aria-label="All-Time Top Results">
-            <div className="flex flex-wrap items-baseline justify-between gap-2 border-b-2 border-slate-900 pb-2 mb-6">
-                <h2 className="text-xl font-black uppercase font-sans">
-                    All-Time Top Results
-                </h2>
-                <span className="text-[10px] font-bold text-slate-400 font-sans uppercase tracking-wider">
-                    Largest Margins &bull; Competitive League &amp; Playoffs
-                </span>
+        <section className="mb-12" aria-label="Top Wins and Losses">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b-2 border-slate-900 pb-3 mb-6">
+                <div>
+                    <h2 className="text-xl font-black uppercase font-sans">
+                        {timeframe === 'all-time' ? 'All-Time Top Results' : 'Last 10 Years Top Results'}
+                    </h2>
+                    <span className="text-[10px] font-bold text-slate-400 font-sans uppercase tracking-wider">
+                        Largest Margins &bull; Competitive League &amp; Playoffs
+                    </span>
+                </div>
+
+                <div
+                    role="group"
+                    aria-label="Top results timeframe"
+                    className="inline-flex rounded-lg bg-slate-100 p-1 border border-slate-200 self-start sm:self-auto shrink-0"
+                >
+                    {TIMEFRAME_OPTIONS.map((option) => {
+                        const isActive = timeframe === option.value;
+                        return (
+                            <button
+                                key={option.value}
+                                type="button"
+                                aria-pressed={isActive}
+                                onClick={() => setTimeframe(option.value)}
+                                className={`px-3 py-1 rounded-md text-xs font-sans transition-all ${
+                                    isActive
+                                        ? 'bg-white text-slate-900 shadow-sm font-black'
+                                        : 'text-slate-600 hover:text-slate-900 font-bold'
+                                }`}
+                            >
+                                {option.label}
+                            </button>
+                        );
+                    })}
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <ResultsPanel variant="win" entries={topWins} />
-                <ResultsPanel variant="loss" entries={topLosses} />
+                <ResultsPanel variant="win" entries={activeResults.topWins} timeframe={timeframe} />
+                <ResultsPanel variant="loss" entries={activeResults.topLosses} timeframe={timeframe} />
             </div>
         </section>
     );

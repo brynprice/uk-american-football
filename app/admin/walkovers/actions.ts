@@ -3,14 +3,24 @@
 import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
 import { assertPermission } from "@/lib/auth/admin-guard";
+import { isValidScore, isValidUuid } from "@/lib/utils/validation";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY!;
 
 export async function updateWalkoverScore(gameId: string, homeScore: number, awayScore: number, formData: FormData) {
     await assertPermission("walkovers");
+    if (!isValidUuid(gameId)) {
+        throw new Error("Invalid game ID.");
+    }
+    if (!isValidScore(homeScore) || !isValidScore(awayScore)) {
+        throw new Error("Scores must be integers between 0 and 300.");
+    }
     const supabase = createClient(supabaseUrl, supabaseKey);
     const notes = formData.get("notes")?.toString();
+    if (notes && notes.length > 2000) {
+        throw new Error("Notes must be under 2,000 characters.");
+    }
 
     // 1. Update the game score and notes
     const { error: gameError } = await supabase
@@ -33,6 +43,9 @@ export async function updateWalkoverScore(gameId: string, homeScore: number, awa
 
 export async function deleteGame(gameId: string) {
     await assertPermission("walkovers");
+    if (!isValidUuid(gameId)) {
+        throw new Error("Invalid game ID.");
+    }
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     // Delete related items first (notes, staff, sources)
@@ -57,8 +70,14 @@ export async function deleteGame(gameId: string) {
 
 export async function updateGameNotes(gameId: string, formData: FormData) {
     await assertPermission("walkovers");
+    if (!isValidUuid(gameId)) {
+        throw new Error("Invalid game ID.");
+    }
     const supabase = createClient(supabaseUrl, supabaseKey);
     const notes = formData.get("notes")?.toString();
+    if (notes && notes.length > 2000) {
+        throw new Error("Notes must be under 2,000 characters.");
+    }
 
     const { error } = await supabase
         .from("games")

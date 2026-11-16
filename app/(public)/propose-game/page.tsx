@@ -7,9 +7,15 @@ export const revalidate = 86400; // 24 hours
 export default async function ProposeGamePage({
     searchParams
 }: {
-    searchParams: Promise<{ id?: string }>
+    searchParams: Promise<{
+        id?: string;
+        team?: string;
+        competition?: string;
+        year?: string;
+        phase?: string;
+    }>
 }) {
-    const { id } = await searchParams;
+    const { id, team, competition, year, phase } = await searchParams;
     let initialData = undefined;
 
     if (id) {
@@ -20,7 +26,7 @@ export default async function ProposeGamePage({
 
             initialData = {
                 competition: game.phase.season.competition.name,
-                year: game.phase.season.year.toString(),
+                year: `${game.phase.season.competition.name} ${game.phase.season.year}`,
                 phase: game.phase.name,
                 date: game.date || "",
                 home_team: homeIdentity.name,
@@ -39,6 +45,26 @@ export default async function ProposeGamePage({
         } catch (error) {
             console.error("Error fetching game details for proposal:", error);
         }
+    } else if (team || competition || year || phase) {
+        const seasonValue = competition && year ? `${competition} ${year}` : (year || "");
+        initialData = {
+            competition: competition || "BUAFL",
+            year: seasonValue,
+            phase: phase || "",
+            date: "",
+            home_team: team || "",
+            away_team: "",
+            home_score: "",
+            away_score: "",
+            venue: "",
+            notes: "",
+            status: "completed",
+            is_playoff: false,
+            playoff_round: "",
+            final_type: "none",
+            title_name: "",
+            is_double_header: false,
+        };
     }
 
     return (

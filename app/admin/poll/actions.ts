@@ -3,6 +3,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
 import { assertPermission, isSuperAdmin } from "@/lib/auth/admin-guard";
+import { isValidUuid } from "@/lib/utils/validation";
 import { isPlayoffPhase, getPhaseTierInfo } from "@/lib/utils/phase-utils";
 import { resolveTeamIdentity } from "@/lib/utils/team-resolver";
 
@@ -65,6 +66,9 @@ export interface SavedPollBallot {
 
 export async function fetchPollBuilderData(seasonId?: string) {
     const user = await assertPermission("poll");
+    if (seasonId && !isValidUuid(seasonId)) {
+        throw new Error("Invalid season ID.");
+    }
     const userIsAdmin = isSuperAdmin(user);
     const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -389,11 +393,27 @@ export async function savePollBallotAction(
 ) {
     try {
         const user = await assertPermission("poll");
+        if (!isValidUuid(seasonId)) {
+            return { success: false, error: "Invalid season ID." };
+        }
+        if (!Array.isArray(slots)) {
+            return { success: false, error: "Invalid ballot slots." };
+        }
         const userIsAdmin = isSuperAdmin(user);
         const supabase = createClient(supabaseUrl, supabaseKey);
 
         const cleanLabel = (label || "Current Ballot").trim();
-        const normalizedSlots = Array.from({ length: 25 }, (_, i) => slots[i] || null);
+        if (!cleanLabel || cleanLabel.length > 100) {
+            return { success: false, error: "Ballot label must be between 1 and 100 characters." };
+        }
+        const normalizedSlots = Array.from({ length: 25 }, (_, i) => {
+            const slotVal = slots[i];
+            if (!slotVal) return null;
+            if (!isValidUuid(slotVal)) {
+                throw new Error("Invalid team ID in ballot slots.");
+            }
+            return slotVal;
+        });
         const voterName =
             user.user_metadata?.display_name ||
             user.user_metadata?.name ||
@@ -456,6 +476,9 @@ export async function savePollBallotAction(
 export async function deletePollBallotAction(noteId: string) {
     try {
         const user = await assertPermission("poll");
+        if (!isValidUuid(noteId)) {
+            return { success: false, error: "Invalid ballot ID." };
+        }
         const userIsAdmin = isSuperAdmin(user);
         const supabase = createClient(supabaseUrl, supabaseKey);
 

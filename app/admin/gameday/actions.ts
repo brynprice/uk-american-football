@@ -3,7 +3,13 @@
 import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
 import { assertPermission } from "@/lib/auth/admin-guard";
-import { isValidUuid } from "@/lib/utils/validation";
+import {
+    isValidGameStatus,
+    isValidIsoDate,
+    isValidScore,
+    isValidTimeString,
+    isValidUuid,
+} from "@/lib/utils/validation";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY!;
@@ -99,6 +105,9 @@ export async function fetchGamedayData(seasonId?: string, phaseId?: string, date
     }
     if (phaseId && !isValidUuid(phaseId)) {
         throw new Error("Invalid phase ID.");
+    }
+    if (dateFilter && !isValidIsoDate(dateFilter)) {
+        throw new Error("Invalid date filter.");
     }
 
     // Fetch phases for selected season
@@ -198,8 +207,41 @@ export async function fetchGamedayData(seasonId?: string, phaseId?: string, date
 
 export async function saveGamedayScores(updates: GamedayUpdatePayload[]) {
     await assertPermission("gameday");
-    if (!updates || updates.length === 0) {
+    if (!Array.isArray(updates) || updates.length === 0) {
         return { success: true, count: 0 };
+    }
+    if (updates.length > 200) {
+        throw new Error("Too many updates in a single batch.");
+    }
+
+    for (const item of updates) {
+        if (!isValidUuid(item?.id)) {
+            throw new Error("Invalid game ID in update payload.");
+        }
+        if (!isValidGameStatus(item.status)) {
+            throw new Error(`Invalid status for game ${item.id}.`);
+        }
+        if (item.home_score !== null && !isValidScore(item.home_score)) {
+            throw new Error(`Invalid home score for game ${item.id}.`);
+        }
+        if (item.away_score !== null && !isValidScore(item.away_score)) {
+            throw new Error(`Invalid away score for game ${item.id}.`);
+        }
+        if (item.date !== undefined && item.date !== null && item.date.trim() && !isValidIsoDate(item.date)) {
+            throw new Error(`Invalid date for game ${item.id}.`);
+        }
+        if (item.time !== undefined && item.time !== null && item.time.trim() && !isValidTimeString(item.time)) {
+            throw new Error(`Invalid time for game ${item.id}.`);
+        }
+        if (item.notes && item.notes.length > 2000) {
+            throw new Error("Notes must be under 2,000 characters.");
+        }
+        if (item.venue_name && item.venue_name.length > 200) {
+            throw new Error("Venue name must be under 200 characters.");
+        }
+        if ((item.home_coach && item.home_coach.length > 120) || (item.away_coach && item.away_coach.length > 120)) {
+            throw new Error("Coach name must be under 120 characters.");
+        }
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey);

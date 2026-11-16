@@ -322,6 +322,26 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
                         </div>
                     </div>
 
+                    <div className="flex justify-end -mb-3">
+                        <button
+                            type="button"
+                            onClick={() =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    home_team: prev.away_team,
+                                    away_team: prev.home_team,
+                                    home_score: prev.away_score,
+                                    away_score: prev.home_score,
+                                    home_coach: prev.away_coach,
+                                    away_coach: prev.home_coach,
+                                }))
+                            }
+                            className="text-[10px] font-black uppercase tracking-wider text-slate-600 hover:text-blue-600 bg-slate-100 hover:bg-blue-50 border border-slate-200 hover:border-blue-200 px-3 py-1 rounded-full transition-colors cursor-pointer"
+                        >
+                            ⇄ Swap Home / Away
+                        </button>
+                    </div>
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-4 px-6 border-2 border-dashed border-slate-100 rounded-2xl">
                         <div className="space-y-4">
                             <h4 className="text-[10px] font-black uppercase text-center text-slate-300 tracking-[0.2em]">Home Team</h4>

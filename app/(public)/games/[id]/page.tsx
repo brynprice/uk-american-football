@@ -4,6 +4,7 @@ import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import { resolveHeadCoach } from '@/lib/utils/coach-resolver';
 import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
 import DeleteGameButton from '@/components/archive/DeleteGameButton';
+import { encodeMapCoordinates } from '@/lib/utils/validation';
 export const revalidate = 3600;
 
 export default async function GamePage({ params }: { params: Promise<{ id: string }> }) {
@@ -174,7 +175,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                         <div>
                             {game.venue?.coordinates ? (
                                 <a
-                                    href={`https://www.google.com/maps?q=${game.venue.coordinates.replace(/[()]/g, '')}`}
+                                    href={`https://www.google.com/maps?q=${encodeMapCoordinates(game.venue.coordinates)}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="group"

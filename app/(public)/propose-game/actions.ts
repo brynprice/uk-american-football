@@ -1,5 +1,6 @@
 "use server";
 
+import crypto from "crypto";
 import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
@@ -9,10 +10,38 @@ export type ProposalType = 'add' | 'update' | 'delete';
 
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
 const MAX_PROPOSALS_PER_WINDOW = 10;
+const MAX_RATE_LIMIT_ENTRIES = 5000;
 const proposalRateLimitMap = new Map<string, { count: number; resetAt: number }>();
 
-function checkProposalRateLimit(clientKey: string): boolean {
+function getTrustedClientIp(reqHeaders: Headers): string {
+    const vercelIp = reqHeaders.get("x-vercel-forwarded-for");
+    if (vercelIp) return vercelIp.split(",")[0].trim();
+    const cfIp = reqHeaders.get("cf-connecting-ip");
+    if (cfIp) return cfIp.trim();
+    const realIp = reqHeaders.get("x-real-ip");
+    if (realIp) return realIp.trim();
+    const forwardedFor = reqHeaders.get("x-forwarded-for");
+    if (forwardedFor) {
+        const parts = forwardedFor.split(",").map((s) => s.trim()).filter(Boolean);
+        if (parts.length > 0) return parts[parts.length - 1];
+    }
+    return "local";
+}
+
+function checkInMemoryRateLimit(clientKey: string): boolean {
     const now = Date.now();
+    if (proposalRateLimitMap.size > MAX_RATE_LIMIT_ENTRIES) {
+        for (const [k, v] of proposalRateLimitMap) {
+            if (now > v.resetAt) proposalRateLimitMap.delete(k);
+        }
+        // If still above threshold after pruning expired entries, clear oldest slots
+        while (proposalRateLimitMap.size > MAX_RATE_LIMIT_ENTRIES) {
+            const firstKey = proposalRateLimitMap.keys().next().value;
+            if (!firstKey) break;
+            proposalRateLimitMap.delete(firstKey);
+        }
+    }
+
     const entry = proposalRateLimitMap.get(clientKey);
     if (!entry || now > entry.resetAt) {
         proposalRateLimitMap.set(clientKey, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
@@ -22,6 +51,27 @@ function checkProposalRateLimit(clientKey: string): boolean {
         return false;
     }
     entry.count += 1;
+    return true;
+}
+
+async function checkProposalRateLimit(supabase: any, clientHash: string): Promise<boolean> {
+    if (!checkInMemoryRateLimit(clientHash)) {
+        return false;
+    }
+
+    try {
+        const { data, error } = await supabase.rpc("check_proposal_rate_limit", {
+            p_client_hash: clientHash,
+            p_max_requests: MAX_PROPOSALS_PER_WINDOW,
+            p_window_seconds: Math.floor(RATE_LIMIT_WINDOW_MS / 1000),
+        });
+        if (!error && typeof data === "boolean") {
+            return data;
+        }
+    } catch {
+        // Fall back to in-memory check if DB rate-limit migration has not been applied yet
+    }
+
     return true;
 }
 
@@ -77,11 +127,23 @@ export async function submitGameProposal(payload: {
     submittedByEmail?: string;
 }) {
     try {
-        const reqHeaders = await headers();
-        const forwardedFor = reqHeaders.get("x-forwarded-for");
-        const clientIp = forwardedFor ? forwardedFor.split(",")[0].trim() : "local";
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY;
 
-        if (!checkProposalRateLimit(clientIp)) {
+        if (!supabaseUrl || !supabaseKey) {
+            throw new Error("Missing Supabase configuration.");
+        }
+
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        const reqHeaders = await headers();
+        const clientIp = getTrustedClientIp(reqHeaders);
+        const clientHash = crypto
+            .createHmac("sha256", supabaseKey)
+            .update(clientIp)
+            .digest("hex");
+
+        if (!(await checkProposalRateLimit(supabase, clientHash))) {
             return {
                 success: false,
                 error: "Too many proposals submitted recently. Please wait a few minutes before trying again."
@@ -128,15 +190,6 @@ export async function submitGameProposal(payload: {
 
         const sanitizedData = sanitizeProposedData(payload.proposedData);
 
-        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-        const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY;
-
-        if (!supabaseUrl || !supabaseKey) {
-            throw new Error("Missing Supabase configuration.");
-        }
-
-        const supabase = createClient(supabaseUrl, supabaseKey);
-
         const { error } = await supabase.from("game_proposals").insert({
             game_id: payload.gameId || null,
             proposal_type: payload.proposalType,
@@ -156,6 +209,11 @@ export async function submitGameProposal(payload: {
         return { success: true };
     } catch (err: any) {
         console.error("Proposal submission error:", err);
-        return { success: false, error: err.message || "An unknown error occurred" };
+        return {
+            success: false,
+            error: err?.message?.includes("maximum length") || err?.message?.includes("Invalid proposed game data")
+                ? err.message
+                : "Failed to submit proposal."
+        };
     }
 }

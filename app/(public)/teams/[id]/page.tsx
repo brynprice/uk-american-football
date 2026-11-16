@@ -5,7 +5,7 @@ import H2HSelector from '@/components/archive/H2HSelector';
 import TeamSeasonHistory from '@/components/archive/TeamSeasonHistory';
 import TeamTopResults from '@/components/archive/TeamTopResults';
 import { isPlayoffPhase, calculateTeamCompleteness } from '@/lib/utils/phase-utils';
-import { getTopTeamWinsAndLosses } from '@/lib/utils/team-records';
+import { getTenYearCutoff, getTopTeamWinsAndLosses } from '@/lib/utils/team-records';
 export const revalidate = 3600; // 1 hour
 
 export default async function TeamPage({ params }: { params: Promise<{ id: string }> }) {
@@ -47,6 +47,9 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
             const isHome = g.home_team_id === id;
             const teamPhase = isHome ? g.phase : (g.away_phase || g.phase);
             const teamPhaseId = teamPhase?.id || (isHome ? g.phase_id : (g.away_phase_id || g.phase_id));
+
+            if (!teamPhaseId) return;
+            if (g.game_type && g.game_type !== 'league') return;
 
             const isPlayoff = g.is_playoff || isPlayoffPhase(teamPhase || {});
             if (isPlayoff) return;
@@ -151,7 +154,12 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
     const playoffWinPct = playoffStats.gp > 0 ? (playoffStats.wins / playoffStats.gp + (1 - playoffStats.losses / playoffStats.gp)) / 2 : 0;
 
     const completeness = calculateTeamCompleteness(id, team.participations || [], team.games || []);
-    const { topWins, topLosses } = getTopTeamWinsAndLosses(id, team.games || []);
+    const allTimeResults = getTopTeamWinsAndLosses(id, team.games || []);
+    const { minDate, minSeasonYear } = getTenYearCutoff();
+    const last10YearsResults = getTopTeamWinsAndLosses(id, team.games || [], {
+        minDate,
+        minSeasonYear,
+    });
 
     return (
         <ArchiveLayout>
@@ -316,7 +324,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                 </div>
             </div>
 
-            <TeamTopResults topWins={topWins} topLosses={topLosses} />
+            <TeamTopResults allTime={allTimeResults} last10Years={last10YearsResults} />
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                 {/* Left Column: History Timeline */}
@@ -325,10 +333,76 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                         <h3 className="text-xl font-black uppercase border-b-2 border-slate-900 pb-2 mb-6 font-sans">Season History</h3>
                         <TeamSeasonHistory
                             teamId={id}
+                            teamName={team.name}
                             participations={team.participations}
                             games={team.games}
                         />
                     </section>
+
+                    {/* Friendlies, Associate & Exhibition Matches */}
+                    {(() => {
+                        const nonLeagueGames = (team.games || []).filter((g: any) => g.game_type && g.game_type !== 'league' && g.status !== 'anomaly');
+                        if (nonLeagueGames.length === 0) return null;
+                        return (
+                            <section>
+                                <div className="flex items-center justify-between border-b-2 border-slate-900 pb-2 mb-4">
+                                    <h3 className="text-xl font-black uppercase font-sans">Friendlies & Associate Games</h3>
+                                    <span className="text-[10px] font-bold text-slate-400 font-sans uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                                        Non-League / Unranked
+                                    </span>
+                                </div>
+                                <div className="space-y-3">
+                                    {nonLeagueGames.map((game: any) => {
+                                        const isHome = game.home_team_id === id;
+                                        const opp = isHome ? game.away_team : game.home_team;
+                                        const myScore = isHome ? game.home_score : game.away_score;
+                                        const oppScore = isHome ? game.away_score : game.home_score;
+                                        const isWin = myScore !== null && oppScore !== null && myScore > oppScore;
+                                        const isLoss = myScore !== null && oppScore !== null && myScore < oppScore;
+                                        const isTie = myScore !== null && oppScore !== null && myScore === oppScore;
+                                        return (
+                                            <Link
+                                                key={game.id}
+                                                href={`/games/${game.id}`}
+                                                className="block bg-white border border-slate-200 p-4 hover:border-blue-500 transition-all shadow-sm group rounded-sm"
+                                            >
+                                                <div className="flex justify-between items-center mb-1.5">
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-xs font-sans text-slate-500">
+                                                            {game.date_display || (game.date ? new Date(game.date).toLocaleDateString('en-GB') : (game.phase?.season?.year || 'Unknown'))}
+                                                        </span>
+                                                        <span className={`text-[10px] font-black px-1.5 py-0.5 rounded uppercase ${
+                                                            game.game_type === 'associate' ? 'bg-purple-100 text-purple-700 border border-purple-200' :
+                                                            'bg-blue-100 text-blue-700 border border-blue-200'
+                                                        }`}>
+                                                            {game.game_type}
+                                                        </span>
+                                                    </div>
+                                                    <span className={`text-xs font-black uppercase px-2 py-0.5 rounded ${
+                                                        isWin ? 'bg-emerald-100 text-emerald-800' :
+                                                        isLoss ? 'bg-rose-100 text-rose-800' :
+                                                        isTie ? 'bg-amber-100 text-amber-800' :
+                                                        'bg-slate-100 text-slate-700'
+                                                    }`}>
+                                                        {isWin ? 'Win' : isLoss ? 'Loss' : isTie ? 'Tie' : 'Result'}
+                                                    </span>
+                                                </div>
+                                                <div className="flex justify-between items-center text-sm font-bold">
+                                                    <span className="group-hover:text-blue-600 transition-colors">
+                                                        {isHome ? 'vs' : '@'} {opp?.name || 'Unknown'}
+                                                    </span>
+                                                    <span className="tabular-nums font-mono font-black">
+                                                        {myScore !== null && oppScore !== null ? `${myScore} – ${oppScore}` : 'Score Unrecorded'}
+                                                    </span>
+                                                </div>
+                                                {game.notes && <p className="text-[11px] text-slate-400 mt-1 italic">{game.notes}</p>}
+                                            </Link>
+                                        );
+                                    })}
+                                </div>
+                            </section>
+                        );
+                    })()}
 
                     {/* Hall of Fame Section */}
                     {team.hall_of_fame && team.hall_of_fame.length > 0 && (
@@ -419,44 +493,67 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                                 {completeness.incompleteSeasons.length} {completeness.incompleteSeasons.length === 1 ? 'season has' : 'seasons have'} fewer recorded game logs than expected from official standings or league schedules.
                             </p>
                             <div className="space-y-2.5 max-h-80 overflow-y-auto pr-1">
-                                {completeness.incompleteSeasons.map((s) => (
-                                    <div
-                                        key={s.seasonKey}
-                                        className="bg-white p-3 rounded border border-amber-200 flex items-center justify-between gap-3 text-xs shadow-2xs"
-                                    >
-                                        <div className="min-w-0">
-                                            <div className="font-bold text-slate-900 truncate">
-                                                {s.seasonId ? (
-                                                    <Link href={`/seasons/${s.seasonId}`} className="hover:text-blue-700 hover:underline">
-                                                        {s.seasonName}
-                                                    </Link>
-                                                ) : (
-                                                    s.seasonName
+                                {completeness.incompleteSeasons.map((s) => {
+                                    const proposeParams = new URLSearchParams();
+                                    proposeParams.set('team', team.name);
+                                    if (s.competitionName) proposeParams.set('competition', s.competitionName);
+                                    if (s.year) proposeParams.set('year', String(s.year));
+                                    if (s.primaryPhaseName) proposeParams.set('phase', s.primaryPhaseName);
+
+                                    return (
+                                        <div
+                                            key={s.seasonKey}
+                                            className="bg-white p-3 rounded border border-amber-200 flex items-center justify-between gap-3 text-xs shadow-2xs"
+                                        >
+                                            <div className="min-w-0">
+                                                <div className="font-bold text-slate-900 truncate">
+                                                    {s.seasonId ? (
+                                                        <Link href={`/seasons/${s.seasonId}`} className="hover:text-blue-700 hover:underline">
+                                                            {s.seasonName}
+                                                        </Link>
+                                                    ) : (
+                                                        s.seasonName
+                                                    )}
+                                                </div>
+                                                {s.competitionName && (
+                                                    <div className="text-[10px] text-slate-500 uppercase font-sans font-bold tracking-wide truncate">
+                                                        {s.competitionName}
+                                                    </div>
                                                 )}
                                             </div>
-                                            {s.competitionName && (
-                                                <div className="text-[10px] text-slate-500 uppercase font-sans font-bold tracking-wide truncate">
-                                                    {s.competitionName}
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="flex items-center gap-2 shrink-0">
-                                            <span className="text-[10px] font-mono text-slate-500">
-                                                {s.recordedGames}/{s.expectedGames} rec
-                                            </span>
-                                            {s.missingGames > 0 && (
-                                                <span className="bg-amber-100 text-amber-900 border border-amber-300 font-mono font-black text-[10px] px-2 py-0.5 rounded">
-                                                    -{s.missingGames}
+                                            <div className="flex items-center gap-1.5 shrink-0">
+                                                <span className="text-[10px] font-mono text-slate-500">
+                                                    {s.recordedGames}/{s.expectedGames} rec
                                                 </span>
-                                            )}
-                                            {s.unscoredGames > 0 && (
-                                                <span className="bg-rose-100 text-rose-800 border border-rose-200 font-mono font-bold text-[10px] px-1.5 py-0.5 rounded">
-                                                    {s.unscoredGames} unscored
-                                                </span>
-                                            )}
+                                                {s.missingGames > 0 && (
+                                                    <span className="bg-amber-100 text-amber-900 border border-amber-300 font-mono font-black text-[10px] px-1.5 py-0.5 rounded">
+                                                        -{s.missingGames}
+                                                    </span>
+                                                )}
+                                                {s.unscoredGames > 0 && (
+                                                    <span className="bg-rose-100 text-rose-800 border border-rose-200 font-mono font-bold text-[10px] px-1.5 py-0.5 rounded">
+                                                        {s.unscoredGames} unscored
+                                                    </span>
+                                                )}
+                                                <Link
+                                                    href={`/propose-game?${proposeParams.toString()}`}
+                                                    className="bg-slate-900 hover:bg-blue-600 text-white font-sans font-black uppercase text-[9px] tracking-wider px-2 py-1 rounded transition-colors"
+                                                    title={`Report a missing game for ${team.name} in ${s.seasonName}`}
+                                                >
+                                                    + Report
+                                                </Link>
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
+                            </div>
+                            <div className="mt-4 pt-3 border-t border-amber-200/80">
+                                <Link
+                                    href={`/propose-game?team=${encodeURIComponent(team.name)}`}
+                                    className="w-full inline-flex items-center justify-center gap-1.5 bg-amber-900 hover:bg-slate-900 text-white text-[11px] font-black uppercase tracking-wider font-sans py-2.5 px-4 rounded transition-colors shadow-xs"
+                                >
+                                    <span>+ Submit Missing Game for {team.name}</span>
+                                </Link>
                             </div>
                         </section>
                     )}

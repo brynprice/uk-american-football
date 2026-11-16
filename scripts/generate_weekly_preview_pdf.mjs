@@ -17,6 +17,7 @@ import fs from 'fs';
 import path from 'path';
 import playwright from 'playwright';
 import { generateWeeklyPreview } from '../lib/facts/weekly-preview-core.mjs';
+import { escapeHtml, createIsolatedPdfPage } from '../lib/facts/html-utils.mjs';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY;
@@ -55,7 +56,7 @@ function generateHtml(preview) {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Britball Weekly Preview - ${window.label}</title>
+  <title>Britball Weekly Preview - ${escapeHtml(window.label)}</title>
   <style>
     @page {
       size: A4 portrait;
@@ -193,31 +194,31 @@ function generateHtml(preview) {
   <div class="header">
     <div class="header-left">
       <h1>UK American Football Archive</h1>
-      <div class="sub">Upcoming Scouting & Intelligence Preview — ${window.label}</div>
+      <div class="sub">Upcoming Scouting & Intelligence Preview — ${escapeHtml(window.label)}</div>
     </div>
     <div class="header-right">
       <div class="badge">OFFICIAL SCOUTING REPORT</div>
-      <div>Season: <strong>BUCS ${window.seasonYear}</strong></div>
-      <div>Generated: ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+      <div>Season: <strong>BUCS ${escapeHtml(window.seasonYear)}</strong></div>
+      <div>Generated: ${escapeHtml(new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }))}</div>
     </div>
   </div>
 
   <!-- Snapshot Bar -->
   <div class="snapshot-bar">
     <div class="stat-box">
-      <div class="stat-val">${totalFixtures}</div>
+      <div class="stat-val">${escapeHtml(totalFixtures)}</div>
       <div class="stat-label">Fixtures Scheduled</div>
     </div>
     <div class="stat-box">
-      <div class="stat-val">${inauguralMatchups.length}</div>
+      <div class="stat-val">${escapeHtml(inauguralMatchups.length)}</div>
       <div class="stat-label">Inaugural Clashes</div>
     </div>
     <div class="stat-box">
-      <div class="stat-val">${formWatch.defendingPerfection.length}</div>
+      <div class="stat-val">${escapeHtml(formWatch.defendingPerfection.length)}</div>
       <div class="stat-label">Undefeated Teams Playing</div>
     </div>
     <div class="stat-box">
-      <div class="stat-val">${longHiatusMatchups.length}</div>
+      <div class="stat-val">${escapeHtml(longHiatusMatchups.length)}</div>
       <div class="stat-label">Hiatuses Ended (≥4 Yrs)</div>
     </div>
   </div>
@@ -229,22 +230,22 @@ function generateHtml(preview) {
       ${marqueeMatchups.slice(0, 4).map(m => `
         <div class="card card-purple">
           <div class="card-header">
-            <div class="card-title">${m.matchup}</div>
-            <span class="tag tag-purple">${m.type}</span>
+            <div class="card-title">${escapeHtml(m.matchup)}</div>
+            <span class="tag tag-purple">${escapeHtml(m.type)}</span>
           </div>
-          <div class="card-desc">${m.description} (${m.division})</div>
+          <div class="card-desc">${escapeHtml(m.description)} (${escapeHtml(m.division)})</div>
         </div>
       `).join('')}
 
       ${brightonPreview ? `
         <div class="card card-panthers">
           <div class="card-header">
-            <div class="card-title" style="color: #252E30;">🐾 ${brightonPreview.matchup}</div>
+            <div class="card-title" style="color: #252E30;">🐾 ${escapeHtml(brightonPreview.matchup)}</div>
             <span class="tag tag-panthers">PANTHERS SPOTLIGHT</span>
           </div>
           <div class="card-desc" style="color: #252E30;">
-            ${brightonPreview.notes}
-            ${brightonPreview.predictedScore ? `<br><strong style="color: #633063;">Model Projection:</strong> ${brightonPreview.predictedScore} (${brightonPreview.winProb}% prob)` : ''}
+            ${escapeHtml(brightonPreview.notes)}
+            ${brightonPreview.predictedScore ? `<br><strong style="color: #633063;">Model Projection:</strong> ${escapeHtml(brightonPreview.predictedScore)} (${escapeHtml(brightonPreview.winProb)}% prob)` : ''}
           </div>
         </div>
       ` : ''}
@@ -257,11 +258,11 @@ function generateHtml(preview) {
     <div class="grid-2">
       <div class="card">
         <div class="card-header">
-          <div class="card-title">Inaugural Meetings (${inauguralMatchups.length})</div>
+          <div class="card-title">Inaugural Meetings (${escapeHtml(inauguralMatchups.length)})</div>
           <span class="tag tag-green">FIRST-EVER</span>
         </div>
         <ul class="fact-list">
-          ${inauguralMatchups.map(i => `<li><strong>${i.matchup}</strong> (${i.division}): ${i.description}</li>`).join('')}
+          ${inauguralMatchups.map(i => `<li><strong>${escapeHtml(i.matchup)}</strong> (${escapeHtml(i.division)}): ${escapeHtml(i.description)}</li>`).join('')}
         </ul>
       </div>
 
@@ -271,7 +272,7 @@ function generateHtml(preview) {
           <span class="tag tag-amber">LONG TIME NO SEE</span>
         </div>
         <ul class="fact-list">
-          ${longHiatusMatchups.map(h => `<li><strong>${h.matchup}</strong>: ${h.description}</li>`).join('')}
+          ${longHiatusMatchups.map(h => `<li><strong>${escapeHtml(h.matchup)}</strong>: ${escapeHtml(h.description)}</li>`).join('')}
         </ul>
       </div>
     </div>
@@ -286,9 +287,9 @@ function generateHtml(preview) {
           <div class="card-title">Early Season Momentum</div>
         </div>
         <ul class="fact-list">
-          ${formWatch.defendingPerfection.length > 0 ? `<li>🟢 <strong>Perfection on the Line</strong>: ${formWatch.defendingPerfection.map(t => `${t.team} (${t.record}) aiming for ${t.nextWin || (t.wins + 1)}-0`).join(', ')}</li>` : ''}
-          ${formWatch.shutoutStreaks.map(s => `<li>🛡️ <strong>Iron Curtain Watch</strong>: ${s.description}</li>`).join('')}
-          ${formWatch.winlessTeams.length > 0 ? `<li>🔴 <strong>Desperation Bowls (Hunting Win #1)</strong>: ${formWatch.winlessTeams.map(t => `${t.team} (${t.record})`).join(', ')}</li>` : ''}
+          ${formWatch.defendingPerfection.length > 0 ? `<li>🟢 <strong>Perfection on the Line</strong>: ${formWatch.defendingPerfection.map(t => `${escapeHtml(t.team)} (${escapeHtml(t.record)}) aiming for ${escapeHtml(t.nextWin || (t.wins + 1))}-0`).join(', ')}</li>` : ''}
+          ${formWatch.shutoutStreaks.map(s => `<li>🛡️ <strong>Iron Curtain Watch</strong>: ${escapeHtml(s.description)}</li>`).join('')}
+          ${formWatch.winlessTeams.length > 0 ? `<li>🔴 <strong>Desperation Bowls (Hunting Win #1)</strong>: ${formWatch.winlessTeams.map(t => `${escapeHtml(t.team)} (${escapeHtml(t.record)})`).join(', ')}</li>` : ''}
         </ul>
       </div>
 
@@ -297,8 +298,8 @@ function generateHtml(preview) {
           <div class="card-title">Historical Series Dominance & Milestones</div>
         </div>
         <ul class="fact-list">
-          ${seriesDominance.slice(0, 4).map(s => `<li>🧱 <strong>Dominance</strong>: ${s.description}</li>`).join('')}
-          ${milestoneAlerts.map(ms => `<li>🏆 <strong>Milestone Watch</strong>: ${ms.description}</li>`).join('')}
+          ${seriesDominance.slice(0, 4).map(s => `<li>🧱 <strong>Dominance</strong>: ${escapeHtml(s.description)}</li>`).join('')}
+          ${milestoneAlerts.map(ms => `<li>🏆 <strong>Milestone Watch</strong>: ${escapeHtml(ms.description)}</li>`).join('')}
         </ul>
       </div>
     </div>
@@ -310,9 +311,9 @@ function generateHtml(preview) {
     <div class="preds-grid">
       ${predictedGames.map(p => `
         <div class="pred-card">
-          <div class="pred-matchup">${p.homeTeam} vs ${p.awayTeam}</div>
-          <div class="pred-score">Proj: ${p.predHome} - ${p.predAway}</div>
-          <div class="pred-prob">${p.predWinner} favored (${p.winProb}% prob)</div>
+          <div class="pred-matchup">${escapeHtml(p.homeTeam)} vs ${escapeHtml(p.awayTeam)}</div>
+          <div class="pred-score">Proj: ${escapeHtml(p.predHome)} - ${escapeHtml(p.predAway)}</div>
+          <div class="pred-prob">${escapeHtml(p.predWinner)} favored (${escapeHtml(p.winProb)}% prob)</div>
         </div>
       `).join('')}
     </div>
@@ -345,14 +346,17 @@ async function main() {
     }
 
     const defaultFilename = `BUCS_${options.season}_Week_${options.week}_Preview.pdf`;
+    const workspaceRoot = path.resolve(process.cwd());
     const outputPath = outputArg ? path.resolve(outputArg) : path.join(reportsDir, defaultFilename);
+    if (!outputPath.startsWith(workspaceRoot + path.sep)) {
+      throw new Error('Output path must remain inside the repository directory.');
+    }
 
     console.log(`[INFO] Launching Chromium to render Preview PDF...`);
     const browser = await playwright.chromium.launch();
-    const context = await browser.newContext();
-    const page = await context.newPage();
+    const { page } = await createIsolatedPdfPage(browser);
 
-    await page.setContent(html, { waitUntil: 'networkidle' });
+    await page.setContent(html, { waitUntil: 'load' });
 
     await page.pdf({
       path: outputPath,

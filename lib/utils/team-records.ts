@@ -70,6 +70,12 @@ export interface TeamTopWinsAndLosses {
     topLosses: TeamExtremeGame[];
 }
 
+export interface TopTeamWinsAndLossesOptions {
+    limit?: number;
+    minDate?: string | null;
+    minSeasonYear?: number | null;
+}
+
 /**
  * Returns true if a scoreline is a 1-0 or 0-1 walkover forfeit rather than an on-field score.
  */
@@ -78,6 +84,23 @@ export function isWalkoverScoreline(
     awayScore: number | null | undefined
 ): boolean {
     return (homeScore === 1 && awayScore === 0) || (homeScore === 0 && awayScore === 1);
+}
+
+/**
+ * Returns the inclusive rolling 10-year date and undated season-year cutoffs in UTC.
+ */
+export function getTenYearCutoff(referenceDate: Date = new Date()): {
+    minDate: string;
+    minSeasonYear: number;
+} {
+    const referenceYear = referenceDate.getUTCFullYear();
+    const cutoff = new Date(
+        Date.UTC(referenceYear - 10, referenceDate.getUTCMonth(), referenceDate.getUTCDate())
+    );
+    return {
+        minDate: cutoff.toISOString().slice(0, 10),
+        minSeasonYear: referenceYear - 9,
+    };
 }
 
 function parseDateYear(date?: string | null): number | null {
@@ -89,6 +112,40 @@ function parseDateYear(date?: string | null): number | null {
     }
     const timestamp = Date.parse(date);
     return Number.isFinite(timestamp) ? new Date(timestamp).getUTCFullYear() : null;
+}
+
+function isWithinTimeWindow(
+    gameDate: string | null | undefined,
+    seasonYear: number | null,
+    minDate?: string | null,
+    minSeasonYear?: number | null
+): boolean {
+    const hasMinYear = minSeasonYear !== null && minSeasonYear !== undefined;
+    if (!minDate && !hasMinYear) {
+        return true;
+    }
+
+    if (gameDate) {
+        const normalizedDate = gameDate.trim().slice(0, 10);
+        if (minDate && /^\d{4}-\d{2}-\d{2}$/.test(normalizedDate)) {
+            return normalizedDate >= minDate;
+        }
+        const parsedYear = parseDateYear(normalizedDate);
+        if (parsedYear !== null && hasMinYear) {
+            return parsedYear >= minSeasonYear;
+        }
+    }
+
+    if (hasMinYear) {
+        return seasonYear !== null && seasonYear >= minSeasonYear;
+    }
+
+    if (minDate) {
+        const minYear = parseDateYear(minDate);
+        return seasonYear !== null && minYear !== null && seasonYear > minYear;
+    }
+
+    return true;
 }
 
 function compareRecencyDesc(a: TeamExtremeGame, b: TeamExtremeGame): number {
@@ -116,6 +173,7 @@ function compareRecencyDesc(a: TeamExtremeGame, b: TeamExtremeGame): number {
  * - Played competitive games only (`status === 'completed'`, `game_type === 'league'` or unset)
  * - Excludes walkover forfeits (`status === 'awarded'` and `1-0` / `0-1` scorelines)
  * - Excludes non-league games (friendlies, associate, varsity, old_boys) and ties
+ * - Optionally filtered by `minDate` / `minSeasonYear` for rolling timeframes (e.g. last 10 years)
  *
  * Ranking:
  * - Wins: largest margin descending, then highest team score descending, then most recent first
@@ -124,8 +182,13 @@ function compareRecencyDesc(a: TeamExtremeGame, b: TeamExtremeGame): number {
 export function getTopTeamWinsAndLosses(
     teamId: string,
     games: readonly TeamRecordGame[],
-    limit = 3
+    limitOrOptions: number | TopTeamWinsAndLossesOptions = 3
 ): TeamTopWinsAndLosses {
+    const options: TopTeamWinsAndLossesOptions =
+        typeof limitOrOptions === "number" ? { limit: limitOrOptions } : limitOrOptions;
+    const limit = options.limit ?? 3;
+    const { minDate, minSeasonYear } = options;
+
     const wins: TeamExtremeGame[] = [];
     const losses: TeamExtremeGame[] = [];
     const seenIds = new Set<string>();
@@ -162,6 +225,11 @@ export function getTopTeamWinsAndLosses(
             resolvedPhase?.season?.year ??
             game.season?.year ??
             parseDateYear(game.date);
+
+        if (!isWithinTimeWindow(game.date, seasonYear, minDate, minSeasonYear)) {
+            continue;
+        }
+
         const competitionName =
             resolvedPhase?.season?.competition?.name ??
             game.season?.competition?.name ??

@@ -3,12 +3,19 @@
 import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
 import { assertPermission } from "@/lib/auth/admin-guard";
+import { isValidScore, isValidUuid } from "@/lib/utils/validation";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY!;
 
 export async function resolveAnomaly(gameId: string, homeScore: number, awayScore: number) {
   await assertPermission("anomalies");
+  if (!isValidUuid(gameId)) {
+    return { success: false, error: "Invalid game ID." };
+  }
+  if (!isValidScore(homeScore) || !isValidScore(awayScore)) {
+    return { success: false, error: "Scores must be integers between 0 and 300." };
+  }
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   const { error } = await supabase
@@ -30,6 +37,9 @@ export async function resolveAnomaly(gameId: string, homeScore: number, awayScor
 
 export async function deleteAnomalyGame(gameId: string) {
   await assertPermission("anomalies");
+  if (!isValidUuid(gameId)) {
+    return { success: false, error: "Invalid game ID." };
+  }
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   await Promise.all([

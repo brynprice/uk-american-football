@@ -314,6 +314,11 @@ def sense_check_season(csv_path):
     missing_phases = 0
     missing_parent_phases = 0
     for idx, g in enumerate(games, 1):
+        g_type = (g.get('game_type') or '').strip().lower()
+        title_n = (g.get('title_name') or '').strip().lower()
+        notes_str = (g.get('notes') or '').lower()
+        if g_type in ('friendly', 'exhibition') or title_n in ('varsity bowl', 'cavalier cup') or 'varsity bowl' in notes_str or 'friendly' in notes_str:
+            continue
         phase = (g.get('phase') or '').strip()
         parent_phase = (g.get('parent_phase') or '').strip()
         if not phase:
@@ -343,7 +348,11 @@ def sense_check_season(csv_path):
                         team_phase_map[canonical_t] = {'phase': p, 'parent_phase': pp}
 
             for idx, g in enumerate(games, 1):
-                if g.get('is_playoff', '').upper() == 'TRUE':
+                parent_p = (g.get('parent_phase') or '').lower()
+                game_p = (g.get('phase') or '').lower()
+                if (g.get('is_playoff', '').upper() == 'TRUE' or
+                    parent_p in ('varsity fixtures', 'exhibition', 'friendlies') or
+                    game_p in ('varsity bowl', 'exhibition')):
                     continue
                 a_team = active_alias_map.get(g.get('away_team', '').strip(), g.get('away_team', '').strip())
                 h_team = active_alias_map.get(g.get('home_team', '').strip(), g.get('home_team', '').strip())
@@ -482,16 +491,27 @@ def sense_check_season(csv_path):
         round_hierarchy = {
             'wildcard': 1,
             'wildcard round': 1,
+            'wild card': 1,
+            'wild card round': 1,
+            'wild-card': 1,
             'first round': 1,
             'round 1': 1,
             'quarter final': 2,
             'quarter finals': 2,
             'quarter-final': 2,
             'quarter-finals': 2,
+            'quarter_final': 2,
+            'quarter_finals': 2,
+            'quarterfinal': 2,
+            'quarterfinals': 2,
             'semi final': 3,
             'semi finals': 3,
             'semi-final': 3,
             'semi-finals': 3,
+            'semi_final': 3,
+            'semi_finals': 3,
+            'semifinal': 3,
+            'semifinals': 3,
             'third-place playoff': 4,
             '3rd place playoff': 4,
             'consolation': 4,
@@ -609,12 +629,17 @@ def sense_check_season(csv_path):
                 )
         else:
             # University football: October to April
-            # Rule 1: No regular games in May, and no games in June, July, August, or September (Critical)
-            if month in (6, 7, 8, 9) or (month == 5 and not is_playoff):
+            parent_p = (g.get('parent_phase') or '').lower()
+            game_p = (g.get('phase') or '').lower()
+            is_varsity = parent_p in ('varsity fixtures', 'exhibition', 'friendlies') or game_p in ('varsity bowl', 'exhibition')
+            # Rule 1: No regular games in May (unless varsity/exhibition), and no games in June, July, August, or September (Critical)
+            if month in (6, 7, 8, 9) or (month == 5 and not is_playoff and not is_varsity):
                 issues.append(
                     f"Row {idx}: Invalid game month ({month_names[month]} / {d_str}). "
                     f"Games should not be played in May, June, July, August, or September."
                 )
+            elif month == 5 and is_varsity:
+                pass
             elif month == 5 and is_playoff:
                 warnings.append(
                     f"Row {idx}: Playoff game in May ({month_names[month]} / {d_str}). "

@@ -90,12 +90,38 @@ export default function AdminUsersPage() {
   }, []);
 
   const generateRandomPassword = () => {
-    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#";
-    let out = "";
-    for (let i = 0; i < 12; i++) {
-      out += chars.charAt(Math.floor(Math.random() * chars.length));
+    const upper = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+    const lower = "abcdefghijkmnopqrstuvwxyz";
+    const digits = "23456789";
+    const symbols = "!@#%&*";
+    const all = upper + lower + digits + symbols;
+
+    const getRandomIndex = (max: number): number => {
+      const limit = Math.floor(0x100000000 / max) * max;
+      const buf = new Uint32Array(1);
+      let val: number;
+      do {
+        window.crypto.getRandomValues(buf);
+        val = buf[0];
+      } while (val >= limit);
+      return val % max;
+    };
+
+    const chars: string[] = [
+      upper[getRandomIndex(upper.length)],
+      lower[getRandomIndex(lower.length)],
+      digits[getRandomIndex(digits.length)],
+      symbols[getRandomIndex(symbols.length)],
+    ];
+    while (chars.length < 16) {
+      chars.push(all[getRandomIndex(all.length)]);
     }
-    setNewPassword(out);
+    // Fisher-Yates shuffle with CSPRNG
+    for (let i = chars.length - 1; i > 0; i--) {
+      const j = getRandomIndex(i + 1);
+      [chars[i], chars[j]] = [chars[j], chars[i]];
+    }
+    setNewPassword(chars.join(""));
   };
 
   const applyPresetToNewUser = (presetId: string) => {
@@ -239,8 +265,8 @@ export default function AdminUsersPage() {
   };
 
   const handleResetPassword = (userId: string) => {
-    if (!resetPasswordValue || resetPasswordValue.length < 10) {
-      showToast("Password must be at least 10 characters.", "error");
+    if (!resetPasswordValue || resetPasswordValue.length < 12) {
+      showToast("Password must be at least 12 characters.", "error");
       return;
     }
     startTransition(async () => {
@@ -403,10 +429,10 @@ export default function AdminUsersPage() {
                 <input
                   type="text"
                   required
-                  minLength={10}
+                  minLength={12}
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="Min 10 characters"
+                  placeholder="Min 12 characters (A-Z, a-z, 0-9)"
                   className="w-full border-2 border-slate-900 px-3 py-2 text-sm font-mono font-bold focus:outline-none focus:bg-amber-50/40"
                 />
               </div>
@@ -664,7 +690,7 @@ export default function AdminUsersPage() {
                           type="text"
                           value={resetPasswordValue}
                           onChange={(e) => setResetPasswordValue(e.target.value)}
-                          placeholder="Min 10 characters"
+                          placeholder="Min 12 characters"
                           className="border border-slate-400 bg-white px-2.5 py-1 text-xs font-mono"
                         />
                         <button

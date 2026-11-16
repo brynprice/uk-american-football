@@ -214,6 +214,7 @@ export interface SeasonCompletenessSummary {
     year: number;
     seasonName: string;
     competitionName: string;
+    primaryPhaseName?: string;
     expectedGames: number;
     recordedGames: number;
     missingGames: number;
@@ -268,6 +269,7 @@ export function calculateTeamCompleteness(
         let seasonRecorded = 0;
         let seasonMissing = 0;
         let seasonUnscored = 0;
+        let primaryPhaseName: string | undefined = undefined;
 
         for (const p of seasonParts) {
             const phaseId = p.phase_id || p.phase?.id;
@@ -279,6 +281,9 @@ export function calculateTeamCompleteness(
             });
 
             const comp = calculatePhaseCompleteness(p, phaseGames);
+            if (!primaryPhaseName && (comp.missingGames > 0 || comp.unscoredGames > 0) && p.phase?.name) {
+                primaryPhaseName = p.phase.name;
+            }
             if (comp.expectedGames !== null) {
                 seasonExpected += Math.max(comp.expectedGames, comp.recordedGames);
                 seasonRecorded += comp.recordedGames;
@@ -302,6 +307,7 @@ export function calculateTeamCompleteness(
                 year: season?.year || 0,
                 seasonName: season?.name || (season?.year ? `${season.year} Season` : 'Season'),
                 competitionName: season?.competition?.name || '',
+                primaryPhaseName: primaryPhaseName || seasonParts[0]?.phase?.name || '',
                 expectedGames: seasonExpected,
                 recordedGames: seasonRecorded,
                 missingGames: seasonMissing,

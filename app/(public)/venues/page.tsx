@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
+import { encodeMapCoordinates } from '@/lib/utils/validation';
 
 export const revalidate = 86400; // 24 hours
 
@@ -23,7 +24,7 @@ export default async function VenuesListPage() {
                         >
                             {venue.coordinates ? (
                                 <a
-                                    href={`https://www.google.com/maps?q=${venue.coordinates.replace(/[()]/g, '')}`}
+                                    href={`https://www.google.com/maps?q=${encodeMapCoordinates(venue.coordinates)}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="group block"

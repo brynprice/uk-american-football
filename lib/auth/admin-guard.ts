@@ -1,4 +1,6 @@
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { sanitizeInternalRedirect } from "@/lib/utils/validation";
 import {
   PermissionKey,
   PERMISSION_METADATA,
@@ -66,5 +68,47 @@ export async function assertPermission(permission: PermissionKey) {
     throw new UnauthorizedError(`Forbidden: Your account does not have access to ${label}.`);
   }
 
+  return user;
+}
+
+/**
+ * Server Component guard ensuring the requester has an active authenticated Supabase session.
+ * Provides defense-in-depth alongside middleware/proxy checks.
+ */
+export async function requireAuthenticatedPage(redirectPath = "/admin") {
+  const safeNext = sanitizeInternalRedirect(redirectPath, "/admin");
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (error || !user) {
+    redirect(`/login?next=${encodeURIComponent(safeNext)}`);
+  }
+
+  return user;
+}
+
+/**
+ * Server Component guard ensuring the requester is a Super Admin.
+ */
+export async function requireAdminPage(redirectPath = "/admin/users") {
+  const user = await requireAuthenticatedPage(redirectPath);
+  if (!isSuperAdmin(user)) {
+    redirect("/admin?denied=admin_only");
+  }
+  return user;
+}
+
+/**
+ * Server Component guard ensuring the requester holds a specific tool permission (or Super Admin).
+ */
+export async function requirePermissionPage(permission: PermissionKey, redirectPath?: string) {
+  const targetPath = redirectPath || PERMISSION_METADATA[permission]?.href || "/admin";
+  const user = await requireAuthenticatedPage(targetPath);
+  if (!hasPermission(user, permission)) {
+    redirect(`/admin?denied=${encodeURIComponent(permission)}`);
+  }
   return user;
 }
