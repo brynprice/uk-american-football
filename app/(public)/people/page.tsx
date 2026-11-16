@@ -2,7 +2,7 @@ import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import PeopleFilterList from '@/components/archive/PeopleFilterList';
 
-export const revalidate = 3600; // 1 hour
+export const revalidate = 604800; // 7 days
 
 export default async function PeopleListPage() {
     const people = await ArchiveService.getPeople();

@@ -3,7 +3,7 @@ import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import UniballTimelineView from '@/components/archive/UniballTimelineView';
 import { ArchiveService } from '@/services/archive-service';
 
-export const revalidate = 3600;
+export const revalidate = 604800; // 7 days
 
 export const metadata: Metadata = {
     title: "Interactive Historical Timelines (Uniball & Women's Game) | Britball.io",

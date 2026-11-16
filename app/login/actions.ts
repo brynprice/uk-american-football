@@ -35,13 +35,13 @@ export async function login(formData: FormData) {
     }
   }
 
-  revalidatePath('/', 'layout')
+  revalidatePath('/admin', 'layout')
   redirect(next)
 }
 
 export async function signOut() {
   const supabase = await createClient()
   await supabase.auth.signOut()
-  revalidatePath('/', 'layout')
+  revalidatePath('/admin', 'layout')
   redirect('/login')
 }

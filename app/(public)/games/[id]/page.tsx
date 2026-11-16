@@ -5,11 +5,13 @@ import { resolveHeadCoach } from '@/lib/utils/coach-resolver';
 import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
 import DeleteGameButton from '@/components/archive/DeleteGameButton';
 import { encodeMapCoordinates } from '@/lib/utils/validation';
-export const revalidate = 3600;
+import { assertValidUuidOrNotFound, fetchOrNotFound } from '@/lib/utils/route-helpers';
+export const revalidate = 2592000; // 30 days
 
 export default async function GamePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const game = await ArchiveService.getGameDetails(id);
+    assertValidUuidOrNotFound(id);
+    const game = await fetchOrNotFound(() => ArchiveService.getGameDetails(id));
 
     const homeCoach = resolveHeadCoach(
         game.id,
@@ -40,7 +42,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
             <div className="mb-12">
                 <div className="flex justify-between items-start mb-4">
                     {season ? (
-                        <Link href={`/seasons/${season.id}`} className="text-blue-600 hover:underline text-sm inline-block">
+                        <Link href={`/seasons/${season.id}`} prefetch={false} className="text-blue-600 hover:underline text-sm inline-block">
                             &larr; Back to {season.year} {season.competition?.name || 'Season'}
                         </Link>
                     ) : (
@@ -60,6 +62,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                             {game.is_totally_unique ? (
                                 <Link
                                     href="/scorigami/unique"
+                                    prefetch={false}
                                     className="bg-amber-400 hover:bg-amber-500 text-slate-950 px-2.5 py-0.5 rounded text-[10px] font-black normal-case tracking-normal shadow-sm transition-colors flex items-center gap-1"
                                     title="This game produced a totally unique final score never repeated in British American football history across all levels"
                                 >
@@ -68,6 +71,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                             ) : game.is_unique_score ? (
                                 <Link
                                     href="/scorigami/unique"
+                                    prefetch={false}
                                     className="bg-purple-600 hover:bg-purple-700 text-white px-2 py-0.5 rounded text-[10px] font-black normal-case tracking-normal shadow-sm transition-colors"
                                     title={`This game produced a unique final score never repeated in ${game.game_level || 'this level of'} British American football history`}
                                 >
@@ -113,7 +117,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                                     <img src={awayIdentity.logo_url} alt={awayIdentity.name} className="max-w-full max-h-full object-contain" />
                                 </div>
                             )}
-                            <Link href={`/teams/${game.away_team_id}`} className="text-2xl font-black hover:text-blue-700">
+                            <Link href={`/teams/${game.away_team_id}`} prefetch={false} className="text-2xl font-black hover:text-blue-700">
                                 {awayIdentity.name}
                             </Link>
                             <div className="text-xs text-slate-500 mt-2 font-sans uppercase">Visitor</div>
@@ -133,7 +137,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                                     <img src={homeIdentity.logo_url} alt={homeIdentity.name} className="max-w-full max-h-full object-contain" />
                                 </div>
                             )}
-                            <Link href={`/teams/${game.home_team_id}`} className="text-2xl font-black hover:text-blue-700">
+                            <Link href={`/teams/${game.home_team_id}`} prefetch={false} className="text-2xl font-black hover:text-blue-700">
                                 {homeIdentity.name}
                             </Link>
                             <div className="text-xs text-slate-500 mt-2 font-sans uppercase">Home</div>
@@ -163,7 +167,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                                         {mvpStaff.map((s: any) => (
                                             <div key={s.id} className="flex justify-between text-xs">
                                                 <span className="text-slate-500 uppercase">{s.role.replace(/_/g, ' ')}:</span>
-                                                <Link href={`/people/${s.person.id}`} className="font-bold text-slate-900 hover:text-blue-600">
+                                                <Link href={`/people/${s.person.id}`} prefetch={false} className="font-bold text-slate-900 hover:text-blue-600">
                                                     {s.person.display_name}
                                                 </Link>
                                             </div>
@@ -231,6 +235,8 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                 </div>
                 <Link 
                     href={`/propose-game?id=${game.id}`}
+                    prefetch={false}
+                    rel="nofollow"
                     className="bg-slate-100 hover:bg-amber-100 text-slate-600 hover:text-amber-800 px-4 py-2 rounded-lg font-black uppercase tracking-tighter transition-all flex items-center gap-2 border border-slate-200 hover:border-amber-200 shadow-sm"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">

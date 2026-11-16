@@ -81,6 +81,7 @@ export default function PhaseView({ phases, parentPhaseId = null, seasonId, init
                                 return (
                                     <Link
                                         href={`/phases/${phase.id}`}
+                                        prefetch={false}
                                         className="text-sm font-bold text-blue-600 hover:underline inline-flex items-center gap-1"
                                     >
                                         {isPlayoff ? "View Games" : "View Standings & Games"} &rarr;

@@ -145,8 +145,10 @@ export async function GET(
 
         return new Response(csvContent, {
             headers: {
-                "Content-Type": "text/csv",
-                "Content-Disposition": `attachment; filename="phase_${id}_export.csv"`
+                "Content-Type": "text/csv; charset=utf-8",
+                "Content-Disposition": `attachment; filename="phase_${id}_export.csv"`,
+                "Cache-Control": "public, s-maxage=86400, stale-while-revalidate=604800",
+                "X-Robots-Tag": "noindex, nofollow",
             }
         });
 

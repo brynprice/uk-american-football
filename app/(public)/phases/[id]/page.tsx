@@ -5,12 +5,14 @@ import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
 import StandingsTable from '@/components/archive/StandingsTable';
 import DeleteGameButton from '@/components/archive/DeleteGameButton';
 import { isPlayoffPhase } from '@/lib/utils/phase-utils';
+import { assertValidUuidOrNotFound, fetchOrNotFound } from '@/lib/utils/route-helpers';
 
-export const revalidate = 3600;
+export const revalidate = 604800; // 7 days
 
 export default async function PhasePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const phase = await ArchiveService.getPhaseData(id);
+    assertValidUuidOrNotFound(id);
+    const phase = await fetchOrNotFound(() => ArchiveService.getPhaseData(id));
 
     // Determine if this is a playoff phase
     const isPlayoff = isPlayoffPhase(phase);
@@ -42,6 +44,7 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                         href={`/api/export/phase/${id}`}
                         className="bg-slate-900 text-white text-xs font-black uppercase px-4 py-2 rounded hover:bg-blue-600 transition-colors inline-flex items-center gap-2 w-fit"
                         download
+                        rel="nofollow"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
                         Download CSV
@@ -93,6 +96,7 @@ export default async function PhasePage({ params }: { params: Promise<{ id: stri
                             <Link
                                 key={game.id}
                                 href={`/games/${game.id}`}
+                                prefetch={false}
                                 className="block bg-white border border-slate-200 p-4 hover:border-blue-500 transition-all shadow-sm"
                             >
                                 <div className="flex justify-between items-center mb-2">

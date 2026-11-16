@@ -1,22 +1,11 @@
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
-import TeamFilterList, { TeamStatusFilter } from '@/components/archive/TeamFilterList';
+import TeamFilterList from '@/components/archive/TeamFilterList';
 
-export const revalidate = 0;
+export const revalidate = 604800; // 7 days
 
-interface TeamsListPageProps {
-    searchParams?: Promise<{ status?: string }>;
-}
-
-export default async function TeamsListPage({ searchParams }: TeamsListPageProps) {
+export default async function TeamsListPage() {
     const teams = await ArchiveService.getTeams();
-    const resolvedParams = searchParams ? await searchParams : undefined;
-    const initialStatus: TeamStatusFilter =
-        resolvedParams?.status === 'folded'
-            ? 'folded'
-            : resolvedParams?.status === 'all'
-            ? 'all'
-            : 'active';
 
     return (
         <ArchiveLayout>
@@ -26,7 +15,7 @@ export default async function TeamsListPage({ searchParams }: TeamsListPageProps
                     Browse active clubs competing today as well as historical programmes across university, adult contact, and women&apos;s American football in the United Kingdom.
                 </p>
 
-                <TeamFilterList teams={teams} initialStatus={initialStatus} />
+                <TeamFilterList teams={teams} />
             </section>
         </ArchiveLayout>
     );

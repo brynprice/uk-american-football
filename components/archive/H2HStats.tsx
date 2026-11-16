@@ -102,6 +102,7 @@ export default function H2HStats({ team1, team2, games }: H2HStatsProps) {
                                 </div>
                                 <Link
                                     href={`/games/${game.id}`}
+                                    prefetch={false}
                                     className="text-[9px] font-black uppercase text-slate-400 hover:text-blue-600 tracking-tighter"
                                 >
                                     Details &rarr;

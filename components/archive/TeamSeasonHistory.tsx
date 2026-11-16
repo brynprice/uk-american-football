@@ -307,6 +307,7 @@ export default function TeamSeasonHistory({
                                         <Link
                                             key={t.id}
                                             href={`/teams/${t.id}`}
+                                            prefetch={false}
                                             className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-white border border-slate-300 text-xs font-bold text-slate-800 hover:text-blue-600 hover:border-blue-400 transition-colors shadow-2xs"
                                         >
                                             {t.logo_url && (
@@ -387,6 +388,7 @@ export default function TeamSeasonHistory({
                                     {season?.id && season?.competition?.name && (
                                         <Link
                                             href={`/seasons/${season.id}`}
+                                            prefetch={false}
                                             className="text-xs font-bold text-slate-600 hover:text-blue-700 hover:underline"
                                         >
                                             {season.competition.name}
@@ -426,6 +428,7 @@ export default function TeamSeasonHistory({
                                                         {!teamId && teamIdentity && (
                                                             <Link
                                                                 href={`/teams/${p.team_id || p.team?.id}`}
+                                                                prefetch={false}
                                                                 className="text-xs font-bold text-indigo-900 hover:underline"
                                                             >
                                                                 {teamIdentity.name}
@@ -434,7 +437,7 @@ export default function TeamSeasonHistory({
                                                     </div>
                                                     {p.phase?.id && p.phase?.name && (
                                                         <h4 className="text-sm font-bold text-indigo-950 hover:underline mt-1">
-                                                            <Link href={`/phases/${p.phase.id}`}>{p.phase.name}</Link>
+                                                            <Link href={`/phases/${p.phase.id}`} prefetch={false}>{p.phase.name}</Link>
                                                         </h4>
                                                     )}
                                                 </div>
@@ -484,6 +487,7 @@ export default function TeamSeasonHistory({
                                                         {!teamId && teamIdentity && (
                                                             <Link
                                                                 href={`/teams/${p.team_id || p.team?.id}`}
+                                                                prefetch={false}
                                                                 className="text-xs font-bold text-slate-800 hover:underline"
                                                             >
                                                                 {teamIdentity.name}
@@ -492,7 +496,7 @@ export default function TeamSeasonHistory({
                                                     </div>
                                                     {p.phase?.id && p.phase?.name && (
                                                         <h4 className="text-sm font-bold text-slate-900 hover:underline mt-1">
-                                                            <Link href={`/phases/${p.phase.id}`}>{p.phase.name}</Link>
+                                                            <Link href={`/phases/${p.phase.id}`} prefetch={false}>{p.phase.name}</Link>
                                                         </h4>
                                                     )}
                                                 </div>
@@ -636,6 +640,7 @@ function GameRow({ game, teamId, seasonYear }: { game: any; teamId?: string; sea
                 {opponent?.id ? (
                     <Link
                         href={`/teams/${opponent.id}`}
+                        prefetch={false}
                         className="font-bold text-slate-800 hover:text-blue-700 truncate"
                     >
                         {oppIdentity.name}
@@ -668,6 +673,7 @@ function GameRow({ game, teamId, seasonYear }: { game: any; teamId?: string; sea
                 </span>
                 <Link
                     href={`/games/${game.id}`}
+                    prefetch={false}
                     className="text-blue-600 font-black uppercase text-[10px] hover:underline"
                 >
                     Details &rarr;

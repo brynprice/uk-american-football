@@ -330,6 +330,7 @@ export default function PeopleFilterList({ people }: PeopleFilterListProps) {
                     <Link
                         key={person.id}
                         href={`/people/${person.id}`}
+                        prefetch={false}
                         className="group flex flex-col justify-between p-6 bg-white border border-slate-200 shadow-sm hover:border-blue-500 hover:shadow-md transition-all rounded"
                     >
                         <div>

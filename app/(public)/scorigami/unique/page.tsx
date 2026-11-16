@@ -3,7 +3,7 @@ import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import UniqueGamesList from '@/components/archive/UniqueGamesList';
 
-export const revalidate = 3600; // 1 hour
+export const revalidate = 604800; // 7 days
 
 export default async function UniqueScoresPage() {
     const games = await ArchiveService.getUniqueScoreGames();
@@ -30,12 +30,14 @@ export default async function UniqueScoresPage() {
             <div className="flex items-center gap-2 border-b-2 border-slate-900 mb-8 pb-px">
                 <Link
                     href="/scorigami"
+                    prefetch={false}
                     className="px-4 py-2 font-bold uppercase text-xs tracking-wider text-slate-500 hover:text-slate-900 border-b-2 border-transparent transition-colors"
                 >
                     Score Search
                 </Link>
                 <Link
                     href="/scorigami/unique"
+                    prefetch={false}
                     className="px-4 py-2 font-black uppercase text-xs tracking-wider border-b-2 border-purple-600 text-purple-700 -mb-[2px] transition-colors flex items-center gap-1.5"
                 >
                     <span>Unique Scores</span>

@@ -445,8 +445,25 @@ export async function saveGamedayScores(updates: GamedayUpdatePayload[]) {
         revalidatePath(`/phases/${phaseId}`);
     }
 
+    const seasonIds = new Set<string>();
+    const teamIds = new Set<string>();
+    for (const g of gameDetails || []) {
+        revalidatePath(`/games/${g.id}`);
+        if (g.season_id) seasonIds.add(g.season_id);
+        if (g.home_team_id) teamIds.add(g.home_team_id);
+        if (g.away_team_id) teamIds.add(g.away_team_id);
+    }
+    for (const seasonId of seasonIds) {
+        revalidatePath(`/seasons/${seasonId}`);
+    }
+    for (const teamId of teamIds) {
+        revalidatePath(`/teams/${teamId}`);
+    }
+
     revalidatePath("/admin/gameday");
     revalidatePath("/admin/walkovers");
+    revalidatePath("/scorigami");
+    revalidatePath("/scorigami/unique");
     revalidatePath("/");
 
     return { success: true, count: updates.length };

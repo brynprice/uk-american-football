@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { Database } from '@/lib/supabase/types';
 
@@ -20,6 +20,17 @@ export default function TeamFilterList({ teams, initialStatus = 'active' }: Team
     const [statusFilter, setStatusFilter] = useState<TeamStatusFilter>(initialStatus);
     const [selectedType, setSelectedType] = useState<string>('All');
     const [searchQuery, setSearchQuery] = useState<string>('');
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const statusParam = new URLSearchParams(window.location.search).get('status');
+        if (statusParam === 'folded' || statusParam === 'all' || statusParam === 'active') {
+            const timer = setTimeout(() => {
+                setStatusFilter(statusParam);
+            }, 0);
+            return () => clearTimeout(timer);
+        }
+    }, []);
 
     // Precalculate counts for Active vs Folded vs All across the entire dataset
     const countsByStatus = useMemo(() => {
@@ -239,6 +250,7 @@ export default function TeamFilterList({ teams, initialStatus = 'active' }: Team
                         <Link
                             key={team.id}
                             href={`/teams/${team.id}`}
+                            prefetch={false}
                             className="group block p-6 bg-white border border-slate-200 shadow-sm hover:border-blue-500 hover:shadow-md transition-all flex items-start gap-5 rounded-sm"
                         >
                             <div className="flex-shrink-0 w-16 h-16 bg-white rounded border border-slate-100 flex items-center justify-center overflow-hidden p-1">

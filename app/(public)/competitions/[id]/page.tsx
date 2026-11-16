@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
-export const revalidate = 3600; // 1 hour
+import { assertValidUuidOrNotFound, fetchOrNotFound } from '@/lib/utils/route-helpers';
+export const revalidate = 604800; // 7 days
 
 export default async function CompetitionPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const competition = await ArchiveService.getCompetitionById(id);
+    assertValidUuidOrNotFound(id);
+    const competition = await fetchOrNotFound(() => ArchiveService.getCompetitionById(id));
 
     return (
         <ArchiveLayout>
@@ -28,6 +30,7 @@ export default async function CompetitionPage({ params }: { params: Promise<{ id
                     </div>
                     <Link
                         href={`/competitions/${competition.id}/champions`}
+                        prefetch={false}
                         className="px-5 py-2.5 bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider rounded hover:bg-amber-300 transition-colors shrink-0 shadow-sm"
                     >
                         View Champions &rarr;
@@ -79,6 +82,7 @@ export default async function CompetitionPage({ params }: { params: Promise<{ id
                                     <td className="py-4 px-4 text-right">
                                         <Link
                                             href={`/seasons/${season.id}`}
+                                            prefetch={false}
                                             className="inline-block px-4 py-1.5 bg-slate-900 text-white font-bold hover:bg-blue-700 transition-colors rounded shadow-sm"
                                         >
                                             View Season

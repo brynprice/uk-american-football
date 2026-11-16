@@ -1,8 +1,10 @@
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import H2HStats from '@/components/archive/H2HStats';
-export const revalidate = 3600; // 1 hour
+import { assertValidUuidOrNotFound } from '@/lib/utils/route-helpers';
+export const revalidate = 2592000; // 30 days
 
 interface H2HPageProps {
     params: Promise<{
@@ -13,6 +15,7 @@ interface H2HPageProps {
 
 export default async function H2HPage({ params }: H2HPageProps) {
     const { id, opponentId } = await params;
+    assertValidUuidOrNotFound(id, opponentId);
 
     const [basicTeams, games] = await Promise.all([
         ArchiveService.getTeamsBasic([id, opponentId]),
@@ -21,7 +24,7 @@ export default async function H2HPage({ params }: H2HPageProps) {
     const team1 = basicTeams.find((t: any) => t.id === id);
     const team2 = basicTeams.find((t: any) => t.id === opponentId);
     if (!team1 || !team2) {
-        throw new Error('Team not found');
+        notFound();
     }
 
     return (
@@ -29,6 +32,7 @@ export default async function H2HPage({ params }: H2HPageProps) {
             <div className="mb-8 flex items-center gap-4">
                 <Link
                     href={`/teams/${id}`}
+                    prefetch={false}
                     className="text-xs font-black uppercase text-slate-400 hover:text-blue-600 transition-colors flex items-center gap-1"
                 >
                     &larr; Back to {team1.name}

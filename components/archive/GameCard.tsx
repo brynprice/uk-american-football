@@ -22,6 +22,7 @@ export default function GameCard({ game, seasonYear }: GameCardProps) {
     return (
         <Link
             href={`/games/${game.id}`}
+            prefetch={false}
             className="block bg-white border border-slate-200 p-4 hover:border-blue-500 transition-all shadow-sm group"
         >
             <div className="flex flex-wrap justify-between items-center gap-2 mb-2">

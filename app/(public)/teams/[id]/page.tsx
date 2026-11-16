@@ -6,11 +6,13 @@ import TeamSeasonHistory from '@/components/archive/TeamSeasonHistory';
 import TeamTopResults from '@/components/archive/TeamTopResults';
 import { isPlayoffPhase, calculateTeamCompleteness } from '@/lib/utils/phase-utils';
 import { getTenYearCutoff, getTopTeamWinsAndLosses } from '@/lib/utils/team-records';
-export const revalidate = 3600; // 1 hour
+import { assertValidUuidOrNotFound, fetchOrNotFound } from '@/lib/utils/route-helpers';
+export const revalidate = 604800; // 7 days
 
 export default async function TeamPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const team = await ArchiveService.getTeamHistory(id);
+    assertValidUuidOrNotFound(id);
+    const team = await fetchOrNotFound(() => ArchiveService.getTeamHistory(id));
 
     // Derive opponents directly from already-fetched games to avoid 3 redundant DB round-trips
     const oppMap = new Map<string, { id: string; name: string; aliases?: string[] }>();
@@ -364,6 +366,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                                             <Link
                                                 key={game.id}
                                                 href={`/games/${game.id}`}
+                                                prefetch={false}
                                                 className="block bg-white border border-slate-200 p-4 hover:border-blue-500 transition-all shadow-sm group rounded-sm"
                                             >
                                                 <div className="flex justify-between items-center mb-1.5">
@@ -416,7 +419,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                                         </div>
                                         <div className="font-bold text-lg mb-1 group-hover:text-blue-700 transition-colors">
                                             {hof.person_id ? (
-                                                <Link href={`/people/${hof.person_id}`}>{hof.person_name}</Link>
+                                                <Link href={`/people/${hof.person_id}`} prefetch={false}>{hof.person_name}</Link>
                                             ) : (
                                                 hof.person_name
                                             )}
@@ -460,7 +463,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                                                 </div>
                                                 <div className="font-bold text-slate-800">
                                                     {rj.honoured_person_id ? (
-                                                        <Link href={`/people/${rj.honoured_person_id}`} className="hover:text-blue-700">
+                                                        <Link href={`/people/${rj.honoured_person_id}`} prefetch={false} className="hover:text-blue-700">
                                                             {rj.person?.display_name || rj.honoured_person_name}
                                                         </Link>
                                                     ) : (
@@ -508,7 +511,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                                             <div className="min-w-0">
                                                 <div className="font-bold text-slate-900 truncate">
                                                     {s.seasonId ? (
-                                                        <Link href={`/seasons/${s.seasonId}`} className="hover:text-blue-700 hover:underline">
+                                                        <Link href={`/seasons/${s.seasonId}`} prefetch={false} className="hover:text-blue-700 hover:underline">
                                                             {s.seasonName}
                                                         </Link>
                                                     ) : (
@@ -537,6 +540,8 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                                                 )}
                                                 <Link
                                                     href={`/propose-game?${proposeParams.toString()}`}
+                                                    prefetch={false}
+                                                    rel="nofollow"
                                                     className="bg-slate-900 hover:bg-blue-600 text-white font-sans font-black uppercase text-[9px] tracking-wider px-2 py-1 rounded transition-colors"
                                                     title={`Report a missing game for ${team.name} in ${s.seasonName}`}
                                                 >
@@ -550,6 +555,8 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                             <div className="mt-4 pt-3 border-t border-amber-200/80">
                                 <Link
                                     href={`/propose-game?team=${encodeURIComponent(team.name)}`}
+                                    prefetch={false}
+                                    rel="nofollow"
                                     className="w-full inline-flex items-center justify-center gap-1.5 bg-amber-900 hover:bg-slate-900 text-white text-[11px] font-black uppercase tracking-wider font-sans py-2.5 px-4 rounded transition-colors shadow-xs"
                                 >
                                     <span>+ Submit Missing Game for {team.name}</span>
@@ -642,7 +649,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                                             <div>
                                                 <div className="font-bold text-slate-900 leading-tight">
                                                     {p.phase?.id ? (
-                                                        <Link href={`/phases/${p.phase.id}`} className="hover:text-blue-700 hover:underline">
+                                                        <Link href={`/phases/${p.phase.id}`} prefetch={false} className="hover:text-blue-700 hover:underline">
                                                             {p.phase.name}
                                                         </Link>
                                                     ) : (

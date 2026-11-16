@@ -32,7 +32,14 @@ export async function deleteGame(gameId: string, redirectUrl?: string) {
     );
 
     try {
-        // 3. Delete the game
+        // 3. Look up affected entities before deletion so we can revalidate targeted paths
+        const { data: existingGame } = await supabaseAdmin
+            .from('games')
+            .select('phase_id, away_phase_id, season_id, home_team_id, away_team_id')
+            .eq('id', gameId)
+            .maybeSingle();
+
+        // 4. Delete the game
         const { error } = await supabaseAdmin
             .from('games')
             .delete()
@@ -43,18 +50,34 @@ export async function deleteGame(gameId: string, redirectUrl?: string) {
             return { success: false, error: `Failed to delete game: ${error.message}` };
         }
 
-        // 4. Revalidate and redirect
-        // We revalidate broadly to ensure lists update
-        revalidatePath('/', 'layout');
-        
-        if (redirectUrl) {
-            redirect(sanitizeInternalRedirect(redirectUrl, '/'));
+        // 5. Revalidate only affected routes and redirect
+        revalidatePath(`/games/${gameId}`);
+        if (existingGame?.phase_id) {
+            revalidatePath(`/phases/${existingGame.phase_id}`);
         }
-
-        return { success: true };
-
+        if (existingGame?.away_phase_id && existingGame.away_phase_id !== existingGame.phase_id) {
+            revalidatePath(`/phases/${existingGame.away_phase_id}`);
+        }
+        if (existingGame?.season_id) {
+            revalidatePath(`/seasons/${existingGame.season_id}`);
+        }
+        if (existingGame?.home_team_id) {
+            revalidatePath(`/teams/${existingGame.home_team_id}`);
+        }
+        if (existingGame?.away_team_id && existingGame.away_team_id !== existingGame.home_team_id) {
+            revalidatePath(`/teams/${existingGame.away_team_id}`);
+        }
+        revalidatePath('/scorigami');
+        revalidatePath('/scorigami/unique');
+        revalidatePath('/');
     } catch (err: any) {
         console.error("Unexpected error during game deletion:", err);
         return { success: false, error: err.message || 'An unexpected error occurred.' };
     }
+
+    if (redirectUrl) {
+        redirect(sanitizeInternalRedirect(redirectUrl, '/'));
+    }
+
+    return { success: true };
 }

@@ -3,6 +3,8 @@
 import { useState, FormEvent, useEffect } from "react";
 import { ProposalType, submitGameProposal } from "../../app/(public)/propose-game/actions";
 import { ArchiveService, TeamWithAliases, Phase } from "@/services/archive-service";
+import { resolveTeamIdentity } from "@/lib/utils/team-resolver";
+import { isValidUuid } from "@/lib/utils/validation";
 
 interface GameProposalFormProps {
     gameId?: string;
@@ -28,7 +30,8 @@ interface GameProposalFormProps {
 }
 
 export default function GameProposalForm({ gameId, initialData, onSuccess }: GameProposalFormProps) {
-    const isUpdate = !!gameId;
+    const [resolvedGameId, setResolvedGameId] = useState<string | undefined>(gameId);
+    const isUpdate = !!resolvedGameId;
 
     // Data lists for dropdowns
     const [teams, setTeams] = useState<TeamWithAliases[]>([]);
@@ -72,20 +75,81 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
     const [message, setMessage] = useState({ text: "", type: "" });
 
     useEffect(() => {
+        const urlParams = typeof window !== "undefined"
+            ? new URLSearchParams(window.location.search)
+            : null;
+        const urlId = !gameId && urlParams ? urlParams.get("id")?.trim() : undefined;
+        const targetGameId = gameId || (urlId && isValidUuid(urlId) ? urlId : undefined);
+
+        const paramTeam = urlParams?.get("team")?.trim() || "";
+        const paramComp = urlParams?.get("competition")?.trim() || "";
+        const paramYear = urlParams?.get("year")?.trim() || "";
+        const paramPhase = urlParams?.get("phase")?.trim() || "";
+
         const loadData = async () => {
             try {
-                const [teamsData, seasonsData, phasesData, peopleData, venuesData] = await Promise.all([
+                const [teamsData, seasonsData, phasesData, peopleData, venuesData, prefillGame] = await Promise.all([
                     ArchiveService.getTeams(),
                     ArchiveService.getSeasons(),
                     ArchiveService.getAllPhases(),
                     ArchiveService.getPeople(),
-                    ArchiveService.getVenues()
+                    ArchiveService.getVenues(),
+                    targetGameId && !initialData
+                        ? ArchiveService.getGameDetails(targetGameId).catch((err) => {
+                            console.error("Error fetching game details for proposal:", err);
+                            return null;
+                        })
+                        : Promise.resolve(null),
                 ]);
+                if (targetGameId) {
+                    setResolvedGameId(targetGameId);
+                }
                 setTeams(teamsData);
                 setSeasons(seasonsData);
                 setPhases(phasesData);
                 setPeople(peopleData);
                 setVenues(venuesData);
+
+                if (prefillGame) {
+                    const seasonObj = prefillGame.phase?.season || prefillGame.season;
+                    const seasonYear = seasonObj?.year;
+                    const compName = seasonObj?.competition?.name || "";
+                    const homeIdentity = resolveTeamIdentity(prefillGame.home_team, seasonYear);
+                    const awayIdentity = resolveTeamIdentity(prefillGame.away_team, seasonYear);
+                    const formattedSeason = compName && seasonYear
+                        ? `${compName} ${seasonYear}`
+                        : (seasonYear ? seasonYear.toString() : "");
+
+                    setFormData((prev) => ({
+                        ...prev,
+                        competition: compName || prev.competition,
+                        year: formattedSeason || prev.year,
+                        phase: prefillGame.phase?.name || "",
+                        date: prefillGame.date || "",
+                        time: prefillGame.time || "",
+                        home_team: prefillGame.home_team?.name || homeIdentity.name || "",
+                        away_team: prefillGame.away_team?.name || awayIdentity.name || "",
+                        home_score: prefillGame.home_score?.toString() || "",
+                        away_score: prefillGame.away_score?.toString() || "",
+                        venue: prefillGame.venue?.name || "",
+                        notes: prefillGame.notes || "",
+                        status: prefillGame.status || "completed",
+                        is_playoff: Boolean(prefillGame.is_playoff),
+                        playoff_round: prefillGame.playoff_round || "",
+                        final_type: prefillGame.final_type || "none",
+                        title_name: prefillGame.title_name || "",
+                        is_double_header: Boolean(prefillGame.is_double_header),
+                    }));
+                } else if (!targetGameId && !initialData && (paramTeam || paramComp || paramYear || paramPhase)) {
+                    const seasonValue = paramComp && paramYear ? `${paramComp} ${paramYear}` : paramYear;
+                    setFormData((prev) => ({
+                        ...prev,
+                        competition: paramComp || prev.competition,
+                        year: seasonValue || prev.year,
+                        phase: paramPhase || prev.phase,
+                        home_team: paramTeam || prev.home_team,
+                    }));
+                }
             } catch (error) {
                 console.error("Error loading form data:", error);
             } finally {
@@ -93,7 +157,7 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
             }
         };
         loadData();
-    }, []);
+    }, [gameId, initialData]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
@@ -143,7 +207,7 @@ export default function GameProposalForm({ gameId, initialData, onSuccess }: Gam
 
         try {
             const payload = {
-                gameId,
+                gameId: resolvedGameId,
                 proposalType: (isUpdate ? 'update' : 'add') as ProposalType,
                 proposedData: formData,
                 reason: metaData.reason,

@@ -22,13 +22,13 @@ export default function ArchiveLayout({
                         <span className="sr-only">Britball.io</span>
                     </Link>
                     <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm uppercase tracking-widest font-sans font-medium">
-                        <Link href="/about" className="hover:text-blue-700">About</Link>
-                        <Link href="/competitions" className="hover:text-blue-700">Competitions</Link>
-                        <Link href="/teams" className="hover:text-blue-700">Teams</Link>
-                        <Link href="/timeline" className="hover:text-blue-700">Timeline</Link>
-                        <Link href="/people" className="hover:text-blue-700">People</Link>
-                        <Link href="/scorigami" className="hover:text-blue-700">Scorigami</Link>
-                        <Link href="/propose-game" className="px-3 py-1 bg-slate-900 text-white rounded hover:bg-blue-700 transition-colors">Contribute</Link>
+                        <Link href="/about" prefetch={false} className="hover:text-blue-700">About</Link>
+                        <Link href="/competitions" prefetch={false} className="hover:text-blue-700">Competitions</Link>
+                        <Link href="/teams" prefetch={false} className="hover:text-blue-700">Teams</Link>
+                        <Link href="/timeline" prefetch={false} className="hover:text-blue-700">Timeline</Link>
+                        <Link href="/people" prefetch={false} className="hover:text-blue-700">People</Link>
+                        <Link href="/scorigami" prefetch={false} className="hover:text-blue-700">Scorigami</Link>
+                        <Link href="/propose-game" prefetch={false} className="px-3 py-1 bg-slate-900 text-white rounded hover:bg-blue-700 transition-colors">Contribute</Link>
                     </nav>
                 </div>
             </header>
@@ -47,13 +47,13 @@ export default function ArchiveLayout({
                         />
                     </Link>
                     <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 mb-3">
-                        <Link href="/about" className="text-slate-700 font-semibold hover:text-blue-700">About the Project</Link>
+                        <Link href="/about" prefetch={false} className="text-slate-700 font-semibold hover:text-blue-700">About the Project</Link>
                         <span>&bull;</span>
-                        <Link href="/timeline" className="text-slate-700 font-semibold hover:text-blue-700">Uniball Timeline</Link>
+                        <Link href="/timeline" prefetch={false} className="text-slate-700 font-semibold hover:text-blue-700">Uniball Timeline</Link>
                         <span>&bull;</span>
-                        <Link href="/timeline?league=womens" className="text-slate-700 font-semibold hover:text-blue-700">Women&apos;s Timeline</Link>
+                        <Link href="/timeline?league=womens" prefetch={false} className="text-slate-700 font-semibold hover:text-blue-700">Women&apos;s Timeline</Link>
                         <span>&bull;</span>
-                        <Link href="/propose-game" className="text-slate-700 font-semibold hover:text-blue-700">Contribute Data</Link>
+                        <Link href="/propose-game" prefetch={false} className="text-slate-700 font-semibold hover:text-blue-700">Contribute Data</Link>
                         <span>&bull;</span>
                         <a href="mailto:ukaffootballproject@gmail.com" className="text-slate-700 font-semibold hover:text-blue-700">Contact</a>
                     </div>

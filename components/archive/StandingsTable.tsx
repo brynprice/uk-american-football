@@ -76,7 +76,7 @@ export default function StandingsTable({ participations, games, phaseName, seaso
                         {standings.map((p: any) => (
                             <tr key={p.id} className="border-b border-slate-100 transition-colors hover:bg-slate-50">
                                 <td className="py-3 px-4">
-                                    <Link href={`/teams/${p.team_id}`} className="font-bold hover:text-blue-600">
+                                    <Link href={`/teams/${p.team_id}`} prefetch={false} className="font-bold hover:text-blue-600">
                                         {resolveTeamIdentity({ ...p.team, team_aliases: p.team?.team_aliases || [] }, seasonYear || games?.[0]?.date || null).name}
                                     </Link>
                                 </td>

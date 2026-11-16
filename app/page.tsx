@@ -2,7 +2,7 @@ import Link from 'next/link';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import { ArchiveService } from '@/services/archive-service';
 
-export const revalidate = 3600; // Re-fetch stats every hour
+export const revalidate = 86400; // 24 hours (also revalidated on-demand by gameday/proposal saves)
 
 export default async function HomePage() {
   const stats = await ArchiveService.getArchiveStats();
@@ -21,18 +21,21 @@ export default async function HomePage() {
           <div className="flex flex-col sm:flex-row gap-3">
             <Link 
               href="/timeline" 
+              prefetch={false}
               className="bg-blue-700 text-white text-center px-7 py-3 font-black uppercase tracking-widest hover:bg-slate-900 transition-colors shadow-[6px_6px_0px_0px_rgba(255,255,255,1),6px_6px_0px_1px_rgba(15,23,42,1)]"
             >
               Explore Uniball Timeline &rarr;
             </Link>
             <Link 
               href="/competitions" 
+              prefetch={false}
               className="bg-slate-900 text-white text-center px-7 py-3 font-black uppercase tracking-widest hover:bg-blue-700 transition-colors shadow-[6px_6px_0px_0px_rgba(255,255,255,1),6px_6px_0px_1px_rgba(15,23,42,1)]"
             >
               Browse All Leagues
             </Link>
             <Link 
               href="/teams" 
+              prefetch={false}
               className="bg-white border-2 border-slate-900 text-slate-900 text-center px-7 py-3 font-black uppercase tracking-widest hover:bg-slate-50 transition-colors shadow-[6px_6px_0px_0px_rgba(15,23,42,1)]"
             >
               Search Teams
@@ -81,12 +84,14 @@ export default async function HomePage() {
         <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
           <Link
             href="/timeline"
+            prefetch={false}
             className="px-6 py-3 bg-amber-400 text-slate-950 font-black uppercase text-xs tracking-widest hover:bg-white transition-colors rounded shadow-md text-center"
           >
             🏈 Uniball Timeline (1985&ndash;Present) &rarr;
           </Link>
           <Link
             href="/timeline?league=womens"
+            prefetch={false}
             className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/30 font-black uppercase text-xs tracking-widest transition-colors rounded shadow-md text-center"
           >
             👑 Women&apos;s Timeline (2014&ndash;Present) &rarr;
@@ -118,6 +123,7 @@ export default async function HomePage() {
           <div className="pt-6 mt-6 border-t border-slate-200 flex items-center justify-between">
             <Link
               href="/about"
+              prefetch={false}
               className="text-xs font-black uppercase tracking-widest text-blue-700 hover:text-slate-900 transition-colors inline-flex items-center gap-1"
             >
               Read the full story &rarr;
@@ -135,7 +141,7 @@ export default async function HomePage() {
             <ul className="space-y-4">
               <li className="flex gap-4">
                 <span className="font-black text-blue-400">01</span>
-                <span><strong>Missing Scores:</strong> Use our <Link href="/propose-game" className="text-blue-400 hover:underline">Contribute</Link> tool to submit missing game results or corrections.</span>
+                <span><strong>Missing Scores:</strong> Use our <Link href="/propose-game" prefetch={false} className="text-blue-400 hover:underline">Contribute</Link> tool to submit missing game results or corrections.</span>
               </li>
               <li className="flex gap-4">
                 <span className="font-black text-blue-400">02</span>

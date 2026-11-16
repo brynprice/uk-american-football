@@ -190,6 +190,7 @@ export default function ChampionsView({
                                             )}
                                             <Link
                                                 href={`/teams/${item.teamId}`}
+                                                prefetch={false}
                                                 className="font-bold text-slate-800 hover:text-blue-700 truncate"
                                             >
                                                 {item.name}
@@ -272,6 +273,7 @@ export default function ChampionsView({
                                         {item.competition && (
                                             <Link
                                                 href={`/competitions/${item.competition.id}`}
+                                                prefetch={false}
                                                 className="text-[10px] font-black font-sans uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-700 hover:bg-blue-100 hover:text-blue-800 border border-slate-200 transition-colors"
                                             >
                                                 {item.competition.slug?.toUpperCase() || item.competition.name}
@@ -306,6 +308,7 @@ export default function ChampionsView({
                                                     </div>
                                                     <Link
                                                         href={`/teams/${team.id}`}
+                                                        prefetch={false}
                                                         className="font-black text-slate-900 hover:text-blue-700 truncate block text-base leading-tight"
                                                     >
                                                         {team.displayName}
@@ -338,6 +341,7 @@ export default function ChampionsView({
                                                 </div>
                                                 <Link
                                                     href={`/teams/${item.winner.id}`}
+                                                    prefetch={false}
                                                     className="font-black text-slate-900 hover:text-blue-700 truncate block text-base leading-tight"
                                                 >
                                                     {item.winner.displayName}
@@ -367,6 +371,7 @@ export default function ChampionsView({
                                                 </div>
                                                 <Link
                                                     href={`/teams/${item.runnerUp.id}`}
+                                                    prefetch={false}
                                                     className="font-bold text-slate-700 hover:text-blue-700 truncate block text-base leading-tight"
                                                 >
                                                     {item.runnerUp.displayName}
@@ -382,6 +387,7 @@ export default function ChampionsView({
                                 <div className="mt-3 pt-2 text-right">
                                     <Link
                                         href={`/games/${item.id}`}
+                                        prefetch={false}
                                         className="text-xs font-black uppercase text-blue-600 hover:underline font-sans"
                                     >
                                         View Game Details &rarr;

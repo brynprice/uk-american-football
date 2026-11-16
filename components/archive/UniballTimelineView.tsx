@@ -720,6 +720,7 @@ export default function UniballTimelineView({ data, womensData }: UniballTimelin
                                     {/* Link to Full Season Archive */}
                                     <Link
                                         href={`/seasons/${season.id}`}
+                                        prefetch={false}
                                         className="text-xs font-black uppercase tracking-widest text-blue-700 hover:text-blue-900 font-sans flex items-center gap-1 group/link"
                                     >
                                         <span>Season Vault</span>
@@ -899,6 +900,7 @@ export default function UniballTimelineView({ data, womensData }: UniballTimelin
                                         </button>
                                         <Link
                                             href={`/seasons/${season.id}`}
+                                            prefetch={false}
                                             className="text-blue-700 hover:underline font-bold"
                                         >
                                             View Standings &rarr;
@@ -1052,6 +1054,7 @@ function TeamCampaignBanner({
 
                 <Link
                     href={`/seasons/${season.id}`}
+                    prefetch={false}
                     className="px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-900 border border-slate-300 rounded text-xs font-black uppercase tracking-wider font-sans transition-colors shadow-sm shrink-0"
                 >
                     Standings &rarr;

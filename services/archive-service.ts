@@ -284,10 +284,15 @@ export const ArchiveService = {
         gameData.game_level = gameData.game_level || resolveGameLevel(gameData);
 
         if (gameData.is_unique_score && (gameData.is_totally_unique === undefined || gameData.is_totally_unique === null)) {
-            const totallyUniqueKeys = await getTotallyUniqueScoreKeys();
             const high = Math.max(gameData.home_score ?? 0, gameData.away_score ?? 0);
             const low = Math.min(gameData.home_score ?? 0, gameData.away_score ?? 0);
-            gameData.is_totally_unique = totallyUniqueKeys.has(`${high}-${low}`);
+            const { count: scoreMatchCount } = await supabase
+                .from('games')
+                .select('id', { count: 'exact', head: true })
+                .or(`and(home_score.eq.${high},away_score.eq.${low}),and(home_score.eq.${low},away_score.eq.${high})`)
+                .neq('status', 'anomaly')
+                .neq('status', 'cancelled');
+            gameData.is_totally_unique = scoreMatchCount === 1;
         }
 
         const teamIds = new Set([gameData.home_team_id, gameData.away_team_id].filter(Boolean));
@@ -1116,25 +1121,50 @@ async function buildLeagueTimelineData(options: {
     const phaseMap = new Map<string, any>(phases.map(p => [p.id, p]));
     const games: any[] = (gamesRes.data as any[]) || [];
 
+    const seasonYearById = new Map<string, number>(seasons.map(s => [s.id, s.year]));
+    const gamesBySeasonId = new Map<string, any[]>();
+    for (const g of games) {
+        if (!g.season_id) continue;
+        let list = gamesBySeasonId.get(g.season_id);
+        if (!list) {
+            list = [];
+            gamesBySeasonId.set(g.season_id, list);
+        }
+        list.push(g);
+    }
+
     const seasonNotesMap = new Map(((seasonNotesRes.data || []) as any[]).map(n => [n.entity_id, n.content]));
     const champNotesSet = new Set(((champNotesRes.data || []) as any[]).map(n => `${n.entity_id}:${n.content}`));
     const dbTeams: any[] = (teamsRes.data || []) as any[];
     const dbTeamMap = new Map<string, any>(dbTeams.map(t => [t.id, t]));
 
-    // Filter participations belonging to target phases and attach canonical team lookup
-    const targetPhaseIds = new Set(phases.map(p => p.id));
-    const targetParts = allParticipations
-        .filter(p => targetPhaseIds.has(p.phase_id))
-        .map(p => ({ ...p, team: dbTeamMap.get(p.team_id) || null }));
-
-    // Track active years per team to accurately place post-hiatus/post-COVID rebrand events
+    // Filter participations belonging to target phases, attach canonical team lookup, and group by season
+    const targetParts: any[] = [];
+    const partsBySeasonId = new Map<string, any[]>();
     const teamActiveYearsMap = new Map<string, Set<number>>();
-    for (const p of targetParts) {
+    for (const p of allParticipations) {
         const ph = phaseMap.get(p.phase_id);
-        const sYear = seasons.find(s => s.id === ph?.season_id)?.year;
-        if (p.team_id && sYear) {
-            if (!teamActiveYearsMap.has(p.team_id)) teamActiveYearsMap.set(p.team_id, new Set());
-            teamActiveYearsMap.get(p.team_id)!.add(sYear);
+        if (!ph) continue;
+        const enrichedPart = { ...p, team: dbTeamMap.get(p.team_id) || null };
+        targetParts.push(enrichedPart);
+
+        if (ph.season_id) {
+            let sList = partsBySeasonId.get(ph.season_id);
+            if (!sList) {
+                sList = [];
+                partsBySeasonId.set(ph.season_id, sList);
+            }
+            sList.push(enrichedPart);
+
+            const sYear = seasonYearById.get(ph.season_id);
+            if (p.team_id && sYear) {
+                let years = teamActiveYearsMap.get(p.team_id);
+                if (!years) {
+                    years = new Set();
+                    teamActiveYearsMap.set(p.team_id, years);
+                }
+                years.add(sYear);
+            }
         }
     }
 
@@ -1329,10 +1359,8 @@ async function buildLeagueTimelineData(options: {
     const enrichedSeasons: TimelineSeason[] = seasons.map(season => {
         const comp = compMap.get(season.competition_id);
         const eraObj = getEra(season.year);
-        const sGames = games.filter(g => g.season_id === season.id);
-        const sPhases = phases.filter(p => p.season_id === season.id);
-        const sPhaseIds = new Set(sPhases.map(p => p.id));
-        const sParts = targetParts.filter(p => sPhaseIds.has(p.phase_id));
+        const sGames = gamesBySeasonId.get(season.id) || [];
+        const sParts = partsBySeasonId.get(season.id) || [];
 
         // Teams participating in this season
         const seasonTeamMap = new Map<string, TimelineSeasonTeam>();

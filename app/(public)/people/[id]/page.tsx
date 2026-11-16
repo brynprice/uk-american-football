@@ -4,12 +4,14 @@ import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
 import TeamSeasonHistory from '@/components/archive/TeamSeasonHistory';
 import { isPlayoffPhase } from '@/lib/utils/phase-utils';
-export const revalidate = 3600; // 1 hour
+import { assertValidUuidOrNotFound, fetchOrNotFound } from '@/lib/utils/route-helpers';
+export const revalidate = 604800; // 7 days
 
 export default async function PersonPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
+    assertValidUuidOrNotFound(id);
     const [person, gamesCoached] = await Promise.all([
-        ArchiveService.getPersonDetails(id),
+        fetchOrNotFound(() => ArchiveService.getPersonDetails(id)),
         ArchiveService.getPersonGamesAsCoach(id)
     ]);
 

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 
-export const revalidate = 86400; // 24 hours
+export const revalidate = 604800; // 7 days
 
 export default async function CompetitionsPage() {
     const competitions = await ArchiveService.getCompetitions();
@@ -20,6 +20,7 @@ export default async function CompetitionsPage() {
                         <Link
                             key={comp.id}
                             href={`/competitions/${comp.id}`}
+                            prefetch={false}
                             className="group block p-8 bg-white border-2 border-slate-200 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.05)] hover:border-slate-900 hover:shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all"
                         >
                             <div className="flex justify-between items-start mb-4">

@@ -1,8 +1,9 @@
 import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import ChampionsView from '@/components/archive/ChampionsView';
+import { assertValidUuidOrNotFound, fetchOrNotFound } from '@/lib/utils/route-helpers';
 
-export const revalidate = 3600; // 1 hour
+export const revalidate = 604800; // 7 days
 
 export default async function CompetitionChampionsPage({
     params
@@ -10,9 +11,10 @@ export default async function CompetitionChampionsPage({
     params: Promise<{ id: string }>;
 }) {
     const { id } = await params;
+    assertValidUuidOrNotFound(id);
 
     const [currentComp, allCompetitions] = await Promise.all([
-        ArchiveService.getCompetitionById(id),
+        fetchOrNotFound(() => ArchiveService.getCompetitionById(id)),
         ArchiveService.getCompetitions()
     ]);
 

@@ -3,11 +3,13 @@ import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import PhaseView from '@/components/archive/PhaseView';
 import { resolveTeamIdentity } from '@/lib/utils/team-resolver';
-export const revalidate = 3600; // 1 hour
+import { assertValidUuidOrNotFound, fetchOrNotFound } from '@/lib/utils/route-helpers';
+export const revalidate = 604800; // 7 days
 
 export default async function SeasonPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const season = await ArchiveService.getSeasonDetails(id);
+    assertValidUuidOrNotFound(id);
+    const season = await fetchOrNotFound(() => ArchiveService.getSeasonDetails(id));
 
     const renderMissingDetail = (text: string) => (
         <div className="flex items-center gap-2 text-red-600 text-xs mb-1">
@@ -109,6 +111,7 @@ export default async function SeasonPage({ params }: { params: Promise<{ id: str
                                 <Link
                                     key={game.id}
                                     href={`/games/${game.id}`}
+                                    prefetch={false}
                                     className="block bg-white border border-slate-200 p-4 hover:border-blue-500 transition-all shadow-sm group"
                                 >
                                     <div className="flex justify-between items-center mb-2">

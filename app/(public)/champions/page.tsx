@@ -2,7 +2,7 @@ import { ArchiveService } from '@/services/archive-service';
 import ArchiveLayout from '@/components/archive/ArchiveLayout';
 import ChampionsView from '@/components/archive/ChampionsView';
 
-export const revalidate = 3600; // 1 hour
+export const revalidate = 604800; // 7 days
 
 export default async function GlobalChampionsPage() {
     const [allChampionsData, allCompetitions] = await Promise.all([
