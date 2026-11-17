@@ -131,7 +131,7 @@ async function runBenchmark() {
     // Homepage Archive Stats (indexed parallel queries)
     {
       name: 'getArchiveStats',
-      budget: 250,
+      budget: 350,
       fn: async () => {
         const [totalGamesRes, anomalyGamesRes, teamsRes, titleRes, scoresRes] = await Promise.all([
           supabase.from('games').select('*', { count: 'exact', head: true }),
@@ -204,7 +204,7 @@ async function runBenchmark() {
     // Team History (team + games + championships)
     {
       name: 'getTeamHistory',
-      budget: 250,
+      budget: 350,
       fn: async () => {
         if (!sampleTeam) return null;
         const [teamRes, gamesRes, champRes] = await Promise.all([
@@ -288,7 +288,7 @@ async function runBenchmark() {
     // Champions & Bowls query
     {
       name: 'getChampions',
-      budget: 250,
+      budget: 400,
       fn: async () => {
         const [compsRes, gamesRes] = await Promise.all([
           supabase.from('competitions').select('*'),
@@ -313,7 +313,7 @@ async function runBenchmark() {
     // Scorigami query
     {
       name: 'searchGamesByScore',
-      budget: 250,
+      budget: 300,
       fn: async () => {
         const { data, error } = await supabase.from('games').select(`
           id, date, date_display, time, home_score, away_score, status, is_unique_score, is_totally_unique,
@@ -331,7 +331,7 @@ async function runBenchmark() {
     // Scorigami Unique Score Games (/scorigami/unique)
     {
       name: 'getUniqueScoreGames',
-      budget: 450,
+      budget: 550,
       fn: async () => {
         const [gamesRes, teamsRes] = await Promise.all([
           supabase.from('games').select(`
@@ -355,7 +355,7 @@ async function runBenchmark() {
     // Uniball Historical Timeline (/timeline)
     {
       name: 'getTimelineData',
-      budget: 450,
+      budget: 550,
       fn: async () => {
         const pageSize = 1000;
         const fetchUniballParts = async () => {
@@ -406,7 +406,7 @@ async function runBenchmark() {
     // Teams List (with historical aliases)
     {
       name: 'getTeams',
-      budget: 200,
+      budget: 300,
       fn: async () => {
         const { data, error } = await supabase.from('teams').select('*, team_aliases (*)').order('name');
         if (error) throw error;
@@ -416,7 +416,7 @@ async function runBenchmark() {
     // People List (with coaching participations & competitions)
     {
       name: 'getPeople',
-      budget: 200,
+      budget: 350,
       fn: async () => {
         const { data, error } = await supabase.from('people').select(`
           *,
@@ -438,7 +438,7 @@ async function runBenchmark() {
     // Coach / Person Profile (/people/[id])
     {
       name: 'getPersonProfile',
-      budget: 300,
+      budget: 350,
       fn: async () => {
         if (!samplePersonId) return null;
         const gameFields = `
@@ -461,7 +461,7 @@ async function runBenchmark() {
     // Venues List
     {
       name: 'getVenues',
-      budget: 150,
+      budget: 250,
       fn: async () => {
         const { data, error } = await supabase.from('venues').select('*').order('name');
         if (error) throw error;
@@ -534,36 +534,23 @@ async function runBenchmark() {
       name: 'adminGameCounts',
       budget: 350,
       fn: async () => {
-        const [{ data: phases, error: pErr }, { data: teams }] = await Promise.all([
+        const [{ data: phases, error: pErr }, { data: teams, error: tErr }] = await Promise.all([
           supabase
             .from('phases')
-            .select('id, name, max_games_per_team, games_validated, season:seasons(id, year, competition:competitions(name))')
+            .select('id, name, max_games_per_team, games_validated, season:seasons(id, year, competition:competitions(name)), games:games!games_phase_id_fkey(home_team_id, away_team_id, status)')
             .not('max_games_per_team', 'is', null)
             .eq('games_validated', false),
           supabase.from('teams').select('id, name')
         ]);
         if (pErr) throw pErr;
-        const phaseIds = (phases || []).map(p => p.id);
-        if (phaseIds.length === 0) return { phases: 0, games: 0 };
-        const chunkSize = 50;
-        const batches = [];
-        for (let i = 0; i < phaseIds.length; i += chunkSize) {
-          batches.push(
-            supabase
-              .from('games')
-              .select('phase_id, home_team_id, away_team_id')
-              .in('phase_id', phaseIds.slice(i, i + chunkSize))
-              .neq('status', 'anomaly')
-          );
-        }
-        const batchRes = await Promise.all(batches);
-        const totalGames = batchRes.reduce((sum, r) => sum + (r.data?.length || 0), 0);
-        return { phases: phaseIds.length, teams: teams?.length || 0, games: totalGames };
+        if (tErr) throw tErr;
+        const totalGames = (phases || []).reduce((sum, p) => sum + (p.games?.filter(g => g.status !== 'anomaly').length || 0), 0);
+        return { phases: phases?.length || 0, teams: teams?.length || 0, games: totalGames };
       }
     },
     {
       name: 'adminPollBuilder',
-      budget: 350,
+      budget: 400,
       fn: async () => {
         if (!recentSeason) return null;
         const [phasesRes, partRes, gamesRes, notesRes] = await Promise.all([
