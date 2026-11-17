@@ -81,14 +81,12 @@ export async function fetchGamedayData(seasonId?: string, phaseId?: string, date
     await assertPermission("gameday");
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Fetch seasons
-    const { data: seasons } = await supabase
-        .from("seasons")
-        .select("id, year, name, competition:competitions(name)")
-        .order("year", { ascending: false });
-
     // Do not load fixtures or season metadata until a season is explicitly selected
     if (!seasonId) {
+        const { data: seasons } = await supabase
+            .from("seasons")
+            .select("id, year, name, competition:competitions(name)")
+            .order("year", { ascending: false });
         return {
             seasons: seasons || [],
             phases: [],
@@ -110,16 +108,7 @@ export async function fetchGamedayData(seasonId?: string, phaseId?: string, date
         throw new Error("Invalid date filter.");
     }
 
-    // Fetch phases for selected season
-    const { data: phaseData } = await supabase
-        .from("phases")
-        .select("id, name, type, ordinal, parent_phase_id")
-        .eq("season_id", seasonId)
-        .order("ordinal", { ascending: true });
-    const phases: any[] = phaseData || [];
-    const phaseIds = phases.map(p => p.id);
-
-    // Build games query
+    // Build games query with nested game_staff overrides
     let gamesQuery = supabase
         .from("games")
         .select(`
@@ -136,15 +125,14 @@ export async function fetchGamedayData(seasonId?: string, phaseId?: string, date
             home_team:teams!home_team_id(id, name, logo_url),
             away_team:teams!away_team_id(id, name, logo_url),
             phase:phases!phase_id(id, name),
-            venue:venues!venue_id(id, name)
+            venue:venues!venue_id(id, name),
+            game_staff(game_id, team_id, person_id, role, person:people(display_name))
         `)
         .order("date", { ascending: true })
         .order("time", { ascending: true });
 
     if (phaseId) {
         gamesQuery = gamesQuery.eq("phase_id", phaseId);
-    } else if (phaseIds.length > 0) {
-        gamesQuery = gamesQuery.or(`season_id.eq.${seasonId},phase_id.in.(${phaseIds.join(",")})`);
     } else {
         gamesQuery = gamesQuery.eq("season_id", seasonId);
     }
@@ -153,55 +141,61 @@ export async function fetchGamedayData(seasonId?: string, phaseId?: string, date
         gamesQuery = gamesQuery.eq("date", dateFilter);
     }
 
-    const { data: games, error: gamesErr } = await gamesQuery;
+    const [
+        { data: seasons },
+        { data: phaseData },
+        { data: gamesData, error: gamesErr },
+        { data: venues },
+        { data: people },
+        { data: partData }
+    ] = await Promise.all([
+        supabase
+            .from("seasons")
+            .select("id, year, name, competition:competitions(name)")
+            .order("year", { ascending: false }),
+        supabase
+            .from("phases")
+            .select("id, name, type, ordinal, parent_phase_id")
+            .eq("season_id", seasonId)
+            .order("ordinal", { ascending: true }),
+        gamesQuery,
+        supabase
+            .from("venues")
+            .select("id, name")
+            .order("name", { ascending: true }),
+        supabase
+            .from("people")
+            .select("id, display_name")
+            .order("display_name", { ascending: true }),
+        supabase
+            .from("participations")
+            .select("phase_id, team_id, person:people(display_name), phases!inner(season_id)")
+            .eq("phases.season_id", seasonId)
+            .not("head_coach_id", "is", null)
+    ]);
 
     if (gamesErr) {
         throw new Error(`Failed to load fixtures: ${gamesErr.message}`);
     }
 
-    // Fetch venues for autocomplete
-    const { data: venues } = await supabase
-        .from("venues")
-        .select("id, name")
-        .order("name", { ascending: true });
-
-    // Fetch people for coach autocomplete
-    const { data: people } = await supabase
-        .from("people")
-        .select("id, display_name")
-        .order("display_name", { ascending: true });
-
-    // Fetch game_staff overrides for these games
-    const gameIds = (games || []).map(g => g.id);
-    let gameStaff: any[] = [];
-    if (gameIds.length > 0) {
-        const { data: staffData } = await supabase
-            .from("game_staff")
-            .select("game_id, team_id, person_id, role, person:people(display_name)")
-            .in("game_id", gameIds)
-            .eq("role", "head_coach");
-        gameStaff = staffData || [];
-    }
-
-    // Fetch default head coaches from participations for the active season's phases
-    let defaultCoaches: any[] = [];
-    if (phaseIds.length > 0) {
-        const { data: partData } = await supabase
-            .from("participations")
-            .select("phase_id, team_id, person:people(display_name)")
-            .in("phase_id", phaseIds)
-            .not("head_coach_id", "is", null);
-        defaultCoaches = partData || [];
+    const games = gamesData || [];
+    const gameStaff: any[] = [];
+    for (const g of games as any[]) {
+        for (const s of g.game_staff || []) {
+            if (s.role === "head_coach") {
+                gameStaff.push(s);
+            }
+        }
     }
 
     return {
         seasons: seasons || [],
-        phases,
-        games: games || [],
+        phases: phaseData || [],
+        games,
         venues: venues || [],
         people: people || [],
         gameStaff,
-        defaultCoaches
+        defaultCoaches: partData || []
     };
 }
 

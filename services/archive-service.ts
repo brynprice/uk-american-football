@@ -453,39 +453,40 @@ export const ArchiveService = {
     },
 
     async getUniqueScoreGames(): Promise<any[]> {
-        const [gamesRes, teamsRes, phasesRes] = await Promise.all([
+        const pageSize = 1000;
+        const fetchUniquePage = (page: number) =>
             supabase
                 .from('games')
                 .select(`
                     id, date, date_display, time, home_score, away_score, status, is_unique_score, is_totally_unique,
                     game_level, final_type, title_name, nickname, is_playoff, playoff_round, is_double_header,
-                    phase_id, away_phase_id, home_team_id, away_team_id
+                    phase_id, away_phase_id, home_team_id, away_team_id,
+                    phase:phases!games_phase_id_fkey(id, name, season:seasons(id, year, competition:competitions(name, level))),
+                    away_phase:phases!away_phase_id(name)
                 `)
                 .eq('is_unique_score', true)
                 .neq('status', 'anomaly')
                 .neq('status', 'cancelled')
-                .order('date', { ascending: false, nullsFirst: false }),
+                .order('date', { ascending: false, nullsFirst: false })
+                .range(page * pageSize, (page + 1) * pageSize - 1);
+
+        const [page0Res, page1Res, teamsRes] = await Promise.all([
+            fetchUniquePage(0),
+            fetchUniquePage(1),
             supabase
                 .from('teams')
-                .select('id, name, logo_url, team_type, team_aliases(id, name, start_year, end_year, logo_url)'),
-            supabase
-                .from('phases')
-                .select('id, name, season:seasons(id, year, competition:competitions(name, level))')
-                .limit(5000)
+                .select('id, name, logo_url, team_type, team_aliases(id, name, start_year, end_year, logo_url)')
         ]);
 
-        const { data, error } = gamesRes;
-        if (!error && data) {
+        const error = page0Res.error || page1Res.error;
+        const data = [...(page0Res.data || []), ...(page1Res.data || [])];
+        if (!error && data.length > 0) {
             const teamMap = new Map<string, any>(((teamsRes.data as any[]) || []).map(t => [t.id, t]));
-            const phaseMap = new Map<string, any>(((phasesRes.data as any[]) || []).map(p => [p.id, p]));
             const needsFallback = data.some((g: any) => g.is_totally_unique === undefined || g.is_totally_unique === null);
             const totallyUniqueKeys = needsFallback ? await getTotallyUniqueScoreKeys() : null;
             const games: any[] = data.map((g: any) => {
                 const home_team = teamMap.get(g.home_team_id) || null;
                 const away_team = teamMap.get(g.away_team_id) || null;
-                const phase = g.phase_id ? (phaseMap.get(g.phase_id) || null) : null;
-                const awayPh = g.away_phase_id ? phaseMap.get(g.away_phase_id) : null;
-                const away_phase = awayPh ? { name: awayPh.name } : null;
                 const high = Math.max(g.home_score ?? 0, g.away_score ?? 0);
                 const low = Math.min(g.home_score ?? 0, g.away_score ?? 0);
                 const isTotallyUnique = g.is_totally_unique !== undefined && g.is_totally_unique !== null
@@ -493,8 +494,6 @@ export const ArchiveService = {
                     : (totallyUniqueKeys ? totallyUniqueKeys.has(`${high}-${low}`) : false);
                 const enriched = {
                     ...g,
-                    phase,
-                    away_phase,
                     home_team,
                     away_team
                 };
@@ -716,9 +715,22 @@ export const ArchiveService = {
     },
 
     async getAllPhases(): Promise<Phase[]> {
-        const { data, error } = await supabase.from("phases").select("*").order("name");
-        if (error) throw error;
-        return data || [];
+        const pageSize = 1000;
+        const pages = await Promise.all(
+            [0, 1, 2].map(p =>
+                supabase
+                    .from("phases")
+                    .select("*")
+                    .order("name")
+                    .range(p * pageSize, (p + 1) * pageSize - 1)
+            )
+        );
+        const allPhases: Phase[] = [];
+        for (const res of pages) {
+            if (res.error) throw res.error;
+            if (res.data) allPhases.push(...(res.data as Phase[]));
+        }
+        return allPhases;
     },
 
     async getPeople(): Promise<PersonWithRoles[]> {

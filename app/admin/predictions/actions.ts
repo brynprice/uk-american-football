@@ -445,30 +445,18 @@ export async function getModelCalibrationStatsAction(seasonYear: number | "all" 
     await assertPermission("predictions");
     const supabase = getAdminClient();
 
-    let seasonId: string | null = null;
-    if (seasonYear !== "all") {
-      const { data: bucsSeason } = await supabase
-        .from("seasons")
-        .select("id, competitions!inner(name)")
-        .eq("year", seasonYear)
-        .ilike("competitions.name", "%Universities%")
-        .maybeSingle();
+    // 1. Fetch season ID (if filtered) and all predictions (with nested linked game) in a single parallel round-trip
+    const seasonPromise =
+      seasonYear !== "all"
+        ? supabase
+            .from("seasons")
+            .select("id, competitions!inner(name)")
+            .eq("year", seasonYear)
+            .ilike("competitions.name", "%Universities%")
+            .maybeSingle()
+        : Promise.resolve({ data: null });
 
-      if (bucsSeason) {
-        seasonId = bucsSeason.id;
-      } else {
-        const { data: fallbackSeason } = await supabase
-          .from("seasons")
-          .select("id")
-          .eq("year", seasonYear)
-          .limit(1)
-          .maybeSingle();
-        seasonId = fallbackSeason?.id || null;
-      }
-    }
-
-    // 1. Fetch predictions with home & away teams
-    const { data: predictions, error: pErr } = await supabase
+    const predictionsPromise = supabase
       .from("predictions")
       .select(`
         id,
@@ -481,11 +469,28 @@ export async function getModelCalibrationStatsAction(seasonYear: number | "all" 
         confidence,
         created_at,
         home_team:teams!predictions_home_team_id_fkey(id, name),
-        away_team:teams!predictions_away_team_id_fkey(id, name)
+        away_team:teams!predictions_away_team_id_fkey(id, name),
+        game:games!predictions_game_id_fkey(id, date, home_score, away_score, status, season_id, home_team_id, away_team_id)
       `)
       .order("created_at", { ascending: false });
 
+    const [{ data: bucsSeason }, { data: predictions, error: pErr }] = await Promise.all([
+      seasonPromise,
+      predictionsPromise,
+    ]);
+
     if (pErr) throw pErr;
+
+    let seasonId: string | null = bucsSeason?.id || null;
+    if (seasonYear !== "all" && !seasonId) {
+      const { data: fallbackSeason } = await supabase
+        .from("seasons")
+        .select("id")
+        .eq("year", seasonYear)
+        .limit(1)
+        .maybeSingle();
+      seasonId = fallbackSeason?.id || null;
+    }
 
     if (!predictions || predictions.length === 0) {
       return {
@@ -499,27 +504,32 @@ export async function getModelCalibrationStatsAction(seasonYear: number | "all" 
       };
     }
 
-    // Collect explicit game_ids to fetch completed games in bulk
-    const explicitGameIds = predictions
-      .filter((p) => p.game_id)
-      .map((p) => p.game_id as string);
+    // Resolve any unlinked ad-hoc predictions in parallel rather than sequentially
+    const unlinkedPreds = predictions.filter((p) => !p.game_id);
+    const adHocGamesMap = new Map<string, any>();
+    if (unlinkedPreds.length > 0) {
+      await Promise.all(
+        unlinkedPreds.map(async (p) => {
+          let matchQuery = supabase
+            .from("games")
+            .select("id, date, home_score, away_score, status, season_id")
+            .eq("home_team_id", p.home_team_id)
+            .eq("away_team_id", p.away_team_id)
+            .eq("status", "completed")
+            .not("home_score", "is", null)
+            .not("away_score", "is", null)
+            .gte("date", p.created_at.split("T")[0])
+            .order("date", { ascending: true })
+            .limit(1);
 
-    const explicitGamesMap = new Map<string, any>();
-    if (explicitGameIds.length > 0) {
-      let gQuery = supabase
-        .from("games")
-        .select("id, date, home_score, away_score, status, season_id, home_team_id, away_team_id")
-        .in("id", explicitGameIds)
-        .eq("status", "completed")
-        .not("home_score", "is", null)
-        .not("away_score", "is", null);
+          if (seasonId) {
+            matchQuery = matchQuery.eq("season_id", seasonId);
+          }
 
-      if (seasonId) {
-        gQuery = gQuery.eq("season_id", seasonId);
-      }
-
-      const { data: explicitGames } = await gQuery;
-      (explicitGames || []).forEach((g) => explicitGamesMap.set(g.id, g));
+          const { data: mGame } = await matchQuery.maybeSingle();
+          if (mGame) adHocGamesMap.set(p.id, mGame);
+        })
+      );
     }
 
     const matched: any[] = [];
@@ -531,27 +541,18 @@ export async function getModelCalibrationStatsAction(seasonYear: number | "all" 
     for (const p of predictions) {
       let game: any = null;
       if (p.game_id) {
-        game = explicitGamesMap.get(p.game_id);
-      } else {
-        // Match ad-hoc prediction with completed game between those teams on or after prediction
-        let matchQuery = supabase
-          .from("games")
-          .select("id, date, home_score, away_score, status, season_id")
-          .eq("home_team_id", p.home_team_id)
-          .eq("away_team_id", p.away_team_id)
-          .eq("status", "completed")
-          .not("home_score", "is", null)
-          .not("away_score", "is", null)
-          .gte("date", p.created_at.split("T")[0])
-          .order("date", { ascending: true })
-          .limit(1);
-
-        if (seasonId) {
-          matchQuery = matchQuery.eq("season_id", seasonId);
+        const linked = Array.isArray(p.game) ? p.game[0] : p.game;
+        if (
+          linked &&
+          linked.status === "completed" &&
+          linked.home_score !== null &&
+          linked.away_score !== null &&
+          (!seasonId || linked.season_id === seasonId)
+        ) {
+          game = linked;
         }
-
-        const { data: mGame } = await matchQuery.maybeSingle();
-        game = mGame;
+      } else {
+        game = adHocGamesMap.get(p.id) || null;
       }
 
       if (!game) continue;

@@ -319,6 +319,11 @@ export async function predictMatchup(
       string,
       { offenseDelta: number; defenseDelta: number; gamesPlayed: number }
     >;
+    preloadedHistory?: {
+      homeGames: any[];
+      awayGames: any[];
+      h2hGames: any[];
+    };
   }
 ): Promise<PredictionResult> {
   const {
@@ -351,77 +356,91 @@ export async function predictMatchup(
     awayName = teamRows?.find((t: any) => t.id === awayTeamId)?.name || 'Away Team';
   }
 
-  // 2. Fetch Recent History (last 2 seasons + current season) with !inner join on phase & season
+  // 2. Fetch or use preloaded Recent History (last 2 seasons + current season) and H2H Historical Games
   const startCommonYear = seasonYear - 2;
-  let homeHistQuery = supabase
-    .from('games')
-    .select(
-      'id, date, home_team_id, away_team_id, home_score, away_score, is_playoff, phase:phases!games_phase_id_fkey!inner(name, season:seasons!inner(year))'
-    )
-    .or(`home_team_id.eq.${homeTeamId},away_team_id.eq.${homeTeamId}`)
-    .eq('status', 'completed')
-    .not('home_score', 'is', null)
-    .not('away_score', 'is', null)
-    .gte('phase.season.year', startCommonYear);
+  let rawHomeHistory: any[];
+  let rawAwayHistory: any[];
+  let rawH2H: any[];
 
-  let awayHistQuery = supabase
-    .from('games')
-    .select(
-      'id, date, home_team_id, away_team_id, home_score, away_score, is_playoff, phase:phases!games_phase_id_fkey!inner(name, season:seasons!inner(year))'
-    )
-    .or(`home_team_id.eq.${awayTeamId},away_team_id.eq.${awayTeamId}`)
-    .eq('status', 'completed')
-    .not('home_score', 'is', null)
-    .not('away_score', 'is', null)
-    .gte('phase.season.year', startCommonYear);
+  if (params.preloadedHistory) {
+    rawHomeHistory = params.preloadedHistory.homeGames;
+    rawAwayHistory = params.preloadedHistory.awayGames;
+    rawH2H = params.preloadedHistory.h2hGames;
+  } else {
+    let homeHistQuery = supabase
+      .from('games')
+      .select(
+        'id, date, home_team_id, away_team_id, home_score, away_score, is_playoff, phase:phases!games_phase_id_fkey!inner(name, season:seasons!inner(year))'
+      )
+      .or(`home_team_id.eq.${homeTeamId},away_team_id.eq.${homeTeamId}`)
+      .eq('status', 'completed')
+      .not('home_score', 'is', null)
+      .not('away_score', 'is', null)
+      .gte('phase.season.year', startCommonYear);
 
-  if (gameDate) {
-    homeHistQuery = homeHistQuery.lt('date', gameDate);
-    awayHistQuery = awayHistQuery.lt('date', gameDate);
+    let awayHistQuery = supabase
+      .from('games')
+      .select(
+        'id, date, home_team_id, away_team_id, home_score, away_score, is_playoff, phase:phases!games_phase_id_fkey!inner(name, season:seasons!inner(year))'
+      )
+      .or(`home_team_id.eq.${awayTeamId},away_team_id.eq.${awayTeamId}`)
+      .eq('status', 'completed')
+      .not('home_score', 'is', null)
+      .not('away_score', 'is', null)
+      .gte('phase.season.year', startCommonYear);
+
+    let h2hQuery = supabase
+      .from('games')
+      .select(`
+        id,
+        home_team_id,
+        away_team_id,
+        home_score,
+        away_score,
+        date,
+        is_playoff,
+        phase:phases!games_phase_id_fkey!inner(name, season:seasons!inner(year))
+      `)
+      .or(
+        `and(home_team_id.eq.${homeTeamId},away_team_id.eq.${awayTeamId}),and(home_team_id.eq.${awayTeamId},away_team_id.eq.${homeTeamId})`
+      )
+      .eq('status', 'completed')
+      .not('home_score', 'is', null)
+      .not('away_score', 'is', null);
+
+    if (gameDate) {
+      homeHistQuery = homeHistQuery.lt('date', gameDate);
+      awayHistQuery = awayHistQuery.lt('date', gameDate);
+      h2hQuery = h2hQuery.lt('date', gameDate);
+    }
+
+    const [homeHistoryRes, awayHistoryRes, h2hRes] = await Promise.all([
+      homeHistQuery,
+      awayHistQuery,
+      h2hQuery,
+    ]);
+
+    rawHomeHistory = (homeHistoryRes.data || []) as any[];
+    rawAwayHistory = (awayHistoryRes.data || []) as any[];
+    rawH2H = (h2hRes.data || []) as any[];
   }
 
-  // 3. Fetch H2H Historical Games
-  let h2hQuery = supabase
-    .from('games')
-    .select(`
-      id,
-      home_team_id,
-      away_team_id,
-      home_score,
-      away_score,
-      date,
-      is_playoff,
-      phase:phases!games_phase_id_fkey!inner(name, season:seasons!inner(year))
-    `)
-    .or(
-      `and(home_team_id.eq.${homeTeamId},away_team_id.eq.${awayTeamId}),and(home_team_id.eq.${awayTeamId},away_team_id.eq.${homeTeamId})`
-    )
-    .eq('status', 'completed')
-    .not('home_score', 'is', null)
-    .not('away_score', 'is', null);
-
-  if (gameDate) {
-    h2hQuery = h2hQuery.lt('date', gameDate);
-  }
-
-  const [homeHistoryRes, awayHistoryRes, h2hRes] = await Promise.all([
-    homeHistQuery,
-    awayHistQuery,
-    h2hQuery,
-  ]);
-
-  const hGames = ((homeHistoryRes.data || []) as any[]).filter(
+  const hGames = rawHomeHistory.filter(
     (g) =>
       (g.phase?.season?.year ?? 0) >= startCommonYear &&
+      (!gameDate || !g.date || g.date < gameDate) &&
       !isWalkoverScoreline(g.home_score, g.away_score)
   );
-  const aGames = ((awayHistoryRes.data || []) as any[]).filter(
+  const aGames = rawAwayHistory.filter(
     (g) =>
       (g.phase?.season?.year ?? 0) >= startCommonYear &&
+      (!gameDate || !g.date || g.date < gameDate) &&
       !isWalkoverScoreline(g.home_score, g.away_score)
   );
-  const h2hGames = ((h2hRes.data || []) as any[]).filter(
-    (g) => !isWalkoverScoreline(g.home_score, g.away_score)
+  const h2hGames = rawH2H.filter(
+    (g) =>
+      (!gameDate || !g.date || g.date < gameDate) &&
+      !isWalkoverScoreline(g.home_score, g.away_score)
   );
 
   // 4. Determine Target Matchup Tier
@@ -759,9 +778,95 @@ export async function predictBatchSlate(
   // Determine earliest date in slate to scope in-season residuals
   const sortedDates = games.map((g) => g.date).sort();
   const earliestDate = sortedDates[0];
+  const startCommonYear = seasonYear - 2;
 
-  // Pre-load in-season residuals once for all games in the slate
-  const residuals = await getInSeasonTeamResiduals(supabase, seasonYear, earliestDate);
+  const slateTeamIds = Array.from(
+    new Set(games.flatMap((g) => [g.homeTeamId, g.awayTeamId]).filter(Boolean))
+  );
+
+  const histSelect =
+    'id, date, home_team_id, away_team_id, home_score, away_score, is_playoff, phase:phases!games_phase_id_fkey!inner(name, season:seasons!inner(year))';
+
+  // Chunk H2H pairs in batches of 25 games so URL query strings remain compact
+  const h2hChunkSize = 25;
+  const h2hPromises: PromiseLike<any>[] = [];
+  for (let i = 0; i < games.length; i += h2hChunkSize) {
+    const chunk = games.slice(i, i + h2hChunkSize);
+    const pairClauses = chunk
+      .flatMap((g) => [
+        `and(home_team_id.eq.${g.homeTeamId},away_team_id.eq.${g.awayTeamId})`,
+        `and(home_team_id.eq.${g.awayTeamId},away_team_id.eq.${g.homeTeamId})`,
+      ])
+      .join(',');
+    h2hPromises.push(
+      supabase
+        .from('games')
+        .select(histSelect)
+        .or(pairClauses)
+        .eq('status', 'completed')
+        .not('home_score', 'is', null)
+        .not('away_score', 'is', null)
+    );
+  }
+
+  // Pre-load in-season residuals, recent team history, and H2H history in one parallel round-trip
+  const [residuals, homeRecentRes, awayRecentRes, ...h2hBatchResults] =
+    await Promise.all([
+      getInSeasonTeamResiduals(supabase, seasonYear, earliestDate),
+      supabase
+        .from('games')
+        .select(histSelect)
+        .in('home_team_id', slateTeamIds)
+        .eq('status', 'completed')
+        .not('home_score', 'is', null)
+        .not('away_score', 'is', null)
+        .gte('phase.season.year', startCommonYear),
+      supabase
+        .from('games')
+        .select(histSelect)
+        .in('away_team_id', slateTeamIds)
+        .eq('status', 'completed')
+        .not('home_score', 'is', null)
+        .not('away_score', 'is', null)
+        .gte('phase.season.year', startCommonYear),
+      ...h2hPromises,
+    ]);
+
+  // Index recent games per team (deduplicated by game ID)
+  const seenRecentIds = new Set<string>();
+  const recentByTeam = new Map<string, any[]>();
+  for (const row of [
+    ...((homeRecentRes.data || []) as any[]),
+    ...((awayRecentRes.data || []) as any[]),
+  ]) {
+    if (!row?.id || seenRecentIds.has(row.id)) continue;
+    seenRecentIds.add(row.id);
+    if (row.home_team_id) {
+      const list = recentByTeam.get(row.home_team_id) || [];
+      list.push(row);
+      recentByTeam.set(row.home_team_id, list);
+    }
+    if (row.away_team_id) {
+      const list = recentByTeam.get(row.away_team_id) || [];
+      list.push(row);
+      recentByTeam.set(row.away_team_id, list);
+    }
+  }
+
+  // Index H2H games by sorted team pair key
+  const pairKey = (a: string, b: string) => (a < b ? `${a}_${b}` : `${b}_${a}`);
+  const seenH2HIds = new Set<string>();
+  const h2hByPair = new Map<string, any[]>();
+  for (const res of h2hBatchResults) {
+    for (const row of (res?.data || []) as any[]) {
+      if (!row?.id || seenH2HIds.has(row.id)) continue;
+      seenH2HIds.add(row.id);
+      const key = pairKey(row.home_team_id, row.away_team_id);
+      const list = h2hByPair.get(key) || [];
+      list.push(row);
+      h2hByPair.set(key, list);
+    }
+  }
 
   const results: PredictionResult[] = [];
   for (const g of games) {
@@ -775,6 +880,11 @@ export async function predictBatchSlate(
       parentPhaseName: g.parentPhaseName,
       teamNames: { home: g.homeTeamName, away: g.awayTeamName },
       preloadedResiduals: residuals,
+      preloadedHistory: {
+        homeGames: recentByTeam.get(g.homeTeamId) || [],
+        awayGames: recentByTeam.get(g.awayTeamId) || [],
+        h2hGames: h2hByPair.get(pairKey(g.homeTeamId, g.awayTeamId)) || [],
+      },
     });
     results.push(pred);
   }

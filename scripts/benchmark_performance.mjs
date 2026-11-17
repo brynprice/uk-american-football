@@ -3,6 +3,8 @@ import WebSocket from 'ws';
 globalThis.WebSocket = WebSocket;
 import dotenv from 'dotenv';
 import fs from 'fs';
+import { generateWeeklyFacts } from '../lib/facts/weekly-facts-core.mjs';
+import { generateWeeklyPreview } from '../lib/facts/weekly-preview-core.mjs';
 
 // Load environment variables (.env.local, then .env)
 dotenv.config({ path: '.env.local' });
@@ -157,6 +159,20 @@ async function runBenchmark() {
         const { data, error } = await supabase.from('competitions').select('*').order('name');
         if (error) throw error;
         return data;
+      }
+    },
+    // Competition Overview (/competitions/[id])
+    {
+      name: 'getCompetitionById',
+      budget: 250,
+      fn: async () => {
+        if (!recentSeason) return null;
+        const { data: comp } = await supabase
+          .from('competitions')
+          .select('*, seasons(*)')
+          .limit(1)
+          .single();
+        return comp;
       }
     },
     // Season Details (unphased games + notes)
@@ -328,24 +344,31 @@ async function runBenchmark() {
         return data;
       }
     },
-    // Scorigami Unique Score Games (/scorigami/unique)
+    // Scorigami Unique Score Games (/scorigami/unique) — paginated across 2 pages (2,000 capacity)
     {
       name: 'getUniqueScoreGames',
       budget: 550,
       fn: async () => {
-        const [gamesRes, teamsRes] = await Promise.all([
+        const pageSize = 1000;
+        const fetchPage = p =>
           supabase.from('games').select(`
             id, date, date_display, time, home_score, away_score, status, is_unique_score, is_totally_unique,
             game_level, final_type, title_name, nickname, is_playoff, playoff_round, is_double_header,
             phase_id, away_phase_id, home_team_id, away_team_id,
-            phase:phases!games_phase_id_fkey(name, season:seasons(year, competition:competitions(name, level))),
+            phase:phases!games_phase_id_fkey(id, name, season:seasons(id, year, competition:competitions(name, level))),
             away_phase:phases!away_phase_id(name)
-          `).eq('is_unique_score', true).neq('status', 'anomaly').neq('status', 'cancelled').order('date', { ascending: false, nullsFirst: false }),
+          `).eq('is_unique_score', true).neq('status', 'anomaly').neq('status', 'cancelled').order('date', { ascending: false, nullsFirst: false }).range(p * pageSize, (p + 1) * pageSize - 1);
+
+        const [page0Res, page1Res, teamsRes] = await Promise.all([
+          fetchPage(0),
+          fetchPage(1),
           supabase.from('teams').select('id, name, logo_url, team_type, team_aliases(id, name, start_year, end_year, logo_url)')
         ]);
-        if (gamesRes.error) throw gamesRes.error;
+        if (page0Res.error) throw page0Res.error;
+        if (page1Res.error) throw page1Res.error;
+        const allGames = [...(page0Res.data || []), ...(page1Res.data || [])];
         const teamMap = new Map((teamsRes.data || []).map(t => [t.id, t]));
-        return (gamesRes.data || []).map(g => ({
+        return allGames.map(g => ({
           ...g,
           home_team: teamMap.get(g.home_team_id) || null,
           away_team: teamMap.get(g.away_team_id) || null
@@ -401,6 +424,71 @@ async function runBenchmark() {
           teams: teamsRes.data?.length || 0,
           notes: (seasonNotesRes.data?.length || 0) + (champNotesRes.data?.length || 0)
         };
+      }
+    },
+    // Women's Historical Timeline (/timeline?league=womens)
+    {
+      name: 'getWomensTimeline',
+      budget: 450,
+      fn: async () => {
+        const slugs = ['sapphire-series', 'nwfl'];
+        const [seasonsRes, phasesRes, gamesRes, partsRes, seasonNotesRes, champNotesRes, teamsRes] = await Promise.all([
+          supabase.from('seasons').select('id, year, name, competition_id, completeness_score, competition:competitions!inner(id, name, slug, level)').in('competition.slug', slugs).order('year', { ascending: true }),
+          supabase.from('phases').select('id, season_id, name, type, ordinal, parent_phase_id, season:seasons!inner(competition:competitions!inner(slug))').in('season.competition.slug', slugs).limit(1000),
+          supabase.from('games').select(`
+            id, season_id, date, home_score, away_score, final_type, title_name, notes,
+            home_team:teams!home_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)),
+            away_team:teams!away_team_id (id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)),
+            venue:venues (id, name, city),
+            season:seasons!games_season_id_fkey!inner(competition:competitions!inner(slug))
+          `).in('season.competition.slug', slugs).or('final_type.in.(title,bowl),title_name.ilike.%College Bowl%').neq('status', 'anomaly').order('date', { ascending: true }),
+          supabase.from('participations').select('id, team_id, phase_id, is_champion, wins, losses, ties, points_for, points_against, phases!inner(season:seasons!inner(competition:competitions!inner(slug)))').in('phases.season.competition.slug', slugs).range(0, 999),
+          supabase.from('notes').select('entity_id, content').eq('entity_type', 'seasons'),
+          supabase.from('notes').select('entity_id, content').eq('entity_type', 'divisional_champion'),
+          supabase.from('teams').select('id, name, logo_url, team_aliases (id, name, start_year, end_year, logo_url)')
+        ]);
+        if (seasonsRes.error) throw seasonsRes.error;
+        return {
+          seasons: seasonsRes.data?.length || 0,
+          phases: phasesRes.data?.length || 0,
+          games: gamesRes.data?.length || 0,
+          participations: partsRes.data?.length || 0,
+          teams: teamsRes.data?.length || 0,
+          notes: (seasonNotesRes.data?.length || 0) + (champNotesRes.data?.length || 0)
+        };
+      }
+    },
+    // Phase CSV Export Route (/api/export/phase/[id])
+    {
+      name: 'exportPhaseCsv',
+      budget: 350,
+      fn: async () => {
+        if (!samplePhase) return null;
+        const { data: phase, error: pErr } = await supabase
+          .from('phases')
+          .select('*, season:seasons(id, year, competition:competitions(name), phases(id, name, parent_phase_id, type))')
+          .eq('id', samplePhase.id)
+          .single();
+        if (pErr) throw pErr;
+        const allPhases = phase?.season?.phases || [];
+        const getDescendants = parentId => {
+          const children = allPhases.filter(p => p.parent_phase_id === parentId);
+          return [parentId, ...children.flatMap(c => getDescendants(c.id))];
+        };
+        const descendantIds = getDescendants(samplePhase.id);
+        const [gamesRes, partsRes] = await Promise.all([
+          supabase.from('games').select(`
+            *,
+            home_team:teams!home_team_id (*, team_aliases (*)),
+            away_team:teams!away_team_id (*, team_aliases (*)),
+            venue:venues (name),
+            phase:phases!games_phase_id_fkey (name, parent_phase:phases!parent_phase_id (name)),
+            game_staff (game_id, team_id, role, person:people(display_name))
+          `).in('phase_id', descendantIds).neq('status', 'anomaly').order('date', { ascending: true }),
+          supabase.from('participations').select('phase_id, team_id, person:people(display_name)').in('phase_id', descendantIds)
+        ]);
+        if (gamesRes.error) throw gamesRes.error;
+        return { games: gamesRes.data?.length || 0, participations: partsRes.data?.length || 0 };
       }
     },
     // Teams List (with historical aliases)
@@ -564,6 +652,108 @@ async function runBenchmark() {
         if (gamesRes.error) throw gamesRes.error;
         return { phases: phasesRes.data?.length || 0, participations: partRes.data?.length || 0, games: gamesRes.data?.length || 0, ballots: notesRes.data?.length || 0 };
       }
+    },
+    // Gameday Live Score Hub (/admin/gameday)
+    {
+      name: 'adminGamedayLoader',
+      budget: 450,
+      fn: async () => {
+        if (!recentSeason) return null;
+        const [seasonsRes, phasesRes, gamesRes, venuesRes, peopleRes, partRes] = await Promise.all([
+          supabase.from('seasons').select('id, year, name, competition:competitions(name)').order('year', { ascending: false }),
+          supabase.from('phases').select('id, name, type, ordinal, parent_phase_id').eq('season_id', recentSeason.id).order('ordinal', { ascending: true }),
+          supabase.from('games').select(`
+            id, phase_id, date, time, status, home_score, away_score, is_playoff, is_double_header, notes,
+            home_team:teams!home_team_id(id, name, logo_url),
+            away_team:teams!away_team_id(id, name, logo_url),
+            phase:phases!phase_id(id, name),
+            venue:venues!venue_id(id, name),
+            game_staff(game_id, team_id, person_id, role, person:people(display_name))
+          `).eq('season_id', recentSeason.id).order('date', { ascending: true }).order('time', { ascending: true }),
+          supabase.from('venues').select('id, name').order('name', { ascending: true }),
+          supabase.from('people').select('id, display_name').order('display_name', { ascending: true }),
+          supabase.from('participations').select('phase_id, team_id, person:people(display_name), phases!inner(season_id)').eq('phases.season_id', recentSeason.id).not('head_coach_id', 'is', null)
+        ]);
+        if (gamesRes.error) throw gamesRes.error;
+        return {
+          seasons: seasonsRes.data?.length || 0,
+          phases: phasesRes.data?.length || 0,
+          games: gamesRes.data?.length || 0,
+          venues: venuesRes.data?.length || 0,
+          people: peopleRes.data?.length || 0,
+          defaultCoaches: partRes.data?.length || 0
+        };
+      }
+    },
+    // Batch Slate Predictor (/admin/predictions)
+    {
+      name: 'adminPredictionsSlate',
+      budget: 500,
+      fn: async () => {
+        const { data: slate, error: sErr } = await supabase
+          .from('games')
+          .select('id, date, home_team_id, away_team_id')
+          .gte('date', '2026-11-14')
+          .lte('date', '2026-11-15');
+        if (sErr) throw sErr;
+        const games = slate || [];
+        if (games.length === 0) return { games: 0 };
+        const ids = Array.from(new Set(games.flatMap(g => [g.home_team_id, g.away_team_id]).filter(Boolean)));
+        const pairClauses = games.slice(0, 25).flatMap(g => [
+          `and(home_team_id.eq.${g.home_team_id},away_team_id.eq.${g.away_team_id})`,
+          `and(home_team_id.eq.${g.away_team_id},away_team_id.eq.${g.home_team_id})`
+        ]).join(',');
+        const histSelect = 'id, date, home_team_id, away_team_id, home_score, away_score, is_playoff, phase:phases!games_phase_id_fkey!inner(name, season:seasons!inner(year))';
+        const [residualsRes, homeRecent, awayRecent, h2hRes] = await Promise.all([
+          supabase.from('games').select('id, home_team_id, away_team_id, home_score, away_score, date, status, phase:phases!games_phase_id_fkey!inner(name, season:seasons!inner(year))').eq('status', 'completed').not('home_score', 'is', null).not('away_score', 'is', null).eq('phase.season.year', 2026).lt('date', '2026-11-14'),
+          supabase.from('games').select(histSelect).in('home_team_id', ids).eq('status', 'completed').not('home_score', 'is', null).not('away_score', 'is', null).gte('phase.season.year', 2024),
+          supabase.from('games').select(histSelect).in('away_team_id', ids).eq('status', 'completed').not('home_score', 'is', null).not('away_score', 'is', null).gte('phase.season.year', 2024),
+          supabase.from('games').select(histSelect).or(pairClauses).eq('status', 'completed').not('home_score', 'is', null).not('away_score', 'is', null)
+        ]);
+        if (homeRecent.error) throw homeRecent.error;
+        return {
+          slateGames: games.length,
+          inSeasonGames: residualsRes.data?.length || 0,
+          recentGames: (homeRecent.data?.length || 0) + (awayRecent.data?.length || 0),
+          h2hGames: h2hRes.data?.length || 0
+        };
+      }
+    },
+    // Model Calibration & Accuracy (/admin/predictions/accuracy)
+    {
+      name: 'adminPredictionAccuracy',
+      budget: 300,
+      fn: async () => {
+        const [seasonRes, predsRes] = await Promise.all([
+          supabase.from('seasons').select('id, competitions!inner(name)').eq('year', 2026).ilike('competitions.name', '%Universities%').maybeSingle(),
+          supabase.from('predictions').select(`
+            id, game_id, home_team_id, away_team_id, predicted_home_score, predicted_away_score, win_probability, confidence, created_at,
+            home_team:teams!predictions_home_team_id_fkey(id, name),
+            away_team:teams!predictions_away_team_id_fkey(id, name),
+            game:games!predictions_game_id_fkey(id, date, home_score, away_score, status, season_id, home_team_id, away_team_id)
+          `).order('created_at', { ascending: false })
+        ]);
+        if (predsRes.error) throw predsRes.error;
+        return { seasonId: seasonRes.data?.id || null, predictions: predsRes.data?.length || 0 };
+      }
+    },
+    // Weekly Interesting Facts Engine (/api/facts?mode=recap & npm run facts)
+    {
+      name: 'weeklyFactsEngine',
+      budget: 600,
+      fn: async () => {
+        const facts = await generateWeeklyFacts(supabase, { week: 3, season: 2026 });
+        return { completedGames: facts.summary?.completedCount || 0, window: facts.window?.label };
+      }
+    },
+    // Weekly Upcoming Preview Engine (/api/facts?mode=preview & npm run preview)
+    {
+      name: 'weeklyPreviewEngine',
+      budget: 600,
+      fn: async () => {
+        const preview = await generateWeeklyPreview(supabase, { week: 5, season: 2026 });
+        return { upcomingGames: preview.summary?.totalScheduled || 0, window: preview.window?.label };
+      }
     }
   ];
 
@@ -574,25 +764,74 @@ async function runBenchmark() {
   }
 
   // Console output
-  console.log('------------------------------------------------------------------------');
-  console.log(' Query Name          Latency      Budget     Payload    Rows    Status');
-  console.log('------------------------------------------------------------------------');
+  console.log('---------------------------------------------------------------------------');
+  console.log(' Query Name              Latency      Budget     Payload    Rows    Status');
+  console.log('---------------------------------------------------------------------------');
   for (const r of results) {
-    const nameCol = r.name.padEnd(19);
+    const nameCol = r.name.padEnd(23);
     const latCol = `${r.durationMs.toFixed(1)}ms`.padStart(9);
     const budCol = `${r.budgetMs}ms`.padStart(9);
     const sizeCol = `${(r.sizeBytes / 1024).toFixed(1)} KB`.padStart(10);
     const rowsCol = String(r.count).padStart(7);
     console.log(` ${nameCol} ${latCol}  ${budCol}  ${sizeCol}  ${rowsCol}    ${r.status}`);
   }
-  console.log('------------------------------------------------------------------------');
+  console.log('---------------------------------------------------------------------------');
+
+  // 3. PostgREST 1,000-Row Capacity & Silent Truncation Guardrails
+  console.log('\n--- 3. POSTGREST ROW-CAP & PAGINATION GUARDRAILS ---');
+  const champsBench = results.find(r => r.name === 'getChampions');
+  const uniqueBench = results.find(r => r.name === 'getUniqueScoreGames');
+  const [{ count: uniballPhasesCount }, { count: uniballPartsCount }] = await Promise.all([
+    supabase
+      .from('phases')
+      .select('id, season:seasons!inner(competition:competitions!inner(slug))', { count: 'exact', head: true })
+      .in('season.competition.slug', ['bcafl', 'buafl']),
+    supabase
+      .from('participations')
+      .select('id, phases!inner(season:seasons!inner(competition:competitions!inner(slug)))', { count: 'exact', head: true })
+      .in('phases.season.competition.slug', ['bcafl', 'buafl'])
+  ]);
+
+  const capacityChecks = [
+    { name: 'teams (single fetch)', rows: Number(tableCounts.teams) || 0, limit: 1000 },
+    { name: 'venues (single fetch)', rows: Number(tableCounts.venues) || 0, limit: 1000 },
+    { name: 'people (single fetch)', rows: Number(tableCounts.people) || 0, limit: 1000 },
+    { name: 'seasons (single fetch)', rows: Number(tableCounts.seasons) || 0, limit: 1000 },
+    { name: 'notes (single fetch)', rows: Number(tableCounts.notes) || 0, limit: 1000 },
+    { name: 'getChampions (single fetch)', rows: champsBench?.count || 0, limit: 1000 },
+    { name: 'uniballPhases (single fetch)', rows: uniballPhasesCount || 0, limit: 1000 },
+    { name: 'getUniqueScoreGames (2 pages)', rows: uniqueBench?.count || 0, limit: 2000 },
+    { name: 'getAllPhases (3 pages)', rows: Number(tableCounts.phases) || 0, limit: 3000 },
+    { name: 'uniballParticipations (4 pages)', rows: uniballPartsCount || 0, limit: 4000 }
+  ].map(c => {
+    const pct = (c.rows / c.limit) * 100;
+    let status = '🟢 PASS';
+    if (pct >= 95) status = '🔴 CRITICAL';
+    else if (pct >= 85) status = '🟡 WARNING';
+    return { ...c, pct, status };
+  });
+
+  console.log('---------------------------------------------------------------------------');
+  console.log(' Guardrail Scope                  Rows    Ceiling   Utilization     Status');
+  console.log('---------------------------------------------------------------------------');
+  for (const c of capacityChecks) {
+    const nameCol = c.name.padEnd(31);
+    const rowsCol = String(c.rows).padStart(6);
+    const limCol = String(c.limit).padStart(9);
+    const pctCol = `${c.pct.toFixed(1)}%`.padStart(12);
+    console.log(` ${nameCol} ${rowsCol}  ${limCol}  ${pctCol}    ${c.status}`);
+  }
+  console.log('---------------------------------------------------------------------------');
 
   const passedCount = results.filter(r => r.status.includes('PASS')).length;
   const warnCount = results.filter(r => r.status.includes('WARNING')).length;
   const critCount = results.filter(r => r.status.includes('CRITICAL')).length;
   const errCount = results.filter(r => r.status.includes('ERROR')).length;
+  const capWarnCount = capacityChecks.filter(c => c.status.includes('WARNING')).length;
+  const capCritCount = capacityChecks.filter(c => c.status.includes('CRITICAL')).length;
 
-  console.log(`\nSummary: ${passedCount} Passed | ${warnCount} Warnings | ${critCount} Critical | ${errCount} Errors\n`);
+  console.log(`\nLatency Summary : ${passedCount} Passed | ${warnCount} Warnings | ${critCount} Critical | ${errCount} Errors`);
+  console.log(`Capacity Summary: ${capacityChecks.length - capWarnCount - capCritCount} Passed | ${capWarnCount} Warnings | ${capCritCount} Critical\n`);
 
   // Append to GitHub Actions Job Summary if running in CI
   if (process.env.GITHUB_STEP_SUMMARY) {
@@ -609,12 +848,17 @@ ${Object.entries(tableCounts).map(([k, v]) => `| \`${k}\` | **${v}** |`).join('\
 |---|---|---|---|---|
 ${results.map(r => `| **\`${r.name}\`** | \`${r.durationMs.toFixed(1)} ms\` | \`${r.budgetMs} ms\` | \`${(r.sizeBytes / 1024).toFixed(1)} KB\` | ${r.status} |`).join('\n')}
 
-**Overall Health**: ${critCount === 0 && errCount === 0 ? '✅ All queries healthy' : '⚠️ Latency warnings detected'}
+### 🛡️ PostgREST Row-Cap & Pagination Guardrails
+| Scope | Current Rows | Max Capacity | Utilization | Status |
+|---|---|---|---|---|
+${capacityChecks.map(c => `| **\`${c.name}\`** | \`${c.rows}\` | \`${c.limit}\` | \`${c.pct.toFixed(1)}%\` | ${c.status} |`).join('\n')}
+
+**Overall Health**: ${critCount === 0 && errCount === 0 && capCritCount === 0 ? '✅ All queries and capacity guardrails healthy' : '⚠️ Latency or capacity warnings detected'}
 `;
     fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, summaryMd);
   }
 
-  if (isStrict && (critCount > 0 || errCount > 0)) {
+  if (isStrict && (critCount > 0 || errCount > 0 || capCritCount > 0)) {
     console.error('Benchmark failed with critical regressions in strict mode.');
     process.exit(1);
   }
