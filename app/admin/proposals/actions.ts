@@ -46,10 +46,27 @@ export async function approveGameProposal(proposalId: string, adminNotes?: strin
         }
 
         const proposedData = proposal.proposed_data || {};
+        const isSeasonCoachProposal = proposedData.proposal_kind === "season_coach";
+
+        if (isSeasonCoachProposal) {
+            const rawCoach = proposedData.head_coach ? String(proposedData.head_coach).trim() : "";
+            if (!rawCoach) {
+                return { success: false, error: "Proposed Head Coach name is empty." };
+            }
+            if (rawCoach.length > 120) {
+                return { success: false, error: "Proposed Head Coach name exceeds 120 characters." };
+            }
+            if (proposedData.season_id && !isValidUuid(proposedData.season_id)) {
+                return { success: false, error: "Proposal references an invalid season ID." };
+            }
+            if (proposedData.team_id && !isValidUuid(proposedData.team_id)) {
+                return { success: false, error: "Proposal references an invalid team ID." };
+            }
+        }
 
         // Validate update payload fields up front before claiming or mutating records
         let cleanUpdatePayload: Record<string, any> | null = null;
-        if (proposal.proposal_type === "update" && proposal.game_id) {
+        if (!isSeasonCoachProposal && proposal.proposal_type === "update" && proposal.game_id) {
             if (!isValidUuid(proposal.game_id)) {
                 return { success: false, error: "Proposal references an invalid game ID." };
             }
@@ -108,131 +125,274 @@ export async function approveGameProposal(proposalId: string, adminNotes?: strin
         }
 
         try {
-            // 3. Resolve IDs
-            // Resolve Phase ID
-            let phaseId = null;
-            if (proposedData.phase && proposedData.year) {
-                const { data: seasons } = await supabase.from("seasons").select("id, year, competition:competitions (name)");
-                const season = seasons?.find(s => `${(s.competition as any).name} ${s.year}` === proposedData.year);
+            if (isSeasonCoachProposal) {
+                const headCoachName = String(proposedData.head_coach || "").trim();
 
-                if (season) {
-                    const { data: phase } = await supabase
-                        .from("phases")
+                let targetSeasonId: string | null =
+                    proposedData.season_id && isValidUuid(proposedData.season_id)
+                        ? proposedData.season_id
+                        : null;
+
+                if (!targetSeasonId && proposedData.year) {
+                    const { data: seasons } = await supabase
+                        .from("seasons")
+                        .select("id, year, competition:competitions (name)");
+                    const matchedSeason = seasons?.find(
+                        (s: any) =>
+                            `${s.competition?.name} ${s.year}` === proposedData.year ||
+                            String(s.year) === String(proposedData.year)
+                    );
+                    if (matchedSeason) targetSeasonId = matchedSeason.id;
+                }
+
+                let targetTeamId: string | null =
+                    proposedData.team_id && isValidUuid(proposedData.team_id)
+                        ? proposedData.team_id
+                        : null;
+
+                if (!targetTeamId && proposedData.team) {
+                    const { data: teamRow } = await supabase
+                        .from("teams")
                         .select("id")
-                        .eq("season_id", season.id)
-                        .eq("name", proposedData.phase)
+                        .ilike("name", String(proposedData.team).trim())
+                        .maybeSingle();
+                    if (teamRow) targetTeamId = teamRow.id;
+                }
+
+                if (!targetSeasonId || !targetTeamId) {
+                    throw new Error("Could not resolve season or team for this Head Coach proposal.");
+                }
+
+                // Find or create person
+                let coachId: string | null = null;
+                const { data: existingPerson } = await supabase
+                    .from("people")
+                    .select("id")
+                    .ilike("display_name", headCoachName)
+                    .maybeSingle();
+
+                if (existingPerson) {
+                    coachId = existingPerson.id;
+                } else {
+                    const { data: newPerson, error: personErr } = await supabase
+                        .from("people")
+                        .insert({ display_name: headCoachName })
+                        .select("id")
                         .single();
-                    if (phase) phaseId = phase.id;
-                }
-            }
-
-            // Resolve Team IDs
-            const resolveTeam = async (name: string) => {
-                const { data } = await supabase.from("teams").select("id").eq("name", name).single();
-                return data?.id || null;
-            };
-
-            const homeTeamId = proposedData.home_team ? await resolveTeam(proposedData.home_team) : null;
-            const awayTeamId = proposedData.away_team ? await resolveTeam(proposedData.away_team) : null;
-
-            // Resolve Venue ID
-            let venueId = null;
-            if (proposedData.venue) {
-                const { data } = await supabase.from("venues").select("id").eq("name", proposedData.venue).single();
-                venueId = data?.id || null;
-            }
-
-            // 4. Apply changes for verified update proposals
-            if (cleanUpdatePayload && proposal.game_id) {
-                if (phaseId) cleanUpdatePayload.phase_id = phaseId;
-                if (homeTeamId) cleanUpdatePayload.home_team_id = homeTeamId;
-                if (awayTeamId) cleanUpdatePayload.away_team_id = awayTeamId;
-                if (venueId) cleanUpdatePayload.venue_id = venueId;
-
-                const { error: updateErr } = await supabase
-                    .from("games")
-                    .update(cleanUpdatePayload)
-                    .eq("id", proposal.game_id);
-
-                if (updateErr) {
-                    console.error("Game update error:", updateErr);
-                    throw updateErr;
+                    if (personErr) throw personErr;
+                    coachId = newPerson.id;
                 }
 
-                // Handle Coaches
-                const handleCoach = async (teamId: string | null, personIdOrName: string | null) => {
-                    if (!teamId || !personIdOrName || !proposal.game_id) return;
-                    const trimmedCoach = String(personIdOrName).trim();
-                    if (!trimmedCoach || trimmedCoach.length > 120) return;
+                // Fetch all phases for the season
+                const { data: phases, error: phasesErr } = await supabase
+                    .from("phases")
+                    .select("id")
+                    .eq("season_id", targetSeasonId);
+                if (phasesErr) throw phasesErr;
 
-                    let personId = null;
-                    if (isValidUuid(trimmedCoach)) {
-                        personId = trimmedCoach;
+                const phaseIds = (phases || []).map((p: any) => p.id);
+                if (phaseIds.length > 0 && coachId) {
+                    const { data: existingParts, error: partCheckErr } = await supabase
+                        .from("participations")
+                        .select("id")
+                        .in("phase_id", phaseIds)
+                        .eq("team_id", targetTeamId);
+                    if (partCheckErr) throw partCheckErr;
+
+                    if (existingParts && existingParts.length > 0) {
+                        const { error: partUpdateErr } = await supabase
+                            .from("participations")
+                            .update({ head_coach_id: coachId })
+                            .in("phase_id", phaseIds)
+                            .eq("team_id", targetTeamId);
+                        if (partUpdateErr) throw partUpdateErr;
                     } else {
-                        const { data: existingPerson } = await supabase
-                            .from("people")
-                            .select("id")
-                            .eq("display_name", trimmedCoach)
-                            .maybeSingle();
-                        if (existingPerson) {
-                            personId = existingPerson.id;
-                        } else {
-                            const { data: newPerson, error: personErr } = await supabase
-                                .from("people")
-                                .insert({ display_name: trimmedCoach })
-                                .select("id")
-                                .single();
-                            if (personErr) throw personErr;
-                            personId = newPerson.id;
+                        // Fallback if team played games in phases of this season without an existing participations row
+                        const { data: teamGames } = await supabase
+                            .from("games")
+                            .select("phase_id, away_phase_id, home_team_id, away_team_id")
+                            .in("phase_id", phaseIds)
+                            .or(`home_team_id.eq.${targetTeamId},away_team_id.eq.${targetTeamId}`);
+
+                        const activePhaseIds = new Set<string>();
+                        for (const g of teamGames || []) {
+                            if (g.home_team_id === targetTeamId && g.phase_id) {
+                                activePhaseIds.add(g.phase_id);
+                            }
+                            if (g.away_team_id === targetTeamId) {
+                                activePhaseIds.add(g.away_phase_id || g.phase_id);
+                            }
+                        }
+
+                        const phasesToInsert =
+                            activePhaseIds.size > 0 ? Array.from(activePhaseIds) : [phaseIds[0]];
+                        for (const pid of phasesToInsert) {
+                            const { error: insertPartErr } = await supabase
+                                .from("participations")
+                                .insert({
+                                    phase_id: pid,
+                                    team_id: targetTeamId,
+                                    head_coach_id: coachId,
+                                });
+                            if (insertPartErr) throw insertPartErr;
                         }
                     }
 
-                    if (personId) {
-                        const { error: staffErr } = await supabase
+                    // Clean up now-redundant game_staff records matching the new season head coach
+                    const { data: games } = await supabase
+                        .from("games")
+                        .select("id")
+                        .in("phase_id", phaseIds)
+                        .or(`home_team_id.eq.${targetTeamId},away_team_id.eq.${targetTeamId}`);
+
+                    if (games && games.length > 0) {
+                        const gameIds = games.map((g: any) => g.id);
+                        await supabase
                             .from("game_staff")
-                            .upsert({
-                                game_id: proposal.game_id,
-                                team_id: teamId,
-                                person_id: personId,
-                                role: "head_coach",
-                            });
-                        if (staffErr) {
-                            console.warn("Staff upsert error (continuing):", staffErr);
-                        }
+                            .delete()
+                            .in("game_id", gameIds)
+                            .eq("team_id", targetTeamId)
+                            .eq("person_id", coachId)
+                            .eq("role", "head_coach");
                     }
+
+                    for (const pid of phaseIds) {
+                        revalidatePath(`/phases/${pid}`);
+                    }
+                }
+
+                revalidatePath("/admin/set-coach");
+                revalidatePath(`/teams/${targetTeamId}`);
+                revalidatePath(`/seasons/${targetSeasonId}`);
+                if (coachId) revalidatePath(`/people/${coachId}`);
+                revalidatePath("/people");
+            } else {
+                // 3. Resolve IDs
+                // Resolve Phase ID
+                let phaseId = null;
+                if (proposedData.phase && proposedData.year) {
+                    const { data: seasons } = await supabase.from("seasons").select("id, year, competition:competitions (name)");
+                    const season = seasons?.find(s => `${(s.competition as any).name} ${s.year}` === proposedData.year);
+
+                    if (season) {
+                        const { data: phase } = await supabase
+                            .from("phases")
+                            .select("id")
+                            .eq("season_id", season.id)
+                            .eq("name", proposedData.phase)
+                            .single();
+                        if (phase) phaseId = phase.id;
+                    }
+                }
+
+                // Resolve Team IDs
+                const resolveTeam = async (name: string) => {
+                    const { data } = await supabase.from("teams").select("id").eq("name", name).single();
+                    return data?.id || null;
                 };
 
-                let currentHomeTeamId = homeTeamId;
-                let currentAwayTeamId = awayTeamId;
+                const homeTeamId = proposedData.home_team ? await resolveTeam(proposedData.home_team) : null;
+                const awayTeamId = proposedData.away_team ? await resolveTeam(proposedData.away_team) : null;
 
-                if (!currentHomeTeamId || !currentAwayTeamId) {
-                    const { data: currentGame } = await supabase
+                // Resolve Venue ID
+                let venueId = null;
+                if (proposedData.venue) {
+                    const { data } = await supabase.from("venues").select("id").eq("name", proposedData.venue).single();
+                    venueId = data?.id || null;
+                }
+
+                // 4. Apply changes for verified update proposals
+                if (cleanUpdatePayload && proposal.game_id) {
+                    if (phaseId) cleanUpdatePayload.phase_id = phaseId;
+                    if (homeTeamId) cleanUpdatePayload.home_team_id = homeTeamId;
+                    if (awayTeamId) cleanUpdatePayload.away_team_id = awayTeamId;
+                    if (venueId) cleanUpdatePayload.venue_id = venueId;
+
+                    const { error: updateErr } = await supabase
                         .from("games")
-                        .select("home_team_id, away_team_id")
-                        .eq("id", proposal.game_id)
-                        .single();
+                        .update(cleanUpdatePayload)
+                        .eq("id", proposal.game_id);
 
-                    if (!currentHomeTeamId) currentHomeTeamId = currentGame?.home_team_id;
-                    if (!currentAwayTeamId) currentAwayTeamId = currentGame?.away_team_id;
+                    if (updateErr) {
+                        console.error("Game update error:", updateErr);
+                        throw updateErr;
+                    }
+
+                    // Handle Coaches
+                    const handleCoach = async (teamId: string | null, personIdOrName: string | null) => {
+                        if (!teamId || !personIdOrName || !proposal.game_id) return;
+                        const trimmedCoach = String(personIdOrName).trim();
+                        if (!trimmedCoach || trimmedCoach.length > 120) return;
+
+                        let personId = null;
+                        if (isValidUuid(trimmedCoach)) {
+                            personId = trimmedCoach;
+                        } else {
+                            const { data: existingPerson } = await supabase
+                                .from("people")
+                                .select("id")
+                                .eq("display_name", trimmedCoach)
+                                .maybeSingle();
+                            if (existingPerson) {
+                                personId = existingPerson.id;
+                            } else {
+                                const { data: newPerson, error: personErr } = await supabase
+                                    .from("people")
+                                    .insert({ display_name: trimmedCoach })
+                                    .select("id")
+                                    .single();
+                                if (personErr) throw personErr;
+                                personId = newPerson.id;
+                            }
+                        }
+
+                        if (personId) {
+                            const { error: staffErr } = await supabase
+                                .from("game_staff")
+                                .upsert({
+                                    game_id: proposal.game_id,
+                                    team_id: teamId,
+                                    person_id: personId,
+                                    role: "head_coach",
+                                });
+                            if (staffErr) {
+                                console.warn("Staff upsert error (continuing):", staffErr);
+                            }
+                        }
+                    };
+
+                    let currentHomeTeamId = homeTeamId;
+                    let currentAwayTeamId = awayTeamId;
+
+                    if (!currentHomeTeamId || !currentAwayTeamId) {
+                        const { data: currentGame } = await supabase
+                            .from("games")
+                            .select("home_team_id, away_team_id")
+                            .eq("id", proposal.game_id)
+                            .single();
+
+                        if (!currentHomeTeamId) currentHomeTeamId = currentGame?.home_team_id;
+                        if (!currentAwayTeamId) currentAwayTeamId = currentGame?.away_team_id;
+                    }
+
+                    if (proposedData.home_coach) {
+                        await handleCoach(currentHomeTeamId, proposedData.home_coach);
+                    }
+
+                    if (proposedData.away_coach) {
+                        await handleCoach(currentAwayTeamId, proposedData.away_coach);
+                    }
+
+                    // Recompute standings for the affected phase
+                    const targetPhaseId = phaseId || (await supabase.from("games").select("phase_id").eq("id", proposal.game_id).single()).data?.phase_id;
+                    if (targetPhaseId) {
+                        await recomputePhaseStandings(supabase, targetPhaseId);
+                        revalidatePath(`/phases/${targetPhaseId}`);
+                    }
+
+                    if (currentHomeTeamId) revalidatePath(`/teams/${currentHomeTeamId}`);
+                    if (currentAwayTeamId) revalidatePath(`/teams/${currentAwayTeamId}`);
                 }
-
-                if (proposedData.home_coach) {
-                    await handleCoach(currentHomeTeamId, proposedData.home_coach);
-                }
-
-                if (proposedData.away_coach) {
-                    await handleCoach(currentAwayTeamId, proposedData.away_coach);
-                }
-
-                // Recompute standings for the affected phase
-                const targetPhaseId = phaseId || (await supabase.from("games").select("phase_id").eq("id", proposal.game_id).single()).data?.phase_id;
-                if (targetPhaseId) {
-                    await recomputePhaseStandings(supabase, targetPhaseId);
-                    revalidatePath(`/phases/${targetPhaseId}`);
-                }
-
-                if (currentHomeTeamId) revalidatePath(`/teams/${currentHomeTeamId}`);
-                if (currentAwayTeamId) revalidatePath(`/teams/${currentAwayTeamId}`);
             }
         } catch (applyErr) {
             // Roll back claim to pending if applying the update failed

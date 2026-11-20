@@ -76,6 +76,13 @@ async function checkProposalRateLimit(supabase: any, clientHash: string): Promis
 }
 
 const ALLOWED_PROPOSED_STRING_FIELDS: Record<string, number> = {
+    proposal_kind: 30,
+    season_id: 60,
+    season_year: 20,
+    team_id: 60,
+    team: 150,
+    head_coach: 120,
+    current_coach: 120,
     competition: 100,
     year: 100,
     phase: 150,
@@ -214,6 +221,160 @@ export async function submitGameProposal(payload: {
             error: err?.message?.includes("maximum length") || err?.message?.includes("Invalid proposed game data")
                 ? err.message
                 : "Failed to submit proposal."
+        };
+    }
+}
+
+export async function submitSeasonCoachProposal(payload: {
+    seasonId: string;
+    teamId: string;
+    headCoach: string;
+    reason: string;
+    sourceUrl?: string;
+    submittedByName?: string;
+    submittedByEmail?: string;
+}) {
+    try {
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY;
+
+        if (!supabaseUrl || !supabaseKey) {
+            throw new Error("Missing Supabase configuration.");
+        }
+
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        const reqHeaders = await headers();
+        const clientIp = getTrustedClientIp(reqHeaders);
+        const clientHash = crypto
+            .createHmac("sha256", supabaseKey)
+            .update(clientIp)
+            .digest("hex");
+
+        if (!(await checkProposalRateLimit(supabase, clientHash))) {
+            return {
+                success: false,
+                error: "Too many proposals submitted recently. Please wait a few minutes before trying again."
+            };
+        }
+
+        if (!payload || !isValidUuid(payload.seasonId)) {
+            return { success: false, error: "Please select a valid season." };
+        }
+
+        if (!isValidUuid(payload.teamId)) {
+            return { success: false, error: "Please select a valid team." };
+        }
+
+        const cleanCoach = typeof payload.headCoach === "string" ? payload.headCoach.trim() : "";
+        if (!cleanCoach) {
+            return { success: false, error: "Please enter a Head Coach name." };
+        }
+        if (cleanCoach.length > 120) {
+            return { success: false, error: "Head Coach name must be under 120 characters." };
+        }
+
+        if (!payload.reason || typeof payload.reason !== "string" || payload.reason.trim().length === 0) {
+            return { success: false, error: "Please provide a reason or historical context for the proposal." };
+        }
+        if (payload.reason.length > 2000) {
+            return { success: false, error: "Reason must be under 2,000 characters." };
+        }
+
+        if (payload.submittedByName && payload.submittedByName.length > 100) {
+            return { success: false, error: "Name must be under 100 characters." };
+        }
+        if (payload.submittedByEmail && payload.submittedByEmail.length > 150) {
+            return { success: false, error: "Email must be under 150 characters." };
+        }
+
+        let cleanSourceUrl: string | null = null;
+        if (payload.sourceUrl && payload.sourceUrl.trim().length > 0) {
+            const rawSource = payload.sourceUrl.trim();
+            if (rawSource.length > 500) {
+                return { success: false, error: "Source URL must be under 500 characters." };
+            }
+            if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(rawSource) && !isSafeHttpUrl(rawSource)) {
+                return { success: false, error: "Source URL must use http:// or https:// (or be a plain text reference)." };
+            }
+            cleanSourceUrl = rawSource;
+        }
+
+        // Verify Season and Team in database
+        const [{ data: season, error: seasonErr }, { data: team, error: teamErr }, { data: phases }] = await Promise.all([
+            supabase.from("seasons").select("id, year, name, competition:competitions(name)").eq("id", payload.seasonId).maybeSingle(),
+            supabase.from("teams").select("id, name").eq("id", payload.teamId).maybeSingle(),
+            supabase.from("phases").select("id, name").eq("season_id", payload.seasonId),
+        ]);
+
+        if (seasonErr || !season) {
+            return { success: false, error: "Selected season could not be found." };
+        }
+        if (teamErr || !team) {
+            return { success: false, error: "Selected team could not be found." };
+        }
+
+        const compName = (season.competition as any)?.name || "";
+        const seasonLabel = compName ? `${compName} ${season.year}` : String(season.year);
+        const phaseIds = (phases || []).map((p: any) => p.id);
+
+        let currentCoachName = "";
+        let phaseNamesLabel = "";
+        if (phaseIds.length > 0) {
+            const { data: parts } = await supabase
+                .from("participations")
+                .select("phase_id, person:people(display_name), phase:phases(name)")
+                .in("phase_id", phaseIds)
+                .eq("team_id", payload.teamId);
+
+            if (parts && parts.length > 0) {
+                const coaches = Array.from(
+                    new Set(parts.map((p: any) => p.person?.display_name).filter(Boolean))
+                );
+                currentCoachName = coaches.join(", ");
+                const pNames = Array.from(
+                    new Set(parts.map((p: any) => p.phase?.name).filter(Boolean))
+                );
+                phaseNamesLabel = pNames.join(", ");
+            }
+        }
+
+        const sanitizedData = sanitizeProposedData({
+            proposal_kind: "season_coach",
+            season_id: season.id,
+            competition: compName,
+            year: seasonLabel,
+            season_year: String(season.year),
+            phase: phaseNamesLabel,
+            team_id: team.id,
+            team: team.name,
+            head_coach: cleanCoach,
+            current_coach: currentCoachName,
+        });
+
+        const { error } = await supabase.from("game_proposals").insert({
+            game_id: null,
+            proposal_type: "update",
+            proposed_data: sanitizedData,
+            reason: payload.reason.trim(),
+            source_url: cleanSourceUrl,
+            submitted_by_name: payload.submittedByName?.trim() || null,
+            submitted_by_email: payload.submittedByEmail?.trim() || null,
+            status: "pending",
+        });
+
+        if (error) throw error;
+
+        revalidatePath("/admin/proposals");
+
+        return { success: true };
+    } catch (err: any) {
+        console.error("Season coach proposal submission error:", err);
+        return {
+            success: false,
+            error: err?.message?.includes("maximum length")
+                ? err.message
+                : "Failed to submit season head coach proposal."
         };
     }
 }
