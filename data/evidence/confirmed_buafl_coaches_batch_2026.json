@@ -1,0 +1,197 @@
+{
+  "competition": "BUAFL",
+  "description": "User-confirmed multi-season head coach batch derived from the 2026/27 BUAFL coach lead review.",
+  "results": [
+    {
+      "team": "Derby Braves",
+      "years": [2026],
+      "status": "verified_current_season",
+      "head_coach": "Christian Salisbury",
+      "source_url": "https://www.derbyunion.co.uk/communities/americanfootball/",
+      "source_date": "2026/27 (first season)",
+      "source_details": "University of Derby Students' Union official club page and user confirmation documenting Christian Salisbury's first season as Head Coach & Offensive Coordinator of Derby Braves in 2026/27."
+    },
+    {
+      "team": "Leeds Gryphons",
+      "years": [2021, 2022, 2023, 2024],
+      "status": "verified_current_season",
+      "head_coach": "Bo Scholes",
+      "source_url": "https://engage.luu.org.uk/groups/B6C/american-football",
+      "source_date": "2021/22–2024/25",
+      "source_details": "Leeds University Union official page, BAFCA Coach of the Year nomination, and user confirmation documenting Bo Scholes as Head Coach of Leeds Gryphons for the 2021/22 through 2024/25 seasons."
+    },
+    {
+      "team": "MMU Eagles",
+      "years": [2025, 2026],
+      "status": "verified_current_season",
+      "head_coach": "Ben Martin",
+      "source_url": "https://www.fieldlevel.com/app/coach-profile/ben.martin.bb0b2",
+      "source_date": "2025/26–2026/27",
+      "source_details": "FieldLevel coaching profile and user confirmation documenting Ben Martin as Head Coach of MMU Eagles from the 2025/26 season through 2026/27."
+    },
+    {
+      "team": "Edinburgh Napier Knights",
+      "years": [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026],
+      "status": "verified_current_season",
+      "head_coach": "Pete Laird",
+      "source_url": "https://www.napierstudents.com/organisation/americanfootball/",
+      "source_date": "2010/11–2026/27",
+      "source_details": "Edinburgh Napier Students' Association official club page and user confirmation documenting Pete Laird as continuous Head Coach of Edinburgh Napier Knights from 2010/11 through 2026/27."
+    },
+    {
+      "team": "Edinburgh Mavericks",
+      "years": [2025],
+      "status": "verified_current_season",
+      "head_coach": "Dave Orr",
+      "source_url": "https://enrg.scot/bucs-american-football-returns-to-scotland-for-2025-season/",
+      "source_date": "2025/26",
+      "source_details": "ENRG 2025/26 BUCS Scottish preview and user confirmation documenting Dave Orr as Head Coach of Edinburgh Mavericks for the 2025/26 season prior to the 2026 Wildcats rebrand."
+    },
+    {
+      "team": "Edinburgh Wildcats",
+      "years": [2026],
+      "status": "verified_current_season",
+      "verified_by_user": true,
+      "head_coach": "Dave McKee",
+      "source_url": "Club / UK coaching network confirmation",
+      "source_date": "2026/27",
+      "source_details": "Confirmed by UK American football coaching network / club records as Head Coach of Edinburgh Wildcats for the 2026/27 BUCS campaign."
+    },
+    {
+      "team": "Stirling Clansmen",
+      "years": [2015, 2016, 2017, 2018, 2019, 2020, 2024, 2025, 2026],
+      "status": "verified_current_season",
+      "head_coach": "Victor Peredo",
+      "source_url": "https://enrg.scot/bucs-american-football-returns-to-scotland-for-2025-season/",
+      "source_date": "2015/16–2020/21 & 2024/25–2026/27",
+      "source_details": "ENRG 2025/26 BUCS season preview and user confirmation documenting Victor Peredo as Head Coach of Stirling Clansmen from 2015/16 through 2020/21 and again from 2024/25 through 2026/27."
+    },
+    {
+      "team": "Kent Falcons",
+      "years": [2024, 2025, 2026],
+      "status": "verified_current_season",
+      "head_coach": "Emeka Anyaegbu",
+      "source_url": "https://blogs.kent.ac.uk/kentsport-news/kent-students-celebrate-gb-american-football-performance-squad-selection/",
+      "source_date": "2024/25–2026/27",
+      "source_details": "University of Kent Sport news coverage ('Coach V') and user confirmation identifying Emeka Anyaegbu ('Coach V') as Head Coach of Kent Falcons from at least 2024/25 through 2026/27."
+    },
+    {
+      "team": "Exeter Demons",
+      "years": [2025, 2026],
+      "status": "verified_current_season",
+      "head_coach": "Jack Mullins",
+      "source_url": "https://www.devonlive.com/sport/exeter-demons-win-praise-fighting-10723487",
+      "source_date": "2025/26–2026/27",
+      "source_details": "DevonLive match report (December 2025), Britball Wiki, and user confirmation documenting Jack Mullins as Head Coach of Exeter Demons from 2025/26 through 2026/27."
+    },
+    {
+      "team": "Hertfordshire Hurricanes",
+      "years": [1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2025, 2026],
+      "status": "verified_current_season",
+      "head_coach": "Jim Messenger",
+      "source_url": "https://sport.herts.ac.uk/american-football",
+      "source_date": "1998/99–2016/17 & 2025/26–2026/27",
+      "source_details": "University of Hertfordshire Sport official page, FieldLevel profile, and user confirmation documenting Jim Messenger as Head Coach of Hertfordshire Hurricanes from 1998/99 through 2016/17 and returning for 2025/26 through 2026/27."
+    },
+    {
+      "team": "DMU Lions",
+      "years": [2023, 2024, 2025],
+      "status": "verified_current_season",
+      "head_coach": "Priyank Patel",
+      "source_url": "https://www.dmu.ac.uk/current-students/student-news/2026/april/dmu-sport-awards-2026-a-roundup.aspx",
+      "source_date": "2023/24–2025/26",
+      "source_details": "De Montfort University Sport Awards (April 2026), Leicestershire Press coverage, and user confirmation documenting Priyank Patel as Head Coach of DMU Lions from 2023/24 through 2025/26."
+    },
+    {
+      "team": "Staffordshire Stallions",
+      "years": [2026],
+      "status": "verified_current_season",
+      "head_coach": "Chris Treacy",
+      "source_url": "https://www.staffs.ac.uk/student-life/sport/sports-teams/american-football",
+      "source_date": "2026/27",
+      "source_details": "University of Staffordshire official sports teams page and user confirmation documenting Chris Treacy as Head Coach of Staffordshire Stallions for the 2026/27 season."
+    },
+    {
+      "team": "Worcester Royals",
+      "years": [2024, 2025, 2026],
+      "status": "verified_current_season",
+      "head_coach": "Alessandro Guida",
+      "source_url": "https://herefordstampede.co.uk/2026/01/07/4188/",
+      "source_date": "2024/25–2026/27",
+      "source_details": "Hereford Stampede coaching announcement (January 2026), Britball Wiki, and user confirmation documenting Alessandro Guida as Head Coach of Worcester Royals from 2024/25 through 2026/27."
+    },
+    {
+      "team": "Salford Storm",
+      "years": [2024, 2025, 2026],
+      "status": "verified_current_season",
+      "head_coach": "Aaron Ainsworth-Bowcott",
+      "source_url": "https://salfordnow.co.uk/2024/11/19/salford-storm-put-up-rising-performance-in-their-first-ever-away-game/",
+      "source_date": "2024/25–2026/27",
+      "source_details": "Salford Now match report (19 November 2024), Versus Performance coaching testimonial, and user confirmation documenting Aaron Ainsworth-Bowcott as Head Coach of Salford Storm from 2024/25 through 2026/27."
+    },
+    {
+      "team": "Gloucestershire Gladiators",
+      "years": [2025, 2026],
+      "status": "verified_current_season",
+      "head_coach": "Simon Bennett",
+      "source_url": "https://www.uoggladiators.com/coaches",
+      "source_date": "2025/26–2026/27",
+      "source_details": "Official Gloucestershire Gladiators coaches page, University of Gloucestershire SU match report (Nov 2025), and user confirmation documenting Simon Bennett as Head Coach from 2025/26 through 2026/27."
+    },
+    {
+      "team": "UWE Bullets 2s",
+      "years": [2025, 2026],
+      "status": "verified_current_season",
+      "head_coach": "Sam Astley",
+      "source_url": "https://www.thestudentsunion.co.uk/dosomething/join/americanfootball/",
+      "source_date": "2025/26–2026/27",
+      "source_details": "Official UWE Students' Union page and user confirmation documenting Sam Astley as Head Coach of the UWE Bullets 2s from 2025/26 through 2026/27."
+    },
+    {
+      "team": "Chichester Spitfires",
+      "years": [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026],
+      "status": "verified_current_season",
+      "head_coach": "James Harris",
+      "source_url": "https://www.ucsu.org/organisation/6057/",
+      "source_date": "2019/20–2026/27",
+      "source_details": "University of Chichester SU club page, Sussex Thunder coaching bio, and user confirmation documenting James Harris as Head Coach of Chichester Spitfires from 2019/20 through 2026/27."
+    },
+    {
+      "team": "Leeds Beckett Carnegie",
+      "years": [2024, 2025, 2026],
+      "status": "verified_current_season",
+      "head_coach": "Mike Ripley",
+      "source_url": "https://www.fieldlevel.com/app/coach-profile/mike.ripley",
+      "source_date": "2024/25–2026/27",
+      "source_details": "FieldLevel coaching profile and user confirmation documenting Mike Ripley as Head Coach of Leeds Beckett Carnegie from 2024/25 through 2026/27."
+    },
+    {
+      "team": "UCLan Rams",
+      "years": [2025, 2026],
+      "status": "verified_current_season",
+      "head_coach": "Sam Bloomfield",
+      "source_url": "https://sport.lancashire.ac.uk/teams/american-football",
+      "source_date": "2025/26–2026/27",
+      "source_details": "Official Sport Lancashire team page (2025 Performance Coach of the Year) and user confirmation documenting Sam Bloomfield as Head Coach of UCLan Rams from 2025/26 through 2026/27."
+    },
+    {
+      "team": "Cardiff Cobras",
+      "years": [2022, 2023, 2024, 2025, 2026],
+      "status": "verified_current_season",
+      "head_coach": "Shaun Vaughn",
+      "source_url": "https://www.cardiffstudents.com/activities/sport/cobras/",
+      "source_date": "2022/23–2026/27",
+      "source_details": "Official Cardiff Students' Union club profile and user confirmation documenting Shaun Vaughn as Head Coach of Cardiff Cobras from 2022/23 through 2026/27."
+    },
+    {
+      "team": "Kingston Cougars",
+      "years": [2024, 2025, 2026],
+      "status": "verified_current_season",
+      "verified_by_user": true,
+      "head_coach": "Clark Gardener",
+      "source_url": "Club / UK coaching network confirmation",
+      "source_date": "2024/25–2026/27",
+      "source_details": "Confirmed by UK American football coaching network / club records as Head Coach of Kingston Cougars from the 2024/25 season through 2026/27."
+    }
+  ]
+}

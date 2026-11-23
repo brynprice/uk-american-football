@@ -159,6 +159,8 @@ export interface PhaseCompleteness {
 export function calculatePhaseCompleteness(participation: any, phaseGames: any[]): PhaseCompleteness {
     const phase = participation?.phase || {};
     const isPlayoff = isPlayoffPhase(phase);
+    const notesLower = (participation?.notes || '').toLowerCase();
+    const isPartialStandings = notesLower.includes('partial');
 
     const hasManualStandings =
         participation?.wins !== null &&
@@ -172,7 +174,7 @@ export function calculatePhaseCompleteness(participation: any, phaseGames: any[]
     (phaseGames || []).forEach((g: any) => {
         const status = (g.status || '').toLowerCase();
         if (status === 'cancelled' || status === 'postponed' || status === 'anomaly') return;
-        if (hasManualStandings && status === 'scheduled') return;
+        if (hasManualStandings && !isPartialStandings && status === 'scheduled') return;
         const mult = g.is_double_header ? 2 : 1;
         recordedGames += mult;
 
@@ -183,12 +185,11 @@ export function calculatePhaseCompleteness(participation: any, phaseGames: any[]
 
     let expectedGames: number | null = null;
 
-    if (hasManualStandings) {
+    if (hasManualStandings && !isPartialStandings) {
         expectedGames = (participation.wins || 0) + (participation.losses || 0) + (participation.ties || 0);
     } else if (!isPlayoff && typeof phase.max_games_per_team === 'number' && phase.max_games_per_team > 0) {
-        const notes = (participation?.notes || '').toLowerCase();
         const seasonYear = phase.season?.year;
-        const withdrewWithNoGames = (notes.includes('withdrew') || notes.includes('folded')) && recordedGames === 0;
+        const withdrewWithNoGames = (notesLower.includes('withdrew') || notesLower.includes('folded')) && recordedGames === 0;
         const cancelledCovidSeason = seasonYear === 2020 && recordedGames === 0;
 
         if (withdrewWithNoGames || cancelledCovidSeason) {

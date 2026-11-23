@@ -1,5 +1,5 @@
 competition_name,year,phase,parent_phase,team,wins,losses,ties,points_for,points_against,streak,head_coach,offensive_coordinator,defensive_coordinator,notes,is_champion
-BUAFL,2022,Division 1 Borders,Division 1 North,Leeds Gryphons,8,0,0,268,37,,,,,Source: https://sportank.com/gameday/,TRUE
+BUAFL,2022,Division 1 Borders,Division 1 North,Leeds Gryphons,8,0,0,268,37,,Bo Scholes,,,Source: https://sportank.com/gameday/,TRUE
 BUAFL,2022,Division 1 Borders,Division 1 North,Glasgow University Tigers,4,2,2,80,58,,,,,Source: https://sportank.com/gameday/,FALSE
 BUAFL,2022,Division 1 Borders,Division 1 North,Edinburgh Predators,3,5,0,92,114,,,,,Source: https://sportank.com/gameday/,FALSE
 BUAFL,2022,Division 1 Borders,Division 1 North,Northumbria Mustangs,1,5,2,46,146,,,,,Source: https://sportank.com/gameday/,FALSE
@@ -31,7 +31,7 @@ BUAFL,2022,Division 1 Southern,Division 1 South,Oxford Lancers,2,5,0,70,150,,Ian
 BUAFL,2022,Division 1 Southern,Division 1 South,Sussex Saxons,1,7,0,42,164,,,,,Source: https://sportank.com/gameday/,FALSE
 BUAFL,2022,Division 2 Borders,Division 2 North,HWU Wolverines,6,0,0,223,23,,,,,Source: https://sportank.com/gameday/,TRUE
 BUAFL,2022,Division 2 Borders,Division 2 North,Aberdeen Bulls,5,1,0,43,58,,,,,Source: https://sportank.com/gameday/,FALSE
-BUAFL,2022,Division 2 Borders,Division 2 North,Edinburgh Napier Knights,3,3,0,72,60,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2022,Division 2 Borders,Division 2 North,Edinburgh Napier Knights,3,3,0,72,60,,Pete Laird,,,Source: https://sportank.com/gameday/,FALSE
 BUAFL,2022,Division 2 Borders,Division 2 North,Teesside Cougars,2,4,0,15,151,,,,,Source: https://sportank.com/gameday/,FALSE
 BUAFL,2022,Division 2 Borders,Division 2 North,Sunderland Spartans,1,5,0,32,5,,,,,Source: https://sportank.com/gameday/,FALSE
 BUAFL,2022,Division 2 Borders,Division 2 North,UWS Pyros,1,5,0,1,89,,,,,Source: https://sportank.com/gameday/,FALSE
@@ -71,7 +71,7 @@ BUAFL,2022,Division 2 Southern,Division 2 South,Solent Redhawks,4,2,0,102,102,,,
 BUAFL,2022,Division 2 Southern,Division 2 South,Surrey Stingers,3,3,0,99,121,,,,,Source: https://sportank.com/gameday/,FALSE
 BUAFL,2022,Division 2 Southern,Division 2 South,Oxford Brookes University,2,4,0,99,103,,,,,Source: https://sportank.com/gameday/,FALSE
 BUAFL,2022,Division 2 Southern,Division 2 South,Winchester Silverbacks,0,5,1,28,91,,,,,Source: https://sportank.com/gameday/,FALSE
-BUAFL,2022,Division 2 Southern,Division 2 South,Chichester Spitfires,0,5,1,28,145,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2022,Division 2 Southern,Division 2 South,Chichester Spitfires,0,5,1,28,145,,James Harris,,,Source: https://sportank.com/gameday/,FALSE
 BUAFL,2022,Premier North,Premier North/South,Nottingham Gold,7,1,0,332,57,,Jason Scott,,,Source: https://sportank.com/gameday/,TRUE
 BUAFL,2022,Premier North,Premier North/South,Leeds Beckett Carnegie,7,1,0,312,50,,,,,Source: https://sportank.com/gameday/,FALSE
 BUAFL,2022,Premier North,Premier North/South,Newcastle Raiders,3,5,0,133,186,,,,,Source: https://sportank.com/gameday/,FALSE
@@ -81,4 +81,4 @@ BUAFL,2022,Premier South,Premier North/South,UWE Bullets,8,0,0,604,28,,Daniel Ma
 BUAFL,2022,Premier South,Premier North/South,SGS Pride,6,2,0,338,106,,,,,Source: https://sportank.com/gameday/,FALSE
 BUAFL,2022,Premier South,Premier North/South,Birmingham Lions,4,4,0,107,263,,,,,Source: https://sportank.com/gameday/,FALSE
 BUAFL,2022,Premier South,Premier North/South,UEA Pirates,2,6,0,33,407,,,,,Source: https://sportank.com/gameday/,FALSE
-BUAFL,2022,Premier South,Premier North/South,Cardiff Cobras,0,8,0,24,302,,,,,Source: https://sportank.com/gameday/,FALSE
+BUAFL,2022,Premier South,Premier North/South,Cardiff Cobras,0,8,0,24,302,,Shaun Vaughn,,,Source: https://sportank.com/gameday/,FALSE

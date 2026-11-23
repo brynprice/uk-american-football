@@ -4,7 +4,7 @@ BUAFL,2005,Eastern Division,,Glasgow University Tigers,Newcastle Raiders,12,22,,
 BUAFL,2005,Western Division,,UT Cougars,Sheffield Sabres,46,12,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Northern Conference,Eastern Division,Northern Conference
 BUAFL,2005,Eastern Division,,Staffordshire Stallions,Leeds Celtics,6,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Northern Conference,Western Division,Northern Conference
 BUAFL,2005,Eastern Division,,Birmingham Lions,Hertfordshire Hurricanes,21,14,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,Central Division,Southern Conference
-BUAFL,2005,Western Division,,Cardiff Cobras,Bath Killer Bees,25,12,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,Western Division,Southern Conference
+BUAFL,2005,Playoffs,,Bath Killer Bees,Cardiff Cobras,12,25,,Source: Britball Wiki (https://britball.fandom.com/wiki/Bath_Killer_Bees),,,FALSE,day,,,completed,high,TRUE,FALSE,,,,First Round,Playoffs,,
 BUAFL,2005,Southern Division,,Surrey Stingers,Southampton Stags,14,63,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,Southern Division,Southern Conference
 BUAFL,2005,Western Division,,Greenwich Mariners,UWE Bullets,6,22,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,Eastern Division,Southern Conference
 BUAFL,2005,Eastern Division,,Loughborough Aces,Newcastle Raiders,34,2,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Northern Conference,Central Division,Northern Conference
@@ -14,14 +14,14 @@ BUAFL,2005,Western Division,,Cardiff Cobras,UWE Bullets,14,6,,,,,FALSE,day,,,com
 BUAFL,2005,Eastern Division,,Loughborough Aces,UT Cougars,14,21,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Northern Conference,Central Division,Northern Conference
 BUAFL,2005,Southern Division,,Cardiff Cobras,Southampton Stags,6,19,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,Western Division,Southern Conference
 BUAFL,2005,Southern Division,,UT Cougars,Southampton Stags,8,79,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,Eastern Division,Northern Conference
-BUAFL,2005,Western Division,,Birmingham Lions,Bath Killer Bees,34,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,Central Division,Southern Conference
-BUAFL,2005,Western Division,,Bath Killer Bees,Plymouth Blitz,32,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,Western Division,Southern Conference
-BUAFL,2005,Western Division,,Bath Killer Bees,UWE Bullets,21,24,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,Western Division,Southern Conference
-BUAFL,2005,Western Division,,Bath Killer Bees,Staffordshire Stallions,60,27,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Northern Conference,Western Division,Southern Conference
-BUAFL,2005,Western Division,,Plymouth Blitz,Bath Killer Bees,8,15,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,Western Division,Southern Conference
-BUAFL,2005,Western Division,,Warwick Wolves,Bath Killer Bees,0,39,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,Central Division,Southern Conference
-BUAFL,2005,Western Division,,Bath Killer Bees,Cardiff Cobras,20,14,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,Western Division,Southern Conference
-BUAFL,2005,Western Division,,Bath Killer Bees,Cardiff Cobras,0,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,Western Division,Southern Conference
+BUAFL,2005,Central Division,,Bath Killer Bees,Birmingham Lions,0,34,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,Western Division,Southern Conference
+BUAFL,2005,Western Division,,Plymouth Blitz,Bath Killer Bees,0,32,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,,
+BUAFL,2005,Western Division,,UWE Bullets,Bath Killer Bees,24,21,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,,
+BUAFL,2005,Western Division,,Staffordshire Stallions,Bath Killer Bees,27,60,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,Western Division,Northern Conference
+BUAFL,2005,Western Division,,Bath Killer Bees,Plymouth Blitz,15,8,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,,
+BUAFL,2005,Central Division,,Bath Killer Bees,Warwick Wolves,39,0,,,,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,Western Division,Southern Conference
+BUAFL,2005,Western Division,,Cardiff Cobras,Bath Killer Bees,14,20,,Source: Britball Wiki (https://britball.fandom.com/wiki/Bath_Killer_Bees) (Note: First half of double header; first and second halves counted as two separate games),,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,Western Division,Southern Conference
+BUAFL,2005,Western Division,,Cardiff Cobras,Bath Killer Bees,0,0,,https://britball.fandom.com/wiki/2005-06_BCAFL_Season & https://britball.fandom.com/wiki/Bath_Killer_Bees (Note: Second half of double header; first and second halves counted as two separate games),,,FALSE,day,,,completed,high,False,FALSE,,,,,Southern Conference,,
 bcafl,2005,Central Division,,Derby Braves,Nottingham Gold,13,6,,https://nottinghamunioutlaws.wordpress.com/05-06-season/,,Justin Smith,FALSE,season,,,completed,high,FALSE,FALSE,,,,,Northern Conference,Central Division,Northern Conference
 bcafl,2005,Central Division,,Loughborough Aces,Nottingham Gold,45,7,,https://nottinghamunioutlaws.wordpress.com/05-06-season/,,Justin Smith,FALSE,season,,,completed,high,FALSE,FALSE,,,,,Northern Conference,Central Division,Northern Conference
 bcafl,2005,Central Division,,Leicester Lightning,Nottingham Gold,0,25,,https://nottinghamunioutlaws.wordpress.com/05-06-season/,,Justin Smith,FALSE,season,,,completed,high,FALSE,FALSE,,,,,Northern Conference,,

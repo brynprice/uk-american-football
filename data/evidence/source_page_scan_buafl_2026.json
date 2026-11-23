@@ -1,0 +1,317 @@
+{
+  "competition": "BUAFL",
+  "season": 2026,
+  "scanned_at": "2026-11-19T15:26:49.843Z",
+  "total_urls": 24,
+  "succeeded": 13,
+  "with_coaching_hits": 2,
+  "results": [
+    {
+      "team": "Cambridge Pythons",
+      "canonical_team": "Cambridge Pythons",
+      "university": "University of Cambridge",
+      "requested_url": "https://cupafc.com/",
+      "final_url": "https://cupafc.com/",
+      "http_status": 200,
+      "ok": true,
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "KCL Regents",
+      "canonical_team": "KCL Regents",
+      "university": "King's College London",
+      "requested_url": "https://www.kclsu.org/organisation/americanfootball/",
+      "final_url": "https://www.kclsu.org/organisation/americanfootball/",
+      "http_status": 404,
+      "ok": false,
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "Kingston Cougars",
+      "canonical_team": "Kingston Cougars",
+      "university": "Kingston University",
+      "requested_url": "https://kingstonstudents.net/",
+      "final_url": "https://kingstonstudents.net/",
+      "http_status": 200,
+      "ok": true,
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "QMBL Vipers",
+      "canonical_team": "QMBL Vipers",
+      "university": "Queen Mary University of London",
+      "requested_url": "https://www.qmsu.org/groups/vipers/",
+      "final_url": "https://www.qmsu.org/groups/vipers/",
+      "http_status": 404,
+      "ok": false,
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "Bath Killer Bees",
+      "canonical_team": "Bath Killer Bees",
+      "university": "University of Bath",
+      "requested_url": "https://www.thesubath.com/americanfootball/",
+      "final_url": "https://www.thesubath.com/americanfootball/",
+      "http_status": 200,
+      "ok": true,
+      "match_count": 1,
+      "matches": [
+        {
+          "keyword": "coaching staff",
+          "line": "No experience is required ! Our friendly coaching staff with their wealth of knowledge , alongside our experienced veterans , are always at hand to help new players.",
+          "context": [
+            "We are a competitive BUCS team, looking to build on the strong effort put in over the last few seasons to retain our spot in Division 1 and push for a spot in the Premiership South.",
+            "No experience is required ! Our friendly coaching staff with their wealth of knowledge , alongside our experienced veterans , are always at hand to help new players.",
+            "All essential kit is provided by the club , including pads, helmets, and jerseys! All you need is a gum shield and boots .",
+            "This year, we'll be running three or four training sessions a week , meaning there's plenty of opportunity to improve your game and get to know the team ."
+          ]
+        }
+      ]
+    },
+    {
+      "team": "Southampton Stags",
+      "canonical_team": "Southampton Stags",
+      "university": "University of Southampton",
+      "requested_url": "https://www.susu.org/",
+      "final_url": "https://www.susu.org/",
+      "http_status": 200,
+      "ok": true,
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "Birmingham Lions",
+      "canonical_team": "Birmingham Lions",
+      "university": "University of Birmingham",
+      "requested_url": "https://birminghamlions.com/",
+      "final_url": null,
+      "http_status": null,
+      "ok": false,
+      "error": "UND_ERR_CONNECT_TIMEOUT",
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "Oxford Brookes University",
+      "canonical_team": "Oxford Brookes University",
+      "university": "Oxford Brookes University",
+      "requested_url": "https://www.brookes.ac.uk/",
+      "final_url": "https://www.brookes.ac.uk/",
+      "http_status": 200,
+      "ok": true,
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "Reading Knights",
+      "canonical_team": "Reading Knights",
+      "university": "University of Reading",
+      "requested_url": "https://www.readingsu.co.uk/",
+      "final_url": "https://readingsu.co.uk/",
+      "http_status": 200,
+      "ok": true,
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "Coventry University Jets",
+      "canonical_team": "Coventry University Jets",
+      "university": "Coventry University",
+      "requested_url": "https://www.yoursu.org/",
+      "final_url": "https://www.yoursu.org/",
+      "http_status": 200,
+      "ok": true,
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "Lincoln Colonials",
+      "canonical_team": "Lincoln Colonials",
+      "university": "University of Lincoln",
+      "requested_url": "https://lincolnsu.com/",
+      "final_url": "https://lincolnsu.com/",
+      "http_status": 200,
+      "ok": true,
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "Anglia Ruskin Siege",
+      "canonical_team": "Anglia Ruskin Siege",
+      "university": "Anglia Ruskin University",
+      "requested_url": "https://www.aru.ac.uk/student-life/life-on-campus/sports-clubs",
+      "final_url": "https://www.aru.ac.uk/student-life/life-on-campus/sports-clubs",
+      "http_status": 404,
+      "ok": false,
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "City Wolfpack",
+      "canonical_team": "City Wolfpack",
+      "university": "City St George's, University of London",
+      "requested_url": "https://www.citystgeorges.ac.uk/student-life/sport/sports-clubs",
+      "final_url": "https://www.citystgeorges.ac.uk/student-life/sport/sports-clubs",
+      "http_status": 403,
+      "ok": false,
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "Imperial Immortals",
+      "canonical_team": "Imperial Immortals",
+      "university": "Imperial College London",
+      "requested_url": "https://www.imperialcollegeunion.org/activities/a-to-zinc/american-football",
+      "final_url": "https://www.imperialcollegeunion.org/activities/a-to-zinc/american-football",
+      "http_status": 404,
+      "ok": false,
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "Sussex Saxons",
+      "canonical_team": "Sussex Saxons",
+      "university": "University of Sussex",
+      "requested_url": "https://www.sussexstudent.com/sport/clubs/americanfootball/",
+      "final_url": "https://sussexstudent.com/sport/clubs/americanfootball/",
+      "http_status": 404,
+      "ok": false,
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "Durham Saints",
+      "canonical_team": "Durham Saints",
+      "university": "Durham University",
+      "requested_url": "https://www.durham.ac.uk/",
+      "final_url": "https://www.durham.ac.uk/",
+      "http_status": 403,
+      "ok": false,
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "Nottingham Gold",
+      "canonical_team": "Nottingham Gold",
+      "university": "University of Nottingham",
+      "requested_url": "https://nottinghamsport.com/",
+      "final_url": "https://www.nottinghamsport.com/",
+      "http_status": 200,
+      "ok": true,
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "Nottingham Gold",
+      "canonical_team": "Nottingham Gold",
+      "university": "University of Nottingham",
+      "requested_url": "https://nottinghamunioutlaws.wordpress.com/about/history/",
+      "final_url": "https://nottinghamunioutlaws.wordpress.com/history/",
+      "http_status": 200,
+      "ok": true,
+      "match_count": 3,
+      "matches": [
+        {
+          "keyword": "coaching staff",
+          "line": "Coaching Staff",
+          "context": [
+            "Committee",
+            "Coaching Staff",
+            "Join The Outlaws",
+            "Prospective Student?"
+          ]
+        },
+        {
+          "keyword": "head coach",
+          "line": "In the Outlaws’ first year in the League, they attained a surprising 5-3 record and finished second in the Central Division behind national champion Loughborough Aces. The 2002/03 season proved to be the most successful in the Outlaws history. Following the appointment of Paul Sherratt as head coach, the team won their division 6-2, shutting out every team in the division in the process. In a season that saw them reach the Conference semi-finals, only to lose to the eventual College Bowl winners Stirling Clansmen, the Outlaws were rewarded with the BCAFL Team of the Year Award. Since then, the team has enjoyed moderate success, with three more playoff appearances. In 2008 they beat Stirling Clansmen to win their second ever playoff game and avenging their defeat of five years previous.",
+          "context": [
+            "League Entrance",
+            "In the Outlaws’ first year in the League, they attained a surprising 5-3 record and finished second in the Central Division behind national champion Loughborough Aces. The 2002/03 season proved to be the most successful in the Outlaws history. Following the appointment of Paul Sherratt as head coach, the team won their division 6-2, shutting out every team in the division in the process. In a season that saw them reach the Conference semi-finals, only to lose to the eventual College Bowl winners Stirling Clansmen, the Outlaws were rewarded with the BCAFL Team of the Year Award. Since then, the team has enjoyed moderate success, with three more playoff appearances. In 2008 they beat Stirling Clansmen to win their second ever playoff game and avenging their defeat of five years previous.",
+            "The Split",
+            "Following the BUAFL proclamation that from the 2009-2010 season onwards players could only be recruited from a single institution the Outlaws split into the University of Nottingham Outlaws and the Nottingham Trent University Renegades. 7 February 2010 saw the first official varsity match between the Outlaws and the Renegades with NTU claiming a 14-6 victory in a closely fought game."
+          ]
+        },
+        {
+          "keyword": "coaching staff",
+          "line": "Coaching Staff",
+          "context": [
+            "Committee",
+            "Coaching Staff",
+            "Join The Outlaws",
+            "Prospective Student?"
+          ]
+        }
+      ]
+    },
+    {
+      "team": "UWE Bullets",
+      "canonical_team": "UWE Bullets",
+      "university": "University of the West of England (UWE)",
+      "requested_url": "https://www.thestudentsunion.co.uk/community/sports/clubs/americanfootball/",
+      "final_url": "https://www.thestudentsunion.co.uk/community/sports/clubs/americanfootball/",
+      "http_status": 404,
+      "ok": false,
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "UWE Bullets",
+      "canonical_team": "UWE Bullets",
+      "university": "University of the West of England (UWE)",
+      "requested_url": "https://www.thestudentsunion.co.uk/opportunities/societies/societies-list/american-football/",
+      "final_url": "https://www.thestudentsunion.co.uk/opportunities/societies/societies-list/american-football/",
+      "http_status": 404,
+      "ok": false,
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "Bournemouth University Bobcats",
+      "canonical_team": "Bournemouth University Bobcats",
+      "university": "Bournemouth University",
+      "requested_url": "https://www.bournemouthbobcats.com/",
+      "final_url": "https://bournemouthbobcats.com/",
+      "http_status": 200,
+      "ok": true,
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "Bournemouth University Bobcats",
+      "canonical_team": "Bournemouth University Bobcats",
+      "university": "Bournemouth University",
+      "requested_url": "https://bournemouthbobcats.com/",
+      "final_url": "https://bournemouthbobcats.com/",
+      "http_status": 200,
+      "ok": true,
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "Portsmouth Destroyers",
+      "canonical_team": "Portsmouth Destroyers",
+      "university": "University of Portsmouth",
+      "requested_url": "https://www.upsu.net/groups/american-football-club",
+      "final_url": "https://upsu.net/groups/american-football-club",
+      "http_status": 404,
+      "ok": false,
+      "match_count": 0,
+      "matches": []
+    },
+    {
+      "team": "SGS Pride",
+      "canonical_team": "SGS Pride",
+      "university": "South Gloucestershire and Stroud College (SGS)",
+      "requested_url": "https://www.sgscol.ac.uk/",
+      "final_url": "https://www.sgscol.ac.uk/",
+      "http_status": 200,
+      "ok": true,
+      "match_count": 0,
+      "matches": []
+    }
+  ]
+}

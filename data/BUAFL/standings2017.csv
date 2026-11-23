@@ -1,6 +1,6 @@
 competition_name,parent_phase,phase,year,team,position,games_played,wins,losses,ties,points_for,points_against,streak,is_champion,notes,head_coach
 BUAFL,Premier North/South,Premier North,2017,Durham Saints,1,7,7,0,0,190,63,,TRUE,Source: https://dblcoverage.com/university/bucs-standings-201718/,
-BUAFL,Premier North/South,Premier North,2017,Stirling Clansmen,2,7,4,3,0,174,117,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201718/,
+BUAFL,Premier North/South,Premier North,2017,Stirling Clansmen,2,7,4,3,0,174,117,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201718/,Victor Peredo
 BUAFL,Premier North/South,Premier North,2017,Leeds Beckett Carnegie,3,8,4,4,0,124,164,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201718/,
 BUAFL,Premier North/South,Premier North,2017,Derby Braves,4,8,3,5,0,168,139,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201718/,
 BUAFL,Premier North/South,Premier North,2017,Loughborough Students,5,8,1,7,0,45,215,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201718/,
@@ -9,7 +9,7 @@ BUAFL,Premier North/South,Premier South,2017,Hertfordshire Hurricanes,2,8,6,2,0,
 BUAFL,Premier North/South,Premier South,2017,Swansea Titans,3,6,3,3,0,180,121,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201718/,
 BUAFL,Premier North/South,Premier South,2017,Portsmouth Destroyers,4,6,2,4,0,102,127,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201718/,
 BUAFL,Premier North/South,Premier South,2017,Bath Killer Bees,5,8,0,8,0,32,212,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201718/,
-BUAFL,Division 1 North,Division 1 Northern,2017,Edinburgh Napier Knights,1,8,5,3,0,134,59,,TRUE,Source: https://dblcoverage.com/university/bucs-standings-201718/,
+BUAFL,Division 1 North,Division 1 Northern,2017,Edinburgh Napier Knights,1,8,5,3,0,134,59,,TRUE,Source: https://dblcoverage.com/university/bucs-standings-201718/,Pete Laird
 BUAFL,Division 1 North,Division 1 Northern,2017,Northumbria Mustangs,2,8,5,3,0,123,100,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201718/,
 BUAFL,Division 1 North,Division 1 Northern,2017,Hull Sharks,3,8,5,3,0,108,116,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201718/,
 BUAFL,Division 1 North,Division 1 Northern,2017,Glasgow University Tigers,4,8,4,4,0,196,109,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201718/,

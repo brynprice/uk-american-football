@@ -11,7 +11,10 @@
     "facts:pdf": "node scripts/generate_weekly_pdf.mjs",
     "preview": "node scripts/weekly_preview.mjs",
     "preview:pdf": "node scripts/generate_weekly_preview_pdf.mjs",
-    "benchmark": "node scripts/benchmark_performance.mjs"
+    "benchmark": "node scripts/benchmark_performance.mjs",
+    "coaches:audit": "node scripts/coach_roster_audit.mjs",
+    "coaches:apply": "node scripts/apply_verified_coaches.mjs",
+    "coaches:scan": "node scripts/fetch_team_source_pages.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.2",

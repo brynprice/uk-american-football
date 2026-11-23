@@ -1,11 +1,11 @@
 competition_name,parent_phase,phase,year,team,position,games_played,wins,losses,ties,points_for,points_against,streak,is_champion,notes,head_coach
-BUAFL,Premier North/South,Premier North,2015,Stirling Clansmen,1,8,8,0,0,268,88,,TRUE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
+BUAFL,Premier North/South,Premier North,2015,Stirling Clansmen,1,8,8,0,0,268,88,,TRUE,Source: https://dblcoverage.com/university/bucs-standings-201516/,Victor Peredo
 BUAFL,Premier North/South,Premier North,2015,Durham Saints,2,8,6,2,0,209,146,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
 BUAFL,Premier North/South,Premier North,2015,Derby Braves,3,8,4,4,0,144,163,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
 BUAFL,Premier North/South,Premier North,2015,Loughborough Students,4,8,2,6,0,104,160,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
 BUAFL,Premier North/South,Premier North,2015,Sheffield Hallam Warriors,5,8,0,8,0,76,244,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
 BUAFL,Premier North/South,Premier South,2015,Birmingham Lions,1,8,8,0,0,232,45,,TRUE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
-BUAFL,Premier North/South,Premier South,2015,Hertfordshire Hurricanes,2,8,5,3,0,190,109,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
+BUAFL,Premier North/South,Premier South,2015,Hertfordshire Hurricanes,2,8,5,3,0,190,109,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,Jim Messenger
 BUAFL,Premier North/South,Premier South,2015,Kingston Cougars,3,8,4,4,0,102,134,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
 BUAFL,Premier North/South,Premier South,2015,Bath Killer Bees,4,8,3,5,0,144,163,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
 BUAFL,Premier North/South,Premier South,2015,Imperial Immortals,5,8,0,8,0,46,263,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
@@ -19,7 +19,7 @@ BUAFL,Division 1 North,Division 1 Yorkshire,2015,Leeds Beckett Carnegie,2,8,5,3,
 BUAFL,Division 1 North,Division 1 Yorkshire,2015,Sheffield Sabres,3,8,4,4,0,204,153,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
 BUAFL,Division 1 North,Division 1 Yorkshire,2015,Hull Sharks,4,8,3,5,0,172,137,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
 BUAFL,Division 1 North,Division 1 Yorkshire,2015,Huddersfield Hawks,5,8,0,8,0,48,361,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
-BUAFL,Division 1 North,Division 1 Midlands,2015,Nottingham Trent Renegades,1,8,7,1,0,148,69,,TRUE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
+BUAFL,Division 1 North,Division 1 Midlands,2015,Nottingham Trent Renegades,1,8,7,1,0,148,69,,TRUE,Source: https://dblcoverage.com/university/bucs-standings-201516/,Adrian Giles
 BUAFL,Division 1 North,Division 1 Midlands,2015,Warwick Wolves,2,8,7,1,0,206,102,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
 BUAFL,Division 1 North,Division 1 Midlands,2015,Nottingham Gold,3,8,4,4,0,237,100,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
 BUAFL,Division 1 North,Division 1 Midlands,2015,Worcester Royals,4,8,2,6,0,120,169,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
@@ -39,7 +39,7 @@ BUAFL,Division 1 South,Division 1 South Eastern,2015,Sussex Saxons,2,8,6,2,0,177
 BUAFL,Division 1 South,Division 1 South Eastern,2015,Kent Falcons,3,8,4,4,0,86,105,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
 BUAFL,Division 1 South,Division 1 South Eastern,2015,UEA Pirates,4,8,3,5,0,85,127,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
 BUAFL,Division 1 South,Division 1 South Eastern,2015,Cambridge Pythons,5,8,1,7,0,91,156,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
-BUAFL,Division 2 North,Division 2 Scottish/Northern,2015,Edinburgh Napier Knights,1,8,7,1,0,78,21,,TRUE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
+BUAFL,Division 2 North,Division 2 Scottish/Northern,2015,Edinburgh Napier Knights,1,8,7,1,0,78,21,,TRUE,Source: https://dblcoverage.com/university/bucs-standings-201516/,Pete Laird
 BUAFL,Division 2 North,Division 2 Scottish/Northern,2015,Edinburgh Predators,2,8,5,3,0,149,56,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,Martin Harrison
 BUAFL,Division 2 North,Division 2 Scottish/Northern,2015,Teesside Cougars,3,7,3,4,0,60,52,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,
 BUAFL,Division 2 North,Division 2 Scottish/Northern,2015,HWU Wolverines,4,5,1,4,0,33,48,,FALSE,Source: https://dblcoverage.com/university/bucs-standings-201516/,

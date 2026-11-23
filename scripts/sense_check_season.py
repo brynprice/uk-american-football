@@ -316,8 +316,9 @@ def sense_check_season(csv_path):
     for idx, g in enumerate(games, 1):
         g_type = (g.get('game_type') or '').strip().lower()
         title_n = (g.get('title_name') or '').strip().lower()
+        nick_n = (g.get('nickname') or '').strip().lower()
         notes_str = (g.get('notes') or '').lower()
-        if g_type in ('friendly', 'exhibition') or title_n in ('varsity bowl', 'cavalier cup') or 'varsity bowl' in notes_str or 'friendly' in notes_str:
+        if g_type in ('friendly', 'exhibition') or title_n in ('varsity bowl', 'cavalier cup') or 'varsity' in nick_n or 'varsity' in notes_str or 'friendly' in notes_str:
             continue
         phase = (g.get('phase') or '').strip()
         parent_phase = (g.get('parent_phase') or '').strip()
@@ -350,9 +351,14 @@ def sense_check_season(csv_path):
             for idx, g in enumerate(games, 1):
                 parent_p = (g.get('parent_phase') or '').lower()
                 game_p = (g.get('phase') or '').lower()
+                g_type = (g.get('game_type') or '').strip().lower()
+                nick_n = (g.get('nickname') or '').lower()
+                notes_l = (g.get('notes') or '').lower()
                 if (g.get('is_playoff', '').upper() == 'TRUE' or
                     parent_p in ('varsity fixtures', 'exhibition', 'friendlies') or
-                    game_p in ('varsity bowl', 'exhibition')):
+                    game_p in ('varsity bowl', 'exhibition') or
+                    g_type in ('friendly', 'exhibition') or
+                    'varsity' in nick_n or 'varsity' in notes_l):
                     continue
                 a_team = active_alias_map.get(g.get('away_team', '').strip(), g.get('away_team', '').strip())
                 h_team = active_alias_map.get(g.get('home_team', '').strip(), g.get('home_team', '').strip())
@@ -631,7 +637,16 @@ def sense_check_season(csv_path):
             # University football: October to April
             parent_p = (g.get('parent_phase') or '').lower()
             game_p = (g.get('phase') or '').lower()
-            is_varsity = parent_p in ('varsity fixtures', 'exhibition', 'friendlies') or game_p in ('varsity bowl', 'exhibition')
+            g_type = (g.get('game_type') or '').strip().lower()
+            nick_n = (g.get('nickname') or '').lower()
+            notes_l = (g.get('notes') or '').lower()
+            is_varsity = (
+                parent_p in ('varsity fixtures', 'exhibition', 'friendlies')
+                or game_p in ('varsity bowl', 'exhibition')
+                or g_type in ('friendly', 'exhibition')
+                or 'varsity' in nick_n
+                or 'varsity' in notes_l
+            )
             # Rule 1: No regular games in May (unless varsity/exhibition), and no games in June, July, August, or September (Critical)
             if month in (6, 7, 8, 9) or (month == 5 and not is_playoff and not is_varsity):
                 issues.append(
@@ -645,8 +660,8 @@ def sense_check_season(csv_path):
                     f"Row {idx}: Playoff game in May ({month_names[month]} / {d_str}). "
                     f"May is unusually late for university playoffs; verify weather/rescheduling."
                 )
-            # Rule 2: April should strictly only be playoffs (Critical)
-            elif month == 4 and not is_playoff:
+            # Rule 2: April should strictly only be playoffs (Critical, unless varsity/exhibition)
+            elif month == 4 and not is_playoff and not is_varsity:
                 issues.append(
                     f"Row {idx}: Invalid regular season game date ({month_names[month]} / {d_str}). "
                     f"April games must be playoff games."
