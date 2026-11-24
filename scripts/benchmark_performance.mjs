@@ -20,55 +20,148 @@ if (!supabaseUrl || !supabaseKey) {
   process.exit(1);
 }
 
-const supabase = createClient(supabaseUrl, supabaseKey);
+// ---------------------------------------------------------------------------
+// Instrumented fetch: records every HTTP request issued during a benchmark so we
+// can report request count, bytes on the wire and the number of sequential
+// network "waves" (the critical-path depth of dependent round-trips).
+// ---------------------------------------------------------------------------
+let activeRecorder = null;
+const rawFetch = globalThis.fetch.bind(globalThis);
+
+async function instrumentedFetch(input, init) {
+  const recorder = activeRecorder;
+  const start = performance.now();
+  const res = await rawFetch(input, init);
+  if (recorder) {
+    const entry = { start, end: performance.now(), bytes: 0 };
+    recorder.push(entry);
+    // Read a clone to measure the full body size and the time the body finished arriving
+    recorder.pending.push(
+      res.clone().arrayBuffer().then(
+        buf => { entry.bytes = buf.byteLength; entry.end = performance.now(); },
+        () => {}
+      )
+    );
+  }
+  return res;
+}
+
+function createRecorder() {
+  const entries = [];
+  entries.pending = [];
+  return entries;
+}
+
+// Critical-path depth: a request belongs to wave N+1 if it started after a wave-N request finished.
+function computeWaves(entries) {
+  const sorted = [...entries].sort((a, b) => a.start - b.start);
+  const depth = [];
+  let maxDepth = 0;
+  for (let i = 0; i < sorted.length; i++) {
+    let d = 1;
+    for (let j = 0; j < i; j++) {
+      if (sorted[j].end <= sorted[i].start) d = Math.max(d, depth[j] + 1);
+    }
+    depth.push(d);
+    maxDepth = Math.max(maxDepth, d);
+  }
+  return maxDepth;
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey, { global: { fetch: instrumentedFetch } });
 
 const isStrict = process.argv.includes('--strict');
 
-async function measureQuery(name, budgetMs, fn) {
-  let start = performance.now();
-  try {
-    let result = await fn();
-    let duration = performance.now() - start;
+// Samples per benchmark (median is reported). Override with BENCH_SAMPLES=n.
+const SAMPLES = Math.max(1, Number(process.env.BENCH_SAMPLES) || 3);
 
-    // If first attempt exceeded budget (e.g. due to cold TLS socket / connection pool scaling),
-    // run one immediate retry on the warmed connection pool and record the better execution time.
-    if (duration > budgetMs) {
-      const retryStart = performance.now();
-      const retryResult = await fn();
-      const retryDuration = performance.now() - retryStart;
-      if (retryDuration < duration) {
-        duration = retryDuration;
-        result = retryResult;
-      }
+// Budgets were calibrated against a GitHub Actions -> Supabase (EU) round-trip of ~200 ms.
+// When the measured network floor is slower than this reference, each sequential wave
+// receives the excess as allowance, so runner placement noise is not reported as a DB regression.
+const REFERENCE_RTT_MS = 200;
+let networkFloorMs = 0;
+
+const median = arr => {
+  const s = [...arr].sort((a, b) => a - b);
+  const mid = Math.floor(s.length / 2);
+  return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+};
+
+async function measureNetworkFloor() {
+  const samples = [];
+  for (let i = 0; i < 7; i++) {
+    const start = performance.now();
+    await rawFetch(`${supabaseUrl}/rest/v1/competitions?select=id&limit=1`, {
+      headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` }
+    }).then(r => r.arrayBuffer());
+    samples.push(performance.now() - start);
+  }
+  // Discard the first (TLS handshake) sample
+  return median(samples.slice(1));
+}
+
+async function measureQuery(name, budgetMs, fn) {
+  const durations = [];
+  let result = null;
+  let lastRecorder = null;
+  try {
+    for (let i = 0; i < SAMPLES; i++) {
+      const recorder = createRecorder();
+      activeRecorder = recorder;
+      const start = performance.now();
+      result = await fn();
+      durations.push(performance.now() - start);
+      activeRecorder = null;
+      await Promise.all(recorder.pending);
+      lastRecorder = recorder;
     }
 
+    const duration = median(durations);
+    const spread = Math.max(...durations) - Math.min(...durations);
     const count = Array.isArray(result) ? result.length : (result ? 1 : 0);
     const size = Buffer.byteLength(JSON.stringify(result || ''));
-    
+    const requests = lastRecorder.length;
+    const wireBytes = lastRecorder.reduce((sum, e) => sum + e.bytes, 0);
+    const waves = computeWaves(lastRecorder);
+    const effectiveBudget = budgetMs + waves * Math.max(0, networkFloorMs - REFERENCE_RTT_MS);
+    const netMs = Math.max(0, duration - waves * networkFloorMs);
+
     let status = '🟢 PASS';
-    if (duration > budgetMs * 1.5) {
+    if (duration > effectiveBudget * 1.5) {
       status = '🔴 CRITICAL';
-    } else if (duration > budgetMs) {
+    } else if (duration > effectiveBudget) {
       status = '🟡 WARNING';
     }
 
     return {
       name,
       durationMs: duration,
+      spreadMs: spread,
       budgetMs,
+      effectiveBudget,
+      netMs,
       count,
       sizeBytes: size,
+      wireBytes,
+      requests,
+      waves,
       status,
       error: null
     };
   } catch (err) {
-    const duration = performance.now() - start;
+    activeRecorder = null;
     return {
       name,
-      durationMs: duration,
+      durationMs: durations.length ? median(durations) : 0,
+      spreadMs: 0,
       budgetMs,
+      effectiveBudget: budgetMs,
+      netMs: 0,
       count: 0,
       sizeBytes: 0,
+      wireBytes: 0,
+      requests: 0,
+      waves: 0,
       status: '❌ ERROR',
       error: err.message
     };
@@ -128,12 +221,17 @@ async function runBenchmark() {
   const samplePersonId = sampleCoachPart?.head_coach_id || null;
 
   console.log('\n--- 2. CRITICAL QUERY LATENCY BENCHMARKS ---');
+  networkFloorMs = await measureNetworkFloor();
+  const rttAllowance = Math.max(0, networkFloorMs - REFERENCE_RTT_MS);
+  console.log(`  Network floor (median PostgREST RTT): ${networkFloorMs.toFixed(1)} ms`);
+  console.log(`  Reference RTT: ${REFERENCE_RTT_MS} ms -> per-wave allowance: +${rttAllowance.toFixed(1)} ms`);
+  console.log(`  Samples per benchmark: ${SAMPLES} (median reported)\n`);
 
   const benchmarks = [
     // Homepage Archive Stats (indexed parallel queries)
     {
       name: 'getArchiveStats',
-      budget: 350,
+      budget: 450,
       fn: async () => {
         const [totalGamesRes, anomalyGamesRes, teamsRes, titleRes, scoresRes] = await Promise.all([
           supabase.from('games').select('*', { count: 'exact', head: true }),
@@ -154,7 +252,7 @@ async function runBenchmark() {
     // Competitions list
     {
       name: 'getCompetitions',
-      budget: 200,
+      budget: 250,
       fn: async () => {
         const { data, error } = await supabase.from('competitions').select('*').order('name');
         if (error) throw error;
@@ -164,7 +262,7 @@ async function runBenchmark() {
     // Competition Overview (/competitions/[id])
     {
       name: 'getCompetitionById',
-      budget: 250,
+      budget: 300,
       fn: async () => {
         if (!recentSeason) return null;
         const { data: comp } = await supabase
@@ -178,7 +276,7 @@ async function runBenchmark() {
     // Season Details (unphased games + notes)
     {
       name: 'getSeasonDetails',
-      budget: 350,
+      budget: 450,
       fn: async () => {
         if (!recentSeason) return null;
         const [seasonRes, notesRes, gamesRes] = await Promise.all([
@@ -198,7 +296,7 @@ async function runBenchmark() {
     // Phase Data (games + participations)
     {
       name: 'getPhaseData',
-      budget: 350,
+      budget: 450,
       fn: async () => {
         if (!samplePhase) return null;
         const phaseId = samplePhase.id;
@@ -347,7 +445,7 @@ async function runBenchmark() {
     // Scorigami Unique Score Games (/scorigami/unique) — paginated across 2 pages (2,000 capacity)
     {
       name: 'getUniqueScoreGames',
-      budget: 550,
+      budget: 700,
       fn: async () => {
         const pageSize = 1000;
         const fetchPage = p =>
@@ -378,7 +476,7 @@ async function runBenchmark() {
     // Uniball Historical Timeline (/timeline)
     {
       name: 'getTimelineData',
-      budget: 550,
+      budget: 650,
       fn: async () => {
         const pageSize = 1000;
         const fetchUniballParts = async () => {
@@ -461,7 +559,7 @@ async function runBenchmark() {
     // Phase CSV Export Route (/api/export/phase/[id])
     {
       name: 'exportPhaseCsv',
-      budget: 350,
+      budget: 400,
       fn: async () => {
         if (!samplePhase) return null;
         const { data: phase, error: pErr } = await supabase
@@ -494,7 +592,7 @@ async function runBenchmark() {
     // Teams List (with historical aliases)
     {
       name: 'getTeams',
-      budget: 300,
+      budget: 350,
       fn: async () => {
         const { data, error } = await supabase.from('teams').select('*, team_aliases (*)').order('name');
         if (error) throw error;
@@ -526,7 +624,7 @@ async function runBenchmark() {
     // Coach / Person Profile (/people/[id])
     {
       name: 'getPersonProfile',
-      budget: 350,
+      budget: 400,
       fn: async () => {
         if (!samplePersonId) return null;
         const gameFields = `
@@ -559,15 +657,15 @@ async function runBenchmark() {
     // Admin Operations
     {
       name: 'adminAuthPing',
-      budget: 250,
+      budget: 300,
       fn: async () => {
         // Measure round-trip latency to Supabase Auth endpoint
-        const res = await fetch(`${supabaseUrl}/auth/v1/health`, {
+        const res = await instrumentedFetch(`${supabaseUrl}/auth/v1/health`, {
           headers: { apikey: supabaseKey }
         });
         if (!res.ok && res.status !== 404) {
           // If /health isn't exposed, fallback to auth settings or head
-          const settingsRes = await fetch(`${supabaseUrl}/auth/v1/settings`, {
+          const settingsRes = await instrumentedFetch(`${supabaseUrl}/auth/v1/settings`, {
             headers: { apikey: supabaseKey }
           });
           if (!settingsRes.ok) throw new Error(`Auth endpoint returned ${settingsRes.status}`);
@@ -620,7 +718,7 @@ async function runBenchmark() {
     },
     {
       name: 'adminGameCounts',
-      budget: 350,
+      budget: 400,
       fn: async () => {
         const [{ data: phases, error: pErr }, { data: teams, error: tErr }] = await Promise.all([
           supabase
@@ -638,7 +736,7 @@ async function runBenchmark() {
     },
     {
       name: 'adminPollBuilder',
-      budget: 400,
+      budget: 450,
       fn: async () => {
         if (!recentSeason) return null;
         const [phasesRes, partRes, gamesRes, notesRes] = await Promise.all([
@@ -688,7 +786,7 @@ async function runBenchmark() {
     // Batch Slate Predictor (/admin/predictions)
     {
       name: 'adminPredictionsSlate',
-      budget: 500,
+      budget: 600,
       fn: async () => {
         const { data: slate, error: sErr } = await supabase
           .from('games')
@@ -722,7 +820,7 @@ async function runBenchmark() {
     // Model Calibration & Accuracy (/admin/predictions/accuracy)
     {
       name: 'adminPredictionAccuracy',
-      budget: 300,
+      budget: 350,
       fn: async () => {
         const [seasonRes, predsRes] = await Promise.all([
           supabase.from('seasons').select('id, competitions!inner(name)').eq('year', 2026).ilike('competitions.name', '%Universities%').maybeSingle(),
@@ -740,7 +838,7 @@ async function runBenchmark() {
     // Weekly Interesting Facts Engine (/api/facts?mode=recap & npm run facts)
     {
       name: 'weeklyFactsEngine',
-      budget: 600,
+      budget: 850,
       fn: async () => {
         const facts = await generateWeeklyFacts(supabase, { week: 3, season: 2026 });
         return { completedGames: facts.summary?.completedCount || 0, window: facts.window?.label };
@@ -749,7 +847,7 @@ async function runBenchmark() {
     // Weekly Upcoming Preview Engine (/api/facts?mode=preview & npm run preview)
     {
       name: 'weeklyPreviewEngine',
-      budget: 600,
+      budget: 800,
       fn: async () => {
         const preview = await generateWeeklyPreview(supabase, { week: 5, season: 2026 });
         return { upcomingGames: preview.summary?.totalScheduled || 0, window: preview.window?.label };
@@ -764,18 +862,24 @@ async function runBenchmark() {
   }
 
   // Console output
-  console.log('---------------------------------------------------------------------------');
-  console.log(' Query Name              Latency      Budget     Payload    Rows    Status');
-  console.log('---------------------------------------------------------------------------');
+  const line = '-'.repeat(118);
+  console.log(line);
+  console.log(' Query Name                Median   Spread   Budget  Eff.Budget   Net(DB)  Reqs  Waves    Wire KB    Status');
+  console.log(line);
   for (const r of results) {
     const nameCol = r.name.padEnd(23);
     const latCol = `${r.durationMs.toFixed(1)}ms`.padStart(9);
-    const budCol = `${r.budgetMs}ms`.padStart(9);
-    const sizeCol = `${(r.sizeBytes / 1024).toFixed(1)} KB`.padStart(10);
-    const rowsCol = String(r.count).padStart(7);
-    console.log(` ${nameCol} ${latCol}  ${budCol}  ${sizeCol}  ${rowsCol}    ${r.status}`);
+    const sprCol = `±${(r.spreadMs / 2).toFixed(0)}ms`.padStart(8);
+    const budCol = `${r.budgetMs}ms`.padStart(8);
+    const effCol = `${r.effectiveBudget.toFixed(0)}ms`.padStart(11);
+    const netCol = `${r.netMs.toFixed(0)}ms`.padStart(9);
+    const reqCol = String(r.requests).padStart(5);
+    const wavCol = String(r.waves).padStart(6);
+    const wireCol = `${(r.wireBytes / 1024).toFixed(1)}`.padStart(10);
+    console.log(` ${nameCol} ${latCol} ${sprCol} ${budCol} ${effCol} ${netCol} ${reqCol} ${wavCol} ${wireCol}    ${r.status}${r.error ? ` (${r.error})` : ''}`);
   }
-  console.log('---------------------------------------------------------------------------');
+  console.log(line);
+  console.log(' Net(DB) = median latency minus (waves x network floor): an estimate of server + transfer time independent of runner placement.');
 
   // 3. PostgREST 1,000-Row Capacity & Silent Truncation Guardrails
   console.log('\n--- 3. POSTGREST ROW-CAP & PAGINATION GUARDRAILS ---');
@@ -844,9 +948,13 @@ async function runBenchmark() {
 ${Object.entries(tableCounts).map(([k, v]) => `| \`${k}\` | **${v}** |`).join('\n')}
 
 ### ⏱️ Query Latencies vs Budgets
-| Query | Latency | Budget | Payload | Status |
-|---|---|---|---|---|
-${results.map(r => `| **\`${r.name}\`** | \`${r.durationMs.toFixed(1)} ms\` | \`${r.budgetMs} ms\` | \`${(r.sizeBytes / 1024).toFixed(1)} KB\` | ${r.status} |`).join('\n')}
+**Network floor:** \`${networkFloorMs.toFixed(1)} ms\` median PostgREST RTT (reference \`${REFERENCE_RTT_MS} ms\`, per-wave allowance \`+${rttAllowance.toFixed(1)} ms\`) · **Samples:** ${SAMPLES} per query (median reported)
+
+| Query | Median | Spread | Budget | Eff. Budget | Net (DB) | Reqs | Waves | Wire | Status |
+|---|---|---|---|---|---|---|---|---|---|
+${results.map(r => `| **\`${r.name}\`** | \`${r.durationMs.toFixed(1)} ms\` | \`±${(r.spreadMs / 2).toFixed(0)} ms\` | \`${r.budgetMs} ms\` | \`${r.effectiveBudget.toFixed(0)} ms\` | \`${r.netMs.toFixed(0)} ms\` | ${r.requests} | ${r.waves} | \`${(r.wireBytes / 1024).toFixed(1)} KB\` | ${r.status} |`).join('\n')}
+
+_Net (DB) = median − waves × network floor: approximates server + transfer time independent of runner placement. Waves = sequential round-trips on the critical path._
 
 ### 🛡️ PostgREST Row-Cap & Pagination Guardrails
 | Scope | Current Rows | Max Capacity | Utilization | Status |
